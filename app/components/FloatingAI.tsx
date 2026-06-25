@@ -134,14 +134,21 @@ export default function FloatingAI() {
 
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                  msg.role === "user"
-                    ? "bg-amber-500 text-white rounded-br-md"
-                    : "bg-stone-100 text-stone-700 rounded-bl-md"
-                }`}>
-                  {msg.role === "ai" && <span className="mr-1">🕊️</span>}
-                  {msg.text}
-                </div>
+                {msg.role === "user" ? (
+                  <div className="max-w-[85%] px-4 py-3 rounded-2xl rounded-br-md bg-amber-500 text-white text-sm leading-relaxed">
+                    {msg.text}
+                  </div>
+                ) : (
+                  <div className="max-w-[90%] px-4 py-3 rounded-2xl rounded-bl-md bg-stone-100 text-stone-800">
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <span>🕊️</span>
+                      <span className="text-xs font-bold text-amber-600">{title}</span>
+                    </div>
+                    <div className="text-[13px] leading-6 whitespace-pre-line">
+                      {msg.text.replace(/\*\*(.*?)\*\*/g, "$1").replace(/["«»]/g, "").replace(/\n{3,}/g, "\n\n")}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
 

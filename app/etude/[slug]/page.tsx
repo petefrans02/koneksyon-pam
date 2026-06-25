@@ -58,14 +58,23 @@ function AIChat({ studyTitle, studyContent }: { studyTitle: string; studyContent
         <div className="space-y-3 mb-4 max-h-80 overflow-y-auto">
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                msg.role === "user"
-                  ? "bg-indigo-600 text-white rounded-br-md"
-                  : "bg-white text-stone-700 border border-stone-200 rounded-bl-md"
-              }`}>
-                {msg.role === "ai" && <span className="text-indigo-500 font-bold mr-1">📖</span>}
-                {msg.text}
-              </div>
+              {msg.role === "user" ? (
+                <div className="max-w-[85%] px-4 py-3 rounded-2xl rounded-br-md bg-indigo-600 text-white text-sm leading-relaxed">
+                  {msg.text}
+                </div>
+              ) : (
+                <div className="max-w-[90%] px-4 py-3 rounded-2xl rounded-bl-md bg-white border border-stone-200">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <span>🕊️</span>
+                    <span className="text-xs font-bold text-indigo-600">
+                      {lang === "fr" ? "Assistant Biblique" : lang === "ht" ? "Asistan Biblik" : "Bible Assistant"}
+                    </span>
+                  </div>
+                  <div className="text-[14px] leading-6 text-stone-800 whitespace-pre-line">
+                    {msg.text.replace(/\*\*(.*?)\*\*/g, "$1").replace(/["«»]/g, "").replace(/\n{3,}/g, "\n\n")}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
           {loading && (
