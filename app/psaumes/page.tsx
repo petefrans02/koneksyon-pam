@@ -77,6 +77,8 @@ export default function PsaumesPage() {
   const [loading, setLoading] = useState<number | null>(null);
   const [verseText, setVerseText] = useState<string>("");
   const [translationName, setTranslationName] = useState<string>("");
+  const [aiStudy, setAiStudy] = useState<string>("");
+  const [aiLoading, setAiLoading] = useState(false);
 
   async function loadPsalm(num: number) {
     if (expanded === num) {
@@ -162,7 +164,27 @@ export default function PsaumesPage() {
             </p>
           )}
 
-          <div className="flex gap-2 mt-6">
+          <div className="flex flex-wrap gap-2 mt-6">
+            <button
+              onClick={async () => {
+                if (aiStudy) { setAiStudy(""); return; }
+                setAiLoading(true);
+                const res = await fetch("/api/ask", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    question: `Fais un résumé et une étude approfondie du Psaume ${expanded}. Explique le contexte historique, les thèmes principaux, et comment l'appliquer dans notre vie aujourd'hui.`,
+                    lang,
+                  }),
+                });
+                const data = await res.json();
+                setAiStudy(data.answer || "");
+                setAiLoading(false);
+              }}
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+            >
+              {aiLoading ? "..." : aiStudy ? "✕ Fermer l'étude" : `🕊️ ${lang === "fr" ? "Étude approfondie (IA)" : lang === "ht" ? "Etid apwofondi (IA)" : "Deep study (AI)"}`}
+            </button>
             <button
               onClick={() => {
                 if (navigator.share) {
@@ -178,6 +200,27 @@ export default function PsaumesPage() {
               ↗ {t("share", lang)}
             </button>
           </div>
+
+          {aiLoading && (
+            <div className="mt-6 flex items-center gap-3 text-blue-500">
+              <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+              <span className="text-sm">{lang === "fr" ? "L'IA analyse ce Psaume..." : "AI is analyzing this Psalm..."}</span>
+            </div>
+          )}
+
+          {aiStudy && (
+            <div className="mt-6 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-lg">🕊️</span>
+                <h4 className="font-bold text-blue-800 text-sm">
+                  {lang === "fr" ? "Étude approfondie — Psaume" : "Deep study — Psalm"} {expanded}
+                </h4>
+              </div>
+              <div className="text-sm text-stone-700 leading-relaxed whitespace-pre-line">
+                {aiStudy.replace(/\*\*(.*?)\*\*/g, "$1").replace(/["«»]/g, "")}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

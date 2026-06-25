@@ -16,8 +16,8 @@ export default function AProposPage() {
         <h1 className="text-3xl font-bold text-stone-900">
           {lang === "fr" ? "À propos" : lang === "ht" ? "Konsènan" : "About"}
         </h1>
-        <p className="text-stone-500 mt-2 font-semibold">KONEKSYON PAM</p>
-        <p className="text-stone-400 text-sm mt-1">Une Mission • Un Dieu • Une Vision</p>
+        <p className="text-stone-800 mt-2 font-bold text-lg">KONEKSYON PAM</p>
+        <p className="text-blue-600 text-sm mt-1 font-medium">Une Mission • Un Dieu • Une Vision</p>
       </div>
 
       <div className="space-y-8 text-stone-700 leading-relaxed">
