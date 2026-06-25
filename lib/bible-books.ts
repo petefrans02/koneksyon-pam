@@ -1,7 +1,7 @@
 export interface BibleBook {
   id: number;
   slug: string;
-  name: { fr: string; ht: string; en: string };
+  name: Record<string, string>;
   chapters: number;
   testament: "OT" | "NT";
 }
