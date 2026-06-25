@@ -91,6 +91,12 @@ export default function NavBar() {
         </div>
 
         <div className="flex items-center gap-2">
+          <Link
+            href="/don"
+            className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-2 rounded-full hover:opacity-90 transition-opacity shadow-md shadow-amber-500/20"
+          >
+            ❤️ {lang === "fr" ? "Donner" : lang === "ht" ? "Fè yon don" : "Donate"}
+          </Link>
           <LangSwitch />
           <AuthButton />
         </div>
