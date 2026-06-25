@@ -27,8 +27,17 @@ export default function DonationPage() {
   const [customMode, setCustomMode] = useState(false);
 
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("success") === "1") {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "1") {
       setSuccess(true);
+      const session_id = params.get("session_id");
+      if (session_id) {
+        fetch("/api/stripe/thank-you", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ session_id }),
+        }).catch(() => {});
+      }
     }
   }, []);
 

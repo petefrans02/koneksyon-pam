@@ -28,7 +28,8 @@ export async function POST(request: NextRequest) {
       },
     ],
     mode: "payment",
-    success_url: `${request.headers.get("origin")}/don?success=1`,
+    billing_address_collection: "auto",
+    success_url: `${request.headers.get("origin")}/don?success=1&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${request.headers.get("origin")}/don`,
   });
 
