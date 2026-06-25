@@ -28,6 +28,8 @@ export default function NavBar() {
             { href: "/louange", label: louange },
             { href: "/quiz", label: "Quiz" },
             { href: "/etude", label: lang === "fr" ? "Études" : lang === "ht" ? "Etid" : "Studies" },
+            { href: "/communaute", label: lang === "fr" ? "Communauté" : lang === "ht" ? "Kominote" : "Community" },
+            { href: "/eglise", label: "⛪" },
           ].map((link) => (
             <Link
               key={link.href}
