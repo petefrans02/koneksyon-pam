@@ -1,4 +1,5 @@
 "use client";
+import RequireAuth from "@/app/components/RequireAuth";
 import { gl } from "@/lib/lang-helper";
 
 import { useLang } from "@/lib/LangContext";

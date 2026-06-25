@@ -9,6 +9,9 @@ export async function POST(request: NextRequest) {
   if (!question) {
     return Response.json({ error: "Missing question" }, { status: 400 });
   }
+  if (question.length > 500) {
+    return Response.json({ error: "Question too long" }, { status: 400 });
+  }
 
   if (!CLAUDE_API_KEY) {
     return Response.json({ answer: "API non configurée." }, { status: 200 });

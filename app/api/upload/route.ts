@@ -14,6 +14,12 @@ export async function POST(request: NextRequest) {
 
   if (!file) return Response.json({ error: "No file" }, { status: 400 });
 
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  if (file.size > maxSize) return Response.json({ error: "File too large. Max 5MB." }, { status: 400 });
+
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+  if (!allowedTypes.includes(file.type)) return Response.json({ error: "Only images allowed (JPG, PNG, GIF, WebP)" }, { status: 400 });
+
   const ext = file.name.split(".").pop();
   const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 

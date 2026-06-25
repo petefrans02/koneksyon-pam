@@ -24,6 +24,8 @@ export async function POST(request: NextRequest) {
   const { name, text, country } = body;
 
   if (!text) return Response.json({ error: "Missing text" }, { status: 400 });
+  if (text.length > 2000) return Response.json({ error: "Text too long" }, { status: 400 });
+  if (name && name.length > 100) return Response.json({ error: "Name too long" }, { status: 400 });
 
   const { data, error } = await getSupabase()
     .from("testimonies")

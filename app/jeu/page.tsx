@@ -1,4 +1,5 @@
 "use client";
+import RequireAuth from "@/app/components/RequireAuth";
 
 import { useLang } from "@/lib/LangContext";
 import { useState, useEffect } from "react";
