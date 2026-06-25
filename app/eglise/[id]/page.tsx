@@ -37,6 +37,10 @@ export default function ChurchPage() {
   const [postVideo, setPostVideo] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState("");
+  const [subgroups, setSubgroups] = useState<{ id: string; name: string; icon: string; description: string }[]>([]);
+  const [showSubgroupForm, setShowSubgroupForm] = useState(false);
+  const [newSubName, setNewSubName] = useState("");
+  const [newSubIcon, setNewSubIcon] = useState("📋");
 
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -63,6 +67,24 @@ export default function ChurchPage() {
     setChurch(data.church);
     setPosts(data.posts || []);
     setLoading(false);
+    const sgRes = await fetch(`/api/churches/subgroups?church_id=${id}`);
+    const sgData = await sgRes.json();
+    setSubgroups(sgData.subgroups || []);
+  }
+
+  async function createSubgroup(e: React.FormEvent) {
+    e.preventDefault();
+    if (!newSubName.trim()) return;
+    await fetch("/api/churches/subgroups", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ church_id: id, name: newSubName.trim(), icon: newSubIcon }),
+    });
+    setNewSubName("");
+    setShowSubgroupForm(false);
+    const sgRes = await fetch(`/api/churches/subgroups?church_id=${id}`);
+    const sgData = await sgRes.json();
+    setSubgroups(sgData.subgroups || []);
   }
 
   async function handlePost(e: React.FormEvent) {
@@ -133,6 +155,39 @@ export default function ChurchPage() {
             <p className="text-cyan-400 font-mono font-bold text-lg tracking-widest">{church.join_code}</p>
           </div>
         </div>
+      </div>
+
+      {/* Sous-groupes */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="font-bold text-stone-900">
+            {lang === "fr" ? "Groupes" : lang === "ht" ? "Gwoup" : "Groups"}
+          </h2>
+          <button onClick={() => setShowSubgroupForm(!showSubgroupForm)} className="text-blue-500 text-sm font-medium hover:underline">
+            + {lang === "fr" ? "Créer un groupe" : "Create group"}
+          </button>
+        </div>
+        {showSubgroupForm && (
+          <form onSubmit={createSubgroup} className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-3 flex gap-2">
+            <select value={newSubIcon} onChange={(e) => setNewSubIcon(e.target.value)} className="border border-stone-300 rounded-lg px-2 py-2 text-lg bg-white">
+              {["📖", "🎵", "👩‍👧", "👨", "🧑‍🤝‍🧑", "🙏", "👶", "💼", "🎯", "📋", "💬", "🎤"].map((e) => (
+                <option key={e} value={e}>{e}</option>
+              ))}
+            </select>
+            <input type="text" value={newSubName} onChange={(e) => setNewSubName(e.target.value)} placeholder={lang === "fr" ? "Nom du groupe..." : "Group name..."} required className="flex-1 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-500">OK</button>
+          </form>
+        )}
+        {subgroups.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {subgroups.map((sg) => (
+              <div key={sg.id} className="bg-white border border-blue-100 rounded-xl px-4 py-2.5 flex items-center gap-2 hover:shadow-md transition-shadow cursor-pointer">
+                <span className="text-lg">{sg.icon}</span>
+                <span className="text-sm font-medium text-stone-700">{sg.name}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Tabs */}
