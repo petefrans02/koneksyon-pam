@@ -134,14 +134,12 @@ export default function StudyPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
-      <Link href="/etude" className="text-amber-600 text-sm hover:underline mb-6 block">
+      <Link href="/etude" className="text-blue-500 text-sm hover:underline mb-6 block">
         ← {lang === "fr" ? "Toutes les études" : lang === "ht" ? "Tout etid yo" : "All studies"}
       </Link>
 
       <div className="flex items-center gap-4 mb-6">
-        <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${study.color} flex items-center justify-center text-3xl shrink-0`}>
-          {study.icon}
-        </div>
+        <img src={study.icon} alt="" className="w-14 h-14 shrink-0" />
         <div>
           <h1 className="text-2xl font-bold text-stone-900">{gl(study.title, lang)}</h1>
           <p className="text-stone-500 text-sm">{gl(study.description, lang)}</p>

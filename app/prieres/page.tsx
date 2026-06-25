@@ -61,14 +61,14 @@ export default function PrieresPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
-      <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-2xl p-5 mb-8 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-2xl p-5 mb-8 flex items-center justify-between">
         <div>
           <p className="text-2xl font-bold">{prayers.reduce((a, p) => a + p.count, 0).toLocaleString()}</p>
-          <p className="text-amber-100 text-sm">{t("peoplePrayed", lang)}</p>
+          <p className="text-blue-100 text-sm">{t("peoplePrayed", lang)}</p>
         </div>
         <div className="text-right">
           <p className="text-2xl font-bold">{userCountry.flag} {userCountry.name}</p>
-          <p className="text-amber-100 text-sm">{lang === "fr" ? "Votre position" : lang === "ht" ? "Pozisyon ou" : "Your location"}</p>
+          <p className="text-blue-100 text-sm">{lang === "fr" ? "Votre position" : lang === "ht" ? "Pozisyon ou" : "Your location"}</p>
         </div>
       </div>
 
@@ -76,31 +76,31 @@ export default function PrieresPage() {
         <h1 className="text-2xl font-bold text-stone-900">{t("prayers", lang)}</h1>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-amber-600 text-white px-5 py-2.5 rounded-full font-medium hover:bg-amber-500 transition-colors text-sm"
+          className="bg-blue-600 text-white px-5 py-2.5 rounded-full font-medium hover:bg-blue-500 transition-colors text-sm"
         >
           + {t("submitPrayer", lang)}
         </button>
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-8">
+        <form onSubmit={handleSubmit} className="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-8">
           <h3 className="font-semibold text-stone-900 mb-4">{t("submitPrayer", lang)}</h3>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder={t("yourName", lang)}
-            className="w-full border border-stone-300 rounded-xl px-4 py-2.5 mb-3 text-sm bg-white focus:border-amber-500 focus:outline-none"
+            className="w-full border border-stone-300 rounded-xl px-4 py-2.5 mb-3 text-sm bg-white focus:border-blue-500 focus:outline-none"
           />
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder={t("yourPrayer", lang)}
             rows={4}
-            className="w-full border border-stone-300 rounded-xl px-4 py-2.5 mb-3 text-sm bg-white focus:border-amber-500 focus:outline-none resize-none"
+            className="w-full border border-stone-300 rounded-xl px-4 py-2.5 mb-3 text-sm bg-white focus:border-blue-500 focus:outline-none resize-none"
           />
           <div className="flex items-center gap-3">
-            <button type="submit" className="bg-amber-600 text-white px-6 py-2.5 rounded-full font-medium hover:bg-amber-500 transition-colors text-sm">
+            <button type="submit" className="bg-blue-600 text-white px-6 py-2.5 rounded-full font-medium hover:bg-blue-500 transition-colors text-sm">
               {t("submit", lang)}
             </button>
             <span className="text-sm text-stone-400">{userCountry.flag} {lang === "fr" ? "depuis" : lang === "ht" ? "depi" : "from"} {userCountry.name}</span>
@@ -136,14 +136,14 @@ export default function PrieresPage() {
                 onClick={() => handlePray(prayer.id)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
                   prayer.prayed
-                    ? "bg-amber-600 text-white shadow-lg shadow-amber-200"
-                    : "bg-amber-50 text-amber-700 hover:bg-amber-100"
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
+                    : "bg-blue-50 text-blue-700 hover:bg-blue-100"
                 }`}
               >
                 {prayer.prayed ? `✓ ${t("amen", lang)} ${userCountry.flag}` : t("prayerButton", lang)}
               </button>
               <span className="text-sm text-stone-500">
-                <strong className="text-amber-600">{prayer.count}</strong> {t("peoplePrayed", lang)}
+                <strong className="text-blue-500">{prayer.count}</strong> {t("peoplePrayed", lang)}
               </span>
             </div>
           </div>

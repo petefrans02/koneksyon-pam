@@ -105,7 +105,7 @@ export default function PsaumesPage() {
       <p className="text-stone-500 mb-2">
         {lang === "fr" ? "Les 150 Psaumes de la Bible" : lang === "ht" ? "150 Sòm Bib la" : "All 150 Psalms of the Bible"}
       </p>
-      <p className="text-sm text-amber-600 mb-8">
+      <p className="text-sm text-blue-500 mb-8">
         {lang === "fr" ? "Cliquez sur un Psaume pour le lire" : lang === "ht" ? "Klike sou yon Sòm pou li l" : "Click a Psalm to read it"}
       </p>
 
@@ -116,9 +116,9 @@ export default function PsaumesPage() {
             onClick={() => loadPsalm(num)}
             className={`h-10 rounded-lg text-sm font-bold transition-all ${
               expanded === num
-                ? "bg-amber-600 text-white shadow-lg"
+                ? "bg-blue-600 text-white shadow-lg"
                 : title[num]
-                ? "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100"
+                ? "bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100"
                 : "bg-white text-stone-500 border border-stone-200 hover:bg-stone-50"
             }`}
           >
@@ -130,7 +130,7 @@ export default function PsaumesPage() {
       {expanded && (
         <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-md mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0">
+            <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0">
               {expanded}
             </div>
             <div>
@@ -145,7 +145,7 @@ export default function PsaumesPage() {
 
           {loading === expanded ? (
             <div className="flex items-center justify-center py-8">
-              <div className="w-8 h-8 border-4 border-amber-600 border-t-transparent rounded-full animate-spin" />
+              <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : verseText ? (
             <>

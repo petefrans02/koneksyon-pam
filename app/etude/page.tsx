@@ -1,5 +1,5 @@
 "use client";
-import { gl, gla } from "@/lib/lang-helper";
+import { gl } from "@/lib/lang-helper";
 
 import { useLang } from "@/lib/LangContext";
 import { studies } from "@/lib/studies-data";
@@ -13,7 +13,7 @@ export default function EtudePage() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       <div className="text-center mb-10">
-        <span className="text-5xl block mb-3">📚</span>
+        <img src="https://cdn-icons-png.flaticon.com/512/3330/3330999.png" alt="Bible" className="w-14 h-14 mx-auto mb-3" />
         <h1 className="text-3xl font-bold text-stone-900">{title}</h1>
         <p className="text-stone-500 mt-2">{subtitle}</p>
       </div>
@@ -23,20 +23,20 @@ export default function EtudePage() {
           <Link
             key={study.slug}
             href={`/etude/${study.slug}`}
-            className="bg-white rounded-2xl border border-stone-200 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all group"
+            className="bg-white rounded-2xl border border-blue-100 overflow-hidden hover:shadow-xl hover:shadow-blue-100 hover:-translate-y-1 transition-all group"
           >
-            <div className={`h-2 bg-gradient-to-r ${study.color}`} />
+            <div className={`h-1.5 bg-gradient-to-r ${study.color}`} />
             <div className="p-6">
               <div className="flex items-start gap-4">
-                <span className="text-4xl">{study.icon}</span>
+                <img src={study.icon} alt="" className="w-12 h-12 shrink-0" />
                 <div className="flex-1">
-                  <h3 className="font-bold text-lg text-stone-900 group-hover:text-amber-600 transition-colors">
+                  <h3 className="font-bold text-lg text-stone-900 group-hover:text-blue-600 transition-colors">
                     {gl(study.title, lang)}
                   </h3>
                   <p className="text-sm text-stone-500 mt-1">{gl(study.description, lang)}</p>
                   <div className="flex items-center gap-3 mt-3">
-                    <span className="bg-stone-100 text-stone-600 text-xs font-medium px-2.5 py-1 rounded-full">
-                      ⏱ {study.duration}
+                    <span className="bg-slate-100 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full">
+                      {study.duration}
                     </span>
                     <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
                       gl(study.difficulty, lang) === "Débutant" || gl(study.difficulty, lang) === "Debitan" || gl(study.difficulty, lang) === "Beginner"
