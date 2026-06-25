@@ -48,23 +48,23 @@ function QuickLinks() {
   const links = [
     {
       href: "/psaumes",
-      icon: "📖",
+      image: "https://cdn-icons-png.flaticon.com/512/3330/3330999.png",
       label: t("psalms", lang),
-      desc: lang === "fr" ? "150 Psaumes en 4 langues" : lang === "ht" ? "150 Sòm nan 4 lang" : lang === "es" ? "150 Salmos en 4 idiomas" : "150 Psalms in 4 languages",
+      desc: lang === "fr" ? "150 Psaumes en 3 langues" : lang === "ht" ? "150 Sòm nan 3 lang" : "150 Psalms in 3 languages",
       color: "from-amber-500 to-amber-600",
     },
     {
       href: "/prieres",
-      icon: "🙏",
+      image: "https://cdn-icons-png.flaticon.com/512/4305/4305512.png",
       label: t("prayers", lang),
-      desc: lang === "fr" ? "Priez ensemble" : lang === "ht" ? "Priye ansanm" : lang === "es" ? "Oren juntos" : "Pray together",
+      desc: lang === "fr" ? "Priez ensemble" : lang === "ht" ? "Priye ansanm" : "Pray together",
       color: "from-blue-500 to-blue-600",
     },
     {
       href: "/temoignages",
-      icon: "✨",
+      image: "https://cdn-icons-png.flaticon.com/512/1533/1533908.png",
       label: t("testimonies", lang),
-      desc: lang === "fr" ? "Partagez votre histoire" : lang === "ht" ? "Pataje istwa ou" : lang === "es" ? "Comparte tu historia" : "Share your story",
+      desc: lang === "fr" ? "Partagez votre histoire" : lang === "ht" ? "Pataje istwa ou" : "Share your story",
       color: "from-purple-500 to-purple-600",
     },
   ];
@@ -78,7 +78,7 @@ function QuickLinks() {
             href={link.href}
             className="bg-white rounded-2xl border border-stone-200 p-6 hover:shadow-lg hover:-translate-y-1 transition-all group"
           >
-            <span className="text-4xl block mb-3">{link.icon}</span>
+            <img src={link.image} alt={link.label} className="w-12 h-12 mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="text-lg font-bold text-stone-900 mb-1 group-hover:text-amber-600 transition-colors">
               {link.label}
             </h3>
