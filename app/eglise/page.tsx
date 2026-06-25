@@ -60,7 +60,7 @@ export default function EglisePage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
         <Link
           href="/eglise/creer"
-          className="bg-gradient-to-br from-[#0a1628] to-[#0f2044] rounded-2xl p-8 text-center hover:shadow-xl transition-all border border-blue-800/30"
+          className="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl p-8 text-center hover:shadow-xl hover:shadow-blue-300/20 transition-all"
         >
           <span className="text-5xl block mb-4">⛪</span>
           <h3 className="text-xl font-bold text-white mb-2">
