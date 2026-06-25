@@ -2,81 +2,76 @@
 
 import { useLang } from "@/lib/LangContext";
 import { t } from "@/lib/translations";
-import { useState } from "react";
+import { useCountry } from "@/lib/useCountry";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
 interface Testimony {
-  id: number;
+  id: string;
   name: string;
   text: string;
   likes: number;
-  time: string;
   country: string;
+  created_at: string;
   liked: boolean;
+}
+
+function timeAgo(date: string, lang: string): string {
+  const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
+  if (seconds < 60) return lang === "fr" ? "maintenant" : lang === "ht" ? "kounye a" : "now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}min`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h`;
+  const days = Math.floor(hours / 24);
+  return `${days}${lang === "fr" ? "j" : "d"}`;
 }
 
 export default function TemoignagesPage() {
   const { lang } = useLang();
+  const userCountry = useCountry();
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
   const [text, setText] = useState("");
-  const [testimonies, setTestimonies] = useState<Testimony[]>([
-    {
-      id: 1,
-      name: "Roseline J.",
-      text: "Après 2 ans sans travail, j'ai prié chaque jour avec cette communauté. La semaine dernière, j'ai reçu une offre d'emploi incroyable. Dieu est fidèle ! Merci à tous ceux qui ont prié pour moi. 🙏",
-      likes: 342,
-      time: "3j",
-      country: "🇭🇹",
-      liked: false,
-    },
-    {
-      id: 2,
-      name: "Marc Antoine",
-      text: "Mon père était à l'hôpital dans un état critique. Les médecins avaient perdu espoir. Nous avons prié sans relâche. Aujourd'hui, il est à la maison, guéri ! Gloire à Dieu ! 🙌",
-      likes: 891,
-      time: "1sem",
-      country: "🇺🇸",
-      liked: false,
-    },
-    {
-      id: 3,
-      name: "Stéphanie P.",
-      text: "Après 7 ans de mariage difficile, mon mari et moi avons trouvé la réconciliation à travers la prière. Notre foyer est restauré. Dieu fait des miracles ! ❤️",
-      likes: 567,
-      time: "2sem",
-      country: "🇨🇦",
-      liked: false,
-    },
-    {
-      id: 4,
-      name: "Pasteur Emmanuel",
-      text: "Notre petite église de 20 membres est passée à 150 en un an. Tout a commencé quand nous avons commencé à prier ensemble chaque matin à 5h. La prière change tout. ⛪",
-      likes: 234,
-      time: "1mois",
-      country: "🇫🇷",
-      liked: false,
-    },
-  ]);
+  const [testimonies, setTestimonies] = useState<Testimony[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<unknown>(null);
 
-  function handleLike(id: number) {
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }: { data: { user: unknown } }) => setUser(data.user));
+    loadTestimonies();
+  }, []);
+
+  async function loadTestimonies() {
+    const res = await fetch("/api/testimonies");
+    const data = await res.json();
+    setTestimonies((data.testimonies || []).map((t: Testimony) => ({ ...t, liked: false })));
+    setLoading(false);
+  }
+
+  async function handleLike(id: string) {
     setTestimonies(testimonies.map((t) =>
       t.id === id ? { ...t, likes: t.liked ? t.likes - 1 : t.likes + 1, liked: !t.liked } : t
     ));
+    await fetch("/api/testimonies", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!text.trim()) return;
-    const newTestimony: Testimony = {
-      id: Date.now(),
-      name: name.trim() || (lang === "fr" ? "Anonyme" : lang === "ht" ? "Anonim" : "Anonymous"),
-      text: text.trim(),
-      likes: 0,
-      time: lang === "fr" ? "maintenant" : lang === "ht" ? "kounye a" : "now",
-      country: "🌍",
-      liked: false,
-    };
-    setTestimonies([newTestimony, ...testimonies]);
+    const res = await fetch("/api/testimonies", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: name.trim() || t("anonymous", lang), text: text.trim(), country: userCountry.flag }),
+    });
+    const data = await res.json();
+    if (data.testimony) {
+      setTestimonies([{ ...data.testimony, liked: false }, ...testimonies]);
+    }
     setName("");
     setText("");
     setShowForm(false);
@@ -92,82 +87,58 @@ export default function TemoignagesPage() {
           </p>
         </div>
         <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-purple-600 text-white px-5 py-2.5 rounded-full font-medium hover:bg-purple-500 transition-colors text-sm"
+          onClick={() => { if (!user) { supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${window.location.origin}/temoignages` } }); return; } setShowForm(!showForm); }}
+          className="bg-blue-600 text-white px-5 py-2.5 rounded-full font-medium hover:bg-blue-500 transition-colors text-sm"
         >
           + {t("shareTestimony", lang)}
         </button>
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-purple-50 border border-purple-200 rounded-2xl p-6 mb-8">
+        <form onSubmit={handleSubmit} className="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-8">
           <h3 className="font-semibold text-stone-900 mb-4">{t("shareTestimony", lang)}</h3>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={t("yourName", lang)}
-            className="w-full border border-stone-300 rounded-xl px-4 py-2.5 mb-3 text-sm bg-white focus:border-purple-500 focus:outline-none"
-          />
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder={t("yourTestimony", lang)}
-            rows={5}
-            className="w-full border border-stone-300 rounded-xl px-4 py-2.5 mb-3 text-sm bg-white focus:border-purple-500 focus:outline-none resize-none"
-          />
-          <button
-            type="submit"
-            className="bg-purple-600 text-white px-6 py-2.5 rounded-full font-medium hover:bg-purple-500 transition-colors text-sm"
-          >
-            {t("submit", lang)}
-          </button>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={t("yourName", lang)} className="w-full border border-stone-300 rounded-xl px-4 py-2.5 mb-3 text-sm bg-white focus:border-blue-500 focus:outline-none" />
+          <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder={t("yourTestimony", lang)} rows={5} className="w-full border border-stone-300 rounded-xl px-4 py-2.5 mb-3 text-sm bg-white focus:border-blue-500 focus:outline-none resize-none" />
+          <button type="submit" className="bg-blue-600 text-white px-6 py-2.5 rounded-full font-medium hover:bg-blue-500 transition-colors text-sm">{t("submit", lang)}</button>
         </form>
       )}
 
-      <div className="space-y-4">
-        {testimonies.map((testimony) => (
-          <div key={testimony.id} className="bg-white rounded-2xl border border-stone-200 p-5 hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-lg">{testimony.country}</span>
-              <span className="font-semibold text-stone-900">{testimony.name}</span>
-              <span className="text-stone-400 text-xs">· {testimony.time}</span>
-            </div>
-            <p className="text-stone-700 leading-relaxed mb-4">{testimony.text}</p>
-            <div className="flex items-center justify-between">
-              <button
-                onClick={() => handleLike(testimony.id)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
-                  testimony.liked
-                    ? "bg-purple-600 text-white"
-                    : "bg-purple-50 text-purple-700 hover:bg-purple-100"
-                }`}
-              >
-                {testimony.liked ? "❤️ Amen !" : "🤍 Amen"}
-              </button>
-              <div className="flex items-center gap-3">
-                <span className="text-sm text-stone-500">
-                  <strong className="text-purple-600">{testimony.likes}</strong> {t("amen", lang)}
-                </span>
+      {loading ? (
+        <div className="flex justify-center py-12">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : testimonies.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-4xl mb-3">✨</p>
+          <p className="text-stone-500">{lang === "fr" ? "Aucun témoignage pour le moment. Partagez le vôtre !" : "No testimonies yet. Share yours!"}</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {testimonies.map((testimony) => (
+            <div key={testimony.id} className="bg-white rounded-2xl border border-stone-200 p-5 hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-lg">{testimony.country}</span>
+                <span className="font-semibold text-stone-900">{testimony.name}</span>
+                <span className="text-stone-400 text-xs">· {timeAgo(testimony.created_at, lang)}</span>
+              </div>
+              <p className="text-stone-700 leading-relaxed mb-4">{testimony.text}</p>
+              <div className="flex items-center justify-between">
                 <button
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: t("testimonies", lang),
-                        text: `${testimony.name}: "${testimony.text}"`,
-                        url: window.location.href,
-                      });
-                    }
-                  }}
-                  className="text-stone-400 hover:text-purple-600 transition-colors text-sm"
+                  onClick={() => handleLike(testimony.id)}
+                  className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                    testimony.liked ? "bg-blue-600 text-white" : "bg-blue-50 text-blue-700 hover:bg-blue-100"
+                  }`}
                 >
-                  ↗
+                  {testimony.liked ? "❤️ Amen !" : "🤍 Amen"}
                 </button>
+                <span className="text-sm text-stone-500">
+                  <strong className="text-blue-500">{testimony.likes}</strong> {t("amen", lang)}
+                </span>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
