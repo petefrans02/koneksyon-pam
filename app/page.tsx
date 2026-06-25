@@ -182,7 +182,7 @@ function AIBanner() {
   const { lang } = useLang();
   return (
     <section className="max-w-4xl mx-auto px-6 py-8">
-      <div className="relative bg-gradient-to-br from-amber-500 via-yellow-500 to-amber-600 rounded-2xl p-8 text-white overflow-hidden">
+      <div className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 rounded-2xl p-8 text-white overflow-hidden">
         {/* Sparkle effects */}
         <div className="absolute top-4 right-8 w-3 h-3 bg-white rounded-full animate-ping opacity-40" style={{ animationDuration: "1.5s" }} />
         <div className="absolute top-12 right-20 w-2 h-2 bg-yellow-200 rounded-full animate-ping opacity-30" style={{ animationDuration: "2s", animationDelay: "0.5s" }} />
@@ -201,7 +201,7 @@ function AIBanner() {
             <h2 className="text-2xl font-bold mb-1">
               {lang === "fr" ? "Assistant Biblique IA" : lang === "ht" ? "Asistan Biblik IA" : "AI Bible Assistant"}
             </h2>
-            <p className="text-amber-100 text-sm mb-4">
+            <p className="text-purple-100 text-sm mb-4">
               {lang === "fr"
                 ? "Posez n'importe quelle question sur la Bible — obtenez une réponse instantanée avec des versets. Disponible 24h/24, dans votre langue."
                 : lang === "ht"
@@ -209,11 +209,11 @@ function AIBanner() {
                 : "Ask any question about the Bible — get an instant answer with verses. Available 24/7, in your language."}
             </p>
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5 bg-white/20 px-3 py-1.5 rounded-full text-xs font-medium">
+              <div className="flex items-center gap-1.5 bg-white/20 px-3 py-1.5 rounded-full text-xs font-medium animate-pulse">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                 {lang === "fr" ? "En ligne maintenant" : lang === "ht" ? "Anliy kounye a" : "Online now"}
               </div>
-              <span className="text-amber-200 text-xs">
+              <span className="text-purple-200 text-xs">
                 {lang === "fr" ? "Cliquez la colombe en bas à droite →" : lang === "ht" ? "Klike kolòb la anba adwat →" : "Click the dove bottom right →"}
               </span>
             </div>
