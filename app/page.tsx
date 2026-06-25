@@ -72,10 +72,10 @@ function Hero() {
   const verse = versePool[getDayOfYear() % versePool.length];
 
   return (
-    <section className="bg-gradient-to-br from-[#0a1628] via-[#0f2044] to-[#1a1040] text-white px-6 py-16 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white px-6 py-16 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full">
-        <div className="absolute top-10 left-10 w-48 h-48 bg-blue-500/8 rounded-full blur-[100px]" />
-        <div className="absolute bottom-10 right-10 w-56 h-56 bg-cyan-500/8 rounded-full blur-[100px]" />
+        <div className="absolute top-10 left-10 w-48 h-48 bg-white/10 rounded-full blur-[100px]" />
+        <div className="absolute bottom-10 right-10 w-56 h-56 bg-cyan-300/15 rounded-full blur-[100px]" />
       </div>
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="flex flex-col sm:flex-row items-center gap-8">
@@ -139,9 +139,9 @@ function ServicesShowcase() {
   const doubled = [...services, ...services];
 
   return (
-    <section className="bg-[#080e1c] py-10 overflow-hidden group-pause">
+    <section className="bg-slate-100 py-10 overflow-hidden group-pause">
       <div className="mb-6 text-center">
-        <p className="text-blue-400/50 text-xs font-bold uppercase tracking-[0.2em]">
+        <p className="text-blue-500 text-xs font-bold uppercase tracking-[0.2em]">
           ✦ {lang === "fr" ? "Tous nos services" : lang === "ht" ? "Tout sèvis nou yo" : "All our services"}
         </p>
       </div>
@@ -153,15 +153,14 @@ function ServicesShowcase() {
             <Link
               key={i}
               href={s.href}
-              className={`flex-shrink-0 w-44 bg-white/5 border border-white/10 rounded-2xl p-5 text-center hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all group cursor-pointer hover:shadow-xl ${s.glow}`}
-              style={{ backdropFilter: "blur(10px)" }}
+              className={`flex-shrink-0 w-44 bg-white border border-slate-200 rounded-2xl p-5 text-center hover:shadow-lg hover:-translate-y-1 hover:border-blue-200 transition-all group cursor-pointer`}
             >
-              <div className={`w-12 h-12 bg-gradient-to-br ${s.grad} rounded-xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-lg group-hover:scale-110 transition-transform`}>
+              <div className={`w-12 h-12 bg-gradient-to-br ${s.grad} rounded-xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-md group-hover:scale-110 transition-transform`}>
                 {s.icon}
               </div>
-              <p className="text-white font-bold text-sm mb-1 leading-tight">{s.title}</p>
-              <p className="text-blue-300/50 text-xs leading-tight">{s.desc}</p>
-              <span className="block mt-3 text-blue-400/60 text-xs group-hover:text-blue-300 transition-colors">
+              <p className="text-stone-800 font-bold text-sm mb-1 leading-tight">{s.title}</p>
+              <p className="text-slate-400 text-xs leading-tight">{s.desc}</p>
+              <span className="block mt-3 text-blue-500 text-xs group-hover:text-blue-600 font-medium transition-colors">
                 {lang === "fr" ? "Accéder →" : lang === "ht" ? "Antre →" : "Open →"}
               </span>
             </Link>
@@ -208,9 +207,9 @@ function ChurchCTA() {
   const { lang } = useLang();
   return (
     <section className="max-w-4xl mx-auto px-6 py-10">
-      <div className="bg-gradient-to-br from-[#0a1628] to-[#0f2044] rounded-2xl p-8 sm:p-10 border border-blue-800/30 text-center relative overflow-hidden">
-        <div className="absolute top-6 left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-[80px]" />
-        <div className="absolute bottom-6 right-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-[80px]" />
+      <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-8 sm:p-10 border border-blue-400/20 text-center relative overflow-hidden">
+        <div className="absolute top-6 left-10 w-32 h-32 bg-white/10 rounded-full blur-[80px]" />
+        <div className="absolute bottom-6 right-10 w-40 h-40 bg-cyan-300/15 rounded-full blur-[80px]" />
         <div className="relative z-10">
           <span className="text-5xl block mb-4">🏠</span>
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
@@ -242,9 +241,9 @@ function ConnectedWorld() {
   const countries = ["🇺🇸", "🇭🇹", "🇫🇷", "🇨🇦", "🇧🇷", "🇬🇧", "🇩🇴", "🇨🇱", "🇧🇪", "🇨🇭", "🇲🇽", "🇨🇲"];
 
   return (
-    <section className="bg-[#0a1628] text-white px-6 py-12">
+    <section className="bg-blue-50 px-6 py-12">
       <div className="max-w-3xl mx-auto text-center">
-        <p className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-4">
+        <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-4">
           🌍 {countries.length} {t("countries", lang)}
         </p>
         <div className="flex flex-wrap justify-center gap-3 mb-6">
@@ -252,7 +251,7 @@ function ConnectedWorld() {
             <span key={i} className="text-3xl animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>{flag}</span>
           ))}
         </div>
-        <p className="text-blue-300/40 text-sm">
+        <p className="text-blue-600/60 text-sm">
           {lang === "fr" ? "Des frères et sœurs du monde entier connectés par la foi" : "Brothers and sisters worldwide connected by faith"}
         </p>
       </div>

@@ -51,15 +51,15 @@ export default function NavBar() {
   ];
 
   return (
-    <nav className="bg-gradient-to-r from-[#0a1628] via-[#0f2044] to-[#0a1628] px-4 py-3 sticky top-0 z-50 shadow-xl border-b border-blue-900/30">
+    <nav className="bg-white px-4 py-3 sticky top-0 z-50 shadow-sm border-b border-slate-200">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group" onClick={() => setOpenMenu(null)}>
           <img src="/logo-kp.png" alt="KP" className="w-11 h-11 rounded-xl group-hover:scale-105 transition-transform" />
           <div className="hidden sm:block">
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">KONEKSYON PAM</span>
-            <p className="text-[10px] text-blue-400/60 -mt-0.5 tracking-widest">UNE MISSION • UN DIEU • UNE VISION</p>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">KONEKSYON PAM</span>
+            <p className="text-[10px] text-blue-400 -mt-0.5 tracking-widest">UNE MISSION • UN DIEU • UNE VISION</p>
           </div>
-          <span className="sm:hidden text-lg font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">KP</span>
+          <span className="sm:hidden text-lg font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">KP</span>
         </Link>
 
         {/* Desktop Menu */}
@@ -68,18 +68,18 @@ export default function NavBar() {
             <div key={menu.label} className="relative">
               <button
                 onClick={() => setOpenMenu(openMenu === menu.label ? null : menu.label)}
-                className={`text-blue-200/70 hover:text-white hover:bg-blue-500/20 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${openMenu === menu.label ? "bg-blue-500/20 text-white" : ""}`}
+                className={`text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${openMenu === menu.label ? "bg-blue-50 text-blue-600" : ""}`}
               >
                 {menu.label} ▾
               </button>
               {openMenu === menu.label && (
-                <div className="absolute top-full left-0 mt-1 bg-[#0f2044] border border-blue-800/40 rounded-xl shadow-xl py-2 w-56 z-50">
+                <div className="absolute top-full left-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg py-2 w-56 z-50">
                   {menu.items.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
                       onClick={() => setOpenMenu(null)}
-                      className="block px-4 py-2.5 text-sm text-blue-200/80 hover:text-white hover:bg-blue-500/20 transition-colors"
+                      className="block px-4 py-2.5 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                     >
                       {item.label}
                     </Link>
@@ -108,18 +108,18 @@ export default function NavBar() {
           <div key={menu.label} className="relative">
             <button
               onClick={() => setOpenMenu(openMenu === menu.label ? null : menu.label)}
-              className={`text-blue-300/60 text-xs font-medium px-2 py-1 rounded transition-colors ${openMenu === menu.label ? "text-cyan-300 bg-blue-500/20" : ""}`}
+              className={`text-slate-500 text-xs font-medium px-2 py-1 rounded transition-colors ${openMenu === menu.label ? "text-blue-600 bg-blue-50" : ""}`}
             >
               {menu.label} ▾
             </button>
             {openMenu === menu.label && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-[#0f2044] border border-blue-800/40 rounded-xl shadow-xl py-2 w-52 z-50">
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg py-2 w-52 z-50">
                 {menu.items.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={() => setOpenMenu(null)}
-                    className="block px-4 py-2.5 text-sm text-blue-200/80 hover:text-white hover:bg-blue-500/20 transition-colors"
+                    className="block px-4 py-2.5 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                   >
                     {item.label}
                   </Link>
