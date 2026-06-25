@@ -27,15 +27,15 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
           <p className="text-center text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent mb-1">KONEKSYON PAM</p>
           <p className="text-center text-[10px] tracking-[0.3em] text-cyan-500/40 mb-6 uppercase">Une Mission • Un Dieu • Une Mission</p>
           <div className="flex justify-center gap-6 mb-6">
-            <a href="/psaumes" className="text-blue-400/40 hover:text-cyan-400 text-sm transition-colors">Psaumes</a>
-            <a href="/prieres" className="text-blue-400/40 hover:text-cyan-400 text-sm transition-colors">Prières</a>
-            <a href="/temoignages" className="text-blue-400/40 hover:text-cyan-400 text-sm transition-colors">Témoignages</a>
-            <a href="/etude" className="text-blue-400/40 hover:text-cyan-400 text-sm transition-colors">Études</a>
-            <a href="/quiz" className="text-blue-400/40 hover:text-cyan-400 text-sm transition-colors">Quiz</a>
+            <a href="/psaumes" className="text-blue-300/70 hover:text-cyan-300 text-sm transition-colors">Psaumes</a>
+            <a href="/prieres" className="text-blue-300/70 hover:text-cyan-300 text-sm transition-colors">Prières</a>
+            <a href="/temoignages" className="text-blue-300/70 hover:text-cyan-300 text-sm transition-colors">Témoignages</a>
+            <a href="/etude" className="text-blue-300/70 hover:text-cyan-300 text-sm transition-colors">Études</a>
+            <a href="/quiz" className="text-blue-300/70 hover:text-cyan-300 text-sm transition-colors">Quiz</a>
           </div>
-          <div className="border-t border-blue-800/30 pt-5">
-            <p className="text-center text-xs text-blue-400/30">Connectés par la foi • Konekte pa lafwa • Connected by faith</p>
-            <p className="text-center text-xs text-blue-500/20 mt-2">&copy; {new Date().getFullYear()} KONEKSYON PAM — Pasteur P. Francis</p>
+          <div className="border-t border-blue-700/30 pt-5">
+            <p className="text-center text-sm text-blue-300/50">Connectés par la foi • Konekte pa lafwa • Connected by faith</p>
+            <p className="text-center text-xs text-blue-400/40 mt-2">&copy; {new Date().getFullYear()} KONEKSYON PAM — Pasteur P. Francis</p>
           </div>
         </div>
       </footer>

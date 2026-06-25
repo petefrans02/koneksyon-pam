@@ -46,7 +46,7 @@ export default function ScrollingVerses() {
     <div className="bg-gradient-to-r from-[#0a1628] via-[#0f2044] to-[#0a1628] py-3 overflow-hidden border-b border-blue-900/20">
       <div className="flex animate-marquee whitespace-nowrap">
         {doubled.map((verse, i) => (
-          <span key={i} className="text-cyan-400/70 text-sm mx-8 inline-block">
+          <span key={i} className="text-white text-sm mx-8 inline-block font-medium">
             ✦ {verse}
           </span>
         ))}
