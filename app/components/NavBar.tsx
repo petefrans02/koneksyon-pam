@@ -30,6 +30,7 @@ export default function NavBar() {
       items: [
         { href: "/etude", label: lang === "fr" ? "📚 Études bibliques" : lang === "ht" ? "📚 Etid biblik" : "📚 Bible studies" },
         { href: "/quiz", label: lang === "fr" ? "🏆 Quiz biblique" : lang === "ht" ? "🏆 Kiz biblik" : "🏆 Bible quiz" },
+        { href: "/jeu", label: lang === "fr" ? "🎯 Devine le Verset" : lang === "ht" ? "🎯 Devine Vèsè a" : "🎯 Guess the Verse" },
       ],
     },
     {
