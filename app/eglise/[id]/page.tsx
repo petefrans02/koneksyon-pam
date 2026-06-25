@@ -35,6 +35,23 @@ export default function ChurchPage() {
   const [postType, setPostType] = useState("announcement");
   const [postImage, setPostImage] = useState("");
   const [postVideo, setPostVideo] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [uploadedUrl, setUploadedUrl] = useState("");
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch("/api/upload", { method: "POST", body: formData });
+    const data = await res.json();
+    if (data.url) {
+      setUploadedUrl(data.url);
+      setPostImage(data.url);
+    }
+    setUploading(false);
+  }
 
   useEffect(() => {
     loadChurch();
@@ -149,12 +166,19 @@ export default function ChurchPage() {
           <input type="hidden" value={typeMap[activeTab]} onChange={(e) => setPostType(e.target.value)} />
           <input type="text" value={postTitle} onChange={(e) => setPostTitle(e.target.value)} placeholder={lang === "fr" ? "Titre..." : "Title..."} required className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none font-medium" />
           <textarea value={postContent} onChange={(e) => setPostContent(e.target.value)} placeholder={lang === "fr" ? "Contenu..." : "Content..."} required rows={4} className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none resize-none" />
-          <div className="flex flex-col sm:flex-row gap-3 mb-4">
-            <div className="flex-1">
-              <label className="block text-xs font-medium text-stone-500 mb-1">📷 {lang === "fr" ? "Lien image (optionnel)" : "Image URL (optional)"}</label>
-              <input type="url" value={postImage} onChange={(e) => setPostImage(e.target.value)} placeholder="https://..." className="w-full border border-stone-300 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none" />
+          <div className="flex flex-col gap-3 mb-4">
+            <div>
+              <label className="block text-xs font-medium text-stone-500 mb-1">📷 {lang === "fr" ? "Ajouter une image" : "Add an image"}</label>
+              <div className="flex items-center gap-3">
+                <label className="cursor-pointer bg-slate-100 hover:bg-slate-200 border border-stone-300 rounded-xl px-4 py-2.5 text-sm text-stone-600 font-medium transition-colors">
+                  {uploading ? "⏳ Upload..." : "📁 Choisir un fichier"}
+                  <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+                </label>
+                {uploadedUrl && <span className="text-green-600 text-xs font-medium">✓ Image ajoutée</span>}
+              </div>
+              {uploadedUrl && <img src={uploadedUrl} alt="" className="mt-2 w-32 h-32 object-cover rounded-xl border border-stone-200" />}
             </div>
-            <div className="flex-1">
+            <div>
               <label className="block text-xs font-medium text-stone-500 mb-1">🎬 {lang === "fr" ? "Lien vidéo YouTube (optionnel)" : "YouTube link (optional)"}</label>
               <input type="url" value={postVideo} onChange={(e) => setPostVideo(e.target.value)} placeholder="https://youtube.com/..." className="w-full border border-stone-300 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none" />
             </div>

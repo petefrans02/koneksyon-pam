@@ -11,6 +11,7 @@ export default function EglisePage() {
   const [joinCode, setJoinCode] = useState("");
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<unknown>(null);
+  const [joinError, setJoinError] = useState("");
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }: { data: { user: unknown } }) => setUser(data.user));
@@ -26,6 +27,7 @@ export default function EglisePage() {
 
   async function handleJoin() {
     if (!joinCode.trim()) return;
+    setJoinError("");
     if (!user) {
       supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${window.location.origin}/eglise` } });
       return;
@@ -38,6 +40,8 @@ export default function EglisePage() {
     const data = await res.json();
     if (data.church_id) {
       window.location.href = `/eglise/${data.church_id}`;
+    } else {
+      setJoinError(lang === "fr" ? "⚠️ Vérifiez le code et réessayez" : lang === "ht" ? "⚠️ Verifye kòd la epi eseye ankò" : "⚠️ Check the code and try again");
     }
   }
 
@@ -91,6 +95,7 @@ export default function EglisePage() {
               →
             </button>
           </div>
+          {joinError && <p className="text-red-500 text-sm font-medium mt-2">{joinError}</p>}
         </div>
       </div>
 
