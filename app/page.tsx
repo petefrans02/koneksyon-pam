@@ -178,11 +178,58 @@ function RecentPrayers() {
   );
 }
 
+function AIBanner() {
+  const { lang } = useLang();
+  return (
+    <section className="max-w-4xl mx-auto px-6 py-8">
+      <div className="relative bg-gradient-to-br from-amber-500 via-yellow-500 to-amber-600 rounded-2xl p-8 text-white overflow-hidden">
+        {/* Sparkle effects */}
+        <div className="absolute top-4 right-8 w-3 h-3 bg-white rounded-full animate-ping opacity-40" style={{ animationDuration: "1.5s" }} />
+        <div className="absolute top-12 right-20 w-2 h-2 bg-yellow-200 rounded-full animate-ping opacity-30" style={{ animationDuration: "2s", animationDelay: "0.5s" }} />
+        <div className="absolute bottom-6 right-12 w-2 h-2 bg-white rounded-full animate-ping opacity-30" style={{ animationDuration: "2.5s", animationDelay: "1s" }} />
+        <div className="absolute top-8 left-[60%] w-1.5 h-1.5 bg-yellow-100 rounded-full animate-ping opacity-40" style={{ animationDuration: "3s", animationDelay: "0.3s" }} />
+        <div className="absolute bottom-10 left-[40%] w-2 h-2 bg-white rounded-full animate-ping opacity-20" style={{ animationDuration: "1.8s", animationDelay: "0.8s" }} />
+
+        <div className="flex items-center gap-6 relative z-10">
+          <div className="shrink-0">
+            <div className="relative">
+              <div className="absolute inset-0 bg-white rounded-full animate-pulse opacity-20 blur-md" />
+              <span className="text-6xl block animate-bounce relative" style={{ animationDuration: "2.5s" }}>🕊️</span>
+            </div>
+          </div>
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold mb-1">
+              {lang === "fr" ? "Assistant Biblique IA" : lang === "ht" ? "Asistan Biblik IA" : "AI Bible Assistant"}
+            </h2>
+            <p className="text-amber-100 text-sm mb-4">
+              {lang === "fr"
+                ? "Posez n'importe quelle question sur la Bible — obtenez une réponse instantanée avec des versets. Disponible 24h/24, dans votre langue."
+                : lang === "ht"
+                ? "Poze nenpòt kesyon sou Bib la — jwenn yon repons imedyatman ak vèsè. Disponib 24/7, nan lang ou."
+                : "Ask any question about the Bible — get an instant answer with verses. Available 24/7, in your language."}
+            </p>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 bg-white/20 px-3 py-1.5 rounded-full text-xs font-medium">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                {lang === "fr" ? "En ligne maintenant" : lang === "ht" ? "Anliy kounye a" : "Online now"}
+              </div>
+              <span className="text-amber-200 text-xs">
+                {lang === "fr" ? "Cliquez la colombe en bas à droite →" : lang === "ht" ? "Klike kolòb la anba adwat →" : "Click the dove bottom right →"}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   return (
     <div>
       <VerseOfDay />
       <QuickLinks />
+      <AIBanner />
       <BibleQuiz />
       <RecentPrayers />
       <ConnectedWorld />
