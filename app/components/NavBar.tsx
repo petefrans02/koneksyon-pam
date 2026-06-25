@@ -14,7 +14,8 @@ export default function NavBar() {
     {
       label: lang === "fr" ? "Adoration" : lang === "ht" ? "Adorasyon" : "Worship",
       items: [
-        { href: "/psaumes", label: lang === "fr" ? "📖 Les 150 Psaumes" : lang === "ht" ? "📖 150 Sòm yo" : "📖 150 Psalms" },
+        { href: "/bible", label: lang === "fr" ? "📖 La Bible complète" : lang === "ht" ? "📖 Bib la konplè" : "📖 Full Bible" },
+        { href: "/psaumes", label: lang === "fr" ? "🎶 Les 150 Psaumes" : lang === "ht" ? "🎶 150 Sòm yo" : "🎶 150 Psalms" },
         { href: "/louange", label: lang === "fr" ? "🎵 Louange & Musique" : lang === "ht" ? "🎵 Lwanj & Mizik" : "🎵 Praise & Music" },
       ],
     },
