@@ -12,7 +12,7 @@ export default function NavBar() {
     <nav className="bg-gradient-to-r from-stone-900 to-stone-800 px-4 py-3 sticky top-0 z-50 shadow-lg">
       <div className="max-w-5xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <img src="https://cdn-icons-png.flaticon.com/512/4492/4492489.png" alt="Cross" className="w-8 h-8" />
+          <img src="https://cdn-icons-png.flaticon.com/512/1066/1066898.png" alt="Bible" className="w-8 h-8" />
           <span className="text-xl font-bold text-amber-500">KONEKSYON PAM</span>
         </Link>
         <div className="hidden sm:flex items-center gap-5 text-sm">
