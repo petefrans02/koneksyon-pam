@@ -186,14 +186,24 @@ function QuizPlay({ level, onComplete }: { level: QuizLevel; onComplete: (score:
         )}
 
         {selected !== null && (
-          <button
-            onClick={next}
-            className={`mt-6 w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r ${level.color} hover:opacity-90 transition-opacity`}
-          >
-            {current + 1 >= total
-              ? (lang === "fr" ? "Voir le résultat" : lang === "ht" ? "Wè rezilta" : "See results")
-              : (lang === "fr" ? "Question suivante →" : lang === "ht" ? "Kesyon swivan →" : "Next question →")}
-          </button>
+          <div className="flex gap-3 mt-6">
+            {current > 0 && (
+              <button
+                onClick={() => { setCurrent(current - 1); setSelected(null); setShowExplanation(false); }}
+                className="flex-1 py-3 rounded-xl font-bold text-stone-600 bg-stone-100 hover:bg-stone-200 transition-colors"
+              >
+                ← {lang === "fr" ? "Précédent" : lang === "ht" ? "Anvan" : "Previous"}
+              </button>
+            )}
+            <button
+              onClick={next}
+              className={`flex-1 py-3 rounded-xl font-bold text-white bg-gradient-to-r ${level.color} hover:opacity-90 transition-opacity`}
+            >
+              {current + 1 >= total
+                ? (lang === "fr" ? "Voir le résultat ★" : lang === "ht" ? "Wè rezilta ★" : "See results ★")
+                : (lang === "fr" ? "Suivant →" : lang === "ht" ? "Swivan →" : "Next →")}
+            </button>
+          </div>
         )}
       </div>
     </div>
