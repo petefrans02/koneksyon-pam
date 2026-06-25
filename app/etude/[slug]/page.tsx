@@ -41,17 +41,17 @@ function AIChat({ studyTitle, studyContent }: { studyTitle: string; studyContent
   return (
     <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-200 p-6 mt-8">
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-2xl">🤖</span>
+        <span className="text-2xl">🕊️</span>
         <h3 className="font-bold text-stone-900">
-          {lang === "fr" ? "Posez vos questions" : lang === "ht" ? "Poze kesyon ou yo" : "Ask your questions"}
+          {lang === "fr" ? "Assistant Biblique" : lang === "ht" ? "Asistan Biblik" : "Bible Assistant"}
         </h3>
       </div>
       <p className="text-sm text-stone-500 mb-4">
         {lang === "fr"
-          ? "L'assistant biblique répond à toutes vos questions sur cette étude"
+          ? "Posez n'importe quelle question sur la Bible — l'IA vous répond avec des versets"
           : lang === "ht"
-          ? "Asistan biblik la reponn tout kesyon ou sou etid sa a"
-          : "The Bible assistant answers all your questions about this study"}
+          ? "Poze nenpòt kesyon sou Bib la — IA a reponn ou ak vèsè"
+          : "Ask any question about the Bible — AI answers with verses"}
       </p>
 
       {messages.length > 0 && (
