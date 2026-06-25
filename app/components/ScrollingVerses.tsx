@@ -4,14 +4,16 @@ import { useLang } from "@/lib/LangContext";
 
 const verses = {
   fr: [
-    "« Car Dieu a tant aimé le monde qu'il a donné son Fils unique » — Jean 3:16",
-    "« L'Éternel est mon berger, je ne manquerai de rien » — Psaume 23:1",
-    "« Je peux tout par celui qui me fortifie » — Philippiens 4:13",
-    "« Ne crains point, car je suis avec toi » — Ésaïe 41:10",
-    "« Demandez et l'on vous donnera, cherchez et vous trouverez » — Matthieu 7:7",
-    "« Le commencement de la sagesse, c'est la crainte de l'Éternel » — Proverbes 9:10",
-    "« Toutes choses concourent au bien de ceux qui aiment Dieu » — Romains 8:28",
-    "« La prière fervente du juste a une grande efficacité » — Jacques 5:16",
+    "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle. — Jean 3:16",
+    "L'Éternel est mon berger : je ne manquerai de rien. — Psaume 23:1",
+    "Je puis tout par celui qui me fortifie. — Philippiens 4:13",
+    "Ne crains point, car je suis avec toi ; ne t'effraie point, car je suis ton Dieu. — Ésaïe 41:10",
+    "Demandez, et l'on vous donnera ; cherchez, et vous trouverez ; frappez, et l'on vous ouvrira. — Matthieu 7:7",
+    "Le commencement de la sagesse, c'est la crainte de l'Éternel. — Proverbes 9:10",
+    "Nous savons, du reste, que toutes choses concourent au bien de ceux qui aiment Dieu. — Romains 8:28",
+    "La prière fervente du juste a une grande efficace. — Jacques 5:16",
+    "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse. — Proverbes 3:5",
+    "En toute chose, par la prière et la supplication, avec des actions de grâces, faites connaître vos besoins à Dieu. — Philippiens 4:6",
   ],
   ht: [
     "« Bondye renmen lemonn tèlman li bay sèl Pitit li » — Jan 3:16",
