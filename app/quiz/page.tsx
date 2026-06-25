@@ -302,17 +302,15 @@ export default function QuizPage() {
 
   if (result) {
     return (
-      <QuizResult
-        level={result.level}
-        score={result.score}
-        onBack={() => setResult(null)}
-      />
+      <RequireAuth>
+        <QuizResult level={result.level} score={result.score} onBack={() => setResult(null)} />
+      </RequireAuth>
     );
   }
 
   if (activeLevel) {
-    return <QuizPlay level={activeLevel} onComplete={handleComplete} />;
+    return <RequireAuth><QuizPlay level={activeLevel} onComplete={handleComplete} /></RequireAuth>;
   }
 
-  return <LevelSelector onSelect={setActiveLevel} progress={progress} />;
+  return <RequireAuth><LevelSelector onSelect={setActiveLevel} progress={progress} /></RequireAuth>;
 }

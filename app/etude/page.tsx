@@ -12,6 +12,7 @@ export default function EtudePage() {
   const subtitle = lang === "fr" ? "Approfondissez votre connaissance de la Parole de Dieu" : lang === "ht" ? "Apwofondi konesans ou nan Pawòl Bondye a" : "Deepen your knowledge of God's Word";
 
   return (
+    <RequireAuth>
     <div className="max-w-4xl mx-auto px-6 py-10">
       <div className="text-center mb-10">
         <img src="https://cdn-icons-png.flaticon.com/512/3330/3330999.png" alt="Bible" className="w-14 h-14 mx-auto mb-3" />
@@ -61,5 +62,6 @@ export default function EtudePage() {
         ))}
       </div>
     </div>
+    </RequireAuth>
   );
 }

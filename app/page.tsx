@@ -2,14 +2,22 @@
 
 import { useLang } from "@/lib/LangContext";
 import { t } from "@/lib/translations";
-import { featuredPsalms } from "@/lib/psalms-data";
 import Link from "next/link";
 import BibleQuiz from "./components/BibleQuiz";
 
+const verseOfDay = [
+  { ref: "Jean 3:16", fr: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.", ht: "Paske Bondye sitèlman renmen lèzòm, li bay sèl Pitit li a pou tout moun ki kwè nan li." },
+  { ref: "Philippiens 4:13", fr: "Je puis tout par celui qui me fortifie.", ht: "Mwen ka fè tout bagay nan Kris la ki ban mwen fòs." },
+  { ref: "Psaumes 23:1", fr: "L'Éternel est mon berger : je ne manquerai de rien.", ht: "Seyè a se gadò mwen; mwen p ap manke anyen." },
+  { ref: "Romains 8:28", fr: "Nous savons, du reste, que toutes choses concourent au bien de ceux qui aiment Dieu.", ht: "Nou konnen ke tout bagay travay ansanm pou byen moun ki renmen Bondye." },
+  { ref: "Ésaïe 41:10", fr: "Ne crains rien, car je suis avec toi ; ne promène pas des regards inquiets, car je suis ton Dieu.", ht: "Pa pè, paske mwen avèk ou; pa dekouraje, paske mwen se Bondye ou." },
+  { ref: "Jérémie 29:11", fr: "Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance.", ht: "Paske mwen konnen plan mwen genyen pou nou, se plan pou fè nou jwenn lapè, pa dezas." },
+  { ref: "Matthieu 11:28", fr: "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos.", ht: "Vini jwenn mwen, nou tout ki fatige ak ki chaje ak fado lou, m ap ban nou repo." },
+];
+
 function Hero() {
   const { lang } = useLang();
-  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
-  const psalm = featuredPsalms[dayOfYear % featuredPsalms.length];
+  const verse = verseOfDay[new Date().getDay()];
 
   return (
     <section className="bg-gradient-to-br from-[#0a1628] via-[#0f2044] to-[#1a1040] text-white px-6 py-16 relative overflow-hidden">
@@ -26,14 +34,14 @@ function Hero() {
               </div>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold mb-3">
-              {lang === "fr" ? "La plateforme de l'Église connectée" : lang === "ht" ? "Platfòm Legliz ki konekte" : "The connected Church platform"}
+              {lang === "fr" ? "La plateforme des chrétiens connectés" : lang === "ht" ? "Platfòm kretyen ki konekte" : "The platform for connected Christians"}
             </h1>
             <p className="text-blue-200/70 text-sm sm:text-base mb-6 max-w-lg">
               {lang === "fr"
-                ? "Prière, louange, études bibliques, communauté, espace église — tout ce dont l'Église a besoin, en un seul endroit."
+                ? "Prière, louange, études bibliques, communauté, groupes d'église — tout ce dont chaque chrétien a besoin, en un seul endroit."
                 : lang === "ht"
-                ? "Lapriyè, lwanj, etid biblik, kominote, espas legliz — tout sa Legliz la bezwen, nan yon sèl kote."
-                : "Prayer, praise, Bible studies, community, church space — everything the Church needs, in one place."}
+                ? "Lapriyè, lwanj, etid biblik, kominote, gwoup legliz — tout sa chak kretyen bezwen, nan yon sèl kote."
+                : "Prayer, praise, Bible studies, community, church groups — everything every Christian needs, in one place."}
             </p>
             <div className="flex flex-wrap justify-center sm:justify-start gap-3">
               <Link href="/eglise" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition-all shadow-lg shadow-blue-500/30">
@@ -47,11 +55,10 @@ function Hero() {
           {/* Verse of the day card */}
           <div className="w-full sm:w-80 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-5 shrink-0">
             <p className="text-cyan-400 text-xs font-semibold uppercase tracking-widest mb-2">✦ {t("verseOfDay", lang)}</p>
-            <h3 className="font-bold text-lg mb-1">{t("psalms", lang)} {psalm.number}</h3>
-            <p className="text-cyan-300/60 text-xs mb-3">{psalm.title[lang]}</p>
-            <p className="text-blue-100/80 text-sm italic leading-relaxed line-clamp-4">{psalm.text[lang]}</p>
-            <Link href="/psaumes" className="text-cyan-400 text-xs font-medium hover:underline mt-3 block">
-              {lang === "fr" ? "Lire le psaume complet →" : "Read full psalm →"}
+            <h3 className="font-bold text-lg mb-1">{verse.ref}</h3>
+            <p className="text-blue-100/80 text-sm italic leading-relaxed line-clamp-4">{lang === "ht" ? verse.ht : verse.fr}</p>
+            <Link href="/bible" className="text-cyan-400 text-xs font-medium hover:underline mt-3 block">
+              {lang === "fr" ? "Lire la Bible complète →" : lang === "ht" ? "Li Bib la konplè →" : "Read full Bible →"}
             </Link>
           </div>
         </div>
@@ -64,7 +71,6 @@ function PlatformFeatures() {
   const { lang } = useLang();
   const features = [
     { href: "/bible", image: "https://cdn-icons-png.flaticon.com/512/3330/3330999.png", title: lang === "fr" ? "La Bible" : lang === "ht" ? "Bib la" : "The Bible", desc: lang === "fr" ? "66 livres, 3 langues" : "66 books, 3 languages", color: "from-indigo-600 to-blue-700" },
-    { href: "/psaumes", image: "https://cdn-icons-png.flaticon.com/512/2534/2534204.png", title: lang === "fr" ? "Psaumes" : lang === "ht" ? "Sòm" : "Psalms", desc: lang === "fr" ? "150 Psaumes" : "150 Psalms", color: "from-blue-500 to-indigo-600" },
     { href: "/prieres", image: "https://cdn-icons-png.flaticon.com/512/4305/4305512.png", title: lang === "fr" ? "Prière" : lang === "ht" ? "Lapriyè" : "Prayer", desc: lang === "fr" ? "Mur de prière mondial" : "Global prayer wall", color: "from-cyan-500 to-blue-600" },
     { href: "/etude", image: "https://cdn-icons-png.flaticon.com/512/2534/2534204.png", title: lang === "fr" ? "Études" : lang === "ht" ? "Etid" : "Studies", desc: lang === "fr" ? "Sujets profonds + IA" : "Deep topics + AI", color: "from-purple-500 to-violet-600" },
     { href: "/quiz", image: "https://cdn-icons-png.flaticon.com/512/3135/3135768.png", title: "Quiz", desc: lang === "fr" ? "5 niveaux, testez-vous" : "5 levels, test yourself", color: "from-orange-500 to-red-600" },

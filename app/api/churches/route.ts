@@ -28,15 +28,18 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { name, pastor_name, description } = body;
+  const { name, pastor_name, description, logo_url } = body;
 
   if (!name || !pastor_name) return Response.json({ error: "Missing fields" }, { status: 400 });
 
   const join_code = generateCode();
 
+  const insertData: Record<string, string> = { name, pastor_name, description: description || "", join_code };
+  if (logo_url) insertData.logo_url = logo_url;
+
   const { data, error } = await getSupabase()
     .from("churches")
-    .insert({ name, pastor_name, description: description || "", join_code })
+    .insert(insertData)
     .select()
     .single();
 

@@ -79,6 +79,7 @@ export default function TemoignagesPage() {
   }
 
   return (
+    <RequireAuth>
     <div className="max-w-3xl mx-auto px-6 py-10">
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -141,5 +142,6 @@ export default function TemoignagesPage() {
         </div>
       )}
     </div>
+    </RequireAuth>
   );
 }

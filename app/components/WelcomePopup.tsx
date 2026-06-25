@@ -43,10 +43,10 @@ export default function WelcomePopup() {
 
         <p className="text-stone-600 mb-6 leading-relaxed">
           {lang === "fr"
-            ? "Bienvenue sur la plateforme de l'Église connectée. Créez un compte gratuitement et rejoignez cette belle famille !"
+            ? "Bienvenue sur la plateforme des chrétiens connectés. Créez un compte gratuitement et rejoignez cette belle famille !"
             : lang === "ht"
-            ? "Byenveni sou platfòm Legliz ki konekte. Kreye yon kont gratis epi rantre nan bèl fanmi sa a !"
-            : "Welcome to the connected Church platform. Create a free account and join this beautiful family!"}
+            ? "Byenveni sou platfòm kretyen ki konekte. Kreye yon kont gratis epi rantre nan bèl fanmi sa a !"
+            : "Welcome to the platform for connected Christians. Create a free account and join this beautiful family!"}
         </p>
 
         <button

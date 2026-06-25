@@ -9,13 +9,29 @@ export default function ContactPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSent(true);
-    setName("");
-    setEmail("");
-    setMessage("");
+    setSending(true);
+    setError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      if (!res.ok) throw new Error("Erreur d'envoi");
+      setSent(true);
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch {
+      setError(lang === "fr" ? "Erreur lors de l'envoi. Réessayez." : "Erè. Eseye ankò.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -84,11 +100,15 @@ export default function ContactPage() {
                 className="w-full border border-stone-300 rounded-xl px-4 py-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none focus:bg-white transition-colors resize-none"
               />
             </div>
+            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-3 rounded-xl font-bold hover:from-blue-400 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/20"
+              disabled={sending}
+              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-3 rounded-xl font-bold hover:from-blue-400 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-60"
             >
-              {lang === "fr" ? "Envoyer le message" : lang === "ht" ? "Voye mesaj la" : "Send message"}
+              {sending
+                ? (lang === "fr" ? "Envoi..." : lang === "ht" ? "Ap voye..." : "Sending...")
+                : (lang === "fr" ? "Envoyer le message" : lang === "ht" ? "Voye mesaj la" : "Send message")}
             </button>
           </div>
         </form>

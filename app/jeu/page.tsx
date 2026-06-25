@@ -111,6 +111,7 @@ export default function JeuPage() {
   }
 
   return (
+    <RequireAuth>
     <div className="max-w-lg mx-auto px-6 py-10">
       <Link href="/" className="text-blue-500 text-sm hover:underline mb-6 block">← {lang === "fr" ? "Accueil" : "Home"}</Link>
 
@@ -183,5 +184,6 @@ export default function JeuPage() {
         </div>
       )}
     </div>
+    </RequireAuth>
   );
 }

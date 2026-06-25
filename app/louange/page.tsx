@@ -1,18 +1,22 @@
 "use client";
 
 import { useLang } from "@/lib/LangContext";
+import { useEffect, useState } from "react";
 
-const videos = [
-  { id: "VIDEO_ID_1", title: "Les Psaumes chantés comme jamais ! (Louange, Adoration, Force)" },
-  { id: "VIDEO_ID_2", title: "CHANTS DE DÉLIVRANCE AU NOM DE JÉSUS — PRIÈRES PUISSANTES" },
-  { id: "VIDEO_ID_3", title: "Les Psaumes en Louange — Chants de Victoire et Promesses de Dieu" },
-  { id: "VIDEO_ID_4", title: "PSAUMES EN MUSIQUE — Louange, Adoration & Méditation Biblique" },
-  { id: "VIDEO_ID_5", title: "Les Psaumes en Chants — Foi, Louange & Espérance" },
-  { id: "VIDEO_ID_6", title: "Psaumes en Louange & Adoration — Versets puissants pour la Paix" },
-];
+interface Video { id: string; title: string; published: string; }
 
 export default function LouangePage() {
   const { lang } = useLang();
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/youtube")
+      .then((r) => r.json())
+      .then(({ videos }) => setVideos(videos || []))
+      .catch(() => setVideos([]))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
@@ -20,9 +24,10 @@ export default function LouangePage() {
         {lang === "fr" ? "Louange & Adoration" : lang === "ht" ? "Lwanj & Adorasyon" : "Praise & Worship"}
       </h1>
       <p className="text-stone-500 mb-8">
-        {lang === "fr" ? "Écoute les Psaumes en musique — KONEKSYON PAM" : lang === "ht" ? "Koute Sòm yo nan mizik — KONEKSYON PAM" : "Listen to Psalms in music — KONEKSYON PAM"}
+        {lang === "fr" ? "Dernières vidéos — KONEKSYON PAM" : lang === "ht" ? "Dènye videyo — KONEKSYON PAM" : "Latest videos — KONEKSYON PAM"}
       </p>
 
+      {/* Subscribe Banner */}
       <div className="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl p-6 mb-8 flex items-center gap-4">
         <span className="text-4xl">▶</span>
         <div>
@@ -35,33 +40,64 @@ export default function LouangePage() {
           href="https://www.youtube.com/channel/UCl01tzkV_QzhPvZ-pf9Ey-g?sub_confirmation=1"
           target="_blank"
           rel="noopener noreferrer"
-          className="ml-auto bg-white text-red-600 px-5 py-2 rounded-full font-bold hover:bg-red-50 transition-colors"
+          className="ml-auto bg-white text-red-600 px-5 py-2 rounded-full font-bold hover:bg-red-50 transition-colors shrink-0"
         >
           {lang === "fr" ? "S'abonner" : lang === "ht" ? "Abòne" : "Subscribe"}
         </a>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {videos.map((video, i) => (
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="bg-stone-100 rounded-2xl h-52 animate-pulse" />
+          ))}
+        </div>
+      ) : videos.length === 0 ? (
+        <div className="text-center py-12">
           <a
-            key={i}
-            href={`https://www.youtube.com/channel/UCl01tzkV_QzhPvZ-pf9Ey-g`}
+            href="https://www.youtube.com/channel/UCl01tzkV_QzhPvZ-pf9Ey-g"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white rounded-2xl border border-stone-200 overflow-hidden hover:shadow-lg transition-all group"
+            className="bg-red-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-red-400 transition-colors"
           >
-            <div className="h-40 bg-gradient-to-br from-stone-800 to-stone-900 flex items-center justify-center">
-              <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                <span className="text-white text-2xl ml-1">▶</span>
-              </div>
-            </div>
-            <div className="p-4">
-              <h3 className="font-medium text-stone-900 text-sm line-clamp-2">{video.title}</h3>
-              <p className="text-xs text-stone-400 mt-1">KONEKSYON PAM</p>
-            </div>
+            {lang === "fr" ? "Voir toutes les vidéos sur YouTube" : "Watch on YouTube"}
           </a>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {videos.map((video) => (
+            <a
+              key={video.id}
+              href={`https://www.youtube.com/watch?v=${video.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white rounded-2xl border border-stone-200 overflow-hidden hover:shadow-lg transition-all group"
+            >
+              <div className="relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
+                  alt={video.title}
+                  className="w-full h-40 object-cover"
+                  onError={(e) => {
+                    const el = e.currentTarget as HTMLImageElement;
+                    el.style.display = "none";
+                  }}
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
+                  <div className="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                    <span className="text-white text-xl ml-1">▶</span>
+                  </div>
+                </div>
+              </div>
+              <div className="p-4">
+                <h3 className="font-medium text-stone-900 text-sm line-clamp-2">{video.title}</h3>
+                <p className="text-xs text-stone-400 mt-1">KONEKSYON PAM</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
