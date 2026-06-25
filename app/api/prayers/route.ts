@@ -1,10 +1,12 @@
 import { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-);
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    process.env.SUPABASE_SERVICE_ROLE_KEY || ""
+  );
+}
 
 export async function GET() {
   const { data, error } = await supabase
@@ -39,9 +41,9 @@ export async function PATCH(request: NextRequest) {
 
   if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
 
-  const { data: prayer } = await supabase.from("prayers").select("pray_count").eq("id", id).single();
+  const { data: prayer } = await getSupabase().from("prayers").select("pray_count").eq("id", id).single();
   const newCount = (prayer?.pray_count || 0) + 1;
 
-  await supabase.from("prayers").update({ pray_count: newCount }).eq("id", id);
+  await getSupabase().from("prayers").update({ pray_count: newCount }).eq("id", id);
   return Response.json({ count: newCount });
 }

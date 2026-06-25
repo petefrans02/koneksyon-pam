@@ -1,10 +1,12 @@
 import { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-);
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    process.env.SUPABASE_SERVICE_ROLE_KEY || ""
+  );
+}
 
 export async function GET() {
   const { data, error } = await supabase
@@ -39,9 +41,9 @@ export async function PATCH(request: NextRequest) {
 
   if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
 
-  const { data: testimony } = await supabase.from("testimonies").select("likes").eq("id", id).single();
+  const { data: testimony } = await getSupabase().from("testimonies").select("likes").eq("id", id).single();
   const newLikes = (testimony?.likes || 0) + 1;
 
-  await supabase.from("testimonies").update({ likes: newLikes }).eq("id", id);
+  await getSupabase().from("testimonies").update({ likes: newLikes }).eq("id", id);
   return Response.json({ likes: newLikes });
 }
