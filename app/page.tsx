@@ -119,38 +119,54 @@ function Hero() {
   );
 }
 
-function PlatformFeatures() {
+function ServicesShowcase() {
   const { lang } = useLang();
-  const features = [
-    { href: "/bible", image: "https://cdn-icons-png.flaticon.com/512/3330/3330999.png", title: lang === "fr" ? "La Bible" : lang === "ht" ? "Bib la" : "The Bible", desc: lang === "fr" ? "66 livres, 3 langues" : "66 books, 3 languages", color: "from-indigo-600 to-blue-700" },
-    { href: "/prieres", image: "https://cdn-icons-png.flaticon.com/512/4305/4305512.png", title: lang === "fr" ? "Prière" : lang === "ht" ? "Lapriyè" : "Prayer", desc: lang === "fr" ? "Mur de prière mondial" : "Global prayer wall", color: "from-cyan-500 to-blue-600" },
-    { href: "/etude", image: "https://cdn-icons-png.flaticon.com/512/2534/2534204.png", title: lang === "fr" ? "Études" : lang === "ht" ? "Etid" : "Studies", desc: lang === "fr" ? "Sujets profonds + IA" : "Deep topics + AI", color: "from-purple-500 to-violet-600" },
-    { href: "/quiz", image: "https://cdn-icons-png.flaticon.com/512/3135/3135768.png", title: "Quiz", desc: lang === "fr" ? "5 niveaux, testez-vous" : "5 levels, test yourself", color: "from-orange-500 to-red-600" },
-    { href: "/jeu", image: "https://cdn-icons-png.flaticon.com/512/2534/2534493.png", title: lang === "fr" ? "Devine le Verset" : lang === "ht" ? "Devine Vèsè a" : "Guess the Verse", desc: lang === "fr" ? "Mini jeu biblique" : "Bible mini game", color: "from-amber-500 to-orange-600" },
-    { href: "/temoignages", image: "https://cdn-icons-png.flaticon.com/512/1216/1216575.png", title: lang === "fr" ? "Témoignages" : lang === "ht" ? "Temwayaj" : "Testimonies", desc: lang === "fr" ? "Partagez votre histoire" : "Share your story", color: "from-pink-500 to-rose-600" },
-    { href: "/chants", image: "https://cdn-icons-png.flaticon.com/512/2936/2936690.png", title: lang === "fr" ? "Chants d'Espérance" : lang === "ht" ? "Chan Desperans" : "Songs of Hope", desc: lang === "fr" ? "Cantiques haïtiens" : "Haitian hymns", color: "from-yellow-500 to-amber-600" },
-    { href: "/louange", image: "https://cdn-icons-png.flaticon.com/512/1216/1216575.png", title: lang === "fr" ? "Louange" : lang === "ht" ? "Lwanj" : "Praise", desc: lang === "fr" ? "Musique et adoration" : "Music and worship", color: "from-red-500 to-rose-600" },
-    { href: "/communaute", image: "https://cdn-icons-png.flaticon.com/512/1533/1533908.png", title: lang === "fr" ? "Communauté" : lang === "ht" ? "Kominote" : "Community", desc: lang === "fr" ? "7 groupes thématiques" : "7 thematic groups", color: "from-green-500 to-emerald-600" },
-    { href: "/eglise", image: "https://cdn-icons-png.flaticon.com/512/3884/3884151.png", title: lang === "fr" ? "Espace Église" : lang === "ht" ? "Espas Legliz" : "Church Space", desc: lang === "fr" ? "Votre église privée" : "Your private church", color: "from-blue-600 to-blue-800" },
+
+  const services = [
+    { href: "/bible",       icon: "📖", grad: "from-indigo-500 to-blue-600",    glow: "shadow-indigo-500/40", title: lang === "fr" ? "La Bible" : lang === "ht" ? "Bib la" : "The Bible",                desc: lang === "fr" ? "66 livres · 3 langues" : "66 books · 3 languages" },
+    { href: "/prieres",     icon: "🙏", grad: "from-cyan-500 to-teal-600",       glow: "shadow-cyan-500/40",   title: lang === "fr" ? "Prière" : lang === "ht" ? "Lapriyè" : "Prayer",                    desc: lang === "fr" ? "Mur de prière mondial" : "Global prayer wall" },
+    { href: "/temoignages", icon: "✨", grad: "from-pink-500 to-rose-600",       glow: "shadow-pink-500/40",   title: lang === "fr" ? "Témoignages" : lang === "ht" ? "Temwayaj" : "Testimonies",           desc: lang === "fr" ? "Partagez votre histoire" : "Share your story" },
+    { href: "/etude",       icon: "📚", grad: "from-purple-500 to-violet-600",   glow: "shadow-purple-500/40", title: lang === "fr" ? "Études" : lang === "ht" ? "Etid" : "Studies",                     desc: lang === "fr" ? "Études bibliques + IA" : "Bible studies + AI" },
+    { href: "/quiz",        icon: "🏆", grad: "from-amber-400 to-orange-500",    glow: "shadow-amber-500/40",  title: lang === "fr" ? "Quiz Biblique" : lang === "ht" ? "Kiz Biblik" : "Bible Quiz",       desc: lang === "fr" ? "5 niveaux de difficulté" : "5 difficulty levels" },
+    { href: "/jeu",         icon: "🎮", grad: "from-green-500 to-emerald-600",   glow: "shadow-green-500/40",  title: lang === "fr" ? "Jeux Bibliques" : lang === "ht" ? "Jwèt Biblik" : "Bible Games",    desc: lang === "fr" ? "3 jeux interactifs" : "3 interactive games" },
+    { href: "/louange",     icon: "🎵", grad: "from-red-500 to-rose-600",        glow: "shadow-red-500/40",    title: lang === "fr" ? "Louange" : lang === "ht" ? "Lwanj" : "Praise",                     desc: lang === "fr" ? "Musique & adoration" : "Music & worship" },
+    { href: "/communaute",  icon: "🌍", grad: "from-teal-500 to-green-600",      glow: "shadow-teal-500/40",   title: lang === "fr" ? "Communauté" : lang === "ht" ? "Kominote" : "Community",              desc: lang === "fr" ? "Groupes & débats" : "Groups & debates" },
+    { href: "/eglise",      icon: "⛪", grad: "from-blue-600 to-indigo-700",     glow: "shadow-blue-500/40",   title: lang === "fr" ? "Espace Église" : lang === "ht" ? "Espas Legliz" : "Church Space",  desc: lang === "fr" ? "Groupes privés" : "Private groups" },
+    { href: "/don",         icon: "❤️", grad: "from-orange-400 to-amber-500",    glow: "shadow-orange-500/40", title: lang === "fr" ? "Faire un don" : lang === "ht" ? "Fè yon don" : "Donate",            desc: lang === "fr" ? "Soutenir la mission" : "Support the mission" },
+    { href: "/contact",     icon: "📬", grad: "from-slate-500 to-gray-600",      glow: "shadow-slate-500/40",  title: "Contact",                                                                          desc: lang === "fr" ? "Nous écrire" : "Write to us" },
   ];
 
+  const doubled = [...services, ...services];
+
   return (
-    <section className="max-w-5xl mx-auto px-6 py-14">
-      <div className="text-center mb-10">
-        <h2 className="text-2xl font-bold text-stone-900">
-          {lang === "fr" ? "Tout pour l'Église, en un seul endroit" : lang === "ht" ? "Tout pou Legliz la, nan yon sèl kote" : "Everything for the Church, in one place"}
-        </h2>
+    <section className="bg-[#080e1c] py-10 overflow-hidden group-pause">
+      <div className="mb-6 text-center">
+        <p className="text-blue-400/50 text-xs font-bold uppercase tracking-[0.2em]">
+          ✦ {lang === "fr" ? "Tous nos services" : lang === "ht" ? "Tout sèvis nou yo" : "All our services"}
+        </p>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        {features.map((f) => (
-          <Link key={f.href} href={f.href} className="bg-white rounded-2xl border border-blue-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all group text-center">
-            <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform`}>
-              <img src={f.image} alt="" className="w-8 h-8 brightness-0 invert" />
-            </div>
-            <h3 className="font-bold text-stone-900 group-hover:text-blue-600 transition-colors">{f.title}</h3>
-            <p className="text-xs text-stone-500 mt-1">{f.desc}</p>
-          </Link>
-        ))}
+
+      {/* Scrolling strip */}
+      <div className="overflow-hidden">
+        <div className="flex gap-4 animate-scroll-x" style={{ width: "max-content" }}>
+          {doubled.map((s, i) => (
+            <Link
+              key={i}
+              href={s.href}
+              className={`flex-shrink-0 w-44 bg-white/5 border border-white/10 rounded-2xl p-5 text-center hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all group cursor-pointer hover:shadow-xl ${s.glow}`}
+              style={{ backdropFilter: "blur(10px)" }}
+            >
+              <div className={`w-12 h-12 bg-gradient-to-br ${s.grad} rounded-xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-lg group-hover:scale-110 transition-transform`}>
+                {s.icon}
+              </div>
+              <p className="text-white font-bold text-sm mb-1 leading-tight">{s.title}</p>
+              <p className="text-blue-300/50 text-xs leading-tight">{s.desc}</p>
+              <span className="block mt-3 text-blue-400/60 text-xs group-hover:text-blue-300 transition-colors">
+                {lang === "fr" ? "Accéder →" : lang === "ht" ? "Antre →" : "Open →"}
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -248,7 +264,7 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      <PlatformFeatures />
+      <ServicesShowcase />
       <AIBanner />
       <BibleQuiz />
       <ChurchCTA />
