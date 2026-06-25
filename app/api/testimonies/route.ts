@@ -9,7 +9,7 @@ function getSupabase() {
 }
 
 export async function GET() {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("testimonies")
     .select("*")
     .order("created_at", { ascending: false })
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
   if (!text) return Response.json({ error: "Missing text" }, { status: 400 });
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("testimonies")
     .insert({ name: name || "Anonyme", text, country: country || "🌍" })
     .select()
