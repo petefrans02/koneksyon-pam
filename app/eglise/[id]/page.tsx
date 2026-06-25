@@ -33,6 +33,8 @@ export default function ChurchPage() {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
   const [postType, setPostType] = useState("announcement");
+  const [postImage, setPostImage] = useState("");
+  const [postVideo, setPostVideo] = useState("");
 
   useEffect(() => {
     loadChurch();
@@ -147,6 +149,16 @@ export default function ChurchPage() {
           <input type="hidden" value={typeMap[activeTab]} onChange={(e) => setPostType(e.target.value)} />
           <input type="text" value={postTitle} onChange={(e) => setPostTitle(e.target.value)} placeholder={lang === "fr" ? "Titre..." : "Title..."} required className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none font-medium" />
           <textarea value={postContent} onChange={(e) => setPostContent(e.target.value)} placeholder={lang === "fr" ? "Contenu..." : "Content..."} required rows={4} className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none resize-none" />
+          <div className="flex flex-col sm:flex-row gap-3 mb-4">
+            <div className="flex-1">
+              <label className="block text-xs font-medium text-stone-500 mb-1">📷 {lang === "fr" ? "Lien image (optionnel)" : "Image URL (optional)"}</label>
+              <input type="url" value={postImage} onChange={(e) => setPostImage(e.target.value)} placeholder="https://..." className="w-full border border-stone-300 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none" />
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs font-medium text-stone-500 mb-1">🎬 {lang === "fr" ? "Lien vidéo YouTube (optionnel)" : "YouTube link (optional)"}</label>
+              <input type="url" value={postVideo} onChange={(e) => setPostVideo(e.target.value)} placeholder="https://youtube.com/..." className="w-full border border-stone-300 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none" />
+            </div>
+          </div>
           <button type="submit" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-2.5 rounded-xl font-medium hover:opacity-90 transition-opacity text-sm">
             {lang === "fr" ? "Publier" : lang === "ht" ? "Pibliye" : "Publish"}
           </button>
