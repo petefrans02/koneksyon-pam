@@ -19,13 +19,15 @@ export async function POST(request: NextRequest) {
 
   if (!email) return Response.json({ ok: false, reason: "no email" });
 
-  const gmailUser = process.env.GMAIL_USER || "koneksyonpam@gmail.com";
-  const gmailPass = process.env.GMAIL_APP_PASSWORD;
-  if (!gmailPass) return Response.json({ ok: false, reason: "no gmail config" });
+  const smtpUser = process.env.GMAIL_USER || "contact@koneksyonpam.com";
+  const smtpPass = process.env.GMAIL_APP_PASSWORD;
+  if (!smtpPass) return Response.json({ ok: false, reason: "no smtp config" });
 
   const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: { user: gmailUser, pass: gmailPass },
+    host: process.env.SMTP_HOST || "smtp.hostinger.com",
+    port: parseInt(process.env.SMTP_PORT || "465"),
+    secure: true,
+    auth: { user: smtpUser, pass: smtpPass },
   });
 
   const html = `
@@ -106,7 +108,7 @@ export async function POST(request: NextRequest) {
 </html>`;
 
   await transporter.sendMail({
-    from: `"KONEKSYON PAM" <${gmailUser}>`,
+    from: `"KONEKSYON PAM" <${smtpUser}>`,
     to: email,
     subject: `🙏 Merci pour votre don de $${amount} — KONEKSYON PAM`,
     html,
