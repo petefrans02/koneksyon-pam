@@ -11,6 +11,7 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "KONEKSYON PAM — Connectés par la foi",
   description: "Psaumes, prières et témoignages. Une communauté chrétienne connectée par la foi à travers le monde.",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
 };
 
 export default function RootLayout({

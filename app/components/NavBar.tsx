@@ -43,7 +43,7 @@ export default function NavBar() {
           <AuthButton />
         </div>
       </div>
-      <div className="sm:hidden flex justify-center gap-3 mt-2">
+      <div className="sm:hidden flex flex-wrap justify-center gap-2 mt-2 px-2">
         {[
           { href: "/psaumes", label: t("psalms", lang) },
           { href: "/prieres", label: t("prayers", lang) },

@@ -86,7 +86,7 @@ export default function FloatingAI() {
 
       {/* Chat Panel */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-[360px] max-h-[500px] bg-white rounded-2xl shadow-2xl border border-stone-200 flex flex-col overflow-hidden animate-in">
+        <div className="fixed bottom-24 right-3 sm:right-6 z-50 w-[calc(100vw-24px)] sm:w-[360px] max-h-[70vh] sm:max-h-[500px] bg-white rounded-2xl shadow-2xl border border-stone-200 flex flex-col overflow-hidden animate-in">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 px-5 py-4 text-white">
             <div className="flex items-center gap-3">

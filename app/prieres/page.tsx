@@ -61,7 +61,7 @@ export default function PrieresPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
-      <div className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-2xl p-5 mb-8 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-2xl p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <p className="text-2xl font-bold">{prayers.reduce((a, p) => a + p.count, 0).toLocaleString()}</p>
           <p className="text-blue-100 text-sm">{t("peoplePrayed", lang)}</p>
@@ -131,7 +131,7 @@ export default function PrieresPage() {
               </div>
             )}
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <button
                 onClick={() => handlePray(prayer.id)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
