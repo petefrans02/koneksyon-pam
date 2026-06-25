@@ -5,185 +5,88 @@ import { t } from "@/lib/translations";
 import { featuredPsalms } from "@/lib/psalms-data";
 import Link from "next/link";
 import BibleQuiz from "./components/BibleQuiz";
-import { useCountry } from "@/lib/useCountry";
 
-function VerseOfDay() {
+function Hero() {
   const { lang } = useLang();
-  const dayOfYear = Math.floor(
-    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
-  );
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
   const psalm = featuredPsalms[dayOfYear % featuredPsalms.length];
 
   return (
-    <section className="bg-gradient-to-br from-[#0a1628] via-[#0f2044] to-[#1a1040] text-white px-6 py-20 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-[#0a1628] via-[#0f2044] to-[#1a1040] text-white px-6 py-16 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full">
         <div className="absolute top-10 left-10 w-48 h-48 bg-blue-500/8 rounded-full blur-[100px]" />
         <div className="absolute bottom-10 right-10 w-56 h-56 bg-cyan-500/8 rounded-full blur-[100px]" />
-        <div className="absolute top-1/3 right-1/4 w-32 h-32 bg-purple-500/5 rounded-full blur-[80px]" />
       </div>
-      <div className="max-w-3xl mx-auto text-center relative z-10">
-        <div className="flex justify-center mb-6">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-1.5 border border-blue-400/30 shadow-xl shadow-blue-500/10">
-            <img src="/logo-kp.png" alt="KP" className="w-full h-full rounded-full object-cover" />
-          </div>
-        </div>
-        <p className="text-cyan-400 text-xs font-semibold uppercase tracking-[0.25em] mb-3">
-          ✦ {t("verseOfDay", lang)} ✦
-        </p>
-        <h2 className="text-3xl sm:text-4xl font-bold mb-2">
-          {t("psalms", lang)} {psalm.number}
-        </h2>
-        <p className="text-cyan-300/70 text-sm mb-8">{psalm.title[lang]}</p>
-        <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 px-8 py-6 mb-8">
-          <blockquote className="text-lg sm:text-xl leading-relaxed text-blue-100/90 italic">
-            {psalm.text[lang]}
-          </blockquote>
-        </div>
-        <div className="flex justify-center gap-3">
-          <Link
-            href="/psaumes"
-            className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-7 py-3 rounded-full font-medium hover:from-blue-400 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/30"
-          >
-            {t("psalms", lang)} →
-          </Link>
-          <button className="bg-white/10 backdrop-blur-sm text-white px-7 py-3 rounded-full font-medium hover:bg-white/20 transition-colors border border-white/10">
-            {t("share", lang)} ↗
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function QuickLinks() {
-  const { lang } = useLang();
-  const links = [
-    {
-      href: "/psaumes",
-      image: "https://cdn-icons-png.flaticon.com/512/3330/3330999.png",
-      label: t("psalms", lang),
-      desc: lang === "fr" ? "150 Psaumes en 3 langues" : lang === "ht" ? "150 Sòm nan 3 lang" : "150 Psalms in 3 languages",
-      color: "from-amber-500 to-amber-600",
-    },
-    {
-      href: "/prieres",
-      image: "https://cdn-icons-png.flaticon.com/512/4305/4305512.png",
-      label: t("prayers", lang),
-      desc: lang === "fr" ? "Priez ensemble" : lang === "ht" ? "Priye ansanm" : "Pray together",
-      color: "from-blue-500 to-blue-600",
-    },
-    {
-      href: "/temoignages",
-      image: "https://cdn-icons-png.flaticon.com/512/1533/1533908.png",
-      label: t("testimonies", lang),
-      desc: lang === "fr" ? "Partagez votre histoire" : lang === "ht" ? "Pataje istwa ou" : "Share your story",
-      color: "from-purple-500 to-purple-600",
-    },
-  ];
-
-  return (
-    <section className="max-w-4xl mx-auto px-6 py-12">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {links.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="bg-white rounded-2xl border border-blue-100 p-6 hover:shadow-xl hover:shadow-blue-100 hover:-translate-y-1 transition-all group"
-          >
-            <img src={link.image} alt={link.label} className="w-12 h-12 mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="text-lg font-bold text-stone-900 mb-1 group-hover:text-blue-600 transition-colors">
-              {link.label}
-            </h3>
-            <p className="text-sm text-stone-500">{link.desc}</p>
-          </Link>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function ConnectedWorld() {
-  const { lang } = useLang();
-  const countries = [
-    "🇺🇸", "🇭🇹", "🇫🇷", "🇨🇦", "🇧🇷", "🇬🇧", "🇩🇴", "🇨🇱",
-    "🇧🇪", "🇨🇭", "🇲🇽", "🇨🇲",
-  ];
-
-  return (
-    <section className="bg-stone-900 text-white px-6 py-12">
-      <div className="max-w-3xl mx-auto text-center">
-        <p className="text-amber-400 text-sm font-semibold uppercase tracking-widest mb-4">
-          🌍 {countries.length} {t("countries", lang)}
-        </p>
-        <div className="flex flex-wrap justify-center gap-3 mb-6">
-          {countries.map((flag, i) => (
-            <span key={i} className="text-3xl animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>
-              {flag}
-            </span>
-          ))}
-        </div>
-        <p className="text-stone-400 text-sm">
-          {lang === "fr"
-            ? "Des frères et sœurs du monde entier connectés en prière"
-            : lang === "ht"
-            ? "Frè ak sè nan mond lan konekte nan lapriyè"
-            : "Brothers and sisters around the world connected in prayer"}
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function RecentPrayers() {
-  const { lang } = useLang();
-  const prayers = [
-    {
-      name: "Marie L.",
-      text: lang === "fr" ? "Priez pour ma famille en Haïti..." : lang === "ht" ? "Priye pou fanmi m an Ayiti..." : "Pray for my family in Haiti...",
-      count: 47,
-      time: "2h",
-    },
-    {
-      name: "Jean P.",
-      text: lang === "fr" ? "Mon fils est malade, priez pour sa guérison..." : lang === "ht" ? "Pitit gason m malad, priye pou l geri..." : "My son is sick, pray for his healing...",
-      count: 123,
-      time: "5h",
-    },
-    {
-      name: t("anonymous", lang),
-      text: lang === "fr" ? "Je cherche un emploi depuis 6 mois..." : lang === "ht" ? "M ap chèche travay depi 6 mwa..." : "I've been looking for a job for 6 months...",
-      count: 89,
-      time: "8h",
-    },
-  ];
-
-  return (
-    <section className="max-w-3xl mx-auto px-6 py-12">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-stone-900">{t("prayers", lang)}</h2>
-        <Link href="/prieres" className="text-amber-600 text-sm font-medium hover:underline">
-          {lang === "fr" ? "Voir tout" : lang === "ht" ? "Wè tout" : lang === "es" ? "Ver todo" : "See all"} →
-        </Link>
-      </div>
-      <div className="space-y-3">
-        {prayers.map((prayer, i) => (
-          <div key={i} className="bg-white rounded-xl border border-stone-200 p-4">
-            <div className="flex items-start justify-between mb-2">
-              <div>
-                <span className="font-semibold text-stone-900">{prayer.name}</span>
-                <span className="text-stone-400 text-xs ml-2">· {prayer.time}</span>
+      <div className="max-w-4xl mx-auto relative z-10">
+        <div className="flex flex-col sm:flex-row items-center gap-8">
+          <div className="text-center sm:text-left flex-1">
+            <div className="flex justify-center sm:justify-start mb-4">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-1 border border-blue-400/30">
+                <img src="/logo-kp.png" alt="KP" className="w-full h-full rounded-full object-cover" />
               </div>
             </div>
-            <p className="text-stone-600 text-sm mb-3">{prayer.text}</p>
-            <div className="flex items-center justify-between">
-              <button className="bg-amber-50 text-amber-700 px-4 py-1.5 rounded-full text-sm font-medium hover:bg-amber-100 transition-colors">
-                {t("prayerButton", lang)}
-              </button>
-              <span className="text-xs text-stone-400">
-                {prayer.count} {t("peoplePrayed", lang)}
-              </span>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-3">
+              {lang === "fr" ? "La plateforme de l'Église connectée" : lang === "ht" ? "Platfòm Legliz ki konekte" : "The connected Church platform"}
+            </h1>
+            <p className="text-blue-200/70 text-sm sm:text-base mb-6 max-w-lg">
+              {lang === "fr"
+                ? "Prière, louange, études bibliques, communauté, espace église — tout ce dont l'Église a besoin, en un seul endroit."
+                : lang === "ht"
+                ? "Lapriyè, lwanj, etid biblik, kominote, espas legliz — tout sa Legliz la bezwen, nan yon sèl kote."
+                : "Prayer, praise, Bible studies, community, church space — everything the Church needs, in one place."}
+            </p>
+            <div className="flex flex-wrap justify-center sm:justify-start gap-3">
+              <Link href="/eglise" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition-all shadow-lg shadow-blue-500/30">
+                {lang === "fr" ? "⛪ Créer mon église" : lang === "ht" ? "⛪ Kreye legliz mwen" : "⛪ Create my church"}
+              </Link>
+              <Link href="/communaute" className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-colors border border-white/10">
+                {lang === "fr" ? "Explorer →" : lang === "ht" ? "Eksplore →" : "Explore →"}
+              </Link>
             </div>
           </div>
+          {/* Verse of the day card */}
+          <div className="w-full sm:w-80 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-5 shrink-0">
+            <p className="text-cyan-400 text-xs font-semibold uppercase tracking-widest mb-2">✦ {t("verseOfDay", lang)}</p>
+            <h3 className="font-bold text-lg mb-1">{t("psalms", lang)} {psalm.number}</h3>
+            <p className="text-cyan-300/60 text-xs mb-3">{psalm.title[lang]}</p>
+            <p className="text-blue-100/80 text-sm italic leading-relaxed line-clamp-4">{psalm.text[lang]}</p>
+            <Link href="/psaumes" className="text-cyan-400 text-xs font-medium hover:underline mt-3 block">
+              {lang === "fr" ? "Lire le psaume complet →" : "Read full psalm →"}
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PlatformFeatures() {
+  const { lang } = useLang();
+  const features = [
+    { href: "/psaumes", image: "https://cdn-icons-png.flaticon.com/512/3330/3330999.png", title: lang === "fr" ? "Psaumes" : lang === "ht" ? "Sòm" : "Psalms", desc: lang === "fr" ? "150 Psaumes en 3 langues" : "150 Psalms in 3 languages", color: "from-blue-500 to-indigo-600" },
+    { href: "/prieres", image: "https://cdn-icons-png.flaticon.com/512/4305/4305512.png", title: lang === "fr" ? "Prière" : lang === "ht" ? "Lapriyè" : "Prayer", desc: lang === "fr" ? "Mur de prière mondial" : "Global prayer wall", color: "from-cyan-500 to-blue-600" },
+    { href: "/etude", image: "https://cdn-icons-png.flaticon.com/512/2534/2534204.png", title: lang === "fr" ? "Études" : lang === "ht" ? "Etid" : "Studies", desc: lang === "fr" ? "Sujets profonds + IA" : "Deep topics + AI", color: "from-purple-500 to-violet-600" },
+    { href: "/quiz", image: "https://cdn-icons-png.flaticon.com/512/3135/3135768.png", title: "Quiz", desc: lang === "fr" ? "5 niveaux, testez-vous" : "5 levels, test yourself", color: "from-orange-500 to-red-600" },
+    { href: "/communaute", image: "https://cdn-icons-png.flaticon.com/512/1533/1533908.png", title: lang === "fr" ? "Communauté" : lang === "ht" ? "Kominote" : "Community", desc: lang === "fr" ? "7 groupes thématiques" : "7 thematic groups", color: "from-green-500 to-emerald-600" },
+    { href: "/eglise", image: "https://cdn-icons-png.flaticon.com/512/2936/2936690.png", title: lang === "fr" ? "Espace Église" : lang === "ht" ? "Espas Legliz" : "Church Space", desc: lang === "fr" ? "Votre église privée" : "Your private church", color: "from-blue-600 to-blue-800" },
+  ];
+
+  return (
+    <section className="max-w-5xl mx-auto px-6 py-14">
+      <div className="text-center mb-10">
+        <h2 className="text-2xl font-bold text-stone-900">
+          {lang === "fr" ? "Tout pour l'Église, en un seul endroit" : lang === "ht" ? "Tout pou Legliz la, nan yon sèl kote" : "Everything for the Church, in one place"}
+        </h2>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        {features.map((f) => (
+          <Link key={f.href} href={f.href} className="bg-white rounded-2xl border border-blue-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all group text-center">
+            <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform`}>
+              <img src={f.image} alt="" className="w-8 h-8 brightness-0 invert" />
+            </div>
+            <h3 className="font-bold text-stone-900 group-hover:text-blue-600 transition-colors">{f.title}</h3>
+            <p className="text-xs text-stone-500 mt-1">{f.desc}</p>
+          </Link>
         ))}
       </div>
     </section>
@@ -193,41 +96,27 @@ function RecentPrayers() {
 function AIBanner() {
   const { lang } = useLang();
   return (
-    <section className="max-w-4xl mx-auto px-6 py-8">
-      <div className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 rounded-2xl p-8 text-white overflow-hidden">
-        {/* Sparkle effects */}
+    <section className="max-w-4xl mx-auto px-6 py-4">
+      <div className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 rounded-2xl p-6 text-white overflow-hidden">
         <div className="absolute top-4 right-8 w-3 h-3 bg-white rounded-full animate-ping opacity-40" style={{ animationDuration: "1.5s" }} />
-        <div className="absolute top-12 right-20 w-2 h-2 bg-yellow-200 rounded-full animate-ping opacity-30" style={{ animationDuration: "2s", animationDelay: "0.5s" }} />
         <div className="absolute bottom-6 right-12 w-2 h-2 bg-white rounded-full animate-ping opacity-30" style={{ animationDuration: "2.5s", animationDelay: "1s" }} />
-        <div className="absolute top-8 left-[60%] w-1.5 h-1.5 bg-yellow-100 rounded-full animate-ping opacity-40" style={{ animationDuration: "3s", animationDelay: "0.3s" }} />
-        <div className="absolute bottom-10 left-[40%] w-2 h-2 bg-white rounded-full animate-ping opacity-20" style={{ animationDuration: "1.8s", animationDelay: "0.8s" }} />
-
-        <div className="flex items-center gap-6 relative z-10">
+        <div className="flex items-center gap-5 relative z-10">
           <div className="shrink-0">
             <div className="relative">
               <div className="absolute inset-0 bg-white rounded-full animate-pulse opacity-20 blur-md" />
-              <span className="text-6xl block animate-bounce relative" style={{ animationDuration: "2.5s" }}>🕊️</span>
+              <span className="text-5xl block animate-bounce relative" style={{ animationDuration: "2.5s" }}>🕊️</span>
             </div>
           </div>
           <div className="flex-1">
-            <h2 className="text-2xl font-bold mb-1">
+            <h2 className="text-xl font-bold mb-1">
               {lang === "fr" ? "Assistant Biblique IA" : lang === "ht" ? "Asistan Biblik IA" : "AI Bible Assistant"}
             </h2>
-            <p className="text-purple-100 text-sm mb-4">
-              {lang === "fr"
-                ? "Posez n'importe quelle question sur la Bible — obtenez une réponse instantanée avec des versets. Disponible 24h/24, dans votre langue."
-                : lang === "ht"
-                ? "Poze nenpòt kesyon sou Bib la — jwenn yon repons imedyatman ak vèsè. Disponib 24/7, nan lang ou."
-                : "Ask any question about the Bible — get an instant answer with verses. Available 24/7, in your language."}
+            <p className="text-purple-200 text-xs">
+              {lang === "fr" ? "Posez n'importe quelle question sur la Bible — réponse instantanée 24h/24" : "Ask any Bible question — instant answer 24/7"}
             </p>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5 bg-white/20 px-3 py-1.5 rounded-full text-xs font-medium animate-pulse">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                {lang === "fr" ? "En ligne maintenant" : lang === "ht" ? "Anliy kounye a" : "Online now"}
-              </div>
-              <span className="text-purple-200 text-xs">
-                {lang === "fr" ? "Cliquez la colombe en bas à droite →" : lang === "ht" ? "Klike kolòb la anba adwat →" : "Click the dove bottom right →"}
-              </span>
+            <div className="flex items-center gap-2 mt-2">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              <span className="text-purple-200 text-xs">{lang === "fr" ? "En ligne" : "Online"}</span>
             </div>
           </div>
         </div>
@@ -236,14 +125,68 @@ function AIBanner() {
   );
 }
 
+function ChurchCTA() {
+  const { lang } = useLang();
+  return (
+    <section className="max-w-4xl mx-auto px-6 py-10">
+      <div className="bg-gradient-to-br from-[#0a1628] to-[#0f2044] rounded-2xl p-8 sm:p-10 border border-blue-800/30 text-center relative overflow-hidden">
+        <div className="absolute top-6 left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-[80px]" />
+        <div className="absolute bottom-6 right-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-[80px]" />
+        <div className="relative z-10">
+          <span className="text-5xl block mb-4">⛪</span>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+            {lang === "fr" ? "Votre église sur KONEKSYON PAM" : lang === "ht" ? "Legliz ou sou KONEKSYON PAM" : "Your church on KONEKSYON PAM"}
+          </h2>
+          <p className="text-blue-300/60 text-sm mb-6 max-w-lg mx-auto">
+            {lang === "fr"
+              ? "Créez l'espace privé de votre église. Vos membres rejoignent avec un code. Études, prières, événements, jeux — tout centralisé."
+              : "Create your church's private space. Members join with a code. Studies, prayers, events, games — all centralized."}
+          </p>
+          <div className="flex justify-center gap-3">
+            <Link href="/eglise/creer" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/30">
+              {lang === "fr" ? "Créer mon église" : "Create my church"}
+            </Link>
+            <Link href="/eglise" className="bg-white/10 text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-colors border border-white/10">
+              {lang === "fr" ? "Rejoindre" : "Join"}
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ConnectedWorld() {
+  const { lang } = useLang();
+  const countries = ["🇺🇸", "🇭🇹", "🇫🇷", "🇨🇦", "🇧🇷", "🇬🇧", "🇩🇴", "🇨🇱", "🇧🇪", "🇨🇭", "🇲🇽", "🇨🇲"];
+
+  return (
+    <section className="bg-[#0a1628] text-white px-6 py-12">
+      <div className="max-w-3xl mx-auto text-center">
+        <p className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-4">
+          🌍 {countries.length} {t("countries", lang)}
+        </p>
+        <div className="flex flex-wrap justify-center gap-3 mb-6">
+          {countries.map((flag, i) => (
+            <span key={i} className="text-3xl animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>{flag}</span>
+          ))}
+        </div>
+        <p className="text-blue-300/40 text-sm">
+          {lang === "fr" ? "Des frères et sœurs du monde entier connectés par la foi" : "Brothers and sisters worldwide connected by faith"}
+        </p>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   return (
     <div>
-      <VerseOfDay />
-      <QuickLinks />
+      <Hero />
+      <PlatformFeatures />
       <AIBanner />
       <BibleQuiz />
-      <RecentPrayers />
+      <ChurchCTA />
       <ConnectedWorld />
     </div>
   );
