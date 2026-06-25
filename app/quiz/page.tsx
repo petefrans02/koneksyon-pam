@@ -4,6 +4,7 @@ import { gl, gla } from "@/lib/lang-helper";
 import { useLang } from "@/lib/LangContext";
 import { quizLevels, QuizLevel, QuizQuestion } from "@/lib/quiz-data";
 import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
 type Progress = Record<number, { completed: boolean; score: number; bestScore: number }>;
 
@@ -251,12 +252,30 @@ export default function QuizPage() {
   const [progress, setProgress] = useState<Progress>({});
   const [activeLevel, setActiveLevel] = useState<QuizLevel | null>(null);
   const [result, setResult] = useState<{ level: QuizLevel; score: number } | null>(null);
+  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
+    // Load from localStorage first
     setProgress(getProgress());
+    // Then try to load from Supabase if logged in
+    supabase.auth.getUser().then(async ({ data }: { data: { user: { id?: string } | null } }) => {
+      if (data.user?.id) {
+        setUserId(data.user.id);
+        const res = await fetch(`/api/quiz-progress?user_id=${data.user.id}`);
+        const dbData = await res.json();
+        if (dbData.progress?.length > 0) {
+          const dbProgress: Progress = {};
+          for (const p of dbData.progress) {
+            dbProgress[p.level_id] = { completed: p.completed, score: p.score, bestScore: p.best_score };
+          }
+          setProgress(dbProgress);
+          saveProgress(dbProgress);
+        }
+      }
+    });
   }, []);
 
-  function handleComplete(score: number) {
+  async function handleComplete(score: number) {
     if (!activeLevel) return;
     const passed = score >= activeLevel.requiredScore;
     const newProgress = { ...progress };
@@ -268,6 +287,14 @@ export default function QuizPage() {
     };
     setProgress(newProgress);
     saveProgress(newProgress);
+    // Save to Supabase
+    if (userId) {
+      await fetch("/api/quiz-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: userId, level_id: activeLevel.id, score, completed: passed || existing?.completed || false }),
+      });
+    }
     setResult({ level: activeLevel, score });
     setActiveLevel(null);
   }
