@@ -48,7 +48,8 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
               <a href="/communaute" className="block text-blue-400/50 hover:text-cyan-300 text-sm mb-2 transition-colors">🌍 Groupes</a>
               <a href="/eglise" className="block text-blue-400/50 hover:text-cyan-300 text-sm mb-2 transition-colors">⛪ Église</a>
               <a href="/apropos" className="block text-blue-400/50 hover:text-cyan-300 text-sm mb-2 transition-colors">À propos</a>
-              <a href="/contact" className="block text-blue-400/50 hover:text-cyan-300 text-sm transition-colors">Contact</a>
+              <a href="/contact" className="block text-blue-400/50 hover:text-cyan-300 text-sm mb-2 transition-colors">Contact</a>
+              <a href="/don" className="block text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors">💝 Faire un don</a>
             </div>
           </div>
 
