@@ -144,21 +144,23 @@ function ChurchCTA() {
         <div className="absolute top-6 left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-[80px]" />
         <div className="absolute bottom-6 right-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-[80px]" />
         <div className="relative z-10">
-          <span className="text-5xl block mb-4">⛪</span>
+          <span className="text-5xl block mb-4">🏠</span>
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-            {lang === "fr" ? "Votre église sur KONEKSYON PAM" : lang === "ht" ? "Legliz ou sou KONEKSYON PAM" : "Your church on KONEKSYON PAM"}
+            {lang === "fr" ? "La communauté chrétienne sur KONEKSYON PAM" : lang === "ht" ? "Kominote kretyen sou KONEKSYON PAM" : "The Christian community on KONEKSYON PAM"}
           </h2>
           <p className="text-blue-300/60 text-sm mb-6 max-w-lg mx-auto">
             {lang === "fr"
-              ? "Créez l'espace privé de votre église. Vos membres rejoignent avec un code. Études, prières, événements, jeux — tout centralisé."
-              : "Create your church's private space. Members join with a code. Studies, prayers, events, games — all centralized."}
+              ? "Pasteur, responsable ou croyant — créez votre espace de groupe ou rejoignez une communauté existante. Études, prières, événements, tout centralisé."
+              : lang === "ht"
+              ? "Pastè, responsab oswa kretyen — kreye espas gwoup ou oswa rantre nan yon kominote. Etid, lapriyè, evènman, tout santralize."
+              : "Pastor, leader or believer — create your group space or join an existing community. Studies, prayers, events, all centralized."}
           </p>
           <div className="flex justify-center gap-3">
             <Link href="/eglise/creer" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/30">
-              {lang === "fr" ? "Créer l'espace église" : "Create church space"}
+              {lang === "fr" ? "Créer mon groupe" : lang === "ht" ? "Kreye gwoup mwen" : "Create my group"}
             </Link>
             <Link href="/eglise" className="bg-white/10 text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-colors border border-white/10">
-              {lang === "fr" ? "Rejoindre" : "Join"}
+              {lang === "fr" ? "Rejoindre" : lang === "ht" ? "Rantre" : "Join"}
             </Link>
           </div>
         </div>
