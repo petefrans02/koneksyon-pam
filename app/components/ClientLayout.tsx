@@ -30,8 +30,9 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8">
             <div>
               <h4 className="text-blue-300 text-sm font-bold mb-3">Adoration</h4>
-              <a href="/psaumes" className="block text-blue-400/50 hover:text-cyan-300 text-sm mb-2 transition-colors">📖 Psaumes</a>
-              <a href="/louange" className="block text-blue-400/50 hover:text-cyan-300 text-sm mb-2 transition-colors">🎵 Louange</a>
+              <a href="/bible" className="block text-blue-400/50 hover:text-cyan-300 text-sm mb-2 transition-colors">📖 Bible</a>
+              <a href="/psaumes" className="block text-blue-400/50 hover:text-cyan-300 text-sm mb-2 transition-colors">🎶 Psaumes</a>
+              <a href="/chants" className="block text-blue-400/50 hover:text-cyan-300 text-sm mb-2 transition-colors">🎵 Chants d'Espérance</a>
             </div>
             <div>
               <h4 className="text-blue-300 text-sm font-bold mb-3">Prière</h4>
