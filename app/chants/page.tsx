@@ -66,7 +66,7 @@ export default function ChantsPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        question: `Donne-moi les paroles complètes du Chant d'Espérance numéro ${chant.num} : "${chant.title}". Écris toutes les strophes et le refrain. Ne mets pas de guillemets. Écris les paroles directement.`,
+        question: `Donne-moi les paroles ORIGINALES EXACTES du Chant d'Espérance haïtien numéro ${chant.num} intitulé "${chant.title}". IMPORTANT : ne compose PAS de paroles. Donne UNIQUEMENT les paroles originales telles qu'elles existent dans le recueil Chants d'Espérance. Si tu ne connais pas les paroles exactes, dis simplement "Les paroles de ce chant ne sont pas disponibles." Ne mets pas de guillemets.`,
         lang: "fr",
       }),
     });
