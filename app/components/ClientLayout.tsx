@@ -32,7 +32,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
             <a href="/temoignages" className="text-blue-300/70 hover:text-cyan-300 text-sm transition-colors">Témoignages</a>
             <a href="/etude" className="text-blue-300/70 hover:text-cyan-300 text-sm transition-colors">Études</a>
             <a href="/quiz" className="text-blue-300/70 hover:text-cyan-300 text-sm transition-colors">Quiz</a>
-            <a href="/apropos" className="text-blue-300/70 hover:text-cyan-300 text-sm transition-colors">{lang === "fr" ? "À propos" : lang === "ht" ? "Konsènan" : "About"}</a>
+            <a href="/apropos" className="text-blue-300/70 hover:text-cyan-300 text-sm transition-colors">À propos</a>
             <a href="/contact" className="text-blue-300/70 hover:text-cyan-300 text-sm transition-colors">Contact</a>
           </div>
           <div className="border-t border-blue-700/30 pt-5">
