@@ -67,9 +67,11 @@ function PlatformFeatures() {
     { href: "/prieres", image: "https://cdn-icons-png.flaticon.com/512/4305/4305512.png", title: lang === "fr" ? "Prière" : lang === "ht" ? "Lapriyè" : "Prayer", desc: lang === "fr" ? "Mur de prière mondial" : "Global prayer wall", color: "from-cyan-500 to-blue-600" },
     { href: "/etude", image: "https://cdn-icons-png.flaticon.com/512/2534/2534204.png", title: lang === "fr" ? "Études" : lang === "ht" ? "Etid" : "Studies", desc: lang === "fr" ? "Sujets profonds + IA" : "Deep topics + AI", color: "from-purple-500 to-violet-600" },
     { href: "/quiz", image: "https://cdn-icons-png.flaticon.com/512/3135/3135768.png", title: "Quiz", desc: lang === "fr" ? "5 niveaux, testez-vous" : "5 levels, test yourself", color: "from-orange-500 to-red-600" },
-    { href: "/jeu", image: "https://cdn-icons-png.flaticon.com/512/3135/3135768.png", title: lang === "fr" ? "Devine le Verset" : lang === "ht" ? "Devine Vèsè a" : "Guess the Verse", desc: lang === "fr" ? "Mini jeu biblique addictif" : "Addictive Bible mini game", color: "from-amber-500 to-orange-600" },
+    { href: "/jeu", image: "https://cdn-icons-png.flaticon.com/512/2534/2534493.png", title: lang === "fr" ? "Devine le Verset" : lang === "ht" ? "Devine Vèsè a" : "Guess the Verse", desc: lang === "fr" ? "Mini jeu biblique" : "Bible mini game", color: "from-amber-500 to-orange-600" },
+    { href: "/temoignages", image: "https://cdn-icons-png.flaticon.com/512/1216/1216575.png", title: lang === "fr" ? "Témoignages" : lang === "ht" ? "Temwayaj" : "Testimonies", desc: lang === "fr" ? "Partagez votre histoire" : "Share your story", color: "from-pink-500 to-rose-600" },
+    { href: "/louange", image: "https://cdn-icons-png.flaticon.com/512/2936/2936690.png", title: lang === "fr" ? "Louange" : lang === "ht" ? "Lwanj" : "Praise", desc: lang === "fr" ? "Musique et adoration" : "Music and worship", color: "from-red-500 to-rose-600" },
     { href: "/communaute", image: "https://cdn-icons-png.flaticon.com/512/1533/1533908.png", title: lang === "fr" ? "Communauté" : lang === "ht" ? "Kominote" : "Community", desc: lang === "fr" ? "7 groupes thématiques" : "7 thematic groups", color: "from-green-500 to-emerald-600" },
-    { href: "/eglise", image: "https://cdn-icons-png.flaticon.com/512/2936/2936690.png", title: lang === "fr" ? "Espace Église" : lang === "ht" ? "Espas Legliz" : "Church Space", desc: lang === "fr" ? "Votre église privée" : "Your private church", color: "from-blue-600 to-blue-800" },
+    { href: "/eglise", image: "https://cdn-icons-png.flaticon.com/512/3884/3884151.png", title: lang === "fr" ? "Espace Église" : lang === "ht" ? "Espas Legliz" : "Church Space", desc: lang === "fr" ? "Votre église privée" : "Your private church", color: "from-blue-600 to-blue-800" },
   ];
 
   return (
@@ -79,7 +81,7 @@ function PlatformFeatures() {
           {lang === "fr" ? "Tout pour l'Église, en un seul endroit" : lang === "ht" ? "Tout pou Legliz la, nan yon sèl kote" : "Everything for the Church, in one place"}
         </h2>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {features.map((f) => (
           <Link key={f.href} href={f.href} className="bg-white rounded-2xl border border-blue-100 p-5 hover:shadow-xl hover:-translate-y-1 transition-all group text-center">
             <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform`}>
