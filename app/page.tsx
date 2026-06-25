@@ -5,7 +5,7 @@ import { t } from "@/lib/translations";
 import Link from "next/link";
 import BibleQuiz from "./components/BibleQuiz";
 
-const verseOfDay = [
+const versePool = [
   { ref: "Jean 3:16", fr: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.", ht: "Paske Bondye sitèlman renmen lèzòm, li bay sèl Pitit li a pou tout moun ki kwè nan li." },
   { ref: "Philippiens 4:13", fr: "Je puis tout par celui qui me fortifie.", ht: "Mwen ka fè tout bagay nan Kris la ki ban mwen fòs." },
   { ref: "Psaumes 23:1", fr: "L'Éternel est mon berger : je ne manquerai de rien.", ht: "Seyè a se gadò mwen; mwen p ap manke anyen." },
@@ -13,11 +13,63 @@ const verseOfDay = [
   { ref: "Ésaïe 41:10", fr: "Ne crains rien, car je suis avec toi ; ne promène pas des regards inquiets, car je suis ton Dieu.", ht: "Pa pè, paske mwen avèk ou; pa dekouraje, paske mwen se Bondye ou." },
   { ref: "Jérémie 29:11", fr: "Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance.", ht: "Paske mwen konnen plan mwen genyen pou nou, se plan pou fè nou jwenn lapè, pa dezas." },
   { ref: "Matthieu 11:28", fr: "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos.", ht: "Vini jwenn mwen, nou tout ki fatige ak ki chaje ak fado lou, m ap ban nou repo." },
+  { ref: "Psaumes 119:105", fr: "Ta parole est une lampe à mes pieds, et une lumière sur mon sentier.", ht: "Pawòl ou se yon lanp ki klere pye mwen, yon limyè ki montre mwen wout mwen." },
+  { ref: "Proverbes 3:5-6", fr: "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse ; reconnais-le dans toutes tes voies, et il aplanira tes sentiers.", ht: "Fè konfyans nan Seyè a de tout kè ou, pa konte sou pwòp entèlijans ou. Rekonèt li nan tout chemen ou yo, l ap moutre ou wout la." },
+  { ref: "Matthieu 5:9", fr: "Heureux les artisans de paix, car ils seront appelés fils de Dieu !", ht: "Benediksyon pou moun ki fè lapè, paske yo pral rele yo pitit Bondye." },
+  { ref: "Psaumes 46:2", fr: "Dieu est notre refuge et notre force, un secours qui ne manque jamais dans la détresse.", ht: "Bondye se pwoteksyon nou ak fòs nou; li toujou la pou ede nou lè nou nan traka." },
+  { ref: "Galates 5:22-23", fr: "Mais le fruit de l'Esprit, c'est l'amour, la joie, la paix, la patience, la bonté, la bénignité, la fidélité, la douceur, la tempérance.", ht: "Men fwi Lespri a: renmen, kè kontan, lapè, pasyans, jantiyès, bonte, fidelite, dousè, mètrize tèt ou." },
+  { ref: "2 Chroniques 7:14", fr: "Si mon peuple sur qui est invoqué mon nom s'humilie, prie, et cherche ma face, et s'il se détourne de ses mauvaises voies, je l'exaucerai des cieux.", ht: "Si pèp mwen an, moun yo rele pam yo, imilye yo, lapriyè ak chache figi mwen, m ap koute yo nan syèl la." },
+  { ref: "Hébreux 11:1", fr: "Or la foi, c'est la ferme assurance des choses qu'on espère, la démonstration de celles qu'on ne voit pas.", ht: "Lafwa se gen asirans pou bagay nou espere yo, se prèv bagay nou pa wè yo." },
+  { ref: "1 Jean 4:8", fr: "Celui qui n'aime pas n'a pas connu Dieu, car Dieu est amour.", ht: "Moun ki pa renmen pa konnen Bondye, paske Bondye se renmen." },
+  { ref: "Romains 10:9", fr: "Si tu confesses de ta bouche le Seigneur Jésus, et si tu crois dans ton cœur que Dieu l'a ressuscité des morts, tu seras sauvé.", ht: "Si ou konfese ak bouch ou ke Jezi se Seyè a, e si ou kwè nan kè ou ke Bondye leve li vivan, ou pral sove." },
+  { ref: "Apocalypse 3:20", fr: "Voici, je me tiens à la porte, et je frappe. Si quelqu'un entend ma voix et ouvre la porte, j'entrerai chez lui.", ht: "Gade, mwen kanpe bò pòt la, mwen frape. Si yon moun tande vwa mwen e ouvri pòt la, m ap antre." },
+  { ref: "Psaumes 91:1", fr: "Celui qui demeure sous l'abri du Très-Haut repose à l'ombre du Tout-Puissant.", ht: "Moun ki rete anba pwoteksyon Bondye ki pi Wo a ap viv anba lonbraj Bondye ki Toupuisan an." },
+  { ref: "Éphésiens 2:8-9", fr: "C'est par la grâce que vous êtes sauvés, par le moyen de la foi. Et cela ne vient pas de vous, c'est le don de Dieu.", ht: "Se pa gras Bondye ou sove, se pa fòs pa ou. Se yon kado Bondye ba ou." },
+  { ref: "Jean 14:6", fr: "Jésus lui dit : Je suis le chemin, la vérité, et la vie. Nul ne vient au Père que par moi.", ht: "Jezi di li: Mwen se chemen an, verite a, ak lavi a. Pesonn pa ka al jwenn Papa a si se pa pase nan mwen." },
+  { ref: "Psaumes 34:8", fr: "Goûtez et voyez combien l'Éternel est bon ! Heureux l'homme qui cherche en lui son refuge !", ht: "Goute epi wè jan Seyè a bon ! Benediksyon pou moun ki mete konfyans yo nan li !" },
+  { ref: "Romains 12:2", fr: "Ne vous conformez pas au siècle présent, mais soyez transformés par le renouvellement de l'intelligence, afin que vous discerniez quelle est la volonté de Dieu.", ht: "Pa kite monn nan chanje ou, men kite Bondye chanje fason ou panse pou ou ka konnen sa Bondye vle." },
+  { ref: "Ésaïe 40:31", fr: "Mais ceux qui se confient en l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles ; ils courent sans se fatiguer.", ht: "Men moun ki mete espwa yo nan Seyè a pran nouvo fòs. Yo pral vole tankou malfini." },
+  { ref: "Matthieu 6:33", fr: "Cherchez premièrement le royaume et la justice de Dieu ; et toutes ces choses vous seront données par-dessus.", ht: "Men chèche dabò Wayòm Bondye a ak jistis li, tout lòt bagay sa yo ap ban nou tou." },
+  { ref: "1 Corinthiens 13:4-5", fr: "La charité est patiente, elle est pleine de bonté ; la charité n'est point envieuse ; la charité ne se vante point, elle ne s'enfle point d'orgueil.", ht: "Renmen pran pasyans, renmen janti. Renmen pa jalou, li pa vante tèt li, li pa fè lwòj." },
+  { ref: "Nombres 6:24-26", fr: "Que l'Éternel te bénisse, et qu'il te garde ! Que l'Éternel fasse luire sa face sur toi, et qu'il t'accorde sa grâce !", ht: "Ke Seyè a beni ou e pwoteje ou ! Ke Seyè a fè figi li klere sou ou e ba ou gras li !" },
+  { ref: "Luc 1:37", fr: "Car rien n'est impossible à Dieu.", ht: "Paske pa gen anyen ki difisil pou Bondye." },
+  { ref: "Psaumes 27:1", fr: "L'Éternel est ma lumière et mon salut : de qui aurais-je crainte ? L'Éternel est le soutien de ma vie : de qui aurais-je peur ?", ht: "Seyè a se limyè mwen ak delivrans mwen, kilès mwen ta pè ? Seyè a se fòs lavi mwen, kilès mwen ta krent ?" },
+  { ref: "Philippiens 4:6-7", fr: "Ne vous inquiétez de rien ; mais en toutes choses faites connaître vos besoins à Dieu par des prières et des supplications.", ht: "Pa bay kò ou traka pou anyen. Men nan tout bagay, mande Bondye sa ou bezwen nan lapriyè." },
+  { ref: "Jacques 1:2-3", fr: "Mes frères, regardez comme un sujet de joie complète les diverses épreuves auxquelles vous pouvez vous trouver exposés.", ht: "Frè m yo, rejwi ou lè ou pase nan tout kalite eprèv, paske ou konnen ke eprèv fè pasyans ou grandi." },
+  { ref: "2 Timothée 1:7", fr: "Car ce n'est pas un esprit de timidité que Dieu nous a donné, mais un esprit de force, d'amour et de sagesse.", ht: "Paske Bondye pa ba nou yon lespri pè, men yon lespri fòs, renmen ak disiplin." },
+  { ref: "Psaumes 37:4", fr: "Fais de l'Éternel tes délices, et il te donnera ce que ton cœur désire.", ht: "Jwi Seyè a, l ap ba ou sa kè ou vle." },
+  { ref: "Matthieu 5:14", fr: "Vous êtes la lumière du monde. Une ville située sur une montagne ne peut être cachée.", ht: "Nou se limyè monn nan. Yon vil sou tèt yon mòn pa ka kache." },
+  { ref: "Actes 1:8", fr: "Mais vous recevrez une puissance, le Saint-Esprit survenant sur vous, et vous serez mes témoins.", ht: "Men nou pral resevwa pouvwa lè Sentespri a desann sou nou, e nou pral temwen pou mwen." },
+  { ref: "1 Pierre 5:7", fr: "Déchargez-vous sur lui de tous vos soucis, car il prend soin de vous.", ht: "Kite tout enkyetid ou sou li, paske li pran swen ou." },
+  { ref: "Jean 10:10", fr: "Le voleur ne vient que pour dérober, égorger et détruire ; moi, je suis venu afin que les brebis aient la vie, et qu'elles l'aient en abondance.", ht: "Vòlè a pa vini pou anyen, sinon pou vòlè, touye ak detwi. Mwen menm, mwen vini pou mouton yo ka gen lavi, e pou yo gen li an abondans." },
+  { ref: "Psaumes 121:1-2", fr: "Je lève mes yeux vers les montagnes... Mon secours vient de l'Éternel, qui a fait les cieux et la terre.", ht: "Mwen leve je mwen gade mòn yo... Sekou mwen soti nan Seyè a, ki fè syèl la ak tè a." },
+  { ref: "Romains 5:8", fr: "Mais Dieu prouve son amour envers nous, en ce que, lorsque nous étions encore des pécheurs, Christ est mort pour nous.", ht: "Men Bondye montre jan li renmen nou, paske lè nou te peche toujou, Kris te mouri pou nou." },
+  { ref: "Deutéronome 31:6", fr: "Fortifiez-vous et ayez du courage ! Ne craignez point et ne soyez point effrayés devant eux ; car l'Éternel, ton Dieu, marche avec toi.", ht: "Fòtifye ou, mete kouraj. Pa pè, pa kite kè ou sote devan yo, paske Seyè a, Bondye ou a, ap mache avèk ou." },
+  { ref: "Michée 6:8", fr: "Il t'a fait connaître, ô homme, ce qui est bien ; et ce que l'Éternel demande de toi, c'est que tu pratiques la justice, que tu aimes la miséricorde, et que tu marches humblement avec ton Dieu.", ht: "Li montre ou, o moun, sa ki bon; sa Seyè a mande ou se pou fè sa ki jis, renmen bonte, e mache avèk Bondye ou an nan imilite." },
+  { ref: "Éphésiens 6:10", fr: "Au reste, fortifiez-vous dans le Seigneur, et par sa force toute-puissante.", ht: "Pran fòs nan Seyè a ak nan gwo pouvwa li a." },
+  { ref: "Psaumes 100:4", fr: "Entrez dans ses portes avec des actions de grâce, dans ses parvis avec des louanges ! Célébrez-le, bénissez son nom !", ht: "Antre nan kay li ak aksyon de gras, antre nan lakou li ak lwanj. Beni non li !" },
+  { ref: "Jean 15:5", fr: "Je suis le cep, vous êtes les sarments. Celui qui demeure en moi et en qui je demeure porte beaucoup de fruit.", ht: "Mwen se pye rezen an, nou menm se branch yo. Moun ki rete nan mwen e mwen rete nan li, li bay anpil fwi." },
+  { ref: "Ésaïe 53:5", fr: "Mais il était blessé pour nos péchés, brisé pour nos iniquités ; le châtiment qui nous donne la paix est tombé sur lui.", ht: "Li te blese pou peche nou yo, li te kraze pou move zak nou yo; pinisyon ki ban nou lapè a tonbe sou li." },
+  { ref: "Genèse 1:1", fr: "Au commencement, Dieu créa les cieux et la terre.", ht: "Nan konmansman, Bondye kreye syèl la ak tè a." },
+  { ref: "Apocalypse 21:4", fr: "Il essuiera toute larme de leurs yeux, et la mort ne sera plus, et il n'y aura plus ni deuil, ni cri, ni douleur.", ht: "L ap siye tout dlo nan je yo; pa pral gen lanmò ankò, pa gen lapenn, pa gen kri, pa gen soufrans." },
+  { ref: "Psaumes 32:8", fr: "Je t'instruirai et te montrerai la voie que tu dois suivre ; je te conseillerai, j'aurai les yeux sur toi.", ht: "M ap moutre ou, m ap anseye ou nan wout ou dwe swiv la; m ap konseye ou e m ap veye sou ou." },
+  { ref: "Matthieu 28:19-20", fr: "Allez, faites de toutes les nations des disciples, les baptisant au nom du Père, du Fils et du Saint-Esprit.", ht: "Al fè tout nasyon tounen disip mwen, batize yo nan non Papa a, Pitit la ak Sentespri a." },
+  { ref: "2 Corinthiens 5:17", fr: "Si quelqu'un est en Christ, il est une nouvelle créature. Les choses anciennes sont passées ; voici, toutes choses sont devenues nouvelles.", ht: "Si yon moun nan Kris, li se yon nouvo kreyati. Bagay lontan yo pase; gade, tout bagay vin nouvo." },
+  { ref: "Proverbes 18:10", fr: "Le nom de l'Éternel est une tour forte ; le juste s'y réfugie et se trouve en sûreté.", ht: "Non Seyè a se yon fò solid; moun ki jis ka kouri mete ladan li pou yo an sekirite." },
+  { ref: "Jean 16:33", fr: "Je vous ai dit ces choses, afin que vous ayez la paix en moi. Vous aurez des tribulations dans le monde ; mais prenez courage, j'ai vaincu le monde.", ht: "Mwen di nou bagay sa yo pou nou ka gen lapè nan mwen. Nan monn nan nou pral gen traka; men pran kouraj, mwen te genyen sou monn nan." },
+  { ref: "Hébreux 13:8", fr: "Jésus-Christ est le même hier, aujourd'hui, et éternellement.", ht: "Jezi Kris la menm yè, jodi a, e pou tout tan." },
 ];
+
+function getDayOfYear(): number {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now.getTime() - start.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
 
 function Hero() {
   const { lang } = useLang();
-  const verse = verseOfDay[new Date().getDay()];
+  const verse = versePool[getDayOfYear() % versePool.length];
 
   return (
     <section className="bg-gradient-to-br from-[#0a1628] via-[#0f2044] to-[#1a1040] text-white px-6 py-16 relative overflow-hidden">

@@ -16,7 +16,6 @@ export default function NavBar() {
       items: [
         { href: "/bible", label: lang === "fr" ? "📖 La Bible complète" : lang === "ht" ? "📖 Bib la konplè" : "📖 Full Bible" },
         { href: "/louange", label: lang === "fr" ? "🎵 Louange & Musique" : lang === "ht" ? "🎵 Lwanj & Mizik" : "🎵 Praise & Music" },
-        { href: "/chants", label: lang === "fr" ? "🎶 Chants d'Espérance" : lang === "ht" ? "🎶 Chan Desperans" : "🎶 Songs of Hope" },
       ],
     },
     {

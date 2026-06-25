@@ -152,10 +152,10 @@ export default function CommunautePage() {
             </h3>
             <p className="text-blue-300/70 text-sm mb-3">
               {lang === "fr"
-                ? "Pasteur, responsable ou animateur — créez votre espace privé avec photo de profil, publications, sous-groupes et plus."
+                ? "Pasteur, croyant, responsable ou animateur — créez votre espace privé avec photo de profil, publications, sous-groupes et plus."
                 : lang === "ht"
-                ? "Pastè, responsab — kreye espas prive ou ak foto pwofil, piblikasyon, sou-gwoup ak plis."
-                : "Pastor, leader or organizer — create your private space with profile photo, posts, subgroups and more."}
+                ? "Pastè, kretyen, responsab — kreye espas prive ou ak foto pwofil, piblikasyon, sou-gwoup ak plis."
+                : "Pastor, believer, leader or organizer — create your private space with profile photo, posts, subgroups and more."}
             </p>
             <span className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-5 py-2.5 rounded-full text-sm font-bold">
               {lang === "fr" ? "Créer mon groupe →" : lang === "ht" ? "Kreye gwoup mwen →" : "Create my group →"}
