@@ -3,6 +3,7 @@
 import { useLang } from "@/lib/LangContext";
 import { t } from "@/lib/translations";
 import LangSwitch from "./LangSwitch";
+import AuthButton from "./AuthButton";
 import Link from "next/link";
 
 export default function NavBar() {
@@ -37,7 +38,10 @@ export default function NavBar() {
             </Link>
           ))}
         </div>
-        <LangSwitch />
+        <div className="flex items-center gap-2">
+          <LangSwitch />
+          <AuthButton />
+        </div>
       </div>
       <div className="sm:hidden flex justify-center gap-3 mt-2">
         {[
