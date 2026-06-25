@@ -37,7 +37,7 @@ function Hero() {
             </p>
             <div className="flex flex-wrap justify-center sm:justify-start gap-3">
               <Link href="/eglise" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition-all shadow-lg shadow-blue-500/30">
-                {lang === "fr" ? "⛪ Créer mon église" : lang === "ht" ? "⛪ Kreye legliz mwen" : "⛪ Create my church"}
+                {lang === "fr" ? "⛪ Créer l'espace église" : lang === "ht" ? "⛪ Kreye espas legliz" : "⛪ Create church space"}
               </Link>
               <Link href="/communaute" className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-colors border border-white/10">
                 {lang === "fr" ? "Explorer →" : lang === "ht" ? "Eksplore →" : "Explore →"}
@@ -144,7 +144,7 @@ function ChurchCTA() {
           </p>
           <div className="flex justify-center gap-3">
             <Link href="/eglise/creer" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/30">
-              {lang === "fr" ? "Créer mon église" : "Create my church"}
+              {lang === "fr" ? "Créer l'espace église" : "Create church space"}
             </Link>
             <Link href="/eglise" className="bg-white/10 text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-colors border border-white/10">
               {lang === "fr" ? "Rejoindre" : "Join"}

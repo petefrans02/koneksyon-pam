@@ -76,7 +76,7 @@ export default function CreerEglisePage() {
       <div className="text-center mb-8">
         <span className="text-5xl block mb-3">⛪</span>
         <h1 className="text-3xl font-bold text-stone-900">
-          {lang === "fr" ? "Créer mon église" : lang === "ht" ? "Kreye legliz mwen" : "Create my church"}
+          {lang === "fr" ? "Créer l'espace église" : lang === "ht" ? "Kreye espas legliz" : "Create church space"}
         </h1>
         <p className="text-stone-500 mt-2">
           {lang === "fr" ? "Remplissez les informations de votre église" : "Fill in your church information"}

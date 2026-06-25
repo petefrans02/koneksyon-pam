@@ -64,7 +64,7 @@ export default function EglisePage() {
         >
           <span className="text-5xl block mb-4">⛪</span>
           <h3 className="text-xl font-bold text-white mb-2">
-            {lang === "fr" ? "Créer mon église" : lang === "ht" ? "Kreye legliz mwen" : "Create my church"}
+            {lang === "fr" ? "Créer l'espace église" : lang === "ht" ? "Kreye espas legliz" : "Create church space"}
           </h3>
           <p className="text-blue-300/60 text-sm">
             {lang === "fr" ? "Je suis pasteur, je veux créer l'espace de mon église" : lang === "ht" ? "Mwen se pastè, mwen vle kreye espas legliz mwen" : "I'm a pastor, I want to create my church space"}

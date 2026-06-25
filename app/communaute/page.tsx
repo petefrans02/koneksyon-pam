@@ -69,7 +69,7 @@ export default function CommunautePage() {
                   : "Your church has its own private space. The pastor creates the group, members join. Studies, games, contests, meetings — all in one."}
               </p>
               <span className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-5 py-2 rounded-full text-sm font-medium">
-                {lang === "fr" ? "Créer mon église →" : lang === "ht" ? "Kreye legliz mwen →" : "Create my church →"}
+                {lang === "fr" ? "Créer l'espace église →" : lang === "ht" ? "Kreye legliz mwen →" : "Create my church →"}
               </span>
             </div>
           </div>
