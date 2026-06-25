@@ -48,7 +48,7 @@ export default function NavBar() {
           <img src="/logo-kp.png" alt="KP" className="w-11 h-11 rounded-xl group-hover:scale-105 transition-transform" />
           <div className="hidden sm:block">
             <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">KONEKSYON PAM</span>
-            <p className="text-[10px] text-blue-400/60 -mt-0.5 tracking-widest">UNE MISSION • UN DIEU</p>
+            <p className="text-[10px] text-blue-400/60 -mt-0.5 tracking-widest">UNE MISSION • UN DIEU • UNE VISION</p>
           </div>
           <span className="sm:hidden text-lg font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">KP</span>
         </Link>

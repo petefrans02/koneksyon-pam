@@ -25,7 +25,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
           <p className="text-center text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent mb-1">KONEKSYON PAM</p>
-          <p className="text-center text-[10px] tracking-[0.3em] text-cyan-500/40 mb-8 uppercase">Une Mission • Un Dieu • Une Mission</p>
+          <p className="text-center text-[10px] tracking-[0.3em] text-cyan-500/40 mb-8 uppercase">Une Mission • Un Dieu • Une Vision</p>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8">
             <div>
