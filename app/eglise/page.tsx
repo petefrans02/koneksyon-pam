@@ -67,7 +67,7 @@ export default function EglisePage() {
         <div className="relative z-10">
           <span className="text-5xl block mb-4">⛪</span>
           <h1 className="text-3xl font-bold text-white mb-3">
-            {lang === "fr" ? "Votre communauté sur KONEKSYON PAM" : lang === "ht" ? "Kominote ou sou KONEKSYON PAM" : "Your community on KONEKSYON PAM"}
+            {lang === "fr" ? "La communauté chrétienne sur KONEKSYON PAM" : lang === "ht" ? "Kominote kretyen sou KONEKSYON PAM" : "The Christian community on KONEKSYON PAM"}
           </h1>
           <p className="text-blue-200/70 max-w-xl mx-auto text-sm leading-relaxed">
             {lang === "fr"
