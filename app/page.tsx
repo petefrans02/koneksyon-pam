@@ -4,6 +4,7 @@ import { useLang } from "@/lib/LangContext";
 import { t } from "@/lib/translations";
 import Link from "next/link";
 import BibleQuiz from "./components/BibleQuiz";
+import { useState, useEffect } from "react";
 
 const versePool = [
   { ref: "Jean 3:16", fr: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.", ht: "Paske Bondye sitèlman renmen lèzòm, li bay sèl Pitit li a pou tout moun ki kwè nan li." },
@@ -70,25 +71,40 @@ function getDayOfYear(): number {
 function Hero() {
   const { lang } = useLang();
   const verse = versePool[getDayOfYear() % versePool.length];
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setShown(true), 100);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
     <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white px-6 py-16 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-full">
-        <div className="absolute top-10 left-10 w-48 h-48 bg-white/10 rounded-full blur-[100px]" />
-        <div className="absolute bottom-10 right-10 w-56 h-56 bg-cyan-300/15 rounded-full blur-[100px]" />
+      {/* Animated background orbs */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-10 left-10 w-64 h-64 bg-cyan-300/20 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: "4s" }} />
+        <div className="absolute bottom-10 right-10 w-72 h-72 bg-purple-400/15 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: "6s", animationDelay: "2s" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-300/10 rounded-full blur-[150px] animate-pulse" style={{ animationDuration: "8s" }} />
+        {/* Floating sparkles */}
+        {[["10%","20%","1s"],["80%","15%","2s"],["25%","80%","3s"],["70%","70%","0.5s"],["50%","40%","1.5s"]].map(([l,t,d],i) => (
+          <span key={i} className="absolute text-cyan-300/40 text-xs" style={{ left: l, top: t, animation: `twinkle 2s ease-in-out ${d} infinite` }}>✦</span>
+        ))}
       </div>
+
       <div className="max-w-4xl mx-auto relative z-10">
-        <div className="flex flex-col sm:flex-row items-center gap-8">
-          <div className="text-center sm:text-left flex-1">
+        <div className="flex flex-col sm:flex-row items-center gap-10">
+
+          {/* Left — text */}
+          <div className={`text-center sm:text-left flex-1 transition-all duration-700 ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <div className="flex justify-center sm:justify-start mb-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-1 border border-blue-400/30">
+              <div className="w-16 h-16 rounded-full bg-white/20 p-1 border border-white/30 shadow-lg shadow-blue-500/30 animate-pulse" style={{ animationDuration: "3s" }}>
                 <img src="/logo-kp.png" alt="KP" className="w-full h-full rounded-full object-cover" />
               </div>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold mb-3">
+            <h1 className="text-3xl sm:text-4xl font-black mb-3 leading-tight">
               {lang === "fr" ? "La plateforme des chrétiens connectés" : lang === "ht" ? "Platfòm kretyen ki konekte" : "The platform for connected Christians"}
             </h1>
-            <p className="text-blue-200/70 text-sm sm:text-base mb-6 max-w-lg">
+            <p className="text-blue-100/80 text-sm sm:text-base mb-8 max-w-lg leading-relaxed" style={{ animationDelay: "0.2s" }}>
               {lang === "fr"
                 ? "Prière, louange, études bibliques, communauté, groupes d'église — tout ce dont chaque chrétien a besoin, en un seul endroit."
                 : lang === "ht"
@@ -96,23 +112,44 @@ function Hero() {
                 : "Prayer, praise, Bible studies, community, church groups — everything every Christian needs, in one place."}
             </p>
             <div className="flex flex-wrap justify-center sm:justify-start gap-3">
-              <Link href="/eglise" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition-all shadow-lg shadow-blue-500/30">
+              <Link href="/eglise" className="bg-white text-blue-700 px-6 py-3 rounded-full font-bold hover:bg-blue-50 transition-all shadow-xl hover:scale-105 hover:shadow-white/30">
                 {lang === "fr" ? "⛪ Créer l'espace église" : lang === "ht" ? "⛪ Kreye espas legliz" : "⛪ Create church space"}
               </Link>
-              <Link href="/communaute" className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-colors border border-white/10">
+              <Link href="/communaute" className="bg-white/15 backdrop-blur-sm text-white px-6 py-3 rounded-full font-medium hover:bg-white/25 transition-colors border border-white/20">
                 {lang === "fr" ? "Explorer →" : lang === "ht" ? "Eksplore →" : "Explore →"}
               </Link>
             </div>
           </div>
-          {/* Verse of the day card */}
-          <div className="w-full sm:w-80 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-5 shrink-0">
-            <p className="text-cyan-400 text-xs font-semibold uppercase tracking-widest mb-2">✦ {t("verseOfDay", lang)}</p>
-            <h3 className="font-bold text-lg mb-1">{verse.ref}</h3>
-            <p className="text-blue-100/80 text-sm italic leading-relaxed line-clamp-4">{lang === "ht" ? verse.ht : verse.fr}</p>
-            <Link href="/bible" className="text-cyan-400 text-xs font-medium hover:underline mt-3 block">
-              {lang === "fr" ? "Lire la Bible complète →" : lang === "ht" ? "Li Bib la konplè →" : "Read full Bible →"}
-            </Link>
+
+          {/* Right — verse card with float + glow */}
+          <div className={`w-full sm:w-80 shrink-0 transition-all duration-1000 delay-300 ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <div className="relative animate-float animate-glow rounded-2xl">
+              {/* Glowing border ring */}
+              <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-cyan-400/60 via-white/20 to-blue-400/40" />
+              <div className="relative bg-blue-800/60 backdrop-blur-md rounded-2xl p-6">
+                {/* Label */}
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-lg" style={{ animation: "twinkle 2s ease-in-out infinite" }}>✨</span>
+                  <span className="animate-shimmer text-xs font-black uppercase tracking-[0.15em]">{t("verseOfDay", lang)}</span>
+                </div>
+                {/* Reference */}
+                <h3 className="font-black text-xl text-white mb-3 animate-fade-up" style={{ animationDelay: "0.4s" }}>
+                  {verse.ref}
+                </h3>
+                {/* Verse text */}
+                <p className="text-cyan-100/90 text-sm italic leading-relaxed animate-fade-up" style={{ animationDelay: "0.6s" }}>
+                  &ldquo;{lang === "ht" ? verse.ht : verse.fr}&rdquo;
+                </p>
+                {/* Divider */}
+                <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent my-4" />
+                <Link href="/bible" className="flex items-center gap-2 text-cyan-300 text-xs font-bold hover:text-white transition-colors group">
+                  <span>{lang === "fr" ? "Lire la Bible complète" : lang === "ht" ? "Li Bib la konplè" : "Read full Bible"}</span>
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                </Link>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
     </section>
