@@ -43,10 +43,10 @@ export default function ScrollingVerses() {
   const doubled = [...langVerses, ...langVerses];
 
   return (
-    <div className="bg-stone-900 py-3 overflow-hidden">
+    <div className="bg-gradient-to-r from-[#0a1628] via-[#0f2044] to-[#0a1628] py-3 overflow-hidden border-b border-blue-900/20">
       <div className="flex animate-marquee whitespace-nowrap">
         {doubled.map((verse, i) => (
-          <span key={i} className="text-amber-400/80 text-sm mx-8 inline-block">
+          <span key={i} className="text-cyan-400/70 text-sm mx-8 inline-block">
             ✦ {verse}
           </span>
         ))}

@@ -15,22 +15,27 @@ function VerseOfDay() {
   const psalm = featuredPsalms[dayOfYear % featuredPsalms.length];
 
   return (
-    <section className="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-900 text-white px-6 py-16">
-      <div className="max-w-3xl mx-auto text-center">
-        <p className="text-amber-400 text-sm font-semibold uppercase tracking-widest mb-2">
+    <section className="bg-gradient-to-br from-[#0a1628] via-[#0f2044] to-[#1a1040] text-white px-6 py-16 relative overflow-hidden">
+      <div className="absolute top-10 left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-10 right-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 opacity-[0.03]">
+        <img src="/logo-kp.png" alt="" className="w-full h-full" />
+      </div>
+      <div className="max-w-3xl mx-auto text-center relative z-10">
+        <p className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-2">
           {t("verseOfDay", lang)}
         </p>
         <h2 className="text-2xl sm:text-3xl font-bold mb-2">
           {t("psalms", lang)} {psalm.number}
         </h2>
-        <p className="text-amber-300 text-sm mb-6">{psalm.title[lang]}</p>
-        <blockquote className="text-lg sm:text-xl leading-relaxed text-stone-200 italic max-w-2xl mx-auto mb-8">
-          &ldquo;{psalm.text[lang]}&rdquo;
+        <p className="text-blue-300 text-sm mb-6">{psalm.title[lang]}</p>
+        <blockquote className="text-lg sm:text-xl leading-relaxed text-blue-100/80 italic max-w-2xl mx-auto mb-8">
+          {psalm.text[lang]}
         </blockquote>
         <div className="flex justify-center gap-3">
           <Link
             href="/psaumes"
-            className="bg-amber-600 text-white px-6 py-2.5 rounded-full font-medium hover:bg-amber-500 transition-colors"
+            className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-2.5 rounded-full font-medium hover:from-blue-400 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/30"
           >
             {t("psalms", lang)} →
           </Link>
@@ -76,10 +81,10 @@ function QuickLinks() {
           <Link
             key={link.href}
             href={link.href}
-            className="bg-white rounded-2xl border border-stone-200 p-6 hover:shadow-lg hover:-translate-y-1 transition-all group"
+            className="bg-white rounded-2xl border border-blue-100 p-6 hover:shadow-xl hover:shadow-blue-100 hover:-translate-y-1 transition-all group"
           >
             <img src={link.image} alt={link.label} className="w-12 h-12 mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="text-lg font-bold text-stone-900 mb-1 group-hover:text-amber-600 transition-colors">
+            <h3 className="text-lg font-bold text-stone-900 mb-1 group-hover:text-blue-600 transition-colors">
               {link.label}
             </h3>
             <p className="text-sm text-stone-500">{link.desc}</p>

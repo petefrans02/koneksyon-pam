@@ -19,8 +19,8 @@ export default function LangSwitch() {
           onClick={() => setLang(l.code)}
           className={`px-2 py-1 rounded-md text-xs font-medium transition-all ${
             lang === l.code
-              ? "bg-amber-600 text-white"
-              : "bg-white/10 text-white/70 hover:bg-white/20"
+              ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
+              : "bg-white/10 text-blue-200/70 hover:bg-white/20"
           }`}
         >
           {l.flag} {l.label}
