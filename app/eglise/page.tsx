@@ -110,17 +110,20 @@ export default function EglisePage() {
           </h2>
           <div className="space-y-3">
             {churches.map((church) => (
-              <Link key={church.id} href={`/eglise/${church.id}`} className="block bg-white rounded-xl border border-blue-100 p-5 hover:shadow-md transition-all">
+              <div key={church.id} className="bg-white rounded-xl border border-blue-100 p-5">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-white text-xl font-bold shrink-0">
                     {church.name[0]}
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-bold text-stone-900">{church.name}</h3>
                     <p className="text-sm text-stone-500">{church.pastor_name} • {church.description}</p>
                   </div>
+                  <span className="text-xs text-stone-400 bg-stone-100 px-3 py-1 rounded-full shrink-0">
+                    🔒 {lang === "fr" ? "Code requis" : "Code required"}
+                  </span>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
