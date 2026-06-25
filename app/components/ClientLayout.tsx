@@ -4,6 +4,7 @@ import { LangProvider } from "@/lib/LangContext";
 import NavBar from "./NavBar";
 import FloatingAI from "./FloatingAI";
 import ScrollingVerses from "./ScrollingVerses";
+import WelcomePopup from "./WelcomePopup";
 import { ReactNode } from "react";
 
 export default function ClientLayout({ children }: { children: ReactNode }) {
@@ -13,6 +14,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
       <ScrollingVerses />
       <main className="flex-1">{children}</main>
       <FloatingAI />
+      <WelcomePopup />
       <footer className="bg-gradient-to-b from-[#0a1628] to-[#060e1a] px-6 py-14 relative overflow-hidden">
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-8 left-1/4 w-40 h-40 bg-blue-500 rounded-full blur-[100px]" />
