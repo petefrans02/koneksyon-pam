@@ -15,31 +15,38 @@ function VerseOfDay() {
   const psalm = featuredPsalms[dayOfYear % featuredPsalms.length];
 
   return (
-    <section className="bg-gradient-to-br from-[#0a1628] via-[#0f2044] to-[#1a1040] text-white px-6 py-16 relative overflow-hidden">
-      <div className="absolute top-10 left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-10 right-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 opacity-[0.03]">
-        <img src="/logo-kp.png" alt="" className="w-full h-full" />
+    <section className="bg-gradient-to-br from-[#0a1628] via-[#0f2044] to-[#1a1040] text-white px-6 py-20 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-full">
+        <div className="absolute top-10 left-10 w-48 h-48 bg-blue-500/8 rounded-full blur-[100px]" />
+        <div className="absolute bottom-10 right-10 w-56 h-56 bg-cyan-500/8 rounded-full blur-[100px]" />
+        <div className="absolute top-1/3 right-1/4 w-32 h-32 bg-purple-500/5 rounded-full blur-[80px]" />
       </div>
       <div className="max-w-3xl mx-auto text-center relative z-10">
-        <p className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-2">
-          {t("verseOfDay", lang)}
+        <div className="flex justify-center mb-6">
+          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-1.5 border border-blue-400/30 shadow-xl shadow-blue-500/10">
+            <img src="/logo-kp.png" alt="KP" className="w-full h-full rounded-full object-cover" />
+          </div>
+        </div>
+        <p className="text-cyan-400 text-xs font-semibold uppercase tracking-[0.25em] mb-3">
+          ✦ {t("verseOfDay", lang)} ✦
         </p>
-        <h2 className="text-2xl sm:text-3xl font-bold mb-2">
+        <h2 className="text-3xl sm:text-4xl font-bold mb-2">
           {t("psalms", lang)} {psalm.number}
         </h2>
-        <p className="text-blue-300 text-sm mb-6">{psalm.title[lang]}</p>
-        <blockquote className="text-lg sm:text-xl leading-relaxed text-blue-100/80 italic max-w-2xl mx-auto mb-8">
-          {psalm.text[lang]}
-        </blockquote>
+        <p className="text-cyan-300/70 text-sm mb-8">{psalm.title[lang]}</p>
+        <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 px-8 py-6 mb-8">
+          <blockquote className="text-lg sm:text-xl leading-relaxed text-blue-100/90 italic">
+            {psalm.text[lang]}
+          </blockquote>
+        </div>
         <div className="flex justify-center gap-3">
           <Link
             href="/psaumes"
-            className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-2.5 rounded-full font-medium hover:from-blue-400 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/30"
+            className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-7 py-3 rounded-full font-medium hover:from-blue-400 hover:to-cyan-400 transition-all shadow-lg shadow-blue-500/30"
           >
             {t("psalms", lang)} →
           </Link>
-          <button className="bg-white/10 text-white px-6 py-2.5 rounded-full font-medium hover:bg-white/20 transition-colors">
+          <button className="bg-white/10 backdrop-blur-sm text-white px-7 py-3 rounded-full font-medium hover:bg-white/20 transition-colors border border-white/10">
             {t("share", lang)} ↗
           </button>
         </div>
