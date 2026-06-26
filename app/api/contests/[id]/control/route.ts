@@ -85,5 +85,13 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     return Response.json({ ok: true, current_question: nextQ });
   }
 
+  if (action === "reset") {
+    // Delete all participants and votes, reset to upcoming
+    await db.from("contest_votes").delete().eq("contest_id", id);
+    await db.from("contest_participants").delete().eq("contest_id", id);
+    await db.from("contests").update({ status: "upcoming", current_question: 0 }).eq("id", id);
+    return Response.json({ ok: true, status: "upcoming", current_question: 0 });
+  }
+
   return Response.json({ error: "Unknown action" }, { status: 400 });
 }

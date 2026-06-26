@@ -116,12 +116,6 @@ export default function ConcoursPage() {
              : "Participate or vote for your champion. Contests are organized by the Koneksyon Pam team."}
             </p>
           </div>
-          {adminUser && (
-            <Link href="/concours/creer"
-              className="shrink-0 border border-white/30 text-white px-6 py-2.5 rounded text-sm font-bold hover:bg-white hover:text-[#0f2044] transition-all">
-              + {l === "fr" ? "Organiser un concours" : l === "ht" ? "Organize yon konkou" : "Organize a contest"}
-            </Link>
-          )}
         </div>
       </div>
       <div className="h-1 bg-gradient-to-r from-[#0f2044] via-[#1d4ed8] to-[#38bdf8]" />

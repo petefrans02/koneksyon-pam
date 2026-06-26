@@ -1,6 +1,17 @@
 import { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
+import { isAdmin } from "@/lib/admin";
+
+async function getAuthUser(request: NextRequest) {
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll: () => request.cookies.getAll(), setAll: () => {} } }
+  );
+  const { data: { user } } = await supabase.auth.getUser();
+  return user;
+}
 
 function getDb() {
   return createClient(
@@ -50,7 +61,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   // Hide correct_answer if contest is active (so spectators can't cheat)
   const questions = (questionsRes.data || []).map(q => ({
     ...q,
-    correct_answer: contest.status === "completed" || user?.id === contest.created_by
+    correct_answer: contest.status === "completed" || user?.id === contest.created_by || isAdmin(user)
       ? q.correct_answer
       : -1,
   }));
@@ -61,6 +72,21 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     questions,
     myVote,
     myParticipant,
-    isOrganizer: user?.id === contest.created_by,
+    isOrganizer: user?.id === contest.created_by || isAdmin(user),
   });
+}
+
+// DELETE — admin only, removes contest + questions + participants + votes
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const user = await getAuthUser(request);
+  if (!user || !isAdmin(user)) return Response.json({ error: "Accès refusé" }, { status: 403 });
+
+  const db = getDb();
+  await db.from("contest_votes").delete().eq("contest_id", id);
+  await db.from("contest_participants").delete().eq("contest_id", id);
+  await db.from("contest_questions").delete().eq("contest_id", id);
+  const { error } = await db.from("contests").delete().eq("id", id);
+  if (error) return Response.json({ error: error.message }, { status: 500 });
+  return Response.json({ ok: true });
 }

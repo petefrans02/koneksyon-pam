@@ -133,6 +133,61 @@ function OnboardingModal({ l, onClose }: { l: Lang; onClose: () => void }) {
   );
 }
 
+const testimonials = [
+  { name: "Grace O.", country: "Nigeria", avatar: "G", text: { fr: "Je participe chaque semaine au concours biblique. J'ai appris plus en un mois sur cette plateforme qu'en une année de cours.", ht: "Mwen patisipe chak semèn nan konkou biblik la. Mwen aprann plis nan yon mwa sou platfòm sa a pase yon ane nan klas.", en: "I participate every week in the biblical contest. I've learned more in one month on this platform than in a year of classes." } },
+  { name: "Marie-Claire D.", country: "Haïti", avatar: "M", text: { fr: "Le mur de prière a transformé ma façon d'intercéder. Des milliers de frères prient avec moi chaque jour.", ht: "Mi lapriyè a chanje fason mwen entèsede. Dè milye frè priye avèk mwen chak jou.", en: "The prayer wall transformed how I intercede. Thousands of brothers pray with me every day." } },
+  { name: "Pastor Emmanuel K.", country: "Cameroun", avatar: "E", text: { fr: "Enfin une plateforme sérieuse pour les chrétiens francophones d'Afrique. Les enseignements sont profonds et accessibles.", ht: "Anfin yon platfòm serye pou kretyen frankofòn Afrik. Ansèyman yo pwofon epi aksesib.", en: "Finally a serious platform for French-speaking African Christians. The teachings are deep and accessible." } },
+  { name: "Samuel T.", country: "Côte d'Ivoire", avatar: "S", text: { fr: "J'ai rejoint un groupe d'église et nous organisons nos réunions ici. C'est devenu notre espace communautaire principal.", ht: "Mwen rantre nan yon gwoup legliz epi nou òganize reyinyon nou isit la. Se vin yon espas kominotè prensipal nou.", en: "I joined a church group and we organize our meetings here. It has become our main community space." } },
+  { name: "Esther M.", country: "France", avatar: "E", text: { fr: "J'ai gagné le concours des Psaumes avec 498 points. La compétition est intense mais tellement enrichissante spirituellement.", ht: "Mwen genyen konkou Sòm yo ak 498 pwen. Konpetisyon an entans men tèlman anrichi espirityèlman.", en: "I won the Psalms contest with 498 points. The competition is intense but so spiritually enriching." } },
+  { name: "Rachel A.", country: "Bénin", avatar: "R", text: { fr: "Koneksyon Pam est différent de tout ce que j'ai vu. Ce n'est pas un réseau social — c'est une vraie communauté de foi.", ht: "Koneksyon Pam diferan de tout sa mwen wè. Se pa yon rezo sosyal — se yon vrè kominote lafwa.", en: "Koneksyon Pam is different from anything I've seen. It's not a social network — it's a real community of faith." } },
+];
+
+function TestimonialsSection({ l }: { l: Lang }) {
+  return (
+    <section className="bg-white py-16 px-5 sm:px-8 border-t border-stone-100">
+      <div className="max-w-7xl mx-auto">
+        <div className="border-l-4 border-[#1d4ed8] pl-5 mb-12">
+          <p className="text-[#1d4ed8] text-xs font-bold uppercase tracking-[0.2em] mb-1">
+            {l === "fr" ? "Ils nous font confiance" : l === "ht" ? "Yo fè nou konfyans" : "They trust us"}
+          </p>
+          <h2 className="text-[#0f2044] font-black text-2xl sm:text-3xl">
+            {l === "fr" ? "Ce que disent nos membres" : l === "ht" ? "Sa manm nou yo di" : "What our members say"}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {testimonials.map((t, i) => (
+            <div key={i} className="border border-stone-200 rounded-lg p-6 flex flex-col gap-4 hover:border-[#bfdbfe] hover:shadow-sm transition-all">
+              {/* Stars */}
+              <div className="flex gap-0.5">
+                {[1,2,3,4,5].map(s => (
+                  <svg key={s} className="w-4 h-4 text-[#1d4ed8]" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                ))}
+              </div>
+              {/* Quote */}
+              <p className="text-stone-600 text-sm leading-relaxed flex-1 italic">
+                &ldquo;{t.text[l]}&rdquo;
+              </p>
+              {/* Author */}
+              <div className="flex items-center gap-3 pt-3 border-t border-stone-100">
+                <div className="w-9 h-9 rounded-full bg-[#0f2044] flex items-center justify-center text-white text-sm font-black shrink-0">
+                  {t.avatar}
+                </div>
+                <div>
+                  <p className="text-[#0f2044] font-bold text-sm">{t.name}</p>
+                  <p className="text-stone-400 text-xs">{t.country}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ServicesSection({ l }: { l: Lang }) {
   const refs = useRef<(HTMLAnchorElement | null)[]>([]);
   const [visible, setVisible] = useState<boolean[]>(Array(features.length).fill(false));
@@ -346,6 +401,9 @@ export default function Home() {
 
         </div>
       </section>
+
+      {/* ── TÉMOIGNAGES ── */}
+      <TestimonialsSection l={l} />
 
       {/* ── FOOTER BAND ── */}
       <section className="bg-[#0f2044] py-10 px-5 sm:px-8">

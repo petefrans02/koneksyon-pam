@@ -49,7 +49,7 @@ export default function RequireAuth({ children }: { children: ReactNode }) {
             : "Sign in to access all KONEKSYON PAM features"}
         </p>
         <button
-          onClick={signInWithGoogle}
+          onClick={() => signInWithGoogle()}
           className="flex items-center justify-center gap-3 mx-auto bg-white border-2 border-stone-200 rounded-xl px-8 py-3.5 font-medium text-stone-800 hover:border-blue-400 hover:shadow-lg transition-all"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
