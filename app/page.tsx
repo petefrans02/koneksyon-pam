@@ -10,13 +10,13 @@ import ShareButton from "@/app/components/ShareButton";
 type Lang = "fr" | "ht" | "en";
 
 const VERSES = [
-  { ref: "Jérémie 29:11", fr: "Car je connais les projets que j'ai formés sur vous — projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance.", ht: "Paske mwen konnen plan mwen genyen pou nou — plan pou fè nou jwenn lapè, pa dezas, pou ba nou yon avni ak espwa.", en: "For I know the plans I have for you — plans to prosper you and not to harm you, plans to give you hope and a future." },
-  { ref: "Philippiens 4:13", fr: "Je puis tout par celui qui me fortifie.", ht: "Mwen ka fè tout bagay nan Kris la ki ban mwen fòs.", en: "I can do all things through Christ who strengthens me." },
-  { ref: "Ésaïe 41:10", fr: "Ne crains rien, car je suis avec toi. Ne promène pas des regards inquiets, car je suis ton Dieu.", ht: "Pa pè, paske mwen avèk ou. Pa dekouraje, paske mwen se Bondye ou.", en: "Do not fear, for I am with you. Do not be dismayed, for I am your God." },
-  { ref: "Psaumes 23:1", fr: "L'Éternel est mon berger : je ne manquerai de rien.", ht: "Seyè a se gadò mwen — mwen p ap manke anyen.", en: "The Lord is my shepherd — I lack nothing." },
-  { ref: "Romains 8:28", fr: "Toutes choses concourent au bien de ceux qui aiment Dieu.", ht: "Tout bagay travay ansanm pou byen moun ki renmen Bondye.", en: "In all things God works for the good of those who love him." },
-  { ref: "2 Timothée 1:7", fr: "Dieu ne nous a pas donné un esprit de timidité, mais un esprit de force, d'amour et de sagesse.", ht: "Bondye pa ba nou yon lespri pè, men yon lespri fòs, renmen ak disiplin.", en: "God has not given us a spirit of fear, but of power, love and sound mind." },
-  { ref: "Jean 14:6", fr: "Je suis le chemin, la vérité, et la vie. Nul ne vient au Père que par moi.", ht: "Mwen se chemen an, verite a, ak lavi a. Pesonn pa ka al jwenn Papa a si se pa pase nan mwen.", en: "I am the way and the truth and the life. No one comes to the Father except through me." },
+  { ref: { fr: "Jérémie 29:11", ht: "Jeremi 29:11", en: "Jeremiah 29:11" }, fr: "Car je connais les projets que j'ai formés sur vous — projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance.", ht: "Paske mwen konnen plan mwen genyen pou nou — plan pou fè nou jwenn lapè, pa dezas, pou ba nou yon avni ak espwa.", en: "For I know the plans I have for you — plans to prosper you and not to harm you, plans to give you hope and a future." },
+  { ref: { fr: "Philippiens 4:13", ht: "Filipyen 4:13", en: "Philippians 4:13" }, fr: "Je puis tout par celui qui me fortifie.", ht: "Mwen ka fè tout bagay nan Kris la ki ban mwen fòs.", en: "I can do all things through Christ who strengthens me." },
+  { ref: { fr: "Ésaïe 41:10", ht: "Ezayi 41:10", en: "Isaiah 41:10" }, fr: "Ne crains rien, car je suis avec toi. Ne promène pas des regards inquiets, car je suis ton Dieu.", ht: "Pa pè, paske mwen avèk ou. Pa dekouraje, paske mwen se Bondye ou.", en: "Do not fear, for I am with you. Do not be dismayed, for I am your God." },
+  { ref: { fr: "Psaumes 23:1", ht: "Sòm 23:1", en: "Psalm 23:1" }, fr: "L'Éternel est mon berger : je ne manquerai de rien.", ht: "Seyè a se gadò mwen — mwen p ap manke anyen.", en: "The Lord is my shepherd — I lack nothing." },
+  { ref: { fr: "Romains 8:28", ht: "Women 8:28", en: "Romans 8:28" }, fr: "Toutes choses concourent au bien de ceux qui aiment Dieu.", ht: "Tout bagay travay ansanm pou byen moun ki renmen Bondye.", en: "In all things God works for the good of those who love him." },
+  { ref: { fr: "2 Timothée 1:7", ht: "2 Timote 1:7", en: "2 Timothy 1:7" }, fr: "Dieu ne nous a pas donné un esprit de timidité, mais un esprit de force, d'amour et de sagesse.", ht: "Bondye pa ba nou yon lespri pè, men yon lespri fòs, renmen ak disiplin.", en: "God has not given us a spirit of fear, but of power, love and sound mind." },
+  { ref: { fr: "Jean 14:6", ht: "Jan 14:6", en: "John 14:6" }, fr: "Je suis le chemin, la vérité, et la vie. Nul ne vient au Père que par moi.", ht: "Mwen se chemen an, verite a, ak lavi a. Pesonn pa ka al jwenn Papa a si se pa pase nan mwen.", en: "I am the way and the truth and the life. No one comes to the Father except through me." },
 ];
 
 const CHALLENGES = [
@@ -184,27 +184,27 @@ export default function Home() {
                     </span>
                   </div>
                   <Link href="/aujourd-hui" className="text-white/30 text-[10px] hover:text-white/60 transition-colors font-bold">
-                    {l === "fr" ? "Tout voir →" : "Wè tout →"}
+                    {l === "fr" ? "Tout voir →" : l === "ht" ? "Wè tout →" : "See all →"}
                   </Link>
                 </div>
 
                 {/* Verse */}
                 <div className="px-6 py-5 border-b border-white/8">
-                  <p className="text-white/30 text-[9px] uppercase tracking-widest font-bold mb-2">📖 {l === "fr" ? "Verset du jour" : "Vèsè jou a"}</p>
+                  <p className="text-white/30 text-[9px] uppercase tracking-widest font-bold mb-2">📖 {l === "fr" ? "Verset du jour" : l === "ht" ? "Vèsè jou a" : "Verse of the day"}</p>
                   <blockquote className="text-white text-sm font-semibold leading-relaxed italic mb-1">
                     &ldquo;{verse[l]}&rdquo;
                   </blockquote>
-                  <p className="text-[#c5a84f] text-[10px] font-bold">{verse.ref}</p>
+                  <p className="text-[#c5a84f] text-[10px] font-bold">{verse.ref[l]}</p>
                 </div>
 
                 {/* Challenge */}
                 <div className="px-6 py-4 border-b border-white/8">
-                  <p className="text-white/30 text-[9px] uppercase tracking-widest font-bold mb-2">🏛️ {l === "fr" ? "Défi du jour" : "Defi jou a"}</p>
+                  <p className="text-white/30 text-[9px] uppercase tracking-widest font-bold mb-2">🏛️ {l === "fr" ? "Défi du jour" : l === "ht" ? "Defi jou a" : "Daily challenge"}</p>
                   <p className="text-white/70 text-xs font-medium mb-3">{challenge[l]}</p>
                   {!showAnswer ? (
                     <button onClick={() => setShowAnswer(true)}
                       className="text-[10px] font-black text-[#c5a84f] border border-[#c5a84f]/20 bg-[#c5a84f]/5 px-3 py-1.5 rounded-full hover:bg-[#c5a84f]/15 transition-colors">
-                      {l === "fr" ? "Voir la réponse" : "Wè repons"}
+                      {l === "fr" ? "Voir la réponse" : l === "ht" ? "Wè repons" : "See answer"}
                     </button>
                   ) : (
                     <span className="inline-flex items-center gap-1.5 text-green-400 text-[10px] font-black bg-green-500/10 border border-green-500/20 px-3 py-1.5 rounded-full">
@@ -217,12 +217,16 @@ export default function Home() {
                 {liveContest && (
                   <div className="px-6 py-4">
                     <p className="text-white/30 text-[9px] uppercase tracking-widest font-bold mb-2">
-                      🏆 {liveContest.status === "active" ? (l === "fr" ? "En direct maintenant" : "An dirèk kounye a") : (l === "fr" ? "Prochain concours" : "Pwochen konkou")}
+                      🏆 {liveContest.status === "active"
+                        ? (l === "fr" ? "En direct maintenant" : l === "ht" ? "An dirèk kounye a" : "Live now")
+                        : (l === "fr" ? "Prochain concours" : l === "ht" ? "Pwochen konkou" : "Next contest")}
                     </p>
                     <p className="text-white text-xs font-bold mb-3 truncate">{liveContest.title}</p>
                     <Link href={`/concours/${liveContest.id}`}
                       className="inline-flex items-center gap-1.5 bg-[#0f2044] border border-white/10 text-white/80 hover:text-white text-[10px] font-black px-4 py-2 rounded-full transition-colors">
-                      {liveContest.status === "active" ? (l === "fr" ? "Regarder en direct" : "Gade an dirèk") : (l === "fr" ? "S'inscrire" : "Enskri")} →
+                      {liveContest.status === "active"
+                        ? (l === "fr" ? "Regarder en direct" : l === "ht" ? "Gade an dirèk" : "Watch live")
+                        : (l === "fr" ? "S'inscrire" : l === "ht" ? "Enskri" : "Register")} →
                     </Link>
                   </div>
                 )}
@@ -365,10 +369,10 @@ export default function Home() {
                 className="text-white/40 text-xs hover:text-white transition-colors font-medium">{s[l]}</Link>
             ))}
             <Link href="/aujourd-hui" className="text-[#c5a84f]/60 text-xs hover:text-[#c5a84f] transition-colors font-medium">
-              {l === "fr" ? "Aujourd'hui" : "Jodi a"}
+              {l === "fr" ? "Aujourd'hui" : l === "ht" ? "Jodi a" : "Today"}
             </Link>
             <Link href="/decouvrir" className="text-white/40 text-xs hover:text-white transition-colors font-medium">
-              {l === "fr" ? "Découvrir" : "Dekouvri"}
+              {l === "fr" ? "Découvrir" : l === "ht" ? "Dekouvri" : "Discover"}
             </Link>
           </div>
           <p className="text-white/20 text-[10px]">© {new Date().getFullYear()} KONEKSYON PAM</p>
