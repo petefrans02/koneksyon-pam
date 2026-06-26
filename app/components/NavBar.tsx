@@ -60,6 +60,10 @@ export default function NavBar() {
               className="hidden sm:flex items-center gap-1.5 text-[#c5a84f] text-[10px] font-bold uppercase tracking-wider hover:text-[#e8c97a] transition-colors">
               ✨ {l === "fr" ? "Aujourd'hui" : l === "ht" ? "Jodi a" : "Today"}
             </Link>
+            <Link href="/decouvrir"
+              className="hidden sm:flex items-center gap-1.5 text-white/50 text-[10px] font-bold uppercase tracking-wider hover:text-white transition-colors">
+              🔍 {l === "fr" ? "Découvrir" : l === "ht" ? "Dekouvri" : "Discover"}
+            </Link>
             <div className="w-px h-4 bg-white/20 hidden sm:block" />
             {user && (
               <Link href="/dashboard"
@@ -123,16 +127,25 @@ export default function NavBar() {
         {/* Mobile menu — grid of sections */}
         {open && (
           <div className="md:hidden border-t border-stone-100 bg-white px-4 pb-5 pt-3">
-            {/* Today + Dashboard */}
-            <div className="flex gap-2 mb-3">
+            {/* Quick links */}
+            <div className="grid grid-cols-3 gap-2 mb-3">
               <Link href="/aujourd-hui" onClick={() => setOpen(false)}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-[#c5a84f]/10 to-[#c5a84f]/5 border border-[#c5a84f]/20 text-[#b45309] text-xs font-bold">
-                ✨ {l === "fr" ? "Aujourd'hui" : "Jodi a"}
+                className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-gradient-to-b from-[#c5a84f]/10 to-[#c5a84f]/5 border border-[#c5a84f]/20 text-[#b45309] text-[10px] font-bold">
+                ✨ <span>{l === "fr" ? "Aujourd'hui" : "Jodi a"}</span>
               </Link>
-              {user && (
+              <Link href="/decouvrir" onClick={() => setOpen(false)}
+                className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-stone-50 border border-stone-200 text-stone-600 text-[10px] font-bold">
+                🔍 <span>{l === "fr" ? "Découvrir" : "Dekouvri"}</span>
+              </Link>
+              {user ? (
                 <Link href="/dashboard" onClick={() => setOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#0f2044]/5 border border-[#0f2044]/10 text-[#0f2044] text-xs font-bold">
-                  🏠 Dashboard
+                  className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-[#0f2044]/5 border border-[#0f2044]/10 text-[#0f2044] text-[10px] font-bold">
+                  🏠 <span>Dashboard</span>
+                </Link>
+              ) : (
+                <Link href="/concours" onClick={() => setOpen(false)}
+                  className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-[#fffbeb] border border-[#c5a84f]/20 text-[#b45309] text-[10px] font-bold">
+                  🏆 <span>{l === "fr" ? "Concours" : "Konkou"}</span>
                 </Link>
               )}
             </div>

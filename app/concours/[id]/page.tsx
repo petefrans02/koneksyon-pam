@@ -7,6 +7,8 @@ import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Countdown from "@/app/components/Countdown";
 import ToastNotifications from "@/app/components/ToastNotifications";
+import NextStep from "@/app/components/NextStep";
+import ShareButton from "@/app/components/ShareButton";
 
 type Lang = "fr" | "ht" | "en";
 type Status = "upcoming" | "active" | "voting" | "completed";
@@ -683,6 +685,15 @@ export default function ContestPage() {
         </div>
 
       </div>
+
+      {/* Share + Next Step after voting/completed */}
+      {(contest.status === "voting" || contest.status === "completed") && (
+        <div className="max-w-5xl mx-auto px-5 sm:px-8 pb-10 space-y-4">
+          <ShareButton title={contest.title} context="contest" variant="banner" />
+        </div>
+      )}
+
+      <NextStep context="contest" exclude={`/concours/${id}`} />
     </div>
   );
 }
