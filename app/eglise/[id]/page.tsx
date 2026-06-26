@@ -177,25 +177,42 @@ export default function ChurchPage() {
 
       {/* Church Header */}
       <div className="bg-gradient-to-br from-[#0a1628] to-[#0f2044] rounded-2xl p-8 mb-8 border border-blue-800/30">
+        {(() => {
+          const typeMatch = church.description?.match(/^\[([^\]]+)\](?: — (.*))?$/);
+          const typeTag = typeMatch ? typeMatch[1] : "";
+          const descText = typeMatch ? (typeMatch[2] || "") : (church.description || "");
+          return (
         <div className="flex flex-col sm:flex-row items-center gap-6">
-          <div className="w-20 h-20 rounded-2xl shrink-0 overflow-hidden border-2 border-white/20 shadow-lg">
+          <div className="w-24 h-24 rounded-2xl shrink-0 overflow-hidden border-2 border-white/20 shadow-xl">
             {church.logo_url ? (
               <img src={church.logo_url} alt={church.name} className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white text-3xl font-bold">
+              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white text-4xl font-black">
                 {church.name[0]}
               </div>
             )}
           </div>
-          <div className="text-center sm:text-left">
-            <h1 className="text-2xl font-bold text-white">{church.name}</h1>
-            <p className="text-blue-300/70 text-sm">{church.pastor_name}</p>
-            {church.description && <p className="text-blue-200/50 text-sm mt-1">{church.description}</p>}
+          <div className="text-center sm:text-left flex-1">
+            <h1 className="text-3xl font-black text-white uppercase tracking-wide leading-tight">{church.name}</h1>
+            {typeTag && (
+              <span className="inline-flex items-center gap-1 text-xs text-cyan-300 bg-white/10 border border-white/20 rounded-full px-3 py-1 mt-2 font-medium">
+                {typeTag}
+              </span>
+            )}
+            {church.pastor_name && (
+              <p className="text-blue-300/50 text-xs mt-2 uppercase tracking-widest">{lang === "fr" ? "Responsable" : "Leader"} · {church.pastor_name}</p>
+            )}
+            {descText && <p className="text-blue-200/40 text-xs mt-1 leading-relaxed">{descText}</p>}
           </div>
           <div className="sm:ml-auto flex flex-col gap-2">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 text-center border border-white/10">
-              <p className="text-blue-300/60 text-xs mb-1">{lang === "fr" ? "Code d'accès" : "Access code"}</p>
-              <p className="text-cyan-400 font-mono font-bold text-lg tracking-widest">{church.join_code}</p>
+            <div className="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-sm rounded-2xl px-5 py-4 text-center border border-white/20 shadow-inner">
+              <p className="text-blue-300/50 text-xs mb-1.5 uppercase tracking-[0.2em] font-medium">{lang === "fr" ? "Code d'accès" : lang === "ht" ? "Kòd aksè" : "Access code"}</p>
+              <p className="text-white font-mono font-black text-2xl tracking-[0.35em]">{church.join_code}</p>
+              <div className="mt-2 flex items-center justify-center gap-1">
+                {church.join_code.split("").map((c, i) => (
+                  <span key={i} className="w-1 h-1 rounded-full bg-cyan-400/40 inline-block" />
+                ))}
+              </div>
             </div>
             {isOwner && (
               <button
@@ -207,6 +224,8 @@ export default function ChurchPage() {
             )}
           </div>
         </div>
+          );
+        })()}
       </div>
 
       {/* Join Requests Panel — owner only */}

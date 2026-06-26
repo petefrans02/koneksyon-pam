@@ -181,27 +181,42 @@ export default function EglisePage() {
             {lang === "fr" ? "Communautés sur KONEKSYON PAM" : lang === "ht" ? "Kominote sou KONEKSYON PAM" : "Communities on KONEKSYON PAM"}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {churches.map((church) => (
-              <div key={church.id} className="bg-white rounded-2xl border border-blue-100 p-5 hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-4">
-                  {church.logo_url ? (
-                    <img src={church.logo_url} alt={church.name} className="w-14 h-14 rounded-xl object-cover shrink-0 border border-blue-100" />
-                  ) : (
-                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-white text-2xl font-bold shrink-0">
-                      {church.name[0]}
+            {churches.map((church) => {
+              const typeMatch = church.description?.match(/^\[([^\]]+)\](?: — (.*))?$/);
+              const typeTag = typeMatch ? typeMatch[1] : "";
+              const descText = typeMatch ? (typeMatch[2] || "") : (church.description || "");
+              return (
+                <div key={church.id} className="bg-white rounded-2xl border border-stone-100 p-5 hover:shadow-lg transition-all cursor-pointer hover:border-blue-200">
+                  <div className="flex items-center gap-4">
+                    {church.logo_url ? (
+                      <img src={church.logo_url} alt={church.name} className="w-16 h-16 rounded-2xl object-cover shrink-0 shadow-md" />
+                    ) : (
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center text-white text-2xl font-black shrink-0 shadow-md">
+                        {church.name[0]}
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-black text-stone-900 text-base uppercase tracking-wide truncate">{church.name}</h3>
+                      {typeTag && (
+                        <span className="inline-flex items-center gap-1 text-xs text-blue-600 bg-blue-50 border border-blue-100 rounded-full px-2.5 py-0.5 mt-1 font-medium">
+                          {typeTag}
+                        </span>
+                      )}
+                      {descText && <p className="text-xs text-stone-400 truncate mt-1">{descText}</p>}
                     </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-stone-900 truncate">{church.name}</h3>
-                    <p className="text-sm text-stone-500 truncate">{church.pastor_name}</p>
-                    {church.description && <p className="text-xs text-stone-400 truncate mt-0.5">{church.description}</p>}
                   </div>
-                  <span className="text-xs text-stone-400 bg-stone-100 px-3 py-1 rounded-full shrink-0">
-                    🔒 {lang === "fr" ? "Code" : "Code"}
-                  </span>
+                  <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-stone-300 text-xs uppercase tracking-widest font-medium">{lang === "fr" ? "Accès par code" : "Code access"}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-3 py-1.5 rounded-lg">
+                      <span className="text-xs font-mono font-bold tracking-[0.2em]">{church.join_code}</span>
+                      <span className="text-white/50 text-xs">🔑</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

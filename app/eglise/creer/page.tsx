@@ -128,9 +128,11 @@ const GROUP_TYPES = [
   },
 ];
 
+const DEFAULT_DEPTS = ["Chorale", "Jeunesse", "Femmes", "Hommes", "Diaconie", "Évangélisation", "Comité", "Enfants"];
+
 export default function CreerEglisePage() {
   const { lang } = useLang();
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [groupType, setGroupType] = useState<string>("");
   const [name, setName] = useState("");
   const [leaderName, setLeaderName] = useState("");
@@ -142,6 +144,8 @@ export default function CreerEglisePage() {
   const [logoPreview, setLogoPreview] = useState<string>("");
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [departments, setDepartments] = useState<string[]>([]);
+  const [newDept, setNewDept] = useState("");
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }: { data: { user: unknown } }) => {
@@ -175,11 +179,18 @@ export default function CreerEglisePage() {
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleStep2Submit(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim() || !leaderName.trim() || !groupType) return;
-    setLoading(true);
+    if (groupType === "eglise") {
+      setStep(3);
+    } else {
+      await doCreate();
+    }
+  }
 
+  async function doCreate(depts: string[] = []) {
+    setLoading(true);
     const logo_url = await uploadLogo();
     const selectedType = GROUP_TYPES.find(t => t.id === groupType)!;
     const typeLabel = lang === "ht" ? selectedType.ht : lang === "en" ? selectedType.en : selectedType.fr;
@@ -192,6 +203,24 @@ export default function CreerEglisePage() {
     });
     const data = await res.json();
     if (data.church) {
+      // Create departments as subgroups
+      const deptIcons: Record<string, string> = {
+        "Chorale": "🎵", "Jeunesse": "🔥", "Femmes": "👩", "Hommes": "👨",
+        "Diaconie": "🙏", "Évangélisation": "🌍", "Comité": "💼", "Enfants": "👶",
+      };
+      if (depts.length > 0) {
+        await Promise.all(depts.map(d =>
+          fetch("/api/churches/subgroups", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              church_id: data.church.id,
+              name: d,
+              icon: deptIcons[d] || "📋",
+            }),
+          })
+        ));
+      }
       setResult({ id: data.church.id, join_code: data.church.join_code, groupType: selectedType });
     }
     setLoading(false);
@@ -339,7 +368,7 @@ export default function CreerEglisePage() {
             {lang === "fr" ? "2. Informations du groupe" : lang === "ht" ? "2. Enfòmasyon gwoup la" : "2. Group information"}
           </h2>
 
-          <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm space-y-5">
+          <form onSubmit={handleStep2Submit} className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm space-y-5">
 
             {/* Photo */}
             <div>
@@ -433,9 +462,130 @@ export default function CreerEglisePage() {
             >
               {loading || uploading
                 ? <span className="flex items-center justify-center gap-2"><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />{lang === "fr" ? "Création..." : "Creating..."}</span>
+                : groupType === "eglise"
+                ? (lang === "fr" ? "Continuer → Départements" : lang === "ht" ? "Kontinye → Depatman" : "Continue → Departments")
                 : (lang === "fr" ? `Créer ${selectedType.fr}` : lang === "ht" ? `Kreye ${selectedType.ht}` : `Create ${selectedType.en}`)}
             </button>
           </form>
+        </div>
+      )}
+
+      {/* ── STEP 3: Departments (Église only) ── */}
+      {step === 3 && (
+        <div>
+          <div className="flex items-center gap-3 mb-6">
+            <button onClick={() => setStep(2)} className="text-blue-500 text-sm hover:underline flex items-center gap-1">
+              ← {lang === "fr" ? "Retour" : "Back"}
+            </button>
+            <div className="flex items-center gap-2 bg-blue-50 border border-blue-300 rounded-full px-3 py-1">
+              <span>⛪</span>
+              <span className="text-xs font-bold text-stone-700">{name}</span>
+            </div>
+          </div>
+
+          <div className="bg-blue-900 rounded-2xl p-5 mb-6 text-white">
+            <p className="font-black text-base mb-1">📋 {lang === "fr" ? "Étape obligatoire — Pasteur" : lang === "ht" ? "Etap obligatwa — Pastè" : "Mandatory step — Pastor"}</p>
+            <p className="text-blue-200/80 text-sm leading-relaxed">
+              {lang === "fr"
+                ? "En tant que Pasteur, vous devez lister les départements de votre église. Chaque membre qui rejoindra votre groupe devra obligatoirement choisir son département. Cela permet d'organiser votre église sur la plateforme."
+                : lang === "ht"
+                ? "Kòm Pastè, ou dwe liste depatman legliz ou yo. Chak manm ki pral rantre nan gwoup ou a dwe obligatoirement chwazi depatman li. Sa pèmèt ou òganize legliz ou sou platfòm nan."
+                : "As a Pastor, you must list your church departments. Every member joining your group must select their department. This helps organize your church on the platform."}
+            </p>
+          </div>
+
+          <h2 className="text-base font-bold text-stone-700 mb-3">
+            {lang === "fr" ? "3. Départements de votre église *" : lang === "ht" ? "3. Depatman legliz ou *" : "3. Your church departments *"}
+            <span className="ml-2 text-xs font-normal text-red-500">({lang === "fr" ? "min. 2 requis" : "min. 2 required"})</span>
+          </h2>
+
+          {/* Quick-add suggestions */}
+          <div className="mb-4">
+            <p className="text-xs text-stone-500 mb-2">{lang === "fr" ? "Suggestions rapides :" : "Quick add:"}</p>
+            <div className="flex flex-wrap gap-2">
+              {DEFAULT_DEPTS.map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => { if (!departments.includes(d)) setDepartments(prev => [...prev, d]); }}
+                  className={`text-xs px-3 py-1.5 rounded-full border transition-all font-medium ${
+                    departments.includes(d)
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-white text-stone-600 border-stone-300 hover:border-blue-400"
+                  }`}
+                >
+                  {departments.includes(d) ? "✓ " : "+ "}{d}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Custom department */}
+          <div className="flex gap-2 mb-4">
+            <input
+              type="text"
+              value={newDept}
+              onChange={(e) => setNewDept(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  if (newDept.trim() && !departments.includes(newDept.trim())) {
+                    setDepartments(prev => [...prev, newDept.trim()]);
+                    setNewDept("");
+                  }
+                }
+              }}
+              placeholder={lang === "fr" ? "Autre département..." : lang === "ht" ? "Lòt depatman..." : "Other department..."}
+              className="flex-1 border border-stone-300 rounded-xl px-4 py-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                if (newDept.trim() && !departments.includes(newDept.trim())) {
+                  setDepartments(prev => [...prev, newDept.trim()]);
+                  setNewDept("");
+                }
+              }}
+              className="bg-blue-600 text-white px-4 py-3 rounded-xl font-bold hover:bg-blue-500"
+            >
+              +
+            </button>
+          </div>
+
+          {/* Selected departments list */}
+          {departments.length > 0 && (
+            <div className="bg-white rounded-2xl border border-stone-200 p-4 mb-6">
+              <p className="text-xs font-bold text-stone-500 uppercase tracking-wide mb-3">
+                {lang === "fr" ? "Départements ajoutés" : "Added departments"} ({departments.length})
+              </p>
+              <div className="space-y-2">
+                {departments.map((d, i) => (
+                  <div key={i} className="flex items-center justify-between bg-blue-50 rounded-xl px-4 py-2.5">
+                    <span className="text-sm font-medium text-stone-800">📋 {d}</span>
+                    <button
+                      type="button"
+                      onClick={() => setDepartments(prev => prev.filter((_, j) => j !== i))}
+                      className="text-red-400 hover:text-red-600 text-xs font-bold ml-3"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <button
+            onClick={() => { if (departments.length >= 2) doCreate(departments); }}
+            disabled={departments.length < 2 || loading}
+            className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20"
+          >
+            {loading
+              ? <span className="flex items-center justify-center gap-2"><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />{lang === "fr" ? "Création en cours..." : "Creating..."}</span>
+              : departments.length < 2
+              ? (lang === "fr" ? `Ajoutez au moins 2 départements (${departments.length}/2)` : `Add at least 2 departments (${departments.length}/2)`)
+              : (lang === "fr" ? `⛪ Créer l'église avec ${departments.length} départements` : lang === "ht" ? `⛪ Kreye legliz la ak ${departments.length} depatman` : `⛪ Create church with ${departments.length} departments`)}
+          </button>
         </div>
       )}
     </div>
