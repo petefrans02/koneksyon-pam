@@ -224,7 +224,7 @@ export default function DonationPage() {
             </button>
 
             <div className="flex items-center justify-center gap-3 mt-4">
-              <span className="text-xs text-stone-400">🔒 SSL sécurisé</span>
+              <span className="text-xs text-stone-400">🔒 {lang === "fr" ? "SSL sécurisé" : lang === "ht" ? "SSL an sekirite" : "SSL secured"}</span>
               <span className="text-stone-200">·</span>
               <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" className="h-4 opacity-40" />
               <span className="text-stone-200">·</span>
@@ -239,10 +239,10 @@ export default function DonationPage() {
             </p>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { icon: "🖥️", t: lang === "fr" ? "Hébergement du site" : "Site hosting" },
-                { icon: "📖", t: lang === "fr" ? "Contenu biblique" : "Biblical content" },
-                { icon: "🤖", t: lang === "fr" ? "Outils IA bibliques" : "AI Bible tools" },
-                { icon: "🌍", t: lang === "fr" ? "Expansion mondiale" : "Global expansion" },
+                { icon: "🖥️", t: lang === "fr" ? "Hébergement du site" : lang === "ht" ? "Ebergman sit la" : "Site hosting" },
+                { icon: "📖", t: lang === "fr" ? "Contenu biblique" : lang === "ht" ? "Kontni biblik" : "Biblical content" },
+                { icon: "🤖", t: lang === "fr" ? "Outils IA bibliques" : lang === "ht" ? "Zouti IA biblik" : "AI Bible tools" },
+                { icon: "🌍", t: lang === "fr" ? "Expansion mondiale" : lang === "ht" ? "Ekspansyon mondyal" : "Global expansion" },
               ].map((i) => (
                 <div key={i.t} className="flex items-center gap-2 text-xs text-stone-500">
                   <span>{i.icon}</span><span>{i.t}</span>

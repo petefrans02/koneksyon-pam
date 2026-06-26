@@ -126,7 +126,7 @@ export default function EglisePage() {
                   : "The Pastor must accept your request. You'll get access once approved."}
               </p>
               <button onClick={() => setJoinPending(false)} className="text-amber-600 text-xs underline mt-2">
-                {lang === "fr" ? "Essayer un autre code" : "Try another code"}
+                {lang === "fr" ? "Essayer un autre code" : lang === "ht" ? "Eseye yon lòt kòd" : "Try another code"}
               </button>
             </div>
           ) : (

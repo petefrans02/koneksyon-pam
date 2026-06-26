@@ -57,6 +57,8 @@ export default function ChurchPage() {
   const [joinRequests, setJoinRequests] = useState<JoinRequest[]>([]);
   const [showRequests, setShowRequests] = useState(false);
   const [respondingId, setRespondingId] = useState<string | null>(null);
+  const [memberDeptId, setMemberDeptId] = useState<string | null | undefined>(undefined);
+  const [joiningDeptId, setJoiningDeptId] = useState<string | null>(null);
 
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -74,9 +76,18 @@ export default function ChurchPage() {
   }
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setCurrentUserId(data.user?.id || null));
+    supabase.auth.getUser().then(({ data }) => {
+      setCurrentUserId(data.user?.id || null);
+    });
     loadChurch();
   }, [id]);
+
+  useEffect(() => {
+    if (!currentUserId) return;
+    fetch(`/api/churches/memberships?church_id=${id}`)
+      .then(r => r.json())
+      .then(d => setMemberDeptId(d.membership?.department_id ?? null));
+  }, [id, currentUserId]);
 
   async function loadChurch() {
     const res = await fetch(`/api/churches/${id}`);
@@ -108,6 +119,17 @@ export default function ChurchPage() {
 
   const isOwner = church?.owner_user_id && currentUserId && church.owner_user_id === currentUserId;
   const isEglise = church?.description?.includes("[⛪") || church?.description?.includes("[🏛");
+
+  async function joinDepartment(deptId: string) {
+    setJoiningDeptId(deptId);
+    await fetch("/api/churches/memberships", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ church_id: id, department_id: deptId }),
+    });
+    setMemberDeptId(deptId);
+    setJoiningDeptId(null);
+  }
 
   async function createSubgroup(e: React.FormEvent) {
     e.preventDefault();
@@ -153,7 +175,7 @@ export default function ChurchPage() {
     return (
       <div className="max-w-lg mx-auto px-6 py-20 text-center">
         <p className="text-5xl mb-4">⛪</p>
-        <p className="text-stone-500">{lang === "fr" ? "Église non trouvée" : "Church not found"}</p>
+        <p className="text-stone-500">{lang === "fr" ? "Église non trouvée" : lang === "ht" ? "Legliz pa jwenn" : "Church not found"}</p>
         <Link href="/eglise" className="text-blue-500 hover:underline mt-4 block">← {lang === "fr" ? "Retour" : "Back"}</Link>
       </div>
     );
@@ -173,7 +195,7 @@ export default function ChurchPage() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       <Link href="/eglise" className="text-blue-500 text-sm hover:underline mb-6 block">
-        ← {lang === "fr" ? "Toutes les églises" : "All churches"}
+        ← {lang === "fr" ? "Toutes les églises" : lang === "ht" ? "Tout legliz yo" : "All churches"}
       </Link>
 
       {/* Church Header */}
@@ -204,7 +226,7 @@ export default function ChurchPage() {
               </span>
             )}
             {church.pastor_name && (
-              <p className="text-blue-300/50 text-xs mt-2 uppercase tracking-widest">{lang === "fr" ? "Responsable" : "Leader"} · {church.pastor_name}</p>
+              <p className="text-blue-300/50 text-xs mt-2 uppercase tracking-widest">{lang === "fr" ? "Responsable" : lang === "ht" ? "Responsab" : "Leader"} · {church.pastor_name}</p>
             )}
             {descText && <p className="text-blue-200/40 text-xs mt-1 leading-relaxed">{descText}</p>}
           </div>
@@ -282,7 +304,7 @@ export default function ChurchPage() {
         </div>
       )}
 
-      {/* Départements — only for Église type groups */}
+      {/* Départements */}
       {(subgroups.length > 0 || (isOwner && isEglise)) && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-3">
@@ -291,10 +313,12 @@ export default function ChurchPage() {
             </h2>
             {isOwner && isEglise && (
               <button onClick={() => setShowSubgroupForm(!showSubgroupForm)} className="text-blue-500 text-sm font-medium hover:underline">
-                + {lang === "fr" ? "Ajouter un département" : lang === "ht" ? "Ajoute yon depatman" : "Add department"}
+                + {lang === "fr" ? "Ajouter" : lang === "ht" ? "Ajoute" : "Add"}
               </button>
             )}
           </div>
+
+          {/* Owner: add dept form */}
           {isOwner && isEglise && showSubgroupForm && (
             <form onSubmit={createSubgroup} className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-3 flex gap-2">
               <select value={newSubIcon} onChange={(e) => setNewSubIcon(e.target.value)} className="border border-stone-300 rounded-lg px-2 py-2 text-lg bg-white">
@@ -302,18 +326,65 @@ export default function ChurchPage() {
                   <option key={e} value={e}>{e}</option>
                 ))}
               </select>
-              <input type="text" value={newSubName} onChange={(e) => setNewSubName(e.target.value)} placeholder={lang === "fr" ? "Nom du département..." : "Department name..."} required className="flex-1 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+              <input type="text" value={newSubName} onChange={(e) => setNewSubName(e.target.value)} placeholder={lang === "fr" ? "Nom du département..." : lang === "ht" ? "Non depatman..." : "Department name..."} required className="flex-1 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
               <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-500">OK</button>
             </form>
           )}
+
+          {/* Member: dept picker banner (shown when member has no dept yet) */}
+          {!isOwner && currentUserId && subgroups.length > 0 && memberDeptId === null && (
+            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-2xl p-5 mb-4">
+              <p className="font-bold text-blue-900 mb-1">
+                {lang === "fr" ? "👇 Choisissez votre département" : lang === "ht" ? "👇 Chwazi depatman ou" : "👇 Choose your department"}
+              </p>
+              <p className="text-blue-700 text-sm mb-1">
+                {lang === "fr" ? "Sélectionnez le département auquel vous appartenez dans cette église." : lang === "ht" ? "Chwazi depatman ou ap fè parti nan legliz sa a." : "Select the department you belong to in this church."}
+              </p>
+            </div>
+          )}
+
+          {/* Member: current dept */}
+          {!isOwner && currentUserId && memberDeptId && (
+            <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-3 flex items-center gap-3">
+              <span className="text-green-600 font-bold text-sm">✓ {lang === "fr" ? "Votre département :" : lang === "ht" ? "Depatman ou :" : "Your department:"}</span>
+              <span className="font-bold text-green-800">{subgroups.find(s => s.id === memberDeptId)?.icon} {subgroups.find(s => s.id === memberDeptId)?.name}</span>
+              <button onClick={() => setMemberDeptId(null)} className="ml-auto text-xs text-stone-400 hover:text-stone-600 underline">
+                {lang === "fr" ? "Changer" : lang === "ht" ? "Chanje" : "Change"}
+              </button>
+            </div>
+          )}
+
+          {/* Dept cards — clickable for members, display-only for owner */}
           {subgroups.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {subgroups.map((sg) => (
-                <div key={sg.id} className="bg-white border border-blue-100 rounded-xl px-4 py-2.5 flex items-center gap-2 hover:shadow-md transition-shadow cursor-pointer">
-                  <span className="text-lg">{sg.icon}</span>
-                  <span className="text-sm font-medium text-stone-700">{sg.name}</span>
-                </div>
-              ))}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {subgroups.map((sg) => {
+                const isMyDept = memberDeptId === sg.id;
+                const isLoading = joiningDeptId === sg.id;
+                if (isOwner) {
+                  return (
+                    <div key={sg.id} className="bg-white border border-blue-100 rounded-xl px-4 py-3 flex items-center gap-2">
+                      <span className="text-xl">{sg.icon}</span>
+                      <span className="text-sm font-medium text-stone-700">{sg.name}</span>
+                    </div>
+                  );
+                }
+                return (
+                  <button
+                    key={sg.id}
+                    onClick={() => joinDepartment(sg.id)}
+                    disabled={isLoading || isMyDept}
+                    className={`rounded-xl px-4 py-3 flex items-center gap-2 transition-all text-left border-2 ${
+                      isMyDept
+                        ? "bg-green-50 border-green-400 shadow-md shadow-green-100"
+                        : "bg-white border-stone-200 hover:border-blue-400 hover:bg-blue-50 hover:shadow-md"
+                    }`}
+                  >
+                    <span className="text-xl">{isLoading ? "⏳" : sg.icon}</span>
+                    <span className={`text-sm font-medium ${isMyDept ? "text-green-800" : "text-stone-700"}`}>{sg.name}</span>
+                    {isMyDept && <span className="ml-auto text-green-500 text-xs">✓</span>}
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -378,7 +449,7 @@ export default function ChurchPage() {
         <div className="text-center py-12 bg-white rounded-2xl border border-stone-200">
           <p className="text-4xl mb-3">{tabs.find((t) => t.id === activeTab)?.icon}</p>
           <p className="text-stone-500">
-            {lang === "fr" ? "Rien ici pour le moment. Soyez le premier à publier !" : "Nothing here yet. Be the first to post!"}
+            {lang === "fr" ? "Rien ici pour le moment. Soyez le premier à publier !" : lang === "ht" ? "Pa gen anyen isit pou kounye a. Soyez premye a pibliye !" : "Nothing here yet. Be the first to post!"}
           </p>
         </div>
       ) : (

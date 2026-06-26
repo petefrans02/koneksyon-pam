@@ -74,12 +74,23 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "Not authorized" }, { status: 403 });
   }
 
-  const { error } = await db
+  const { data: req, error } = await db
     .from("church_join_requests")
     .update({ status: action })
     .eq("id", request_id)
-    .eq("church_id", church_id);
+    .eq("church_id", church_id)
+    .select("user_id")
+    .single();
 
   if (error) return Response.json({ error: error.message }, { status: 500 });
+
+  // When approved, create the membership record
+  if (action === "approved" && req?.user_id) {
+    await db.from("church_memberships").upsert(
+      { church_id, user_id: req.user_id },
+      { onConflict: "church_id,user_id", ignoreDuplicates: true }
+    );
+  }
+
   return Response.json({ ok: true, action });
 }

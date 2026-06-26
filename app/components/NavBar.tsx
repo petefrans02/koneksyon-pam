@@ -16,6 +16,7 @@ export default function NavBar() {
       items: [
         { href: "/bible", label: lang === "fr" ? "📖 La Bible complète" : lang === "ht" ? "📖 Bib la konplè" : "📖 Full Bible" },
         { href: "/louange", label: lang === "fr" ? "🎵 Louange & Musique" : lang === "ht" ? "🎵 Lwanj & Mizik" : "🎵 Praise & Music" },
+        { href: "/chants", label: lang === "fr" ? "🎶 Chants d'Espérance" : lang === "ht" ? "🎶 Chan Desperans" : "🎶 Hymns" },
       ],
     },
     {
@@ -57,7 +58,9 @@ export default function NavBar() {
           <img src="/logo-kp.png" alt="KP" className="w-11 h-11 rounded-xl group-hover:scale-105 transition-transform" />
           <div className="hidden sm:block">
             <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">KONEKSYON PAM</span>
-            <p className="text-[10px] text-blue-400 -mt-0.5 tracking-widest">UNE MISSION • UN DIEU • UNE VISION</p>
+            <p className="text-[10px] text-blue-400 -mt-0.5 tracking-widest">
+              {lang === "fr" ? "UNE MISSION • UN DIEU • UNE VISION" : lang === "ht" ? "YON MISYON • YON BONDYE • YON VIZYON" : "ONE MISSION • ONE GOD • ONE VISION"}
+            </p>
           </div>
           <span className="sm:hidden text-lg font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">KP</span>
         </Link>

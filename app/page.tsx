@@ -249,11 +249,11 @@ function AIBanner() {
               {lang === "fr" ? "Assistant Biblique IA" : lang === "ht" ? "Asistan Biblik IA" : "AI Bible Assistant"}
             </h2>
             <p className="text-purple-200 text-xs">
-              {lang === "fr" ? "Posez n'importe quelle question sur la Bible — réponse instantanée 24h/24" : "Ask any Bible question — instant answer 24/7"}
+              {lang === "fr" ? "Posez n'importe quelle question sur la Bible — réponse instantanée 24h/24" : lang === "ht" ? "Poze nenpòt kesyon sou Bib la — repons imedyat 24h/24" : "Ask any Bible question — instant answer 24/7"}
             </p>
             <div className="flex items-center gap-2 mt-2">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="text-purple-200 text-xs">{lang === "fr" ? "En ligne" : "Online"}</span>
+              <span className="text-purple-200 text-xs">{lang === "fr" ? "En ligne" : lang === "ht" ? "Anliy" : "Online"}</span>
             </div>
           </div>
         </div>
@@ -311,7 +311,7 @@ function ConnectedWorld() {
           ))}
         </div>
         <p className="text-blue-600/60 text-sm">
-          {lang === "fr" ? "Des frères et sœurs du monde entier connectés par la foi" : "Brothers and sisters worldwide connected by faith"}
+          {lang === "fr" ? "Des frères et sœurs du monde entier connectés par la foi" : lang === "ht" ? "Frè ak sè nan mond antye konekte pa lafwa" : "Brothers and sisters worldwide connected by faith"}
         </p>
       </div>
     </section>

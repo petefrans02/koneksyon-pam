@@ -60,7 +60,7 @@ export default function LouangePage() {
             rel="noopener noreferrer"
             className="bg-red-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-red-400 transition-colors"
           >
-            {lang === "fr" ? "Voir toutes les vidéos sur YouTube" : "Watch on YouTube"}
+            {lang === "fr" ? "Voir toutes les vidéos sur YouTube" : lang === "ht" ? "Gade tout videyo sou YouTube" : "Watch on YouTube"}
           </a>
         </div>
       ) : (

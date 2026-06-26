@@ -17,7 +17,9 @@ export default function AProposPage() {
           {lang === "fr" ? "À propos" : lang === "ht" ? "Konsènan" : "About"}
         </h1>
         <p className="text-stone-800 mt-2 font-bold text-lg">KONEKSYON PAM</p>
-        <p className="text-blue-600 text-sm mt-1 font-medium">Une Mission • Un Dieu • Une Vision</p>
+        <p className="text-blue-600 text-sm mt-1 font-medium">
+          {lang === "fr" ? "Une Mission • Un Dieu • Une Vision" : lang === "ht" ? "Yon Misyon • Yon Bondye • Yon Vizyon" : "One Mission • One God • One Vision"}
+        </p>
       </div>
 
       <div className="space-y-8 text-stone-700 leading-relaxed">
@@ -40,14 +42,78 @@ export default function AProposPage() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-4">
             {[
-              { icon: "⛪", title: lang === "fr" ? "Espace Église" : "Church Space", desc: lang === "fr" ? "Chaque église crée son espace privé avec un code unique. Le pasteur gère les études, événements et prières de sa congrégation." : "Each church creates its private space with a unique code." },
-              { icon: "📖", title: lang === "fr" ? "150 Psaumes" : "150 Psalms", desc: lang === "fr" ? "Tous les Psaumes de la Bible en français (Louis Segond), créole haïtien et anglais." : "All Psalms in French, Haitian Creole and English." },
-              { icon: "🙏", title: lang === "fr" ? "Prière & Témoignages" : "Prayer & Testimonies", desc: lang === "fr" ? "Mur de prière mondial avec drapeaux des pays. Partagez vos témoignages et encouragez-vous mutuellement." : "Global prayer wall with country flags." },
-              { icon: "🕊️", title: lang === "fr" ? "Assistant Biblique IA" : "AI Bible Assistant", desc: lang === "fr" ? "Posez n'importe quelle question sur la Bible et recevez une réponse instantanée avec des versets." : "Ask any Bible question and get an instant answer with verses." },
-              { icon: "📚", title: lang === "fr" ? "Études Bibliques" : "Bible Studies", desc: lang === "fr" ? "Cours interactifs sur les sujets les plus profonds de la Bible avec un assistant IA intégré." : "Interactive courses on the deepest Bible topics with AI assistant." },
-              { icon: "🏆", title: lang === "fr" ? "Quiz Biblique" : "Bible Quiz", desc: lang === "fr" ? "5 niveaux progressifs avec système de déverrouillage. Testez et approfondissez vos connaissances." : "5 progressive levels with unlock system." },
-              { icon: "🌍", title: lang === "fr" ? "Communauté Mondiale" : "Global Community", desc: lang === "fr" ? "7 groupes thématiques : Famille, Jeunesse, Évangélisation, Social, Formation, Actualités et plus." : "7 thematic groups: Family, Youth, Evangelism, Social, Training, News and more." },
-              { icon: "🎵", title: lang === "fr" ? "Louange & Adoration" : "Praise & Worship", desc: lang === "fr" ? "Vidéos de louange, Psaumes en musique, et contenu d'adoration de la chaîne KONEKSYON PAM." : "Praise videos, Psalms in music, and worship content." },
+              {
+                icon: "⛪",
+                title: lang === "fr" ? "Espace Église" : lang === "ht" ? "Espas Legliz" : "Church Space",
+                desc: lang === "fr"
+                  ? "Chaque église crée son espace privé avec un code unique. Le pasteur gère les études, événements et prières de sa congrégation."
+                  : lang === "ht"
+                  ? "Chak legliz kreye espas prive li ak yon kòd inik. Pastè a jere etid, evènman ak lapriyè kongregasyon li."
+                  : "Each church creates its private space with a unique code. The pastor manages studies, events and prayers.",
+              },
+              {
+                icon: "📖",
+                title: lang === "fr" ? "150 Psaumes" : lang === "ht" ? "150 Sòm" : "150 Psalms",
+                desc: lang === "fr"
+                  ? "Tous les Psaumes de la Bible en français (Louis Segond), créole haïtien et anglais."
+                  : lang === "ht"
+                  ? "Tout Sòm Bib la an franse, kreyòl ayisyen ak anglè."
+                  : "All Psalms in French, Haitian Creole and English.",
+              },
+              {
+                icon: "🙏",
+                title: lang === "fr" ? "Prière & Témoignages" : lang === "ht" ? "Lapriyè & Temwayaj" : "Prayer & Testimonies",
+                desc: lang === "fr"
+                  ? "Mur de prière mondial avec drapeaux des pays. Partagez vos témoignages et encouragez-vous mutuellement."
+                  : lang === "ht"
+                  ? "Mi lapriyè mondyal ak drapo peyi yo. Pataje temwayaj ou yo ak ankouraje youn lòt."
+                  : "Global prayer wall with country flags. Share your testimonies and encourage one another.",
+              },
+              {
+                icon: "🕊️",
+                title: lang === "fr" ? "Assistant Biblique IA" : lang === "ht" ? "Asistan Biblik IA" : "AI Bible Assistant",
+                desc: lang === "fr"
+                  ? "Posez n'importe quelle question sur la Bible et recevez une réponse instantanée avec des versets."
+                  : lang === "ht"
+                  ? "Poze nenpòt kesyon sou Bib la epi resevwa yon repons imedyat ak vèsè yo."
+                  : "Ask any Bible question and get an instant answer with verses.",
+              },
+              {
+                icon: "📚",
+                title: lang === "fr" ? "Études Bibliques" : lang === "ht" ? "Etid Biblik" : "Bible Studies",
+                desc: lang === "fr"
+                  ? "Cours interactifs sur les sujets les plus profonds de la Bible avec un assistant IA intégré."
+                  : lang === "ht"
+                  ? "Kou entèraktif sou sijè ki pi fon nan Bib la ak yon asistan IA entegre."
+                  : "Interactive courses on the deepest Bible topics with AI assistant.",
+              },
+              {
+                icon: "🏆",
+                title: lang === "fr" ? "Quiz Biblique" : lang === "ht" ? "Kiz Biblik" : "Bible Quiz",
+                desc: lang === "fr"
+                  ? "5 niveaux progressifs avec système de déverrouillage. Testez et approfondissez vos connaissances."
+                  : lang === "ht"
+                  ? "5 nivo pwogresif ak sistèm deblokaj. Teste ak apwofondi konesans ou."
+                  : "5 progressive levels with unlock system. Test and deepen your knowledge.",
+              },
+              {
+                icon: "🌍",
+                title: lang === "fr" ? "Communauté Mondiale" : lang === "ht" ? "Kominote Mondyal" : "Global Community",
+                desc: lang === "fr"
+                  ? "7 groupes thématiques : Famille, Jeunesse, Évangélisation, Social, Formation, Actualités et plus."
+                  : lang === "ht"
+                  ? "7 gwoup tematik : Fanmi, Jenès, Evanjelizasyon, Sosyal, Fòmasyon, Aktyalite ak plis."
+                  : "7 thematic groups: Family, Youth, Evangelism, Social, Training, News and more.",
+              },
+              {
+                icon: "🎵",
+                title: lang === "fr" ? "Louange & Adoration" : lang === "ht" ? "Lwanj & Adorasyon" : "Praise & Worship",
+                desc: lang === "fr"
+                  ? "Vidéos de louange, Psaumes en musique, et contenu d'adoration de la chaîne KONEKSYON PAM."
+                  : lang === "ht"
+                  ? "Videyo lwanj, Sòm nan mizik, ak kontni adorasyon chèn KONEKSYON PAM."
+                  : "Praise videos, Psalms in music, and worship content.",
+              },
             ].map((item) => (
               <div key={item.title} className="flex items-start gap-3">
                 <span className="text-2xl shrink-0">{item.icon}</span>

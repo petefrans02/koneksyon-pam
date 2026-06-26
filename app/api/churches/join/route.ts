@@ -61,6 +61,12 @@ export async function POST(request: NextRequest) {
     return Response.json({ church_id: church.id, status: "pending" });
   }
 
-  // All other group types: immediate access
+  // All other group types: immediate access + create membership record
+  if (user) {
+    await db.from("church_memberships").upsert(
+      { church_id: church.id, user_id: user.id },
+      { onConflict: "church_id,user_id", ignoreDuplicates: true }
+    );
+  }
   return Response.json({ church_id: church.id, status: "approved" });
 }

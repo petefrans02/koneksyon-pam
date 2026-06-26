@@ -81,7 +81,7 @@ export default function ChantsPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
-      <Link href="/" className="text-blue-500 text-sm hover:underline mb-6 block">← {lang === "fr" ? "Accueil" : "Home"}</Link>
+      <Link href="/" className="text-blue-500 text-sm hover:underline mb-6 block">← {lang === "fr" ? "Accueil" : lang === "ht" ? "Akèy" : "Home"}</Link>
 
       <div className="text-center mb-8">
         <img src="https://cdn-icons-png.flaticon.com/512/2936/2936690.png" alt="" className="w-14 h-14 mx-auto mb-3" />
@@ -89,7 +89,7 @@ export default function ChantsPage() {
           {lang === "fr" ? "Chants d'Espérance" : lang === "ht" ? "Chan Desperans" : "Songs of Hope"}
         </h1>
         <p className="text-stone-500 mt-2">
-          {lang === "fr" ? "Le cantique le plus aimé de l'Église haïtienne" : "The most beloved hymnal of the Haitian Church"}
+          {lang === "fr" ? "Le cantique le plus aimé de l'Église haïtienne" : lang === "ht" ? "Kantik ki pi renmen nan Legliz Ayisyen" : "The most beloved hymnal of the Haitian Church"}
         </p>
       </div>
 
@@ -98,7 +98,7 @@ export default function ChantsPage() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder={lang === "fr" ? "🔍 Chercher par numéro ou titre..." : "🔍 Search by number or title..."}
+          placeholder={lang === "fr" ? "🔍 Chercher par numéro ou titre..." : lang === "ht" ? "🔍 Chèche pa nimewo oswa tit..." : "🔍 Search by number or title..."}
           className="w-full border border-blue-200 rounded-xl px-5 py-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm"
         />
       </div>
@@ -145,7 +145,7 @@ export default function ChantsPage() {
       {filtered.length === 0 && (
         <div className="text-center py-12">
           <p className="text-4xl mb-3">🎵</p>
-          <p className="text-stone-500">{lang === "fr" ? "Aucun chant trouvé" : "No hymn found"}</p>
+          <p className="text-stone-500">{lang === "fr" ? "Aucun chant trouvé" : lang === "ht" ? "Pa gen chant jwenn" : "No hymn found"}</p>
         </div>
       )}
     </div>

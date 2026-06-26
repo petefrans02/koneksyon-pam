@@ -58,7 +58,7 @@ export default function CommunautePage() {
         {[
           { label: lang === "fr" ? "Groupes actifs" : "Gwoup aktif", value: groups.length.toString(), icon: "🏠" },
           { label: lang === "fr" ? "Membres" : "Manm", value: "24.5K+", icon: "👥" },
-          { label: lang === "fr" ? "Débats ouverts" : "Deba ouvè", value: "48", icon: "💬" },
+          { label: lang === "fr" ? "Débats ouverts" : lang === "ht" ? "Deba ouvè" : "Open debates", value: "48", icon: "💬" },
           { label: lang === "fr" ? "Nations" : "Nasyon", value: "12+", icon: "🌍" },
         ].map((s) => (
           <div key={s.label} className="bg-white rounded-2xl border border-blue-50 p-4 text-center">
@@ -72,10 +72,10 @@ export default function CommunautePage() {
       {filtered.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-stone-400">
-            {lang === "fr" ? "Aucun groupe trouvé pour" : "No group found for"} &ldquo;{search}&rdquo;
+            {lang === "fr" ? "Aucun groupe trouvé pour" : lang === "ht" ? "Pa gen gwoup jwenn pou" : "No group found for"} &ldquo;{search}&rdquo;
           </p>
           <button onClick={() => setSearch("")} className="text-blue-500 text-sm mt-2 hover:underline">
-            {lang === "fr" ? "Voir tous les groupes" : "See all groups"}
+            {lang === "fr" ? "Voir tous les groupes" : lang === "ht" ? "Wè tout gwoup yo" : "See all groups"}
           </button>
         </div>
       ) : (

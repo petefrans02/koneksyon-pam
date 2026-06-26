@@ -386,12 +386,12 @@ export default function CreerEglisePage() {
                 </div>
                 <div>
                   <button type="button" onClick={() => fileRef.current?.click()} className="text-sm text-blue-600 font-medium hover:underline block">
-                    {logoPreview ? (lang === "fr" ? "Changer la photo" : "Change photo") : (lang === "fr" ? "Choisir une photo" : lang === "ht" ? "Chwazi yon foto" : "Choose a photo")}
+                    {logoPreview ? (lang === "fr" ? "Changer la photo" : lang === "ht" ? "Chanje foto a" : "Change photo") : (lang === "fr" ? "Choisir une photo" : lang === "ht" ? "Chwazi yon foto" : "Choose a photo")}
                   </button>
                   <p className="text-xs text-stone-400 mt-1">JPG, PNG · max 5MB</p>
                   {logoPreview && (
                     <button type="button" onClick={() => { setLogoFile(null); setLogoPreview(""); }} className="text-xs text-red-400 hover:underline mt-1 block">
-                      {lang === "fr" ? "Supprimer" : "Remove"}
+                      {lang === "fr" ? "Supprimer" : lang === "ht" ? "Efase" : "Remove"}
                     </button>
                   )}
                 </div>
@@ -475,7 +475,7 @@ export default function CreerEglisePage() {
         <div>
           <div className="flex items-center gap-3 mb-6">
             <button onClick={() => setStep(2)} className="text-blue-500 text-sm hover:underline flex items-center gap-1">
-              ← {lang === "fr" ? "Retour" : "Back"}
+              ← {lang === "fr" ? "Retour" : lang === "ht" ? "Tounen" : "Back"}
             </button>
             <div className="flex items-center gap-2 bg-blue-50 border border-blue-300 rounded-full px-3 py-1">
               <span>⛪</span>
@@ -501,7 +501,7 @@ export default function CreerEglisePage() {
 
           {/* Quick-add suggestions */}
           <div className="mb-4">
-            <p className="text-xs text-stone-500 mb-2">{lang === "fr" ? "Suggestions rapides :" : "Quick add:"}</p>
+            <p className="text-xs text-stone-500 mb-2">{lang === "fr" ? "Suggestions rapides :" : lang === "ht" ? "Ajoute rapid :" : "Quick add:"}</p>
             <div className="flex flex-wrap gap-2">
               {DEFAULT_DEPTS.map((d) => (
                 <button
@@ -556,7 +556,7 @@ export default function CreerEglisePage() {
           {departments.length > 0 && (
             <div className="bg-white rounded-2xl border border-stone-200 p-4 mb-6">
               <p className="text-xs font-bold text-stone-500 uppercase tracking-wide mb-3">
-                {lang === "fr" ? "Départements ajoutés" : "Added departments"} ({departments.length})
+                {lang === "fr" ? "Départements ajoutés" : lang === "ht" ? "Depatman ajoute" : "Added departments"} ({departments.length})
               </p>
               <div className="space-y-2">
                 {departments.map((d, i) => (

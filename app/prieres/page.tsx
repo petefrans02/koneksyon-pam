@@ -154,7 +154,7 @@ export default function PrieresPage() {
             {LIVE_STATS.map((s) => (
               <span key={s.country} className="text-xl" title={s.country}>{s.flag}</span>
             ))}
-            <span className="text-blue-300/60 text-xs self-center">+{lang === "fr" ? "12 pays" : "12 nations"}</span>
+            <span className="text-blue-300/60 text-xs self-center">+{lang === "fr" ? "12 pays" : lang === "ht" ? "12 peyi" : "12 nations"}</span>
           </div>
         </div>
       </div>
@@ -176,7 +176,7 @@ export default function PrieresPage() {
       {/* Filter Tabs */}
       <div className="flex gap-2 mb-6">
         <button onClick={() => setFilter("all")} className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === "all" ? "bg-blue-600 text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200"}`}>
-          {lang === "fr" ? "Toutes les prières" : "Tout"}
+          {lang === "fr" ? "Toutes les prières" : lang === "ht" ? "Tout lapriyè" : "All prayers"}
         </button>
         <button onClick={() => setFilter("featured")} className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === "featured" ? "bg-blue-600 text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200"}`}>
           ⭐ {lang === "fr" ? "Les plus priées" : "Plis lapriyè"}
@@ -200,7 +200,7 @@ export default function PrieresPage() {
       {/* My own new prayers */}
       {realPrayers.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-sm font-bold text-stone-500 uppercase tracking-wide mb-3">{lang === "fr" ? "Nouvelles demandes" : "Nouvo demann"}</h2>
+          <h2 className="text-sm font-bold text-stone-500 uppercase tracking-wide mb-3">{lang === "fr" ? "Nouvelles demandes" : lang === "ht" ? "Nouvo demann" : "New requests"}</h2>
           <div className="space-y-4">
             {realPrayers.map((prayer) => (
               <PrayerCard key={prayer.id} prayer={prayer} lang={lang} userFlag={userCountry.flag} isGlobal={false} onPray={handlePray} />
@@ -242,7 +242,7 @@ function PrayerCard({ prayer, lang, userFlag, isGlobal, onPray }: {
       )}
       {prayer.featured && !hot && (
         <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-600 text-xs font-bold px-2 py-0.5 rounded-full mb-3">
-          ⭐ {lang === "fr" ? "En vedette" : "Featured"}
+          ⭐ {lang === "fr" ? "En vedette" : lang === "ht" ? "Prezante" : "Featured"}
         </span>
       )}
       <div className="flex items-start gap-3 mb-3">
