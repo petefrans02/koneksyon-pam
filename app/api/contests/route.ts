@@ -26,7 +26,7 @@ export async function GET() {
   const { data: contests } = await db
     .from("contests")
     .select(`
-      id, title, description, status, start_at, end_at, created_at, max_participants,
+      id, title, description, status, start_at, created_at, max_participants,
       contest_participants(count)
     `)
     .order("created_at", { ascending: false });
