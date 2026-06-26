@@ -125,12 +125,18 @@ export default function ChurchPage() {
 
   async function joinDepartment(deptId: string) {
     setJoiningDeptId(deptId);
-    await fetch("/api/churches/memberships", {
+    const res = await fetch("/api/churches/memberships", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ church_id: id, department_id: deptId }),
     });
-    setMemberDeptId(deptId);
+    const result = await res.json();
+    if (result.ok) {
+      // Confirm from server that it was actually saved
+      const verify = await fetch(`/api/churches/memberships?church_id=${id}`);
+      const verifyData = await verify.json();
+      setMemberDeptId(verifyData.membership?.department_id ?? deptId);
+    }
     setJoiningDeptId(null);
   }
 
