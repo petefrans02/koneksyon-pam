@@ -61,6 +61,13 @@ export default function ContestPage() {
   const [voting, setVoting] = useState<string | null>(null);
   const [joining, setJoining] = useState(false);
   const [controlling, setControlling] = useState(false);
+  const [joinError, setJoinError] = useState<string | null>(null);
+  const [joinSuccess, setJoinSuccess] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ id: string } | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setCurrentUser(data.user));
+  }, []);
 
   const load = useCallback(async () => {
     const res = await fetch(`/api/contests/${id}`);
@@ -90,10 +97,27 @@ export default function ContestPage() {
   }, [id, load]);
 
   async function joinContest() {
+    setJoinError(null);
+    if (!currentUser) {
+      router.push("/auth/login?redirect=/concours/" + id);
+      return;
+    }
     setJoining(true);
     const res = await fetch(`/api/contests/${id}/join`, { method: "POST" });
     const data = await res.json();
-    if (data.ok) { setIsRegistered(true); await load(); }
+    if (data.ok) {
+      setIsRegistered(true);
+      setJoinSuccess(true);
+      await load();
+    } else {
+      setJoinError(
+        data.error === "Contest is full"
+          ? (l === "fr" ? "Le concours est complet." : l === "ht" ? "Konkou a plen." : "Contest is full.")
+          : data.error === "Registration closed"
+          ? (l === "fr" ? "Les inscriptions sont fermées." : "Enskripsyon yo fèmen.")
+          : (l === "fr" ? "Une erreur est survenue. Réessayez." : "Yon erè rive. Eseye ankò.")
+      );
+    }
     setJoining(false);
   }
 
@@ -182,9 +206,9 @@ export default function ContestPage() {
     <div className="bg-white min-h-screen">
 
       {/* Header */}
-      <div className="bg-[#0b0f1a] px-5 sm:px-8 py-12">
+      <div className="bg-[#0f2044] px-5 sm:px-8 py-12">
         <div className="max-w-5xl mx-auto">
-          <Link href="/concours" className="text-white/30 text-xs hover:text-[#c5a84f] transition-colors mb-5 inline-block">
+          <Link href="/concours" className="text-white/30 text-xs hover:text-white transition-colors mb-5 inline-block">
             ← {txt.back}
           </Link>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -288,27 +312,59 @@ export default function ContestPage() {
 
           {/* Upcoming — register */}
           {contest.status === "upcoming" && (
-            <div className="border border-stone-200 rounded-2xl p-8 text-center">
-              <p className="text-[#0b0f1a] font-bold text-lg mb-2">{txt.waitingStart}</p>
-              <p className="text-stone-400 text-sm mb-6">
-                {l === "fr" ? "Inscrivez-vous maintenant pour participer." : "Enskri kounye a pou patisipe."}
-              </p>
-              {!isRegistered ? (
-                <button
-                  onClick={joinContest}
-                  disabled={joining || participants.length >= contest.max_participants}
-                  className="bg-[#0b0f1a] text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-[#131926] transition-colors disabled:opacity-40"
-                >
-                  {joining ? "..." : participants.length >= contest.max_participants ? txt.full : txt.register}
-                </button>
-              ) : (
-                <Link
-                  href={`/concours/${id}/participer`}
-                  className="inline-block bg-green-600 text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-green-700 transition-colors"
-                >
-                  ✓ {txt.registered}
-                </Link>
-              )}
+            <div className="border-2 border-[#1d4ed8]/20 bg-[#f8fbff] rounded-xl p-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                <div className="flex-1">
+                  <p className="text-[#0f2044] font-black text-lg mb-1">
+                    {l === "fr" ? "Inscrivez-vous pour participer" : l === "ht" ? "Enskri pou patisipe" : "Register to participate"}
+                  </p>
+                  <p className="text-stone-500 text-sm">
+                    {participants.length}/{contest.max_participants} {txt.participants}
+                    {" · "}
+                    {l === "fr" ? "Places limitées" : l === "ht" ? "Plas limite" : "Limited spots"}
+                  </p>
+                  {!currentUser && (
+                    <p className="text-[#1d4ed8] text-xs mt-2 font-semibold">
+                      {l === "fr" ? "Vous devez être connecté pour vous inscrire." : l === "ht" ? "Ou dwe konekte pou enskri." : "You must be logged in to register."}
+                    </p>
+                  )}
+                  {joinError && (
+                    <p className="text-red-500 text-xs mt-2 font-semibold">{joinError}</p>
+                  )}
+                  {joinSuccess && (
+                    <p className="text-green-600 text-xs mt-2 font-semibold">
+                      {l === "fr" ? "Inscription réussie ! Le concours démarrera bientôt." : l === "ht" ? "Enskripsyon reyisi ! Konkou a ap kòmanse byento." : "Successfully registered! Contest will start soon."}
+                    </p>
+                  )}
+                </div>
+                {!isRegistered ? (
+                  <button
+                    onClick={joinContest}
+                    disabled={joining || participants.length >= contest.max_participants}
+                    className="shrink-0 bg-[#1d4ed8] hover:bg-[#1e40af] disabled:opacity-40 disabled:cursor-not-allowed text-white px-8 py-3 rounded font-bold text-sm transition-colors flex items-center gap-2"
+                  >
+                    {joining ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        {l === "fr" ? "Inscription..." : "Ap enskri..."}
+                      </>
+                    ) : participants.length >= contest.max_participants ? (
+                      txt.full
+                    ) : (
+                      <>
+                        {l === "fr" ? "S'inscrire" : l === "ht" ? "Enskri" : "Register"} →
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <Link
+                    href={`/concours/${id}/participer`}
+                    className="shrink-0 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded font-bold text-sm transition-colors"
+                  >
+                    ✓ {txt.registered}
+                  </Link>
+                )}
+              </div>
             </div>
           )}
 
