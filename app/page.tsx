@@ -79,33 +79,93 @@ function Hero() {
     return () => clearTimeout(t);
   }, []);
 
+  const brand = "KONEKSYON PAM".split("");
+
   return (
-    <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white px-6 py-16 relative overflow-hidden">
-      {/* Animated background orbs */}
+    <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white px-6 pt-14 pb-16 relative overflow-hidden">
+      {/* Background orbs */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-10 left-10 w-64 h-64 bg-cyan-300/20 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: "4s" }} />
-        <div className="absolute bottom-10 right-10 w-72 h-72 bg-purple-400/15 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: "6s", animationDelay: "2s" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-300/10 rounded-full blur-[150px] animate-pulse" style={{ animationDuration: "8s" }} />
-        {/* Floating sparkles */}
-        {[["10%","20%","1s"],["80%","15%","2s"],["25%","80%","3s"],["70%","70%","0.5s"],["50%","40%","1.5s"]].map(([l,t,d],i) => (
-          <span key={i} className="absolute text-cyan-300/40 text-xs" style={{ left: l, top: t, animation: `twinkle 2s ease-in-out ${d} infinite` }}>✦</span>
+        <div className="absolute top-0 left-1/4 w-80 h-80 bg-cyan-300/20 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: "4s" }} />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-purple-400/15 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: "6s", animationDelay: "2s" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-300/10 rounded-full blur-[180px] animate-pulse" style={{ animationDuration: "8s" }} />
+        {[["8%","15%","1s"],["85%","10%","2s"],["20%","85%","3s"],["75%","75%","0.5s"],["50%","50%","1.5s"],["35%","30%","2.5s"]].map(([l,top,d],i) => (
+          <span key={i} className="absolute text-cyan-300/30 text-sm" style={{ left: l, top, animation: `twinkle 2.5s ease-in-out ${d} infinite` }}>✦</span>
         ))}
       </div>
 
-      <div className="max-w-4xl mx-auto relative z-10">
+      <div className="max-w-5xl mx-auto relative z-10">
+
+        {/* ── BRAND NAME ─────────────────────────────────── */}
+        <div className="text-center mb-10">
+
+          {/* Logo */}
+          <div
+            className="flex justify-center mb-6"
+            style={{ opacity: shown ? 1 : 0, transition: "opacity 0.6s ease-out 0s" }}
+          >
+            <div className="w-20 h-20 rounded-full bg-white/20 p-1.5 border-2 border-white/30 shadow-2xl shadow-blue-900/50 animate-pulse" style={{ animationDuration: "3s" }}>
+              <img src="/logo-kp.png" alt="KP" className="w-full h-full rounded-full object-cover" />
+            </div>
+          </div>
+
+          {/* KONEKSYON PAM — letter by letter */}
+          <div className="animate-brand-glow inline-block">
+            <div className="flex flex-wrap justify-center leading-none gap-0">
+              {brand.map((char, i) => (
+                <span
+                  key={i}
+                  className="inline-block font-black text-5xl sm:text-7xl lg:text-[5.5rem] tracking-[0.05em]"
+                  style={{
+                    color: "#ffffff",
+                    textShadow: "0 0 30px rgba(103,232,249,0.4)",
+                    opacity: shown ? 1 : 0,
+                    transform: shown
+                      ? "translateY(0) scale(1)"
+                      : "translateY(50px) scale(0.7)",
+                    transition: `opacity 0.5s cubic-bezier(0.34,1.56,0.64,1) ${i * 0.055}s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1) ${i * 0.055}s`,
+                    minWidth: char === " " ? "0.5em" : undefined,
+                  }}
+                >
+                  {char === " " ? " " : char}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Tagline under brand */}
+          <p
+            className="text-cyan-200/70 text-xs sm:text-sm tracking-[0.25em] uppercase mt-5 font-medium"
+            style={{
+              opacity: shown ? 1 : 0,
+              transform: shown ? "translateY(0)" : "translateY(10px)",
+              transition: "all 0.7s ease-out 0.9s",
+            }}
+          >
+            {lang === "fr" ? "La plateforme des chrétiens connectés" : lang === "ht" ? "Platfòm kretyen ki konekte" : "The platform for connected Christians"}
+          </p>
+
+          {/* Decorative animated line */}
+          <div className="flex justify-center mt-5">
+            <div
+              className="h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent animate-underline"
+              style={{ maxWidth: "280px", width: "100%" }}
+            />
+          </div>
+        </div>
+
+        {/* ── CONTENT: description + verse ────────────────── */}
         <div className="flex flex-col sm:flex-row items-center gap-10">
 
-          {/* Left — text */}
-          <div className={`text-center sm:text-left flex-1 transition-all duration-700 ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            <div className="flex justify-center sm:justify-start mb-4">
-              <div className="w-16 h-16 rounded-full bg-white/20 p-1 border border-white/30 shadow-lg shadow-blue-500/30 animate-pulse" style={{ animationDuration: "3s" }}>
-                <img src="/logo-kp.png" alt="KP" className="w-full h-full rounded-full object-cover" />
-              </div>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-black mb-3 leading-tight">
-              {lang === "fr" ? "La plateforme des chrétiens connectés" : lang === "ht" ? "Platfòm kretyen ki konekte" : "The platform for connected Christians"}
-            </h1>
-            <p className="text-blue-100/80 text-sm sm:text-base mb-8 max-w-lg leading-relaxed" style={{ animationDelay: "0.2s" }}>
+          {/* Left — description + buttons */}
+          <div
+            className="text-center sm:text-left flex-1"
+            style={{
+              opacity: shown ? 1 : 0,
+              transform: shown ? "translateY(0)" : "translateY(20px)",
+              transition: "all 0.7s ease-out 1.1s",
+            }}
+          >
+            <p className="text-blue-100/80 text-sm sm:text-base mb-8 max-w-lg leading-relaxed">
               {lang === "fr"
                 ? "Prière, louange, études bibliques, communauté, groupes d'église — tout ce dont chaque chrétien a besoin, en un seul endroit."
                 : lang === "ht"
@@ -113,7 +173,7 @@ function Hero() {
                 : "Prayer, praise, Bible studies, community, church groups — everything every Christian needs, in one place."}
             </p>
             <div className="flex flex-wrap justify-center sm:justify-start gap-3">
-              <Link href="/eglise" className="bg-white text-blue-700 px-6 py-3 rounded-full font-bold hover:bg-blue-50 transition-all shadow-xl hover:scale-105 hover:shadow-white/30">
+              <Link href="/eglise" className="bg-white text-blue-700 px-6 py-3 rounded-full font-bold hover:bg-blue-50 transition-all shadow-xl hover:scale-105">
                 {lang === "fr" ? "⛪ Créer l'espace église" : lang === "ht" ? "⛪ Kreye espas legliz" : "⛪ Create church space"}
               </Link>
               <Link href="/communaute" className="bg-white/15 backdrop-blur-sm text-white px-6 py-3 rounded-full font-medium hover:bg-white/25 transition-colors border border-white/20">
@@ -122,26 +182,26 @@ function Hero() {
             </div>
           </div>
 
-          {/* Right — verse card with float + glow */}
-          <div className={`w-full sm:w-80 shrink-0 transition-all duration-1000 delay-300 ${shown ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+          {/* Right — verse card */}
+          <div
+            className="w-full sm:w-80 shrink-0"
+            style={{
+              opacity: shown ? 1 : 0,
+              transform: shown ? "translateY(0)" : "translateY(20px)",
+              transition: "all 0.7s ease-out 1.3s",
+            }}
+          >
             <div className="relative animate-float animate-glow rounded-2xl">
-              {/* Glowing border ring */}
               <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-cyan-400/60 via-white/20 to-blue-400/40" />
               <div className="relative bg-blue-800/60 backdrop-blur-md rounded-2xl p-6">
-                {/* Label */}
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-lg" style={{ animation: "twinkle 2s ease-in-out infinite" }}>✨</span>
                   <span className="animate-shimmer text-xs font-black uppercase tracking-[0.15em]">{t("verseOfDay", lang)}</span>
                 </div>
-                {/* Reference */}
-                <h3 className="font-black text-xl text-white mb-3 animate-fade-up" style={{ animationDelay: "0.4s" }}>
-                  {verse.ref}
-                </h3>
-                {/* Verse text */}
-                <p className="text-cyan-100/90 text-sm italic leading-relaxed animate-fade-up" style={{ animationDelay: "0.6s" }}>
+                <h3 className="font-black text-xl text-white mb-3">{verse.ref}</h3>
+                <p className="text-cyan-100/90 text-sm italic leading-relaxed">
                   &ldquo;{lang === "ht" ? verse.ht : verse.fr}&rdquo;
                 </p>
-                {/* Divider */}
                 <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent my-4" />
                 <Link href="/bible" className="flex items-center gap-2 text-cyan-300 text-xs font-bold hover:text-white transition-colors group">
                   <span>{lang === "fr" ? "Lire la Bible complète" : lang === "ht" ? "Li Bib la konplè" : "Read full Bible"}</span>
