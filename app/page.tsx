@@ -8,12 +8,21 @@ type Lang = "fr" | "ht" | "en";
 
 const verses = [
   { ref: "Jérémie 29:11", fr: "Car je connais les projets que j'ai formés sur vous — projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance.", ht: "Paske mwen konnen plan mwen genyen pou nou — plan pou fè nou jwenn lapè, pa dezas, pou ba nou yon avni ak espwa.", en: "For I know the plans I have for you — plans to prosper you and not to harm you, plans to give you hope and a future." },
-  { ref: "Ésaïe 41:10", fr: "Ne crains rien, car je suis avec toi. Ne promène pas des regards inquiets, car je suis ton Dieu.", ht: "Pa pè, paske mwen avèk ou. Pa dekouraje, paske mwen se Bondye ou.", en: "Do not fear, for I am with you. Do not be dismayed, for I am your God." },
   { ref: "Philippiens 4:13", fr: "Je puis tout par celui qui me fortifie.", ht: "Mwen ka fè tout bagay nan Kris la ki ban mwen fòs.", en: "I can do all things through Christ who strengthens me." },
+  { ref: "Ésaïe 41:10", fr: "Ne crains rien, car je suis avec toi. Ne promène pas des regards inquiets, car je suis ton Dieu.", ht: "Pa pè, paske mwen avèk ou. Pa dekouraje, paske mwen se Bondye ou.", en: "Do not fear, for I am with you. Do not be dismayed, for I am your God." },
   { ref: "Psaumes 23:1", fr: "L'Éternel est mon berger : je ne manquerai de rien.", ht: "Seyè a se gadò mwen — mwen p ap manke anyen.", en: "The Lord is my shepherd — I lack nothing." },
-  { ref: "Jean 3:16", fr: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ait la vie éternelle.", ht: "Paske Bondye sitèlman renmen lèzòm, li bay sèl Pitit li a pou tout moun ki kwè nan li ka gen lavi etènèl.", en: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall have eternal life." },
   { ref: "Romains 8:28", fr: "Toutes choses concourent au bien de ceux qui aiment Dieu.", ht: "Tout bagay travay ansanm pou byen moun ki renmen Bondye.", en: "In all things God works for the good of those who love him." },
   { ref: "2 Timothée 1:7", fr: "Dieu ne nous a pas donné un esprit de timidité, mais un esprit de force, d'amour et de sagesse.", ht: "Bondye pa ba nou yon lespri pè, men yon lespri fòs, renmen ak disiplin.", en: "God has not given us a spirit of fear, but of power, love and sound mind." },
+  { ref: "Jean 14:6", fr: "Je suis le chemin, la vérité, et la vie. Nul ne vient au Père que par moi.", ht: "Mwen se chemen an, verite a, ak lavi a. Pesonn pa ka al jwenn Papa a si se pa pase nan mwen.", en: "I am the way and the truth and the life. No one comes to the Father except through me." },
+];
+
+const features = [
+  { href: "/prieres",      fr: "Prière & Intercession",   ht: "Lapriyè & Entèsesyon",    en: "Prayer & Intercession",   desc: { fr: "Déposez vos requêtes. Intercédez pour d'autres.", ht: "Depoze demann ou. Entèsede pou lòt moun.", en: "Post your requests. Intercede for others." }, icon: "🙏" },
+  { href: "/etude",        fr: "Étude Biblique",          ht: "Etid Biblik",              en: "Bible Study",             desc: { fr: "Plans de lecture et ressources théologiques.", ht: "Plan lekti ak resous teyolojik.", en: "Reading plans and theological resources." }, icon: "📖" },
+  { href: "/enseignement", fr: "Enseignement",            ht: "Ansèyman",                 en: "Teaching",                desc: { fr: "Séries et messages de pasteurs et leaders.", ht: "Seri ak mesaj pastè ak lidè.", en: "Series and messages from pastors and leaders." }, icon: "🎓" },
+  { href: "/jeu",          fr: "Jeux Bibliques",          ht: "Jwèt Biblik",              en: "Bible Games",             desc: { fr: "Trois formats de défi pour tester vos connaissances.", ht: "Twa fòma defi pou teste konesans ou.", en: "Three challenge formats to test your knowledge." }, icon: "🏛️" },
+  { href: "/concours",     fr: "Concours Bibliques",      ht: "Konkou Biblik",            en: "Biblical Contests",       desc: { fr: "Compétitions en direct avec vote du public.", ht: "Konpetisyon an dirèk ak vòt piblik.", en: "Live competitions with public voting." }, icon: "🏆" },
+  { href: "/eglise",       fr: "Groupes d'Église",        ht: "Gwoup Legliz",             en: "Church Groups",           desc: { fr: "Créez ou rejoignez votre communauté privée.", ht: "Kreye oswa rantre nan kominote prive ou.", en: "Create or join your private community." }, icon: "⛪" },
 ];
 
 function getDayOfYear() {
@@ -21,185 +30,201 @@ function getDayOfYear() {
   return Math.floor((n.getTime() - new Date(n.getFullYear(), 0, 0).getTime()) / 86400000);
 }
 
-const features = [
-  { href: "/prieres",      icon: "✦", fr: "Prière",           ht: "Lapriyè",      en: "Prayer",    sub: { fr: "Mur d'intercession mondial", ht: "Mi entèsesyon mondyal", en: "Global intercession wall" } },
-  { href: "/etude",        icon: "◈", fr: "Étude Biblique",   ht: "Etid Biblik",  en: "Bible Study", sub: { fr: "Plans de lecture & ressources", ht: "Plan lekti & resous", en: "Reading plans & resources" } },
-  { href: "/enseignement", icon: "◉", fr: "Enseignement",     ht: "Ansèyman",     en: "Teaching",  sub: { fr: "Séries & messages de pasteurs", ht: "Seri & mesaj pastè", en: "Pastor series & messages" } },
-  { href: "/jeu",          icon: "◐", fr: "Jeux Bibliques",   ht: "Jwèt Biblik",  en: "Bible Games", sub: { fr: "Versets · Vrai/Faux · Figures", ht: "Vèsè · Vre/Fo · Pèsonaj", en: "Verses · True/False · Figures" } },
-  { href: "/concours",     icon: "◆", fr: "Concours",         ht: "Konkou",       en: "Contest",   sub: { fr: "Défi quotidien avec vote du public", ht: "Defi jounen ak vòt piblik", en: "Daily challenge with public vote" } },
-  { href: "/eglise",       icon: "◎", fr: "Groupes d'Église", ht: "Gwoup Legliz", en: "Groups",    sub: { fr: "Communautés privées par code", ht: "Kominote prive pa kòd", en: "Private communities by code" } },
-];
-
 export default function Home() {
   const { lang } = useLang();
   const l = (["fr", "ht", "en"].includes(lang) ? lang : "fr") as Lang;
   const [visible, setVisible] = useState(false);
-  const [verseIdx, setVerseIdx] = useState(getDayOfYear() % verses.length);
+  const [vi, setVi] = useState(getDayOfYear() % verses.length);
 
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 60);
-    return () => clearTimeout(t);
-  }, []);
+  useEffect(() => { const t = setTimeout(() => setVisible(true), 60); return () => clearTimeout(t); }, []);
 
-  const verse = verses[verseIdx];
-
-  const txt = {
-    verseLabel: l === "fr" ? "Verset du jour" : l === "ht" ? "Vèsè jounen an" : "Verse of the day",
-    tagline: l === "fr" ? "La Parole. La Prière. La Communauté." : l === "ht" ? "Pawòl la. Lapriyè a. Kominote a." : "The Word. The Prayer. The Community.",
-    sub: l === "fr" ? "Une plateforme sérieuse pour votre vie spirituelle." : l === "ht" ? "Yon platfòm serye pou lavi espirityèl ou." : "A serious platform for your spiritual life.",
-    cta1: l === "fr" ? "Commencer" : l === "ht" ? "Kòmanse" : "Get started",
-    cta2: l === "fr" ? "Rejoindre un groupe" : l === "ht" ? "Rantre nan yon gwoup" : "Join a group",
-    explore: l === "fr" ? "Tout explorer" : l === "ht" ? "Eksplore tout" : "Explore all",
-    features: l === "fr" ? "Ce que vous trouverez ici" : l === "ht" ? "Sa ou pral jwenn isit" : "What you'll find here",
-    contestTitle: l === "fr" ? "Défi Biblique Quotidien" : l === "ht" ? "Defi Biblik Chak Jou" : "Daily Biblical Challenge",
-    contestSub: l === "fr" ? "Des milliers de spectateurs. Des participants qui s'affrontent. Le public vote." : l === "ht" ? "Dè milye espektatè. Patisipan k ap konpete. Piblik la vote." : "Thousands of spectators. Participants compete. The public votes.",
-    contestBtn: l === "fr" ? "Participer" : l === "ht" ? "Patisipe" : "Participate",
-    prayerTitle: l === "fr" ? "Personne ne prie seul ici." : l === "ht" ? "Pesonn pa priye pou kont li isit." : "No one prays alone here.",
-    prayerSub: l === "fr" ? "Des frères et sœurs du monde entier déposent leurs besoins. Rejoignez le mur de prière." : l === "ht" ? "Frè ak sè nan mond antye ap depoze bezwen yo. Rantre nan mi lapriyè a." : "Brothers and sisters worldwide share their needs. Join the prayer wall.",
-    prayerBtn: l === "fr" ? "Voir les prières" : l === "ht" ? "Wè lapriyè yo" : "See prayers",
-    open: l === "fr" ? "Ouvrir" : l === "ht" ? "Ouvri" : "Open",
-  };
+  const verse = verses[vi];
 
   return (
     <main>
 
-      {/* ── HERO ── */}
-      <section className="relative bg-[#080c14] min-h-screen flex flex-col overflow-hidden">
+      {/* ── HERO BANNER ── */}
+      <section className="bg-[#0f2044]">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+          <div className="flex flex-col lg:flex-row gap-12 items-start">
 
-        {/* Background glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[#c5a84f]/6 blur-[120px]" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-900/20 blur-[100px]" />
-        </div>
-
-        {/* Dot grid */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
-          style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
-
-        {/* Content */}
-        <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-5 py-24 text-center">
-
-          {/* Brand */}
-          <div className="flex items-center gap-3 mb-12"
-            style={{ opacity: visible ? 1 : 0, transition: "opacity 0.5s ease 0.1s" }}>
-            <img src="/logo-kp.png" alt="KP" className="w-10 h-10 rounded-xl opacity-90" />
-            <span className="text-white/40 text-xs font-bold tracking-[0.25em] uppercase">Koneksyon Pam</span>
-          </div>
-
-          {/* Verse — hero element */}
-          <div className="max-w-3xl mx-auto mb-14"
-            style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(24px)", transition: "opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s" }}>
-            <p className="text-[#c5a84f] text-[10px] font-bold uppercase tracking-[0.3em] mb-6">{txt.verseLabel}</p>
-            <blockquote className="text-white/90 leading-relaxed mb-6"
-              style={{ fontSize: "clamp(1.3rem, 3.5vw, 2rem)", fontStyle: "italic", fontWeight: 300 }}>
-              &ldquo;{verse[l]}&rdquo;
-            </blockquote>
-            <p className="text-white/25 text-sm font-semibold tracking-widest uppercase">{verse.ref}</p>
-
-            {/* Verse dots */}
-            <div className="flex justify-center gap-2 mt-6">
-              {verses.map((_, i) => (
-                <button key={i} onClick={() => setVerseIdx(i)}
-                  className={`w-1.5 h-1.5 rounded-full transition-all ${i === verseIdx ? "bg-[#c5a84f] w-4" : "bg-white/20 hover:bg-white/40"}`} />
-              ))}
+            {/* Left: headline */}
+            <div className="flex-1"
+              style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(18px)", transition: "all 0.6s ease 0.1s" }}>
+              <div className="inline-flex items-center gap-2 bg-[#1d4ed8]/30 border border-[#3b82f6]/30 rounded px-3 py-1.5 mb-6">
+                <div className="w-1.5 h-1.5 bg-[#38bdf8] rounded-full" />
+                <span className="text-[#93c5fd] text-xs font-semibold tracking-wide uppercase">
+                  {l === "fr" ? "Plateforme Biblique" : l === "ht" ? "Platfòm Biblik" : "Biblical Platform"}
+                </span>
+              </div>
+              <h1 className="text-white font-black leading-[1.08] mb-5"
+                style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>
+                {l === "fr" ? "La foi chrétienne au cœur du numérique." : l === "ht" ? "Lafwa kretyen nan kè dijital la." : "Christian faith at the heart of the digital age."}
+              </h1>
+              <p className="text-[#93c5fd]/80 text-base sm:text-lg leading-relaxed mb-8 max-w-lg">
+                {l === "fr" ? "Prière, étude, enseignement, concours bibliques et groupes d'église — tout centralisé pour votre vie spirituelle."
+               : l === "ht" ? "Lapriyè, etid, ansèyman, konkou biblik ak gwoup legliz — tout santralize pou lavi espirityèl ou."
+               : "Prayer, study, teaching, biblical contests and church groups — all centralized for your spiritual life."}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/prieres"
+                  className="bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-7 py-3 rounded font-bold text-sm transition-colors shadow-lg">
+                  {l === "fr" ? "Accéder à la plateforme" : l === "ht" ? "Antre nan platfòm nan" : "Access the platform"}
+                </Link>
+                <Link href="/eglise"
+                  className="bg-white/10 hover:bg-white/15 text-white border border-white/20 px-7 py-3 rounded font-semibold text-sm transition-colors">
+                  {l === "fr" ? "Rejoindre un groupe" : l === "ht" ? "Rantre nan yon gwoup" : "Join a group"}
+                </Link>
+              </div>
             </div>
-          </div>
 
-          {/* Tagline + CTAs */}
-          <div style={{ opacity: visible ? 1 : 0, transition: "opacity 0.5s ease 0.8s" }}>
-            <p className="text-white/40 text-sm mb-8 tracking-wide">{txt.tagline}</p>
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/prieres"
-                className="bg-[#c5a84f] text-[#080c14] px-8 py-3.5 rounded-full text-sm font-black hover:bg-[#d4b85c] transition-colors shadow-lg shadow-[#c5a84f]/20">
-                {txt.cta1}
-              </Link>
-              <Link href="/eglise"
-                className="border border-white/10 text-white/60 px-8 py-3.5 rounded-full text-sm font-medium hover:border-white/25 hover:text-white transition-all">
-                {txt.cta2}
-              </Link>
+            {/* Right: Verse of the day */}
+            <div className="w-full lg:w-96 shrink-0"
+              style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(18px)", transition: "all 0.6s ease 0.4s" }}>
+              <div className="bg-white rounded-lg overflow-hidden shadow-2xl">
+                {/* Card header */}
+                <div className="bg-[#1d4ed8] px-6 py-3 flex items-center justify-between">
+                  <p className="text-white text-xs font-bold uppercase tracking-widest">
+                    {l === "fr" ? "Verset du jour" : l === "ht" ? "Vèsè jounen an" : "Verse of the day"}
+                  </p>
+                  <p className="text-white/60 text-xs font-semibold">{verse.ref}</p>
+                </div>
+                {/* Card body */}
+                <div className="px-6 py-6">
+                  <p className="text-[#0f2044] text-base leading-relaxed italic font-medium mb-5">
+                    &ldquo;{verse[l]}&rdquo;
+                  </p>
+                  {/* Verse selector dots */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex gap-1.5">
+                      {verses.map((_, i) => (
+                        <button key={i} onClick={() => setVi(i)}
+                          className={`rounded-full transition-all ${i === vi ? "bg-[#1d4ed8] w-4 h-1.5" : "bg-[#bfdbfe] w-1.5 h-1.5 hover:bg-[#93c5fd]"}`} />
+                      ))}
+                    </div>
+                    <Link href="/bible" className="text-[#1d4ed8] text-xs font-semibold hover:underline">
+                      {l === "fr" ? "Lire la Bible →" : l === "ht" ? "Li Bib la →" : "Read Bible →"}
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* Scroll indicator */}
-        <div className="relative z-10 flex justify-center pb-8"
-          style={{ opacity: visible ? 1 : 0, transition: "opacity 0.5s ease 1.2s" }}>
-          <div className="flex flex-col items-center gap-1">
-            <div className="w-px h-10 bg-gradient-to-b from-transparent to-white/20" />
-            <div className="w-1 h-1 bg-white/20 rounded-full" />
           </div>
         </div>
       </section>
 
-      {/* ── FEATURES ── */}
-      <section className="bg-[#0d1118] px-5 sm:px-8 py-24">
-        <div className="max-w-6xl mx-auto">
-          <p className="text-[#c5a84f] text-[10px] font-bold uppercase tracking-[0.3em] mb-16 text-center">
-            {txt.features}
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 rounded-2xl overflow-hidden">
-            {features.map((f, i) => (
+      {/* Blue strip */}
+      <div className="h-1.5 bg-gradient-to-r from-[#0f2044] via-[#1d4ed8] to-[#38bdf8]" />
+
+      {/* ── NOS SERVICES ── */}
+      <section className="bg-white py-16 px-5 sm:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="border-l-4 border-[#1d4ed8] pl-5 mb-12">
+            <p className="text-[#1d4ed8] text-xs font-bold uppercase tracking-[0.2em] mb-1">
+              {l === "fr" ? "Nos services" : l === "ht" ? "Sèvis nou yo" : "Our services"}
+            </p>
+            <h2 className="text-[#0f2044] font-black text-2xl sm:text-3xl">
+              {l === "fr" ? "Tout ce dont vous avez besoin pour grandir spirituellement"
+             : l === "ht" ? "Tout sa ou bezwen pou grandi espirityèlman"
+             : "Everything you need to grow spiritually"}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {features.map((f) => (
               <Link key={f.href} href={f.href}
-                className="group bg-[#0d1118] hover:bg-[#131926] p-8 flex flex-col gap-5 transition-colors relative overflow-hidden">
-                <div className="absolute inset-0 bg-[#c5a84f]/0 group-hover:bg-[#c5a84f]/3 transition-colors" />
-                <span className="text-[#c5a84f]/40 text-base font-black group-hover:text-[#c5a84f] transition-colors relative z-10">
-                  {f.icon}
-                </span>
-                <div className="relative z-10">
-                  <p className="text-white font-bold text-base mb-2">{f[l as keyof typeof f] as string}</p>
-                  <p className="text-white/30 text-xs leading-relaxed">{(f.sub as Record<Lang, string>)[l]}</p>
+                className="group border border-stone-200 rounded-lg overflow-hidden hover:border-[#1d4ed8] hover:shadow-lg transition-all flex flex-col">
+                {/* Top accent */}
+                <div className="h-1 bg-[#0f2044] group-hover:bg-[#1d4ed8] transition-colors" />
+                <div className="p-6 flex flex-col gap-3 flex-1">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{f.icon}</span>
+                    <p className="text-[#0f2044] font-bold text-base">{f[l as keyof typeof f] as string}</p>
+                  </div>
+                  <p className="text-stone-500 text-sm leading-relaxed">{(f.desc as Record<Lang, string>)[l]}</p>
+                  <div className="mt-auto pt-4 border-t border-stone-100">
+                    <span className="text-[#1d4ed8] text-xs font-bold group-hover:underline">
+                      {l === "fr" ? "Accéder" : l === "ht" ? "Antre" : "Open"} →
+                    </span>
+                  </div>
                 </div>
-                <span className="text-white/15 text-xs font-medium group-hover:text-[#c5a84f]/60 transition-colors relative z-10 mt-auto">
-                  {txt.open} →
-                </span>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── CONTEST ── */}
-      <section className="bg-[#080c14] px-5 sm:px-8 py-24">
-        <div className="max-w-4xl mx-auto">
-          <div className="relative rounded-3xl overflow-hidden border border-[#c5a84f]/15">
-            {/* Gold glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-40 bg-[#c5a84f]/8 blur-[60px]" />
-            <div className="relative z-10 p-10 sm:p-16 text-center">
-              <p className="text-[#c5a84f] text-[10px] font-bold uppercase tracking-[0.3em] mb-6">
-                {txt.contestTitle}
-              </p>
-              <h2 className="text-white font-black leading-tight mb-5"
-                style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}>
-                {l === "fr" ? "Testez vos connaissances.\nLe public décide." : l === "ht" ? "Teste konesans ou.\nPiblik la deside." : "Test your knowledge.\nThe public decides."}
-              </h2>
-              <p className="text-white/30 text-sm leading-relaxed mb-10 max-w-md mx-auto">
-                {txt.contestSub}
-              </p>
-              <Link href="/concours"
-                className="inline-block bg-[#c5a84f] text-[#080c14] px-10 py-4 rounded-full text-sm font-black hover:bg-[#d4b85c] transition-colors shadow-xl shadow-[#c5a84f]/15">
-                {txt.contestBtn}
-              </Link>
+      {/* ── CONCOURS + PRIÈRE ── */}
+      <section className="bg-[#eff6ff] py-16 px-5 sm:px-8">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
+
+          {/* Contest */}
+          <div className="bg-[#0f2044] rounded-lg p-8 flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <span className="bg-[#1d4ed8] text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded">
+                {l === "fr" ? "En direct" : l === "ht" ? "An dirèk" : "Live"}
+              </span>
+              <span className="text-white/40 text-xs">{l === "fr" ? "Concours Biblique" : l === "ht" ? "Konkou Biblik" : "Biblical Contest"}</span>
             </div>
+            <h3 className="text-white font-black text-xl leading-snug">
+              {l === "fr" ? "Des milliers de spectateurs. Un seul vainqueur." : l === "ht" ? "Dè milye espektatè. Yon sèl venkè." : "Thousands of spectators. One winner."}
+            </h3>
+            <p className="text-white/50 text-sm leading-relaxed">
+              {l === "fr" ? "Participez aux concours bibliques en direct. Le public vote pour son favori."
+             : l === "ht" ? "Patisipe nan konkou biblik an dirèk. Piblik la vote pou favori li."
+             : "Participate in live biblical contests. The public votes for their favorite."}
+            </p>
+            <Link href="/concours"
+              className="self-start bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-6 py-2.5 rounded text-sm font-bold transition-colors">
+              {l === "fr" ? "Voir les concours" : l === "ht" ? "Wè konkou yo" : "View contests"} →
+            </Link>
           </div>
+
+          {/* Prayer */}
+          <div className="bg-white rounded-lg border border-[#bfdbfe] p-8 flex flex-col gap-5">
+            <div className="w-10 h-10 bg-[#eff6ff] rounded-lg flex items-center justify-center text-xl">🙏</div>
+            <h3 className="text-[#0f2044] font-black text-xl leading-snug">
+              {l === "fr" ? "Personne ne prie seul sur cette plateforme." : l === "ht" ? "Pesonn pa priye pou kont li sou platfòm sa a." : "No one prays alone on this platform."}
+            </h3>
+            <p className="text-stone-500 text-sm leading-relaxed">
+              {l === "fr" ? "Des frères et sœurs du monde entier déposent leurs besoins. Rejoignez le mur de prière et intercédez."
+             : l === "ht" ? "Frè ak sè nan mond antye ap depoze bezwen yo. Rantre nan mi lapriyè a epi entèsede."
+             : "Brothers and sisters worldwide share their needs. Join the prayer wall and intercede."}
+            </p>
+            <Link href="/prieres"
+              className="self-start border-2 border-[#0f2044] text-[#0f2044] hover:bg-[#0f2044] hover:text-white px-6 py-2.5 rounded text-sm font-bold transition-all">
+              {l === "fr" ? "Voir les prières" : l === "ht" ? "Wè lapriyè yo" : "View prayers"} →
+            </Link>
+          </div>
+
         </div>
       </section>
 
-      {/* ── PRAYER ── */}
-      <section className="bg-[#0d1118] px-5 sm:px-8 py-24">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="w-px h-16 bg-gradient-to-b from-transparent to-[#c5a84f]/40 mx-auto mb-12" />
-          <h2 className="text-white font-black leading-tight mb-5"
-            style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)" }}>
-            {txt.prayerTitle}
-          </h2>
-          <p className="text-white/30 text-sm leading-relaxed mb-10 max-w-md mx-auto">
-            {txt.prayerSub}
-          </p>
-          <Link href="/prieres"
-            className="inline-block border border-white/10 text-white/70 px-8 py-3.5 rounded-full text-sm font-medium hover:border-[#c5a84f]/40 hover:text-white transition-all">
-            {txt.prayerBtn} →
-          </Link>
-          <div className="w-px h-16 bg-gradient-to-t from-transparent to-[#c5a84f]/20 mx-auto mt-12" />
+      {/* ── FOOTER BAND ── */}
+      <section className="bg-[#0f2044] py-10 px-5 sm:px-8">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <img src="/logo-kp.png" alt="KP" className="w-9 h-9 rounded-lg" />
+            <div>
+              <p className="text-white font-black text-sm">KONEKSYON PAM</p>
+              <p className="text-white/40 text-[10px] uppercase tracking-widest">Plateforme Chrétienne</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            {[
+              { href: "/prieres", label: l === "fr" ? "Prière" : "Lapriyè" },
+              { href: "/etude", label: l === "fr" ? "Étude" : "Etid" },
+              { href: "/concours", label: l === "fr" ? "Concours" : "Konkou" },
+              { href: "/eglise", label: l === "fr" ? "Groupes" : "Gwoup" },
+            ].map(item => (
+              <Link key={item.href} href={item.href}
+                className="text-white/50 text-xs hover:text-white transition-colors font-medium">
+                {item.label}
+              </Link>
+            ))}
+          </div>
+          <p className="text-white/25 text-[10px]">© {new Date().getFullYear()} Koneksyon Pam</p>
         </div>
       </section>
 
