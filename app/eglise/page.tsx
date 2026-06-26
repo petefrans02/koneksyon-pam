@@ -21,11 +21,13 @@ export default function EglisePage() {
   const [churches, setChurches] = useState<Church[]>([]);
   const [joinCode, setJoinCode] = useState("");
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<unknown>(null);
+  const [user, setUser] = useState<{ email?: string; user_metadata?: { full_name?: string; avatar_url?: string } } | null>(null);
   const [joinError, setJoinError] = useState("");
+  const [joinPending, setJoinPending] = useState(false);
+  const [joining, setJoining] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }: { data: { user: unknown } }) => setUser(data.user));
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
     loadChurches();
   }, []);
 
@@ -39,18 +41,31 @@ export default function EglisePage() {
   async function handleJoin() {
     if (!joinCode.trim()) return;
     setJoinError("");
+    setJoinPending(false);
     if (!user) {
       supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${window.location.origin}/eglise` } });
       return;
     }
+    setJoining(true);
     const res = await fetch("/api/churches/join", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ join_code: joinCode.trim() }),
+      body: JSON.stringify({
+        join_code: joinCode.trim(),
+        user_name: user.user_metadata?.full_name || user.email?.split("@")[0] || "Anonyme",
+        user_email: user.email || "",
+        user_avatar: user.user_metadata?.avatar_url || "",
+      }),
     });
     const data = await res.json();
+    setJoining(false);
     if (data.church_id) {
-      window.location.href = `/eglise/${data.church_id}`;
+      if (data.status === "pending") {
+        setJoinPending(true);
+        setJoinCode("");
+      } else {
+        window.location.href = `/eglise/${data.church_id}`;
+      }
     } else {
       setJoinError(lang === "fr" ? "⚠️ Vérifiez le code et réessayez" : lang === "ht" ? "⚠️ Verifye kòd la epi eseye ankò" : "⚠️ Check the code and try again");
     }
@@ -113,20 +128,45 @@ export default function EglisePage() {
           <p className="text-stone-500 text-sm mb-4">
             {lang === "fr" ? "Entrez le code partagé par votre responsable" : lang === "ht" ? "Antre kòd responsab ou" : "Enter the code shared by your leader"}
           </p>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={joinCode}
-              onChange={(e) => { setJoinCode(e.target.value.toUpperCase()); setJoinError(""); }}
-              placeholder={lang === "fr" ? "Code (ex: TDG2024)" : "Code"}
-              className="flex-1 border border-stone-300 rounded-xl px-4 py-3 text-sm text-center font-mono uppercase tracking-widest focus:border-blue-500 focus:outline-none"
-              onKeyDown={(e) => e.key === "Enter" && handleJoin()}
-            />
-            <button onClick={handleJoin} className="bg-blue-600 text-white px-5 py-3 rounded-xl font-bold hover:bg-blue-500 transition-colors">
-              →
-            </button>
-          </div>
-          {joinError && <p className="text-red-500 text-sm font-medium mt-2">{joinError}</p>}
+          {joinPending ? (
+            <div className="bg-amber-50 border border-amber-300 rounded-2xl p-5 text-center">
+              <p className="text-3xl mb-2">⏳</p>
+              <p className="font-bold text-amber-800">
+                {lang === "fr" ? "Demande envoyée !" : lang === "ht" ? "Demann voye !" : "Request sent!"}
+              </p>
+              <p className="text-amber-700 text-sm mt-1">
+                {lang === "fr"
+                  ? "Le responsable du groupe doit accepter votre demande avant que vous puissiez accéder au groupe."
+                  : lang === "ht"
+                  ? "Responsab gwoup la dwe aksepte demann ou anvan ou ka antre nan gwoup la."
+                  : "The group leader must accept your request before you can join the group."}
+              </p>
+              <button onClick={() => setJoinPending(false)} className="text-amber-600 text-xs underline mt-3">
+                {lang === "fr" ? "Essayer un autre code" : "Try another code"}
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={joinCode}
+                  onChange={(e) => { setJoinCode(e.target.value.toUpperCase()); setJoinError(""); }}
+                  placeholder={lang === "fr" ? "Code (ex: TDG2024)" : "Code"}
+                  className="flex-1 border border-stone-300 rounded-xl px-4 py-3 text-sm text-center font-mono uppercase tracking-widest focus:border-blue-500 focus:outline-none"
+                  onKeyDown={(e) => e.key === "Enter" && handleJoin()}
+                />
+                <button
+                  onClick={handleJoin}
+                  disabled={joining}
+                  className="bg-blue-600 text-white px-5 py-3 rounded-xl font-bold hover:bg-blue-500 transition-colors disabled:opacity-60"
+                >
+                  {joining ? "..." : "→"}
+                </button>
+              </div>
+              {joinError && <p className="text-red-500 text-sm font-medium mt-2">{joinError}</p>}
+            </>
+          )}
         </div>
       </div>
 

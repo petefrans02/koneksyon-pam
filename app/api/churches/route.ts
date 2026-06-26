@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { createServerClient } from "@supabase/ssr";
 
 function getSupabase() {
   return createClient(
@@ -27,6 +28,14 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  // Get the authenticated user to record ownership
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll: () => request.cookies.getAll(), setAll: () => {} } }
+  );
+  const { data: { user } } = await supabase.auth.getUser();
+
   const body = await request.json();
   const { name, pastor_name, description, logo_url } = body;
 
@@ -34,8 +43,11 @@ export async function POST(request: NextRequest) {
 
   const join_code = generateCode();
 
-  const insertData: Record<string, string> = { name, pastor_name, description: description || "", join_code };
+  const insertData: Record<string, string> = {
+    name, pastor_name, description: description || "", join_code,
+  };
   if (logo_url) insertData.logo_url = logo_url;
+  if (user?.id) insertData.owner_user_id = user.id;
 
   const { data, error } = await getSupabase()
     .from("churches")

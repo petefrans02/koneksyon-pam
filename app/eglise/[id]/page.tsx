@@ -1,6 +1,7 @@
 "use client";
 
 import { useLang } from "@/lib/LangContext";
+import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -12,6 +13,7 @@ interface Church {
   description: string;
   join_code: string;
   logo_url?: string;
+  owner_user_id?: string;
 }
 
 interface Post {
@@ -19,6 +21,15 @@ interface Post {
   type: string;
   title: string;
   content: string;
+  created_at: string;
+}
+
+interface JoinRequest {
+  id: string;
+  user_id: string;
+  user_name: string;
+  user_email: string;
+  user_avatar: string;
   created_at: string;
 }
 
@@ -42,6 +53,10 @@ export default function ChurchPage() {
   const [showSubgroupForm, setShowSubgroupForm] = useState(false);
   const [newSubName, setNewSubName] = useState("");
   const [newSubIcon, setNewSubIcon] = useState("📋");
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [joinRequests, setJoinRequests] = useState<JoinRequest[]>([]);
+  const [showRequests, setShowRequests] = useState(false);
+  const [respondingId, setRespondingId] = useState<string | null>(null);
 
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -59,6 +74,7 @@ export default function ChurchPage() {
   }
 
   useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setCurrentUserId(data.user?.id || null));
     loadChurch();
   }, [id]);
 
@@ -72,6 +88,25 @@ export default function ChurchPage() {
     const sgData = await sgRes.json();
     setSubgroups(sgData.subgroups || []);
   }
+
+  async function loadJoinRequests() {
+    const res = await fetch(`/api/churches/requests?church_id=${id}`);
+    const data = await res.json();
+    setJoinRequests(data.requests || []);
+  }
+
+  async function respondToRequest(requestId: string, action: "approved" | "rejected") {
+    setRespondingId(requestId);
+    await fetch("/api/churches/requests", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ request_id: requestId, church_id: id, action }),
+    });
+    setJoinRequests((prev) => prev.filter((r) => r.id !== requestId));
+    setRespondingId(null);
+  }
+
+  const isOwner = church?.owner_user_id && currentUserId && church.owner_user_id === currentUserId;
 
   async function createSubgroup(e: React.FormEvent) {
     e.preventDefault();
@@ -157,12 +192,72 @@ export default function ChurchPage() {
             <p className="text-blue-300/70 text-sm">{church.pastor_name}</p>
             {church.description && <p className="text-blue-200/50 text-sm mt-1">{church.description}</p>}
           </div>
-          <div className="sm:ml-auto bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 text-center border border-white/10">
-            <p className="text-blue-300/60 text-xs mb-1">{lang === "fr" ? "Code d'accès" : "Access code"}</p>
-            <p className="text-cyan-400 font-mono font-bold text-lg tracking-widest">{church.join_code}</p>
+          <div className="sm:ml-auto flex flex-col gap-2">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 text-center border border-white/10">
+              <p className="text-blue-300/60 text-xs mb-1">{lang === "fr" ? "Code d'accès" : "Access code"}</p>
+              <p className="text-cyan-400 font-mono font-bold text-lg tracking-widest">{church.join_code}</p>
+            </div>
+            {isOwner && (
+              <button
+                onClick={() => { setShowRequests(!showRequests); if (!showRequests) loadJoinRequests(); }}
+                className="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 rounded-xl px-4 py-2.5 text-xs font-bold transition-colors flex items-center gap-2 justify-center"
+              >
+                🔔 {lang === "fr" ? "Demandes d'adhésion" : "Join requests"}
+              </button>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Join Requests Panel — owner only */}
+      {isOwner && showRequests && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-8">
+          <h2 className="font-bold text-amber-900 mb-4">
+            🔔 {lang === "fr" ? "Demandes en attente" : "Pending requests"}
+            {joinRequests.length > 0 && (
+              <span className="ml-2 bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">{joinRequests.length}</span>
+            )}
+          </h2>
+          {joinRequests.length === 0 ? (
+            <p className="text-amber-700/60 text-sm">{lang === "fr" ? "Aucune demande en attente" : "No pending requests"}</p>
+          ) : (
+            <div className="space-y-3">
+              {joinRequests.map((req) => (
+                <div key={req.id} className="bg-white rounded-xl p-4 border border-amber-200 flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white font-bold text-sm shrink-0 overflow-hidden">
+                    {req.user_avatar ? (
+                      <img src={req.user_avatar} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      (req.user_name || "?")[0].toUpperCase()
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-stone-900 text-sm">{req.user_name || "Anonyme"}</p>
+                    <p className="text-stone-400 text-xs">{req.user_email}</p>
+                    <p className="text-stone-400 text-xs">{new Date(req.created_at).toLocaleDateString("fr")}</p>
+                  </div>
+                  <div className="flex gap-2 shrink-0">
+                    <button
+                      onClick={() => respondToRequest(req.id, "approved")}
+                      disabled={respondingId === req.id}
+                      className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors"
+                    >
+                      {respondingId === req.id ? "..." : lang === "fr" ? "✓ Accepter" : "✓ Accept"}
+                    </button>
+                    <button
+                      onClick={() => respondToRequest(req.id, "rejected")}
+                      disabled={respondingId === req.id}
+                      className="bg-red-100 hover:bg-red-200 text-red-600 px-4 py-2 rounded-lg text-xs font-bold transition-colors border border-red-200"
+                    >
+                      {lang === "fr" ? "✗ Refuser" : "✗ Reject"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Sous-groupes */}
       <div className="mb-8">
