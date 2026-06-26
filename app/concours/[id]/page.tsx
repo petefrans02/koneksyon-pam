@@ -287,29 +287,48 @@ export default function ContestPage() {
       )}
 
       {/* Header */}
-      <div className="bg-[#0f2044] px-5 sm:px-8 py-12">
-        <div className="max-w-5xl mx-auto">
-          <Link href="/concours" className="text-white/30 text-xs hover:text-white transition-colors mb-5 inline-block">
+      <div className="relative overflow-hidden bg-[#0a1628]">
+        {/* Gold glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] opacity-15 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse at center top, #c5a84f 0%, transparent 70%)" }} />
+        {/* Cross watermark */}
+        <div className="absolute right-8 bottom-0 text-[180px] text-white opacity-[0.03] select-none pointer-events-none leading-none">✝</div>
+
+        <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 pt-8 pb-10">
+          <Link href="/concours" className="text-white/30 text-xs hover:text-white/80 transition-colors mb-8 inline-flex items-center gap-1">
             ← {txt.back}
           </Link>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                {contest.status === "active" && (
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                )}
-                <span className={`text-xs font-bold uppercase tracking-wider ${meta.color}`}>{meta.label}</span>
+
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+            <div className="flex-1 min-w-0">
+              {/* Status badge */}
+              <div className="flex items-center gap-2 mb-4">
+                {contest.status === "active" && <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />}
+                {contest.status === "voting" && <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />}
+                <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${meta.color}`}>{meta.label}</span>
               </div>
-              <h1 className="text-white font-black text-2xl sm:text-4xl leading-tight mb-2">{contest.title}</h1>
+
+              <h1 className="text-white font-black leading-tight mb-3" style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}>
+                {contest.title}
+              </h1>
               {contest.description && (
-                <p className="text-white/40 text-sm max-w-xl">{contest.description}</p>
+                <p className="text-white/40 text-sm max-w-xl leading-relaxed">{contest.description}</p>
               )}
             </div>
+
+            {/* Participants counter */}
             <div className="shrink-0 text-right">
-              <p className="text-white/30 text-xs">{participants.length}/{contest.max_participants} {txt.participants}</p>
+              <div className="inline-flex flex-col items-end gap-2">
+                <p className="text-white/40 text-xs">{participants.length} / {contest.max_participants} {txt.participants}</p>
+                <div className="w-32 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-[#c5a84f] to-[#e8c97a] rounded-full transition-all duration-700"
+                    style={{ width: `${Math.min(100, (participants.length / (contest.max_participants || 1)) * 100)}%` }} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <div className="h-px bg-gradient-to-r from-transparent via-[#c5a84f]/30 to-transparent" />
       </div>
 
       <div className="max-w-5xl mx-auto px-5 sm:px-8 py-10 flex flex-col lg:flex-row gap-10">
@@ -393,57 +412,66 @@ export default function ContestPage() {
 
           {/* Upcoming — register (hidden for organizer/admin) */}
           {contest.status === "upcoming" && !isOrganizer && (
-            <div className="border-2 border-[#1d4ed8]/20 bg-[#f8fbff] rounded-xl p-8">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                <div className="flex-1">
-                  <p className="text-[#0f2044] font-black text-lg mb-1">
-                    {l === "fr" ? "Inscrivez-vous pour participer" : l === "ht" ? "Enskri pou patisipe" : "Register to participate"}
-                  </p>
-                  <p className="text-stone-500 text-sm">
-                    {participants.length}/{contest.max_participants} {txt.participants}
-                    {" · "}
-                    {l === "fr" ? "Places limitées" : l === "ht" ? "Plas limite" : "Limited spots"}
-                  </p>
-                  {!currentUser && (
-                    <p className="text-[#1d4ed8] text-xs mt-2 font-semibold">
-                      {l === "fr" ? "Une connexion Google suffit — rapide et gratuit." : l === "ht" ? "Yon koneksyon Google sifi — rapid epi gratis." : "A Google login is enough — quick and free."}
-                    </p>
-                  )}
-                  {joinError && (
-                    <p className="text-red-500 text-xs mt-2 font-semibold">{joinError}</p>
-                  )}
-                  {joinSuccess && (
-                    <p className="text-green-600 text-xs mt-2 font-semibold">
-                      {l === "fr" ? "Inscription réussie ! Le concours démarrera bientôt." : l === "ht" ? "Enskripsyon reyisi ! Konkou a ap kòmanse byento." : "Successfully registered! Contest will start soon."}
-                    </p>
-                  )}
-                </div>
-                {!isRegistered ? (
-                  <button
-                    onClick={joinContest}
-                    disabled={joining || participants.length >= contest.max_participants}
-                    className="shrink-0 bg-[#1d4ed8] hover:bg-[#1e40af] disabled:opacity-40 disabled:cursor-not-allowed text-white px-8 py-3 rounded font-bold text-sm transition-colors flex items-center gap-2"
-                  >
-                    {joining ? (
-                      <>
-                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        {l === "fr" ? "Inscription..." : "Ap enskri..."}
-                      </>
-                    ) : participants.length >= contest.max_participants ? (
-                      txt.full
-                    ) : (
-                      <>
-                        {l === "fr" ? "S'inscrire" : l === "ht" ? "Enskri" : "Register"} →
-                      </>
-                    )}
-                  </button>
+            <div className="relative overflow-hidden rounded-2xl border border-[#1d4ed8]/20 bg-gradient-to-br from-[#f8fbff] to-white">
+              <div className="absolute top-0 right-0 w-40 h-40 opacity-5 text-[120px] select-none pointer-events-none leading-none">✝</div>
+              <div className="px-8 py-8">
+                {joinSuccess ? (
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-2xl shrink-0">✓</div>
+                    <div>
+                      <p className="text-green-700 font-black text-lg">
+                        {l === "fr" ? "Inscription confirmée !" : "Enskripsyon konfime !"}
+                      </p>
+                      <p className="text-stone-400 text-sm mt-0.5">
+                        {l === "fr" ? "Le concours démarrera bientôt. Revenez quand il est en cours." : "Konkou a ap kòmanse byento. Tounen lè li kap fèt."}
+                      </p>
+                    </div>
+                  </div>
                 ) : (
-                  <Link
-                    href={`/concours/${id}/participer`}
-                    className="shrink-0 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded font-bold text-sm transition-colors"
-                  >
-                    ✓ {txt.registered}
-                  </Link>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                    <div className="flex-1">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-[#1d4ed8] mb-2">
+                        {l === "fr" ? "Championnat Biblique" : "Chanpyona Biblik"}
+                      </p>
+                      <p className="text-[#0f2044] font-black text-xl mb-1">
+                        {l === "fr" ? "Rejoignez le concours" : l === "ht" ? "Antre nan konkou a" : "Join the contest"}
+                      </p>
+                      <div className="flex items-center gap-3 mt-2">
+                        <div className="flex-1 h-1.5 bg-stone-100 rounded-full overflow-hidden max-w-[120px]">
+                          <div className="h-full bg-[#1d4ed8] rounded-full"
+                            style={{ width: `${Math.min(100, (participants.length / (contest.max_participants || 1)) * 100)}%` }} />
+                        </div>
+                        <span className="text-stone-400 text-xs">{participants.length}/{contest.max_participants} {l === "fr" ? "places" : "plas"}</span>
+                        {participants.length >= contest.max_participants * 0.8 && (
+                          <span className="text-red-500 text-[10px] font-bold">
+                            {l === "fr" ? "Presque complet !" : "Prèske plen !"}
+                          </span>
+                        )}
+                      </div>
+                      {!currentUser && (
+                        <p className="text-[#1d4ed8] text-xs mt-2">
+                          {l === "fr" ? "Connexion Google gratuite et rapide." : "Koneksyon Google gratis epi rapid."}
+                        </p>
+                      )}
+                      {joinError && <p className="text-red-500 text-xs mt-2 font-semibold">{joinError}</p>}
+                    </div>
+                    {!isRegistered ? (
+                      <button onClick={joinContest}
+                        disabled={joining || participants.length >= contest.max_participants}
+                        className="shrink-0 bg-[#0f2044] hover:bg-[#1d4ed8] disabled:opacity-40 disabled:cursor-not-allowed text-white px-8 py-3.5 rounded-xl font-black text-sm transition-all duration-200 flex items-center gap-2 hover:shadow-lg hover:shadow-[#1d4ed8]/20">
+                        {joining ? (
+                          <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />{l === "fr" ? "Inscription..." : "Ap enskri..."}</>
+                        ) : participants.length >= contest.max_participants ? txt.full : (
+                          <>{l === "fr" ? "S'inscrire" : l === "ht" ? "Enskri" : "Register"} →</>
+                        )}
+                      </button>
+                    ) : (
+                      <Link href={`/concours/${id}/participer`}
+                        className="shrink-0 bg-green-600 hover:bg-green-700 text-white px-8 py-3.5 rounded-xl font-black text-sm transition-colors">
+                        ✓ {txt.registered}
+                      </Link>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
@@ -452,39 +480,82 @@ export default function ContestPage() {
           {/* Voting phase */}
           {contest.status === "voting" && (
             <div>
-              <p className="text-[#0b0f1a]/40 text-[10px] font-bold uppercase tracking-[0.25em] mb-5">{txt.votePhase}</p>
+              {/* Vote header */}
+              <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl px-6 py-4 mb-6 flex items-center gap-3">
+                <span className="text-2xl">❤️</span>
+                <div>
+                  <p className="font-black text-amber-800 text-sm">{txt.votePhase}</p>
+                  <p className="text-amber-600 text-xs mt-0.5">
+                    {l === "fr" ? "Votez pour le participant qui vous a le plus inspiré." : "Vote pou patisipan ki te enspire ou plis la."}
+                  </p>
+                </div>
+              </div>
+
+              {/* Total votes count */}
+              <p className="text-stone-400 text-xs mb-4 text-center">
+                {sortedParticipants.reduce((s, p) => s + p.votes_count, 0)} {l === "fr" ? "votes au total" : "vòt an total"}
+              </p>
+
               <div className="grid sm:grid-cols-2 gap-4">
-                {sortedParticipants.map((p, i) => (
-                  <div key={p.id} className={`border rounded-2xl p-5 transition-all ${
-                    myVote === p.id ? "border-[#c5a84f] bg-[#c5a84f]/5" : "border-stone-200 hover:border-stone-300"
-                  }`}>
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="text-lg font-black text-stone-300">#{i + 1}</span>
-                      {p.user_avatar ? (
-                        <img src={p.user_avatar} className="w-10 h-10 rounded-full" alt="" />
-                      ) : (
-                        <div className="w-10 h-10 rounded-full bg-[#0b0f1a] flex items-center justify-center text-white text-sm font-black">
-                          {p.user_name[0]}
+                {sortedParticipants.map((p, i) => {
+                  const totalVotes = sortedParticipants.reduce((s, x) => s + x.votes_count, 0);
+                  const pct = totalVotes > 0 ? Math.round((p.votes_count / totalVotes) * 100) : 0;
+                  const isMyVote = myVote === p.id;
+                  const isMe = myParticipant?.user_id === p.user_id;
+                  return (
+                    <div key={p.id} className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-200 ${
+                      isMyVote ? "border-[#c5a84f] shadow-lg shadow-[#c5a84f]/20" : "border-stone-200 hover:border-stone-300"
+                    }`}>
+                      {isMyVote && <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#c5a84f] to-[#e8c97a]" />}
+                      <div className="p-5">
+                        <div className="flex items-center gap-3 mb-4">
+                          <span className={`text-sm font-black w-6 text-center shrink-0 ${i === 0 ? "text-[#c5a84f]" : "text-stone-300"}`}>
+                            {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i+1}`}
+                          </span>
+                          {p.user_avatar ? (
+                            <img src={p.user_avatar} className="w-11 h-11 rounded-full border-2 border-white shadow-sm" alt="" />
+                          ) : (
+                            <div className="w-11 h-11 rounded-full bg-[#0f2044] flex items-center justify-center text-white font-black shrink-0">
+                              {p.user_name[0]}
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[#0b0f1a] font-bold text-sm truncate">{p.user_name}</p>
+                            <p className="text-stone-400 text-xs">{p.score} {txt.pts} · {p.votes_count} {txt.votes}</p>
+                          </div>
                         </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[#0b0f1a] font-bold text-sm truncate">{p.user_name}</p>
-                        <p className="text-stone-400 text-xs">{p.score} {txt.pts} · {p.votes_count} {txt.votes}</p>
+
+                        {/* Vote progress bar */}
+                        <div className="mb-4">
+                          <div className="flex justify-between text-[10px] text-stone-400 mb-1">
+                            <span>{pct}% {l === "fr" ? "des votes" : "vòt yo"}</span>
+                            <span>{p.votes_count} ❤️</span>
+                          </div>
+                          <div className="h-1.5 bg-stone-100 rounded-full overflow-hidden">
+                            <div className={`h-full rounded-full transition-all duration-700 ${isMyVote ? "bg-[#c5a84f]" : "bg-stone-300"}`}
+                              style={{ width: `${pct}%` }} />
+                          </div>
+                        </div>
+
+                        {isMyVote ? (
+                          <div className="flex items-center justify-center gap-2 py-2 text-[#c5a84f] text-xs font-black">
+                            <span>✓</span> {txt.alreadyVoted}
+                          </div>
+                        ) : (
+                          <button onClick={() => voteFor(p.id)}
+                            disabled={voting !== null || isMe || !!myVote}
+                            className="w-full bg-[#0f2044] hover:bg-[#1d4ed8] disabled:opacity-30 text-white py-2.5 rounded-xl text-xs font-black transition-all duration-200 flex items-center justify-center gap-1.5">
+                            {voting === p.id ? (
+                              <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                              <>❤️ {txt.vote}{isMe ? ` (${l === "fr" ? "vous" : "ou"})` : ""}</>
+                            )}
+                          </button>
+                        )}
                       </div>
                     </div>
-                    {myVote === p.id ? (
-                      <div className="text-[#c5a84f] text-xs font-bold text-center py-1">✓ {txt.alreadyVoted}</div>
-                    ) : (
-                      <button
-                        onClick={() => voteFor(p.id)}
-                        disabled={voting !== null || myParticipant?.user_id === p.user_id}
-                        className="w-full bg-[#0b0f1a] text-white py-2 rounded-full text-xs font-bold hover:bg-[#131926] transition-colors disabled:opacity-30"
-                      >
-                        {voting === p.id ? "..." : txt.vote}
-                      </button>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -492,19 +563,49 @@ export default function ContestPage() {
           {/* Completed */}
           {contest.status === "completed" && (
             <div>
-              <p className="text-[#0b0f1a]/40 text-[10px] font-bold uppercase tracking-[0.25em] mb-5">{txt.results}</p>
-              {sortedParticipants[0] && (
-                <div className="bg-[#0b0f1a] rounded-2xl p-8 text-center mb-6">
-                  <p className="text-[#c5a84f] text-[10px] font-bold uppercase tracking-widest mb-4">🏆 {txt.winner}</p>
-                  {sortedParticipants[0].user_avatar ? (
-                    <img src={sortedParticipants[0].user_avatar} className="w-20 h-20 rounded-full mx-auto mb-3 border-2 border-[#c5a84f]" alt="" />
-                  ) : (
-                    <div className="w-20 h-20 rounded-full bg-[#c5a84f] flex items-center justify-center text-[#0b0f1a] text-3xl font-black mx-auto mb-3">
-                      {sortedParticipants[0].user_name[0]}
-                    </div>
-                  )}
-                  <p className="text-white font-black text-xl">{sortedParticipants[0].user_name}</p>
-                  <p className="text-[#c5a84f] font-bold">{sortedParticipants[0].score} {txt.pts}</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-stone-400 mb-6">{txt.results}</p>
+
+              {/* Trophy podium */}
+              {sortedParticipants.length > 0 && (
+                <div className="relative overflow-hidden rounded-3xl bg-[#0a1628] p-8 mb-6 text-center">
+                  {/* Gold glow */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-40 opacity-20 pointer-events-none"
+                    style={{ background: "radial-gradient(ellipse, #c5a84f 0%, transparent 70%)" }} />
+
+                  <div className="relative z-10">
+                    <p className="text-[#c5a84f] text-[10px] font-black uppercase tracking-[0.3em] mb-6">
+                      🏆 {l === "fr" ? "Champion Biblique KONEKSYON PAM" : "Chanpyon Biblik KONEKSYON PAM"}
+                    </p>
+
+                    {sortedParticipants[0].user_avatar ? (
+                      <img src={sortedParticipants[0].user_avatar}
+                        className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-[#c5a84f] shadow-xl shadow-[#c5a84f]/20" alt="" />
+                    ) : (
+                      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#c5a84f] to-[#e8c97a] flex items-center justify-center text-[#0b0f1a] text-4xl font-black mx-auto mb-4 shadow-xl">
+                        {sortedParticipants[0].user_name[0]}
+                      </div>
+                    )}
+
+                    <p className="text-white font-black text-2xl mb-1">{sortedParticipants[0].user_name}</p>
+                    <p className="text-[#c5a84f] font-bold text-lg mb-2">{sortedParticipants[0].score} {txt.pts}</p>
+                    <p className="text-white/30 text-xs">
+                      {(sortedParticipants[0].answers || []).filter(a => a.correct).length}/{questions.length} {txt.correct}
+                    </p>
+
+                    {/* Vote champion separately */}
+                    {sortedParticipants.reduce((m, p) => p.votes_count > (m?.votes_count ?? 0) ? p : m, sortedParticipants[0]) !== sortedParticipants[0] && (() => {
+                      const voteChamp = sortedParticipants.reduce((m, p) => p.votes_count > m.votes_count ? p : m);
+                      return (
+                        <div className="mt-6 pt-6 border-t border-white/10">
+                          <p className="text-white/30 text-[10px] uppercase tracking-widest mb-3">
+                            ❤️ {l === "fr" ? "Prix du Public" : "Pri Piblik"}
+                          </p>
+                          <p className="text-white font-bold">{voteChamp.user_name}</p>
+                          <p className="text-white/40 text-xs">{voteChamp.votes_count} {txt.votes}</p>
+                        </div>
+                      );
+                    })()}
+                  </div>
                 </div>
               )}
             </div>
@@ -513,39 +614,55 @@ export default function ContestPage() {
 
         {/* Right: Leaderboard */}
         <div className="w-full lg:w-72 shrink-0">
-          <p className="text-[#0b0f1a]/40 text-[10px] font-bold uppercase tracking-[0.25em] mb-5">
-            {txt.leaderboard}
-          </p>
-          <div className="flex flex-col divide-y divide-stone-100">
-            {sortedParticipants.map((p, i) => {
-              const correctCount = (p.answers || []).filter(a => a.correct).length;
-              return (
-                <div key={p.id} className={`py-4 flex items-center gap-3 ${myParticipant?.id === p.id ? "bg-[#f8f6f2] -mx-3 px-3 rounded-xl" : ""}`}>
-                  <span className={`text-xs font-black w-5 text-center shrink-0 ${i === 0 && contest.status === "completed" ? "text-[#c5a84f]" : "text-stone-300"}`}>
-                    {i + 1}
-                  </span>
-                  {p.user_avatar ? (
-                    <img src={p.user_avatar} className="w-8 h-8 rounded-full shrink-0" alt="" />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-[#0b0f1a] flex items-center justify-center text-white text-xs font-black shrink-0">
-                      {p.user_name[0]}
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-[#0b0f1a] truncate">{p.user_name}</p>
-                    <p className="text-[10px] text-stone-400">
-                      {correctCount}/{questions.length} {txt.correct} · {p.votes_count} {txt.votes}
-                    </p>
-                  </div>
-                  <span className="text-xs font-bold text-stone-500 shrink-0">{p.score}</span>
+          <div className="sticky top-4">
+            <div className="flex items-center gap-2 mb-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400 flex-1">{txt.leaderboard}</p>
+              {(contest.status === "active" || contest.status === "voting") && (
+                <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+              )}
+            </div>
+
+            <div className="bg-white rounded-2xl border border-stone-100 overflow-hidden shadow-sm">
+              {participants.length === 0 ? (
+                <div className="py-10 text-center">
+                  <div className="text-4xl mb-2 opacity-20">👥</div>
+                  <p className="text-stone-300 text-xs">
+                    {l === "fr" ? "Aucun participant encore." : "Pa gen patisipan ankò."}
+                  </p>
                 </div>
-              );
-            })}
-            {participants.length === 0 && (
-              <p className="text-stone-300 text-xs py-8 text-center">
-                {l === "fr" ? "Aucun participant encore." : "Pa gen patisipan ankò."}
-              </p>
-            )}
+              ) : (
+                <div className="divide-y divide-stone-50">
+                  {sortedParticipants.map((p, i) => {
+                    const correctCount = (p.answers || []).filter(a => a.correct).length;
+                    const isMe = myParticipant?.id === p.id;
+                    const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : null;
+                    return (
+                      <div key={p.id} className={`px-4 py-3.5 flex items-center gap-3 transition-colors ${isMe ? "bg-[#f8f6f2]" : "hover:bg-stone-50"}`}>
+                        <span className="text-sm w-6 text-center shrink-0 font-black">
+                          {medal ?? <span className="text-xs text-stone-300">{i + 1}</span>}
+                        </span>
+                        {p.user_avatar ? (
+                          <img src={p.user_avatar} className="w-8 h-8 rounded-full shrink-0 border border-stone-100" alt="" />
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-[#0f2044] flex items-center justify-center text-white text-xs font-black shrink-0">
+                            {p.user_name[0]}
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-bold text-[#0b0f1a] truncate">
+                            {p.user_name}{isMe && <span className="text-[#c5a84f] text-[10px] ml-1">(moi)</span>}
+                          </p>
+                          <p className="text-[10px] text-stone-400">
+                            {questions.length > 0 ? `${correctCount}/${questions.length} · ` : ""}{p.votes_count} ❤️
+                          </p>
+                        </div>
+                        <span className="text-xs font-black text-[#0f2044] shrink-0 tabular-nums">{p.score}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
