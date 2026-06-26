@@ -179,9 +179,12 @@ export default function ChurchPage() {
       {/* Church Header */}
       <div className="bg-gradient-to-br from-[#0a1628] to-[#0f2044] rounded-2xl p-8 mb-8 border border-blue-800/30">
         {(() => {
-          const typeMatch = church.description?.match(/^\[([^\]]+)\](?: — (.*))?$/);
-          const typeTag = typeMatch ? typeMatch[1] : "";
-          const descText = typeMatch ? (typeMatch[2] || "") : (church.description || "");
+          const raw = church.description || "";
+          // Strip any leading/trailing brackets variants: [content] or [content] — desc
+          const typeMatch = raw.match(/^\[([^\]]+)\](?:\s*[—-]\s*(.*))?$/) || raw.match(/^([^[—\n]+?)(?:\s*[—-]\s*(.*))?$/);
+          const hasBracket = raw.startsWith("[");
+          const typeTag = hasBracket && typeMatch ? typeMatch[1].trim() : "";
+          const descText = hasBracket && typeMatch ? (typeMatch[2] || "").trim() : raw;
           return (
         <div className="flex flex-col sm:flex-row items-center gap-6">
           <div className="w-24 h-24 rounded-2xl shrink-0 overflow-hidden border-2 border-white/20 shadow-xl">
