@@ -11,6 +11,7 @@ interface Church {
   pastor_name: string;
   description: string;
   join_code: string;
+  logo_url?: string;
 }
 
 interface Post {
@@ -142,8 +143,14 @@ export default function ChurchPage() {
       {/* Church Header */}
       <div className="bg-gradient-to-br from-[#0a1628] to-[#0f2044] rounded-2xl p-8 mb-8 border border-blue-800/30">
         <div className="flex flex-col sm:flex-row items-center gap-6">
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shrink-0">
-            {church.name[0]}
+          <div className="w-20 h-20 rounded-2xl shrink-0 overflow-hidden border-2 border-white/20 shadow-lg">
+            {church.logo_url ? (
+              <img src={church.logo_url} alt={church.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white text-3xl font-bold">
+                {church.name[0]}
+              </div>
+            )}
           </div>
           <div className="text-center sm:text-left">
             <h1 className="text-2xl font-bold text-white">{church.name}</h1>

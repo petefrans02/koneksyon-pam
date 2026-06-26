@@ -362,9 +362,9 @@ export default function Home() {
     <div>
       <Hero />
       <ServicesShowcase />
+      <ChurchCTA />
       <AIBanner />
       <BibleQuiz />
-      <ChurchCTA />
       <ConnectedWorld />
     </div>
   );
