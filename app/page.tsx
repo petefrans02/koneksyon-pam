@@ -2,7 +2,7 @@
 
 import { useLang } from "@/lib/LangContext";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Lang = "fr" | "ht" | "en";
 
@@ -28,6 +28,79 @@ const features = [
 function getDayOfYear() {
   const n = new Date();
   return Math.floor((n.getTime() - new Date(n.getFullYear(), 0, 0).getTime()) / 86400000);
+}
+
+function ServicesSection({ l }: { l: Lang }) {
+  const refs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const [visible, setVisible] = useState<boolean[]>(Array(features.length).fill(false));
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const idx = refs.current.indexOf(entry.target as HTMLAnchorElement);
+          if (entry.isIntersecting && idx !== -1) {
+            setTimeout(() => {
+              setVisible(prev => { const n = [...prev]; n[idx] = true; return n; });
+            }, idx * 100);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    refs.current.forEach(el => el && obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <section className="bg-white py-16 px-5 sm:px-8 overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="border-l-4 border-[#1d4ed8] pl-5 mb-12">
+          <p className="text-[#1d4ed8] text-xs font-bold uppercase tracking-[0.2em] mb-1">
+            {l === "fr" ? "Nos services" : l === "ht" ? "Sèvis nou yo" : "Our services"}
+          </p>
+          <h2 className="text-[#0f2044] font-black text-2xl sm:text-3xl">
+            {l === "fr" ? "Tout ce dont vous avez besoin pour grandir spirituellement"
+           : l === "ht" ? "Tout sa ou bezwen pou grandi espirityèlman"
+           : "Everything you need to grow spiritually"}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {features.map((f, i) => (
+            <Link
+              key={f.href}
+              href={f.href}
+              ref={el => { refs.current[i] = el; }}
+              style={{
+                opacity: visible[i] ? 1 : 0,
+                transform: visible[i] ? "translateY(0)" : "translateY(32px)",
+                transition: `opacity 0.5s ease ${i * 0.08}s, transform 0.5s ease ${i * 0.08}s`,
+              }}
+              className="group border border-stone-200 rounded-lg overflow-hidden hover:border-[#1d4ed8] hover:shadow-xl transition-shadow flex flex-col"
+            >
+              <div className="h-1 bg-[#0f2044] group-hover:bg-[#1d4ed8] transition-colors duration-300" />
+              <div className="p-6 flex flex-col gap-3 flex-1">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl group-hover:scale-110 transition-transform duration-300 inline-block">{f.icon}</span>
+                  <p className="text-[#0f2044] font-bold text-base group-hover:text-[#1d4ed8] transition-colors duration-200">
+                    {f[l as keyof typeof f] as string}
+                  </p>
+                </div>
+                <p className="text-stone-500 text-sm leading-relaxed">{(f.desc as Record<Lang, string>)[l]}</p>
+                <div className="mt-auto pt-4 border-t border-stone-100 flex items-center justify-between">
+                  <span className="text-[#1d4ed8] text-xs font-bold group-hover:underline">
+                    {l === "fr" ? "Accéder" : l === "ht" ? "Antre" : "Open"} →
+                  </span>
+                  <span className="w-6 h-6 rounded-full bg-[#eff6ff] flex items-center justify-center text-[#1d4ed8] text-xs font-bold group-hover:bg-[#1d4ed8] group-hover:text-white transition-all duration-300">→</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default function Home() {
@@ -118,42 +191,7 @@ export default function Home() {
       <div className="h-1.5 bg-gradient-to-r from-[#0f2044] via-[#1d4ed8] to-[#38bdf8]" />
 
       {/* ── NOS SERVICES ── */}
-      <section className="bg-white py-16 px-5 sm:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="border-l-4 border-[#1d4ed8] pl-5 mb-12">
-            <p className="text-[#1d4ed8] text-xs font-bold uppercase tracking-[0.2em] mb-1">
-              {l === "fr" ? "Nos services" : l === "ht" ? "Sèvis nou yo" : "Our services"}
-            </p>
-            <h2 className="text-[#0f2044] font-black text-2xl sm:text-3xl">
-              {l === "fr" ? "Tout ce dont vous avez besoin pour grandir spirituellement"
-             : l === "ht" ? "Tout sa ou bezwen pou grandi espirityèlman"
-             : "Everything you need to grow spiritually"}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {features.map((f) => (
-              <Link key={f.href} href={f.href}
-                className="group border border-stone-200 rounded-lg overflow-hidden hover:border-[#1d4ed8] hover:shadow-lg transition-all flex flex-col">
-                {/* Top accent */}
-                <div className="h-1 bg-[#0f2044] group-hover:bg-[#1d4ed8] transition-colors" />
-                <div className="p-6 flex flex-col gap-3 flex-1">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{f.icon}</span>
-                    <p className="text-[#0f2044] font-bold text-base">{f[l as keyof typeof f] as string}</p>
-                  </div>
-                  <p className="text-stone-500 text-sm leading-relaxed">{(f.desc as Record<Lang, string>)[l]}</p>
-                  <div className="mt-auto pt-4 border-t border-stone-100">
-                    <span className="text-[#1d4ed8] text-xs font-bold group-hover:underline">
-                      {l === "fr" ? "Accéder" : l === "ht" ? "Antre" : "Open"} →
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ServicesSection l={l} />
 
       {/* ── CONCOURS + PRIÈRE ── */}
       <section className="bg-[#eff6ff] py-16 px-5 sm:px-8">
