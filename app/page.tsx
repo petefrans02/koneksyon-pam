@@ -57,7 +57,7 @@ export default function Home() {
                   {l === "fr" ? "Plateforme Biblique" : l === "ht" ? "Platfòm Biblik" : "Biblical Platform"}
                 </span>
               </div>
-              <h1 className="text-white font-black leading-[1.08] mb-5"
+              <h1 className="text-white font-black leading-[1.08] mb-5 uppercase"
                 style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>
                 {l === "fr" ? "La foi chrétienne au cœur du numérique." : l === "ht" ? "Lafwa kretyen nan kè dijital la." : "Christian faith at the heart of the digital age."}
               </h1>

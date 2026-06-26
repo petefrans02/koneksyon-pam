@@ -18,13 +18,6 @@ interface Contest {
   contest_participants: { count: number }[];
 }
 
-const statusColors: Record<string, string> = {
-  upcoming: "text-blue-500 bg-blue-50 border-blue-200",
-  active: "text-green-600 bg-green-50 border-green-200",
-  voting: "text-amber-600 bg-amber-50 border-amber-200",
-  completed: "text-stone-400 bg-stone-50 border-stone-200",
-};
-
 export default function ConcoursPage() {
   const { lang } = useLang();
   const l = (["fr", "ht", "en"].includes(lang) ? lang : "fr") as Lang;
@@ -42,59 +35,58 @@ export default function ConcoursPage() {
       .then(d => { setContests(d.contests || []); setLoading(false); });
   }, []);
 
-  const statusLabel: Record<string, string> = {
-    upcoming: l === "fr" ? "Inscriptions ouvertes" : l === "ht" ? "Enskripsyon louvri" : "Registrations open",
-    active: l === "fr" ? "En cours" : l === "ht" ? "Kap fèt" : "In progress",
-    voting: l === "fr" ? "Phase de vote" : l === "ht" ? "Faz vote a" : "Voting phase",
-    completed: l === "fr" ? "Terminé" : l === "ht" ? "Fini" : "Completed",
+  const statusLabel: Record<string, Record<Lang, string>> = {
+    upcoming: { fr: "Inscriptions ouvertes", ht: "Enskripsyon louvri", en: "Registrations open" },
+    active:   { fr: "En cours", ht: "Kap fèt kounye a", en: "In progress" },
+    voting:   { fr: "Phase de vote", ht: "Faz vote a", en: "Voting phase" },
+    completed:{ fr: "Terminé", ht: "Fini", en: "Completed" },
   };
 
-  const txt = {
-    headline: l === "fr" ? "Les Concours Bibliques." : l === "ht" ? "Konkou Biblik Yo." : "Biblical Contests.",
-    sub: l === "fr" ? "Des milliers de spectateurs. Des participants désignés. Un seul vainqueur."
-       : l === "ht" ? "Dè milye espektatè. Patisipan dezinye. Yon sèl venkè."
-       : "Thousands of spectators. Designated participants. One winner.",
-    active: l === "fr" ? "En direct" : l === "ht" ? "An dirèk" : "Live",
-    upcoming: l === "fr" ? "À venir" : l === "ht" ? "Ap vini" : "Upcoming",
-    past: l === "fr" ? "Terminés" : l === "ht" ? "Fini yo" : "Completed",
-    empty: l === "fr" ? "Aucun concours pour le moment." : l === "ht" ? "Pa gen konkou pou kounye a." : "No contests yet.",
-    create: l === "fr" ? "Organiser un concours" : l === "ht" ? "Organize yon konkou" : "Organize a contest",
-    watch: l === "fr" ? "Regarder" : l === "ht" ? "Gade" : "Watch",
-    join: l === "fr" ? "S'inscrire" : l === "ht" ? "Enskri" : "Register",
-    results: l === "fr" ? "Résultats" : l === "ht" ? "Rezilta" : "Results",
-    participants: l === "fr" ? "participants" : l === "ht" ? "patisipan" : "participants",
+  const statusStyle: Record<string, string> = {
+    upcoming:  "bg-[#eff6ff] text-[#1d4ed8] border-[#bfdbfe]",
+    active:    "bg-green-50 text-green-700 border-green-200",
+    voting:    "bg-amber-50 text-amber-700 border-amber-200",
+    completed: "bg-stone-50 text-stone-400 border-stone-200",
   };
 
-  const active = contests.filter(c => c.status === "active" || c.status === "voting");
-  const upcoming = contests.filter(c => c.status === "upcoming");
-  const past = contests.filter(c => c.status === "completed");
+  const live   = contests.filter(c => c.status === "active" || c.status === "voting");
+  const coming = contests.filter(c => c.status === "upcoming");
+  const past   = contests.filter(c => c.status === "completed");
 
   function ContestCard({ c }: { c: Contest }) {
-    const count = c.contest_participants?.[0]?.count ?? 0;
-    const btnLabel = c.status === "upcoming" ? txt.join : c.status === "completed" ? txt.results : txt.watch;
+    const count  = c.contest_participants?.[0]?.count ?? 0;
+    const isLive = c.status === "active" || c.status === "voting";
     return (
-      <div className="bg-white border border-stone-200 rounded-2xl p-6 hover:border-[#c5a84f]/50 hover:shadow-md transition-all group flex flex-col gap-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <p className="text-[#0b0f1a] font-bold text-base leading-snug mb-1 truncate">{c.title}</p>
-            {c.description && (
-              <p className="text-stone-400 text-xs leading-relaxed line-clamp-2">{c.description}</p>
-            )}
+      <div className={`border rounded-lg overflow-hidden flex flex-col transition-all hover:shadow-md ${isLive ? "border-[#1d4ed8] shadow-sm" : "border-stone-200"}`}>
+        {isLive && <div className="h-1 bg-gradient-to-r from-[#0f2044] via-[#1d4ed8] to-[#38bdf8]" />}
+        <div className="p-5 flex flex-col gap-4 flex-1 bg-white">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1 min-w-0">
+              <p className="text-[#0f2044] font-bold text-sm leading-snug mb-1">{c.title}</p>
+              {c.description && (
+                <p className="text-stone-400 text-xs leading-relaxed line-clamp-2">{c.description}</p>
+              )}
+            </div>
+            <span className={`shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded border whitespace-nowrap ${statusStyle[c.status]}`}>
+              {statusLabel[c.status]?.[l] ?? c.status}
+            </span>
           </div>
-          <span className={`shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${statusColors[c.status]}`}>
-            {statusLabel[c.status]}
-          </span>
-        </div>
-        <div className="flex items-center justify-between gap-4 pt-2 border-t border-stone-100">
-          <span className="text-stone-400 text-xs">
-            {count}/{c.max_participants || 10} {txt.participants}
-          </span>
-          <Link
-            href={`/concours/${c.id}`}
-            className="text-[#0b0f1a] text-xs font-bold hover:text-[#c5a84f] transition-colors"
-          >
-            {btnLabel} →
-          </Link>
+          <div className="flex items-center justify-between pt-3 border-t border-stone-100">
+            <div className="flex items-center gap-2">
+              {isLive && <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />}
+              <span className="text-stone-400 text-xs">
+                {count}/{c.max_participants || 10} {l === "fr" ? "participants" : l === "ht" ? "patisipan" : "participants"}
+              </span>
+            </div>
+            <Link href={`/concours/${c.id}`}
+              className={`text-xs font-bold transition-colors ${isLive ? "text-[#1d4ed8] hover:underline" : "text-[#0f2044]/60 hover:text-[#1d4ed8]"}`}>
+              {c.status === "upcoming"
+                ? (l === "fr" ? "S'inscrire" : l === "ht" ? "Enskri" : "Register")
+                : c.status === "completed"
+                ? (l === "fr" ? "Résultats" : l === "ht" ? "Rezilta" : "Results")
+                : (l === "fr" ? "Regarder en direct" : l === "ht" ? "Gade an dirèk" : "Watch live")} →
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -104,76 +96,92 @@ export default function ConcoursPage() {
     <div className="bg-white min-h-screen">
 
       {/* Header */}
-      <div className="bg-[#0b0f1a] px-5 sm:px-8 py-16">
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-8">
+      <div className="bg-[#0f2044]">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
           <div>
-            <p className="text-[#c5a84f] text-[10px] font-bold uppercase tracking-[0.25em] mb-6">
-              {l === "fr" ? "Concours" : l === "ht" ? "Konkou" : "Contests"}
-            </p>
-            <h1 className="text-white font-black text-3xl sm:text-5xl leading-tight mb-4">
-              {txt.headline}
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded px-3 py-1.5 mb-5">
+              <span className="text-white/70 text-[10px] font-bold uppercase tracking-widest">
+                {l === "fr" ? "Concours Bibliques" : l === "ht" ? "Konkou Biblik" : "Biblical Contests"}
+              </span>
+            </div>
+            <h1 className="text-white font-black leading-tight mb-3"
+              style={{ fontSize: "clamp(1.75rem, 4vw, 3rem)" }}>
+              {l === "fr" ? "Des milliers de spectateurs. Un seul vainqueur."
+             : l === "ht" ? "Dè milye espektatè. Yon sèl venkè."
+             : "Thousands of spectators. One winner."}
             </h1>
-            <p className="text-white/40 text-base max-w-xl leading-relaxed">{txt.sub}</p>
+            <p className="text-white/50 text-sm max-w-xl leading-relaxed">
+              {l === "fr" ? "Participez ou votez pour votre champion. Les concours sont organisés par l'équipe Koneksyon Pam."
+             : l === "ht" ? "Patisipe oswa vote pou chanpyon ou. Konkou yo òganize pa ekip Koneksyon Pam."
+             : "Participate or vote for your champion. Contests are organized by the Koneksyon Pam team."}
+            </p>
           </div>
           {adminUser && (
-            <Link
-              href="/concours/creer"
-              className="shrink-0 border border-[#c5a84f]/40 text-[#c5a84f] px-6 py-3 rounded-full text-sm font-bold hover:bg-[#c5a84f] hover:text-[#0b0f1a] transition-all whitespace-nowrap"
-            >
-              + {txt.create}
+            <Link href="/concours/creer"
+              className="shrink-0 border border-white/30 text-white px-6 py-2.5 rounded text-sm font-bold hover:bg-white hover:text-[#0f2044] transition-all">
+              + {l === "fr" ? "Organiser un concours" : l === "ht" ? "Organize yon konkou" : "Organize a contest"}
             </Link>
           )}
         </div>
       </div>
+      <div className="h-1 bg-gradient-to-r from-[#0f2044] via-[#1d4ed8] to-[#38bdf8]" />
 
-      <div className="max-w-4xl mx-auto px-5 sm:px-8 py-16 flex flex-col gap-14">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 flex flex-col gap-14">
         {loading ? (
           <div className="flex justify-center py-20">
-            <div className="w-8 h-8 border-2 border-[#0b0f1a] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#1d4ed8] border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : contests.length === 0 ? (
+          <div className="text-center py-20 border border-dashed border-stone-200 rounded-lg">
+            <p className="text-stone-400 text-sm">
+              {l === "fr" ? "Aucun concours pour le moment. Revenez bientôt."
+             : l === "ht" ? "Pa gen konkou pou kounye a. Tounen byento."
+             : "No contests yet. Check back soon."}
+            </p>
           </div>
         ) : (
           <>
             {/* Live */}
-            {active.length > 0 && (
+            {live.length > 0 && (
               <section>
-                <p className="text-[#0b0f1a]/40 text-[10px] font-bold uppercase tracking-[0.25em] mb-6 flex items-center gap-2">
+                <div className="border-l-4 border-green-500 pl-4 mb-8 flex items-center gap-3">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  {txt.active}
-                </p>
-                <div className="flex flex-col gap-4">
-                  {active.map(c => <ContestCard key={c.id} c={c} />)}
+                  <p className="text-[#0f2044] font-black text-lg">
+                    {l === "fr" ? "En cours" : l === "ht" ? "Kap fèt kounye a" : "Live now"}
+                  </p>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {live.map(c => <ContestCard key={c.id} c={c} />)}
                 </div>
               </section>
             )}
 
             {/* Upcoming */}
-            {upcoming.length > 0 && (
+            {coming.length > 0 && (
               <section>
-                <p className="text-[#0b0f1a]/40 text-[10px] font-bold uppercase tracking-[0.25em] mb-6">{txt.upcoming}</p>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {upcoming.map(c => <ContestCard key={c.id} c={c} />)}
+                <div className="border-l-4 border-[#1d4ed8] pl-4 mb-8">
+                  <p className="text-[#0f2044] font-black text-lg">
+                    {l === "fr" ? "Inscriptions ouvertes" : l === "ht" ? "Enskripsyon louvri" : "Open registrations"}
+                  </p>
+                  <p className="text-stone-400 text-xs mt-0.5">
+                    {l === "fr" ? "Inscrivez-vous avant le début" : l === "ht" ? "Enskri anvan kòmansman an" : "Register before it starts"}
+                  </p>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {coming.map(c => <ContestCard key={c.id} c={c} />)}
                 </div>
               </section>
             )}
 
-            {/* Empty */}
-            {contests.length === 0 && (
-              <div className="text-center py-20 border border-dashed border-stone-200 rounded-2xl">
-                <p className="text-stone-400 text-sm mb-6">{txt.empty}</p>
-                <Link
-                  href="/concours/creer"
-                  className="inline-block bg-[#0b0f1a] text-white px-7 py-3 rounded-full text-sm font-bold hover:bg-[#131926] transition-colors"
-                >
-                  + {txt.create}
-                </Link>
-              </div>
-            )}
-
-            {/* Past */}
+            {/* Completed */}
             {past.length > 0 && (
               <section>
-                <p className="text-[#0b0f1a]/40 text-[10px] font-bold uppercase tracking-[0.25em] mb-6">{txt.past}</p>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="border-l-4 border-stone-300 pl-4 mb-8">
+                  <p className="text-[#0f2044] font-black text-lg">
+                    {l === "fr" ? "Concours terminés" : l === "ht" ? "Konkou fini" : "Completed contests"}
+                  </p>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {past.map(c => <ContestCard key={c.id} c={c} />)}
                 </div>
               </section>
