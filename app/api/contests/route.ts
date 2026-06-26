@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
+import { isAdmin } from "@/lib/admin";
 
 function getDb() {
   return createClient(
@@ -37,6 +38,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const user = await getAuthUser(request);
   if (!user) return Response.json({ error: "Not authenticated" }, { status: 401 });
+  if (!isAdmin(user)) return Response.json({ error: "Accès refusé" }, { status: 403 });
 
   const body = await request.json();
   const { title, description, start_at, max_participants, church_id, questions } = body;

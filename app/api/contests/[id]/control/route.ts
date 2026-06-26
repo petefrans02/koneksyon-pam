@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
+import { isAdmin } from "@/lib/admin";
 
 function getDb() {
   return createClient(
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     .single();
 
   if (!contest) return Response.json({ error: "Not found" }, { status: 404 });
-  if (contest.created_by !== user.id) return Response.json({ error: "Not organizer" }, { status: 403 });
+  if (!isAdmin(user) && contest.created_by !== user.id) return Response.json({ error: "Not organizer" }, { status: 403 });
 
   const statusFlow: Record<string, string> = {
     upcoming: "active",

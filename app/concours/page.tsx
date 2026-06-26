@@ -3,6 +3,8 @@
 import { useLang } from "@/lib/LangContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { isAdmin } from "@/lib/admin";
 
 type Lang = "fr" | "ht" | "en";
 
@@ -28,6 +30,11 @@ export default function ConcoursPage() {
   const l = (["fr", "ht", "en"].includes(lang) ? lang : "fr") as Lang;
   const [contests, setContests] = useState<Contest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [adminUser, setAdminUser] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setAdminUser(isAdmin(data.user)));
+  }, []);
 
   useEffect(() => {
     fetch("/api/contests")
@@ -108,12 +115,14 @@ export default function ConcoursPage() {
             </h1>
             <p className="text-white/40 text-base max-w-xl leading-relaxed">{txt.sub}</p>
           </div>
-          <Link
-            href="/concours/creer"
-            className="shrink-0 border border-[#c5a84f]/40 text-[#c5a84f] px-6 py-3 rounded-full text-sm font-bold hover:bg-[#c5a84f] hover:text-[#0b0f1a] transition-all whitespace-nowrap"
-          >
-            + {txt.create}
-          </Link>
+          {adminUser && (
+            <Link
+              href="/concours/creer"
+              className="shrink-0 border border-[#c5a84f]/40 text-[#c5a84f] px-6 py-3 rounded-full text-sm font-bold hover:bg-[#c5a84f] hover:text-[#0b0f1a] transition-all whitespace-nowrap"
+            >
+              + {txt.create}
+            </Link>
+          )}
         </div>
       </div>
 

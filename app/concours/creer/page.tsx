@@ -2,8 +2,10 @@
 
 import RequireAuth from "@/app/components/RequireAuth";
 import { useLang } from "@/lib/LangContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import { isAdmin } from "@/lib/admin";
 
 type Lang = "fr" | "ht" | "en";
 
@@ -34,6 +36,16 @@ export default function CreerConcoursPage() {
   const [questions, setQuestions] = useState<Question[]>([emptyQuestion()]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [adminChecked, setAdminChecked] = useState(false);
+  const [adminOk, setAdminOk] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (!isAdmin(data.user)) router.replace("/concours");
+      else setAdminOk(true);
+      setAdminChecked(true);
+    });
+  }, [router]);
 
   const txt = {
     headline: l === "fr" ? "Créer un concours" : l === "ht" ? "Kreye yon konkou" : "Create a contest",
@@ -83,6 +95,8 @@ export default function CreerConcoursPage() {
       setError(data.error || "Erreur");
     }
   }
+
+  if (!adminChecked || !adminOk) return null;
 
   return (
     <RequireAuth>
