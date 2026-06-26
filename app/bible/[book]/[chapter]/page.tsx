@@ -64,7 +64,7 @@ export default function BibleChapterPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
-      <Link href="/bible" className="text-blue-500 text-sm hover:underline mb-6 block">← {lang === "fr" ? "La Bible" : "Bible"}</Link>
+      <Link href="/bible" className="text-blue-500 text-sm hover:underline mb-6 block">← {lang === "fr" ? "La Bible" : lang === "ht" ? "Bib la" : "Bible"}</Link>
 
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -108,7 +108,7 @@ export default function BibleChapterPage() {
             {translation && <p className="text-xs text-blue-500 mt-4 font-medium">📖 {translation}</p>}
           </>
         ) : (
-          <p className="text-stone-400 text-center py-8">{lang === "fr" ? "Texte non disponible" : "Text not available"}</p>
+          <p className="text-stone-400 text-center py-8">{lang === "fr" ? "Texte non disponible" : lang === "ht" ? "Tèks pa disponib" : "Text not available"}</p>
         )}
       </div>
 
@@ -118,20 +118,20 @@ export default function BibleChapterPage() {
           onClick={loadAiStudy}
           className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
         >
-          {aiLoading ? "⏳ ..." : aiStudy ? "✕ Fermer" : `🕊️ ${lang === "fr" ? "Étude approfondie (IA)" : "Deep study (AI)"}`}
+          {aiLoading ? "⏳ ..." : aiStudy ? (lang === "fr" ? "✕ Fermer" : lang === "ht" ? "✕ Fèmen" : "✕ Close") : `🕊️ ${lang === "fr" ? "Étude approfondie (IA)" : lang === "ht" ? "Etid pwofon (IA)" : "Deep study (AI)"}`}
         </button>
         <button
           onClick={() => navigator.share?.({ title: `${bookName} ${chapterNum}`, text: text.slice(0, 200), url: window.location.href })}
           className="bg-stone-100 text-stone-600 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-stone-200"
         >
-          ↗ {lang === "fr" ? "Partager" : "Share"}
+          ↗ {lang === "fr" ? "Partager" : lang === "ht" ? "Pataje" : "Share"}
         </button>
       </div>
 
       {aiLoading && (
         <div className="flex items-center gap-3 text-blue-500 mb-6">
           <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-          <span className="text-sm">{lang === "fr" ? "L'IA analyse ce chapitre..." : "AI analyzing..."}</span>
+          <span className="text-sm">{lang === "fr" ? "L'IA analyse ce chapitre..." : lang === "ht" ? "IA ap analize chapit sa a..." : "AI analyzing this chapter..."}</span>
         </div>
       )}
 
@@ -139,7 +139,7 @@ export default function BibleChapterPage() {
         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6 mb-6">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-lg">🕊️</span>
-            <h4 className="font-bold text-blue-800 text-sm">{lang === "fr" ? "Étude approfondie" : "Deep study"} — {bookName} {chapterNum}</h4>
+            <h4 className="font-bold text-blue-800 text-sm">{lang === "fr" ? "Étude approfondie" : lang === "ht" ? "Etid pwofon" : "Deep study"} — {bookName} {chapterNum}</h4>
           </div>
           <div className="text-sm text-stone-700 leading-relaxed whitespace-pre-line">
             {aiStudy.replace(/\*\*(.*?)\*\*/g, "$1").replace(/["«»]/g, "")}
@@ -150,10 +150,10 @@ export default function BibleChapterPage() {
       {/* Navigation bottom */}
       <div className="flex justify-between">
         {chapterNum > 1 ? (
-          <Link href={`/bible/${bookSlug}/${chapterNum - 1}`} className="bg-stone-100 text-stone-600 px-5 py-2.5 rounded-xl font-medium hover:bg-stone-200">← {lang === "fr" ? "Chapitre" : "Ch."} {chapterNum - 1}</Link>
+          <Link href={`/bible/${bookSlug}/${chapterNum - 1}`} className="bg-stone-100 text-stone-600 px-5 py-2.5 rounded-xl font-medium hover:bg-stone-200">← {lang === "fr" ? "Chapitre" : lang === "ht" ? "Chapit" : "Ch."} {chapterNum - 1}</Link>
         ) : <div />}
         {chapterNum < book.chapters && (
-          <Link href={`/bible/${bookSlug}/${chapterNum + 1}`} className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-5 py-2.5 rounded-xl font-medium hover:opacity-90">{lang === "fr" ? "Chapitre" : "Ch."} {chapterNum + 1} →</Link>
+          <Link href={`/bible/${bookSlug}/${chapterNum + 1}`} className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-5 py-2.5 rounded-xl font-medium hover:opacity-90">{lang === "fr" ? "Chapitre" : lang === "ht" ? "Chapit" : "Ch."} {chapterNum + 1} →</Link>
         )}
       </div>
     </div>

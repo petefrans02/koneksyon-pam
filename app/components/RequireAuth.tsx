@@ -61,7 +61,7 @@ export default function RequireAuth({ children }: { children: ReactNode }) {
           {lang === "fr" ? "Se connecter avec Google" : lang === "ht" ? "Konekte ak Google" : "Sign in with Google"}
         </button>
         <p className="text-xs text-stone-400 mt-4">
-          {lang === "fr" ? "Gratuit • Sécurisé • En un clic" : "Free • Secure • One click"}
+          {lang === "fr" ? "Gratuit • Sécurisé • En un clic" : lang === "ht" ? "Gratis • An sekirite • Yon klik" : "Free • Secure • One click"}
         </p>
       </div>
     );

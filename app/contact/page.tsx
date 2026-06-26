@@ -28,7 +28,7 @@ export default function ContactPage() {
       setEmail("");
       setMessage("");
     } catch {
-      setError(lang === "fr" ? "Erreur lors de l'envoi. Réessayez." : "Erè. Eseye ankò.");
+      setError(lang === "fr" ? "Erreur lors de l'envoi. Réessayez." : lang === "ht" ? "Erè. Eseye ankò." : "Error sending. Please try again.");
     } finally {
       setSending(false);
     }

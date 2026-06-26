@@ -91,7 +91,7 @@ export default function NavBar() {
             <img src="/logo-kp.png" alt="KP" className="w-9 h-9 rounded-lg group-hover:opacity-85 transition-opacity" />
             <div className="hidden lg:block">
               <p className="text-[#0f2044] font-black text-sm leading-tight">KONEKSYON PAM</p>
-              <p className="text-[#7c3aed] text-[8px] font-bold tracking-[0.2em] uppercase">Plateforme Chrétienne</p>
+              <p className="text-[#7c3aed] text-[8px] font-bold tracking-[0.2em] uppercase">{l === "fr" ? "Plateforme Chrétienne" : l === "ht" ? "Platfòm Kretyen" : "Christian Platform"}</p>
             </div>
           </Link>
 
@@ -131,11 +131,11 @@ export default function NavBar() {
             <div className="grid grid-cols-3 gap-2 mb-3">
               <Link href="/aujourd-hui" onClick={() => setOpen(false)}
                 className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-gradient-to-b from-[#c5a84f]/10 to-[#c5a84f]/5 border border-[#c5a84f]/20 text-[#b45309] text-[10px] font-bold">
-                ✨ <span>{l === "fr" ? "Aujourd'hui" : "Jodi a"}</span>
+                ✨ <span>{l === "fr" ? "Aujourd'hui" : l === "ht" ? "Jodi a" : "Today"}</span>
               </Link>
               <Link href="/decouvrir" onClick={() => setOpen(false)}
                 className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-stone-50 border border-stone-200 text-stone-600 text-[10px] font-bold">
-                🔍 <span>{l === "fr" ? "Découvrir" : "Dekouvri"}</span>
+                🔍 <span>{l === "fr" ? "Découvrir" : l === "ht" ? "Dekouvri" : "Discover"}</span>
               </Link>
               {user ? (
                 <Link href="/dashboard" onClick={() => setOpen(false)}

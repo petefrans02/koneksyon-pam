@@ -41,7 +41,7 @@ export default function ToastNotifications({ contestId, lang }: Props) {
             addToast("🏆", msg, "success");
           }
           if (s === "voting") {
-            const msg = l === "fr" ? "Phase de vote ouverte — votez maintenant !" : "Faz vote a louvri !";
+            const msg = l === "fr" ? "Phase de vote ouverte — votez maintenant !" : l === "ht" ? "Faz vote a louvri — vote kounye a !" : "Voting phase open — vote now!";
             addToast("🗳️", msg, "gold");
           }
         }

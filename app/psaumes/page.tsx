@@ -204,7 +204,7 @@ export default function PsaumesPage() {
           {aiLoading && (
             <div className="mt-6 flex items-center gap-3 text-blue-500">
               <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-              <span className="text-sm">{lang === "fr" ? "L'IA analyse ce Psaume..." : "AI is analyzing this Psalm..."}</span>
+              <span className="text-sm">{lang === "fr" ? "L'IA analyse ce Psaume..." : lang === "ht" ? "IA ap analize Sòm sa a..." : "AI is analyzing this Psalm..."}</span>
             </div>
           )}
 
@@ -213,7 +213,7 @@ export default function PsaumesPage() {
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-lg">🕊️</span>
                 <h4 className="font-bold text-blue-800 text-sm">
-                  {lang === "fr" ? "Étude approfondie — Psaume" : "Deep study — Psalm"} {expanded}
+                  {lang === "fr" ? "Étude approfondie — Psaume" : lang === "ht" ? "Etid pwofon — Sòm" : "Deep study — Psalm"} {expanded}
                 </h4>
               </div>
               <div className="text-sm text-stone-700 leading-relaxed whitespace-pre-line">

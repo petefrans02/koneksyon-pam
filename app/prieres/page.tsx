@@ -50,7 +50,7 @@ function timeAgo(date: string, lang: string): string {
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `${hours}h`;
   const days = Math.floor(hours / 24);
-  return `${days}${lang === "fr" ? "j" : "d"}`;
+  return `${days}${lang === "fr" ? "j" : lang === "ht" ? "j" : "d"}`;
 }
 
 export default function PrieresPage() {
@@ -145,7 +145,7 @@ export default function PrieresPage() {
                 <span className="text-2xl">{stat.flag}</span>
                 <div>
                   <p className="font-bold text-sm">{stat.country}</p>
-                  <p className="text-xs text-blue-200/60">{stat.count.toLocaleString()} {lang === "fr" ? "prières" : "prayers"}</p>
+                  <p className="text-xs text-blue-200/60">{stat.count.toLocaleString()} {lang === "fr" ? "prières" : lang === "ht" ? "lapriyè" : "prayers"}</p>
                 </div>
               </div>
             </div>
@@ -179,7 +179,7 @@ export default function PrieresPage() {
           {lang === "fr" ? "Toutes les prières" : lang === "ht" ? "Tout lapriyè" : "All prayers"}
         </button>
         <button onClick={() => setFilter("featured")} className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === "featured" ? "bg-blue-600 text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200"}`}>
-          ⭐ {lang === "fr" ? "Les plus priées" : "Plis lapriyè"}
+          ⭐ {lang === "fr" ? "Les plus priées" : lang === "ht" ? "Plis lapriyè" : "Most prayed"}
         </button>
       </div>
 

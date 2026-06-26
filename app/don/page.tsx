@@ -51,7 +51,7 @@ export default function DonationPage() {
       try {
         await stripeCheckout(amount);
       } catch {
-        alert(lang === "fr" ? "Erreur de paiement. Vérifiez que Stripe est configuré." : "Payment error. Check Stripe config.");
+        alert(lang === "fr" ? "Erreur de paiement. Vérifiez que Stripe est configuré." : lang === "ht" ? "Erè peman. Verifye Stripe a konfigire." : "Payment error. Check Stripe config.");
       } finally {
         setLoading(null);
       }
@@ -107,9 +107,9 @@ export default function DonationPage() {
           {/* Impact stats */}
           <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto mb-2">
             {[
-              { n: "24K+", l: lang === "fr" ? "membres" : "manm" },
-              { n: "12+", l: lang === "fr" ? "pays" : "peyi" },
-              { n: "100%", l: lang === "fr" ? "gratuit" : "gratis" },
+              { n: "24K+", l: lang === "fr" ? "membres" : lang === "ht" ? "manm" : "members" },
+              { n: "12+", l: lang === "fr" ? "pays" : lang === "ht" ? "peyi" : "countries" },
+              { n: "100%", l: lang === "fr" ? "gratuit" : lang === "ht" ? "gratis" : "free" },
             ].map((s) => (
               <div key={s.n} className="bg-white/5 border border-white/10 rounded-2xl p-4">
                 <p className="text-2xl font-black text-white">{s.n}</p>
@@ -178,7 +178,7 @@ export default function DonationPage() {
             ) : (
               <div className="mb-5">
                 <p className="text-xs text-stone-400 font-semibold uppercase tracking-widest mb-3">
-                  {lang === "fr" ? "Montant personnalisé (USD)" : "Custom amount (USD)"}
+                  {lang === "fr" ? "Montant personnalisé (USD)" : lang === "ht" ? "Montan pèsonalize (USD)" : "Custom amount (USD)"}
                 </p>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
@@ -211,7 +211,7 @@ export default function DonationPage() {
               {loading !== null ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  {lang === "fr" ? "Traitement..." : "Processing..."}
+                  {lang === "fr" ? "Traitement..." : lang === "ht" ? "Ap trete..." : "Processing..."}
                 </span>
               ) : (
                 <>

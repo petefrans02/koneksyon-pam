@@ -264,7 +264,7 @@ export default function CreerEglisePage() {
     return (
       <div className="max-w-lg mx-auto px-6 py-16 text-center">
         <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto" />
-        <p className="text-stone-500 mt-4">{lang === "fr" ? "Connexion en cours..." : "Connecting..."}</p>
+        <p className="text-stone-500 mt-4">{lang === "fr" ? "Connexion en cours..." : lang === "ht" ? "Ap konekte..." : "Connecting..."}</p>
       </div>
     );
   }

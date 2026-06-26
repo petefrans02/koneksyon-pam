@@ -33,7 +33,7 @@ function AIChat({ studyTitle, studyContent }: { studyTitle: string; studyContent
       const data = await res.json();
       setMessages((m) => [...m, { role: "ai", text: data.answer || "..." }]);
     } catch {
-      setMessages((m) => [...m, { role: "ai", text: lang === "fr" ? "Erreur de connexion. Réessayez." : "Connection error. Try again." }]);
+      setMessages((m) => [...m, { role: "ai", text: lang === "fr" ? "Erreur de connexion. Réessayez." : lang === "ht" ? "Erè koneksyon. Eseye ankò." : "Connection error. Try again." }]);
     }
     setLoading(false);
   }
@@ -122,8 +122,8 @@ export default function StudyPage() {
     return (
       <div className="max-w-3xl mx-auto px-6 py-20 text-center">
         <p className="text-5xl mb-4">📚</p>
-        <p className="text-stone-500">{lang === "fr" ? "Étude non trouvée" : "Study not found"}</p>
-        <Link href="/etude" className="text-amber-600 hover:underline mt-4 block">← {lang === "fr" ? "Retour" : "Back"}</Link>
+        <p className="text-stone-500">{lang === "fr" ? "Étude non trouvée" : lang === "ht" ? "Etid pa jwenn" : "Study not found"}</p>
+        <Link href="/etude" className="text-amber-600 hover:underline mt-4 block">← {lang === "fr" ? "Retour" : lang === "ht" ? "Tounen" : "Back"}</Link>
       </div>
     );
   }

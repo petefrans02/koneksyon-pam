@@ -185,7 +185,7 @@ export default function ChurchPage() {
       <div className="max-w-lg mx-auto px-6 py-20 text-center">
         <p className="text-5xl mb-4">⛪</p>
         <p className="text-stone-500">{lang === "fr" ? "Église non trouvée" : lang === "ht" ? "Legliz pa jwenn" : "Church not found"}</p>
-        <Link href="/eglise" className="text-blue-500 hover:underline mt-4 block">← {lang === "fr" ? "Retour" : "Back"}</Link>
+        <Link href="/eglise" className="text-blue-500 hover:underline mt-4 block">← {lang === "fr" ? "Retour" : lang === "ht" ? "Tounen" : "Back"}</Link>
       </div>
     );
   }

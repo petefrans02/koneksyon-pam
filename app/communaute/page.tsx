@@ -56,10 +56,10 @@ export default function CommunautePage() {
       {/* Stats bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
         {[
-          { label: lang === "fr" ? "Groupes actifs" : "Gwoup aktif", value: groups.length.toString(), icon: "🏠" },
-          { label: lang === "fr" ? "Membres" : "Manm", value: "24.5K+", icon: "👥" },
+          { label: lang === "fr" ? "Groupes actifs" : lang === "ht" ? "Gwoup aktif" : "Active groups", value: groups.length.toString(), icon: "🏠" },
+          { label: lang === "fr" ? "Membres" : lang === "ht" ? "Manm" : "Members", value: "24.5K+", icon: "👥" },
           { label: lang === "fr" ? "Débats ouverts" : lang === "ht" ? "Deba ouvè" : "Open debates", value: "48", icon: "💬" },
-          { label: lang === "fr" ? "Nations" : "Nasyon", value: "12+", icon: "🌍" },
+          { label: lang === "fr" ? "Nations" : lang === "ht" ? "Nasyon" : "Nations", value: "12+", icon: "🌍" },
         ].map((s) => (
           <div key={s.label} className="bg-white rounded-2xl border border-blue-50 p-4 text-center">
             <span className="text-2xl block mb-1">{s.icon}</span>

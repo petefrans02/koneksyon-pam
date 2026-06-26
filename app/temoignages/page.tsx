@@ -25,7 +25,7 @@ function timeAgo(date: string, lang: string): string {
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `${hours}h`;
   const days = Math.floor(hours / 24);
-  return `${days}${lang === "fr" ? "j" : "d"}`;
+  return `${days}${lang === "fr" ? "j" : lang === "ht" ? "j" : "d"}`;
 }
 
 export default function TemoignagesPage() {
@@ -112,7 +112,7 @@ export default function TemoignagesPage() {
       ) : testimonies.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-4xl mb-3">✨</p>
-          <p className="text-stone-500">{lang === "fr" ? "Aucun témoignage pour le moment. Partagez le vôtre !" : "No testimonies yet. Share yours!"}</p>
+          <p className="text-stone-500">{lang === "fr" ? "Aucun témoignage pour le moment. Partagez le vôtre !" : lang === "ht" ? "Pa gen temwayaj pou kounye a. Pataje pa ou !" : "No testimonies yet. Share yours!"}</p>
         </div>
       ) : (
         <div className="space-y-4">
