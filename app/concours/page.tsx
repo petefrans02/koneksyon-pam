@@ -259,6 +259,10 @@ export default function ConcoursPage() {
                   {l === "fr" ? "Participer" : l === "ht" ? "Patisipe" : "Participate"} →
                 </Link>
               )}
+              <Link href="/concours/hall-of-fame"
+                className="inline-flex items-center gap-2 border border-[#c5a84f]/30 hover:border-[#c5a84f]/60 text-[#c5a84f] font-bold text-sm px-7 py-3.5 rounded-full transition-all duration-200">
+                🏆 {l === "fr" ? "Hall of Fame" : "Hall of Fame"}
+              </Link>
               {live.length > 0 && (
                 <Link href={`/concours/${live[0].id}`}
                   className="inline-flex items-center gap-2 border border-white/20 hover:border-white/50 text-white font-bold text-sm px-7 py-3.5 rounded-full transition-all duration-200 backdrop-blur-sm">

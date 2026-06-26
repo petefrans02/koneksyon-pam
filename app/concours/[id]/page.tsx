@@ -5,6 +5,8 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { supabase, signInWithGoogle } from "@/lib/supabase";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import Countdown from "@/app/components/Countdown";
+import ToastNotifications from "@/app/components/ToastNotifications";
 
 type Lang = "fr" | "ht" | "en";
 type Status = "upcoming" | "active" | "voting" | "completed";
@@ -27,6 +29,7 @@ interface Contest {
   current_question: number;
   max_participants: number;
   created_by: string;
+  start_at?: string | null;
 }
 
 interface Question {
@@ -227,6 +230,9 @@ export default function ContestPage() {
   return (
     <div className="bg-white min-h-screen">
 
+      {/* Real-time toast notifications */}
+      <ToastNotifications contestId={id} lang={l} />
+
       {/* Auth modal */}
       {showAuthModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -313,6 +319,16 @@ export default function ContestPage() {
               </h1>
               {contest.description && (
                 <p className="text-white/40 text-sm max-w-xl leading-relaxed">{contest.description}</p>
+              )}
+
+              {/* Countdown for upcoming contests */}
+              {contest.status === "upcoming" && contest.start_at && (
+                <div className="mt-5">
+                  <p className="text-white/30 text-[10px] uppercase tracking-widest mb-3">
+                    {l === "fr" ? "Le concours commence dans" : l === "ht" ? "Konkou a kòmanse nan" : "Contest starts in"}
+                  </p>
+                  <Countdown targetDate={contest.start_at} lang={l} />
+                </div>
               )}
             </div>
 
