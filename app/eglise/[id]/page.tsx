@@ -22,6 +22,9 @@ interface Post {
   title: string;
   content: string;
   created_at: string;
+  author_name?: string;
+  author_avatar?: string;
+  author_id?: string;
 }
 
 interface JoinRequest {
@@ -456,9 +459,22 @@ export default function ChurchPage() {
         <div className="space-y-4">
           {filteredPosts.map((post) => (
             <div key={post.id} className="bg-white rounded-2xl border border-stone-200 p-6 hover:shadow-md transition-shadow">
+              {/* Author row */}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white text-sm font-bold shrink-0 overflow-hidden">
+                  {post.author_avatar ? (
+                    <img src={post.author_avatar} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    (post.author_name || "?")[0].toUpperCase()
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-stone-800">{post.author_name || "Anonyme"}</p>
+                  <p className="text-xs text-stone-400">{new Date(post.created_at).toLocaleDateString(lang === "en" ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" })}</p>
+                </div>
+              </div>
               <h3 className="font-bold text-stone-900 text-lg mb-2">{post.title}</h3>
               <p className="text-stone-700 leading-relaxed whitespace-pre-line">{post.content}</p>
-              <p className="text-xs text-stone-400 mt-3">{new Date(post.created_at).toLocaleDateString()}</p>
             </div>
           ))}
         </div>
