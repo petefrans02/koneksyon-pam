@@ -3,6 +3,7 @@ import RequireAuth from "@/app/components/RequireAuth";
 import { useLang } from "@/lib/LangContext";
 import { useState } from "react";
 import Link from "next/link";
+import MissionBanner from "@/app/components/MissionBanner";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface LangBlock { verse: string; missingWord: string; hint: string; options: string[]; }
@@ -645,6 +646,7 @@ export default function JeuPage() {
         {mode === "devine"   && <DevineVerset lang={safeLang} onBack={() => setMode(null)} />}
         {mode === "vraifaux" && <VraiFaux     lang={safeLang} onBack={() => setMode(null)} />}
         {mode === "speaker"  && <QuiADit      lang={safeLang} onBack={() => setMode(null)} />}
+        {!mode && <div className="mt-6"><MissionBanner variant="card" /></div>}
       </div>
     </RequireAuth>
   );

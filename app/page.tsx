@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import NextStep from "@/app/components/NextStep";
 import ShareButton from "@/app/components/ShareButton";
+import MissionBanner from "@/app/components/MissionBanner";
 
 type Lang = "fr" | "ht" | "en";
 
@@ -344,6 +345,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ══════ MISSION BANNER ══════ */}
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-4">
+        <MissionBanner variant="card" />
+      </section>
+
       {/* ══════ NEXT STEP ══════ */}
       <NextStep context="default" title={
         l === "fr" ? "Par où voulez-vous commencer ?" :
@@ -373,6 +379,9 @@ export default function Home() {
             </Link>
             <Link href="/decouvrir" className="text-white/40 text-xs hover:text-white transition-colors font-medium">
               {l === "fr" ? "Découvrir" : l === "ht" ? "Dekouvri" : "Discover"}
+            </Link>
+            <Link href="/don" className="text-rose-400/60 text-xs hover:text-rose-300 transition-colors font-bold">
+              ❤ {l === "fr" ? "Soutenir" : l === "ht" ? "Sipòte" : "Support"}
             </Link>
           </div>
           <p className="text-white/20 text-[10px]">© {new Date().getFullYear()} KONEKSYON PAM</p>

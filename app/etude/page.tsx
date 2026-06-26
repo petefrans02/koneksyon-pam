@@ -5,6 +5,7 @@ import { gl } from "@/lib/lang-helper";
 import { useLang } from "@/lib/LangContext";
 import { studies } from "@/lib/studies-data";
 import Link from "next/link";
+import MissionBanner from "@/app/components/MissionBanner";
 
 export default function EtudePage() {
   const { lang } = useLang();
@@ -60,6 +61,9 @@ export default function EtudePage() {
             </div>
           </Link>
         ))}
+      </div>
+      <div className="mt-8">
+        <MissionBanner variant="card" />
       </div>
     </div>
     </RequireAuth>

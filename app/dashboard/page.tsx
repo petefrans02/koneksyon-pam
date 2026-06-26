@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase, signInWithGoogle } from "@/lib/supabase";
 import { SECTIONS } from "@/app/components/NavBar";
+import MissionBanner from "@/app/components/MissionBanner";
 
 type Lang = "fr" | "ht" | "en";
 
@@ -25,13 +26,13 @@ interface UserStats {
 }
 
 const VERSE_OF_DAY = [
-  { ref: "Jérémie 29:11", fr: "Car je connais les projets que j'ai formés sur vous — projets de paix et non de malheur.", ht: "Paske mwen konnen plan mwen genyen pou nou — plan pou fè nou jwenn lapè.", en: "For I know the plans I have for you — plans to prosper you and not to harm you." },
-  { ref: "Philippiens 4:13", fr: "Je puis tout par celui qui me fortifie.", ht: "Mwen ka fè tout bagay nan Kris la ki ban mwen fòs.", en: "I can do all things through Christ who strengthens me." },
-  { ref: "Ésaïe 41:10", fr: "Ne crains rien, car je suis avec toi.", ht: "Pa pè, paske mwen avèk ou.", en: "Do not fear, for I am with you." },
-  { ref: "Psaumes 23:1", fr: "L'Éternel est mon berger : je ne manquerai de rien.", ht: "Seyè a se gadò mwen — mwen p ap manke anyen.", en: "The Lord is my shepherd — I lack nothing." },
-  { ref: "Romains 8:28", fr: "Toutes choses concourent au bien de ceux qui aiment Dieu.", ht: "Tout bagay travay ansanm pou byen moun ki renmen Bondye.", en: "In all things God works for the good of those who love him." },
-  { ref: "Jean 3:16", fr: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique.", ht: "Paske Bondye te renmen mond lan sitèlman li te bay Pitit li a ki fèk li.", en: "For God so loved the world that he gave his one and only Son." },
-  { ref: "2 Timothée 1:7", fr: "Dieu ne nous a pas donné un esprit de timidité, mais un esprit de force.", ht: "Bondye pa ba nou yon lespri pè, men yon lespri fòs.", en: "God has not given us a spirit of fear, but of power and love." },
+  { ref: { fr: "Jérémie 29:11", ht: "Jeremi 29:11", en: "Jeremiah 29:11" }, fr: "Car je connais les projets que j'ai formés sur vous — projets de paix et non de malheur.", ht: "Paske mwen konnen plan mwen genyen pou nou — plan pou fè nou jwenn lapè.", en: "For I know the plans I have for you — plans to prosper you and not to harm you." },
+  { ref: { fr: "Philippiens 4:13", ht: "Filipyen 4:13", en: "Philippians 4:13" }, fr: "Je puis tout par celui qui me fortifie.", ht: "Mwen ka fè tout bagay nan Kris la ki ban mwen fòs.", en: "I can do all things through Christ who strengthens me." },
+  { ref: { fr: "Ésaïe 41:10", ht: "Ezayi 41:10", en: "Isaiah 41:10" }, fr: "Ne crains rien, car je suis avec toi.", ht: "Pa pè, paske mwen avèk ou.", en: "Do not fear, for I am with you." },
+  { ref: { fr: "Psaumes 23:1", ht: "Sòm 23:1", en: "Psalm 23:1" }, fr: "L'Éternel est mon berger : je ne manquerai de rien.", ht: "Seyè a se gadò mwen — mwen p ap manke anyen.", en: "The Lord is my shepherd — I lack nothing." },
+  { ref: { fr: "Romains 8:28", ht: "Women 8:28", en: "Romans 8:28" }, fr: "Toutes choses concourent au bien de ceux qui aiment Dieu.", ht: "Tout bagay travay ansanm pou byen moun ki renmen Bondye.", en: "In all things God works for the good of those who love him." },
+  { ref: { fr: "Jean 3:16", ht: "Jan 3:16", en: "John 3:16" }, fr: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique.", ht: "Paske Bondye te renmen mond lan sitèlman li te bay Pitit li a ki fèk li.", en: "For God so loved the world that he gave his one and only Son." },
+  { ref: { fr: "2 Timothée 1:7", ht: "2 Timote 1:7", en: "2 Timothy 1:7" }, fr: "Dieu ne nous a pas donné un esprit de timidité, mais un esprit de force.", ht: "Bondye pa ba nou yon lespri pè, men yon lespri fòs.", en: "God has not given us a spirit of fear, but of power and love." },
 ];
 
 function getDayVerse() {
@@ -84,6 +85,14 @@ export default function DashboardPage() {
     signin: { fr: "Connectez-vous pour accéder à votre tableau de bord personnalisé.", ht: "Konekte pou jwenn tablo bò ou a.", en: "Sign in to access your personalized dashboard." },
     signinBtn: { fr: "Se connecter avec Google", ht: "Konekte ak Google", en: "Sign in with Google" },
     today: { fr: "Aujourd'hui", ht: "Jodi a", en: "Today" },
+    stats: { fr: "Statistiques", ht: "Estatistik", en: "Statistics" },
+    progression: { fr: "Progression", ht: "Pwogresyon", en: "Progression" },
+    current: { fr: "← vous", ht: "← ou", en: "← you" },
+    levelNames: {
+      fr: ["Disciple","Serviteur","Évangéliste","Missionnaire","Ancien","Pasteur","Docteur","Champion KP","Maître Biblik","Légende"],
+      ht: ["Disip","Sèvitè","Evanjelis","Misyonè","Ansyen","Pastè","Doktè","Chanpyon KP","Mèt Biblik","Lejann"],
+      en: ["Disciple","Servant","Evangelist","Missionary","Elder","Pastor","Doctor","KP Champion","Bible Master","Legend"],
+    },
   };
   const t = (k: keyof typeof txt) => txt[k][l];
 
@@ -177,7 +186,7 @@ export default function DashboardPage() {
             <blockquote className="text-white font-bold text-base leading-relaxed mb-3 italic max-w-lg">
               &ldquo;{verse[l as "fr"|"ht"|"en"]}&rdquo;
             </blockquote>
-            <p className="text-white/40 text-xs font-semibold">{verse.ref}</p>
+            <p className="text-white/40 text-xs font-semibold">{verse.ref[l]}</p>
           </div>
 
           {/* Live contests */}
@@ -202,7 +211,7 @@ export default function DashboardPage() {
 
           {/* Stats grid */}
           <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-3">📊 Statistiques</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-3">📊 {t("stats")}</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {[
                 { label: t("contests"), value: s.stats.contests, icon: "🏆" },
@@ -261,20 +270,21 @@ export default function DashboardPage() {
 
           {/* Level progression */}
           <div className="bg-white rounded-2xl border border-stone-100 p-5">
-            <p className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-4">⬆️ Progression</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-4">⬆️ {t("progression")}</p>
             <div className="space-y-1">
               {[
-                { icon: "🌱", name: "Disciple",       min: 0     },
-                { icon: "🌿", name: "Serviteur",      min: 200   },
-                { icon: "📢", name: "Évangéliste",    min: 500   },
-                { icon: "🌍", name: "Missionnaire",   min: 1000  },
-                { icon: "🕊️", name: "Ancien",         min: 2000  },
-                { icon: "📖", name: "Pasteur",        min: 3500  },
-                { icon: "🎓", name: "Docteur",        min: 5000  },
-                { icon: "🏆", name: "Champion KP",    min: 7500  },
-                { icon: "👑", name: "Maître Biblik", min: 10000 },
-                { icon: "⭐", name: "Légende",        min: 15000 },
+                { icon: "🌱", min: 0     },
+                { icon: "🌿", min: 200   },
+                { icon: "📢", min: 500   },
+                { icon: "🌍", min: 1000  },
+                { icon: "🕊️", min: 2000  },
+                { icon: "📖", min: 3500  },
+                { icon: "🎓", min: 5000  },
+                { icon: "🏆", min: 7500  },
+                { icon: "👑", min: 10000 },
+                { icon: "⭐", min: 15000 },
               ].map((lv, i) => {
+                const name = txt.levelNames[l][i];
                 const isCurrent = lv.min === s.currentLevel.min;
                 const reached = s.xp >= lv.min;
                 return (
@@ -282,9 +292,9 @@ export default function DashboardPage() {
                     isCurrent ? "bg-[#c5a84f]/10 border border-[#c5a84f]/30" : ""
                   }`}>
                     <span className={`text-base ${reached ? "" : "opacity-30"}`}>{lv.icon}</span>
-                    <span className={`flex-1 font-semibold ${reached ? "text-[#0f2044]" : "text-stone-300"}`}>{lv.name}</span>
+                    <span className={`flex-1 font-semibold ${reached ? "text-[#0f2044]" : "text-stone-300"}`}>{name}</span>
                     <span className={`text-[10px] font-bold ${isCurrent ? "text-[#c5a84f]" : "text-stone-300"}`}>
-                      {isCurrent ? "← vous" : `${lv.min} XP`}
+                      {isCurrent ? t("current") : `${lv.min} XP`}
                     </span>
                   </div>
                 );
@@ -292,6 +302,11 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Mission support banner */}
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 pb-8">
+        <MissionBanner variant="card" />
       </div>
     </div>
   );

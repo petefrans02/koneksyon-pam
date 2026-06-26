@@ -64,6 +64,10 @@ export default function NavBar() {
               className="hidden sm:flex items-center gap-1.5 text-white/50 text-[10px] font-bold uppercase tracking-wider hover:text-white transition-colors">
               🔍 {l === "fr" ? "Découvrir" : l === "ht" ? "Dekouvri" : "Discover"}
             </Link>
+            <Link href="/don"
+              className="hidden sm:flex items-center gap-1.5 text-rose-300/70 text-[10px] font-bold uppercase tracking-wider hover:text-rose-300 transition-colors">
+              ❤ {l === "fr" ? "Soutenir" : l === "ht" ? "Sipòte" : "Support"}
+            </Link>
             <div className="w-px h-4 bg-white/20 hidden sm:block" />
             {user && (
               <Link href="/dashboard"

@@ -3,6 +3,7 @@
 import { useLang } from "@/lib/LangContext";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
+import MissionBanner from "@/app/components/MissionBanner";
 
 type Lang = "fr" | "ht" | "en";
 
@@ -384,6 +385,10 @@ export default function ConcoursPage() {
               : "Koneksyon Pam invites you to grow in the Word of God through the most inspiring biblical contests in the world."}
           </p>
         </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-5 sm:px-8 pb-10">
+        <MissionBanner variant="card" />
       </div>
 
       <style jsx global>{`

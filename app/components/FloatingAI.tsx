@@ -44,7 +44,7 @@ export default function FloatingAI() {
       const data = await res.json();
       setMessages((m) => [...m, { role: "ai", text: data.answer || "..." }]);
     } catch {
-      setMessages((m) => [...m, { role: "ai", text: "Erreur. Réessayez." }]);
+      setMessages((m) => [...m, { role: "ai", text: lang === "fr" ? "Erreur. Réessayez." : lang === "ht" ? "Erè. Eseye ankò." : "Error. Please try again." }]);
     }
     setLoading(false);
   }
