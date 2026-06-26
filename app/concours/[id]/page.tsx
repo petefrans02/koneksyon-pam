@@ -139,8 +139,8 @@ export default function ContestPage() {
         data.error === "Contest is full"
           ? (l === "fr" ? "Le concours est complet." : l === "ht" ? "Konkou a plen." : "Contest is full.")
           : data.error === "Registration closed"
-          ? (l === "fr" ? "Les inscriptions sont fermées." : "Enskripsyon yo fèmen.")
-          : (l === "fr" ? "Une erreur est survenue. Réessayez." : "Yon erè rive. Eseye ankò.")
+          ? (l === "fr" ? "Les inscriptions sont fermées." : l === "ht" ? "Enskripsyon yo fèmen." : "Registration is closed.")
+          : (l === "fr" ? "Une erreur est survenue. Réessayez." : l === "ht" ? "Yon erè rive. Eseye ankò." : "An error occurred. Please try again.")
       );
     }
     setJoining(false);
@@ -195,10 +195,10 @@ export default function ContestPage() {
   };
 
   const statusMeta: Record<Status, { label: string; color: string }> = {
-    upcoming: { label: l === "fr" ? "Inscriptions ouvertes" : "Enskripsyon louvri", color: "text-blue-500" },
-    active: { label: l === "fr" ? "En cours" : "Kap fèt", color: "text-green-500" },
-    voting: { label: l === "fr" ? "Vote en cours" : "Vote kap fèt", color: "text-amber-500" },
-    completed: { label: l === "fr" ? "Terminé" : "Fini", color: "text-stone-400" },
+    upcoming: { label: l === "fr" ? "Inscriptions ouvertes" : l === "ht" ? "Enskripsyon louvri" : "Open registrations", color: "text-blue-500" },
+    active: { label: l === "fr" ? "En cours" : l === "ht" ? "Kap fèt" : "Live now", color: "text-green-500" },
+    voting: { label: l === "fr" ? "Vote en cours" : l === "ht" ? "Vote kap fèt" : "Voting open", color: "text-amber-500" },
+    completed: { label: l === "fr" ? "Terminé" : l === "ht" ? "Fini" : "Completed", color: "text-stone-400" },
   };
 
   if (loading) {
@@ -253,7 +253,7 @@ export default function ContestPage() {
                 {l === "fr" ? "Connectez-vous pour participer" : l === "ht" ? "Konekte pou patisipe" : "Sign in to participate"}
               </h2>
               <p className="text-white/50 text-sm mt-1">
-                {l === "fr" ? `Concours : ${contest.title}` : `Konkou : ${contest.title}`}
+                {l === "en" ? `Contest: ${contest.title}` : l === "ht" ? `Konkou : ${contest.title}` : `Concours : ${contest.title}`}
               </p>
             </div>
 
@@ -356,7 +356,7 @@ export default function ContestPage() {
           {isOrganizer && (
             <div className="bg-[#f8f6f2] rounded-2xl p-6 flex flex-col gap-4">
               <p className="text-[10px] font-bold uppercase tracking-wider text-[#0b0f1a]/50">
-                {l === "fr" ? "Contrôles organisateur" : "Kontwòl ògànizatè"}
+                {l === "fr" ? "Contrôles organisateur" : l === "ht" ? "Kontwòl ògànizatè" : "Organizer controls"}
               </p>
               <div className="flex flex-wrap gap-3">
                 {contest.status === "upcoming" && (
@@ -436,10 +436,10 @@ export default function ContestPage() {
                     <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-2xl shrink-0">✓</div>
                     <div>
                       <p className="text-green-700 font-black text-lg">
-                        {l === "fr" ? "Inscription confirmée !" : "Enskripsyon konfime !"}
+                        {l === "fr" ? "Inscription confirmée !" : l === "ht" ? "Enskripsyon konfime !" : "Registration confirmed!"}
                       </p>
                       <p className="text-stone-400 text-sm mt-0.5">
-                        {l === "fr" ? "Le concours démarrera bientôt. Revenez quand il est en cours." : "Konkou a ap kòmanse byento. Tounen lè li kap fèt."}
+                        {l === "fr" ? "Le concours démarrera bientôt. Revenez quand il est en cours." : l === "ht" ? "Konkou a ap kòmanse byento. Tounen lè li kap fèt." : "The contest will start soon. Come back when it's live."}
                       </p>
                     </div>
                   </div>
@@ -447,7 +447,7 @@ export default function ContestPage() {
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                     <div className="flex-1">
                       <p className="text-[10px] font-black uppercase tracking-widest text-[#1d4ed8] mb-2">
-                        {l === "fr" ? "Championnat Biblique" : "Chanpyona Biblik"}
+                        {l === "fr" ? "Championnat Biblique" : l === "ht" ? "Chanpyona Biblik" : "Biblical Championship"}
                       </p>
                       <p className="text-[#0f2044] font-black text-xl mb-1">
                         {l === "fr" ? "Rejoignez le concours" : l === "ht" ? "Antre nan konkou a" : "Join the contest"}
@@ -457,16 +457,16 @@ export default function ContestPage() {
                           <div className="h-full bg-[#1d4ed8] rounded-full"
                             style={{ width: `${Math.min(100, (participants.length / (contest.max_participants || 1)) * 100)}%` }} />
                         </div>
-                        <span className="text-stone-400 text-xs">{participants.length}/{contest.max_participants} {l === "fr" ? "places" : "plas"}</span>
+                        <span className="text-stone-400 text-xs">{participants.length}/{contest.max_participants} {l === "fr" ? "places" : l === "ht" ? "plas" : "spots"}</span>
                         {participants.length >= contest.max_participants * 0.8 && (
                           <span className="text-red-500 text-[10px] font-bold">
-                            {l === "fr" ? "Presque complet !" : "Prèske plen !"}
+                            {l === "fr" ? "Presque complet !" : l === "ht" ? "Prèske plen !" : "Almost full!"}
                           </span>
                         )}
                       </div>
                       {!currentUser && (
                         <p className="text-[#1d4ed8] text-xs mt-2">
-                          {l === "fr" ? "Connexion Google gratuite et rapide." : "Koneksyon Google gratis epi rapid."}
+                          {l === "fr" ? "Connexion Google gratuite et rapide." : l === "ht" ? "Koneksyon Google gratis epi rapid." : "Free and fast Google sign-in."}
                         </p>
                       )}
                       {joinError && <p className="text-red-500 text-xs mt-2 font-semibold">{joinError}</p>}
@@ -476,7 +476,7 @@ export default function ContestPage() {
                         disabled={joining || participants.length >= contest.max_participants}
                         className="shrink-0 bg-[#0f2044] hover:bg-[#1d4ed8] disabled:opacity-40 disabled:cursor-not-allowed text-white px-8 py-3.5 rounded-xl font-black text-sm transition-all duration-200 flex items-center gap-2 hover:shadow-lg hover:shadow-[#1d4ed8]/20">
                         {joining ? (
-                          <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />{l === "fr" ? "Inscription..." : "Ap enskri..."}</>
+                          <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />{l === "fr" ? "Inscription..." : l === "ht" ? "Ap enskri..." : "Registering..."}</>
                         ) : participants.length >= contest.max_participants ? txt.full : (
                           <>{l === "fr" ? "S'inscrire" : l === "ht" ? "Enskri" : "Register"} →</>
                         )}
@@ -502,14 +502,14 @@ export default function ContestPage() {
                 <div>
                   <p className="font-black text-amber-800 text-sm">{txt.votePhase}</p>
                   <p className="text-amber-600 text-xs mt-0.5">
-                    {l === "fr" ? "Votez pour le participant qui vous a le plus inspiré." : "Vote pou patisipan ki te enspire ou plis la."}
+                    {l === "fr" ? "Votez pour le participant qui vous a le plus inspiré." : l === "ht" ? "Vote pou patisipan ki te enspire ou plis la." : "Vote for the participant who inspired you the most."}
                   </p>
                 </div>
               </div>
 
               {/* Total votes count */}
               <p className="text-stone-400 text-xs mb-4 text-center">
-                {sortedParticipants.reduce((s, p) => s + p.votes_count, 0)} {l === "fr" ? "votes au total" : "vòt an total"}
+                {sortedParticipants.reduce((s, p) => s + p.votes_count, 0)} {l === "fr" ? "votes au total" : l === "ht" ? "vòt an total" : "total votes"}
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4">
@@ -544,7 +544,7 @@ export default function ContestPage() {
                         {/* Vote progress bar */}
                         <div className="mb-4">
                           <div className="flex justify-between text-[10px] text-stone-400 mb-1">
-                            <span>{pct}% {l === "fr" ? "des votes" : "vòt yo"}</span>
+                            <span>{pct}% {l === "fr" ? "des votes" : l === "ht" ? "vòt yo" : "of votes"}</span>
                             <span>{p.votes_count} ❤️</span>
                           </div>
                           <div className="h-1.5 bg-stone-100 rounded-full overflow-hidden">
@@ -564,7 +564,7 @@ export default function ContestPage() {
                             {voting === p.id ? (
                               <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                             ) : (
-                              <>❤️ {txt.vote}{isMe ? ` (${l === "fr" ? "vous" : "ou"})` : ""}</>
+                              <>❤️ {txt.vote}{isMe ? ` (${l === "fr" ? "vous" : l === "ht" ? "ou" : "you"})` : ""}</>
                             )}
                           </button>
                         )}
@@ -590,7 +590,7 @@ export default function ContestPage() {
 
                   <div className="relative z-10">
                     <p className="text-[#c5a84f] text-[10px] font-black uppercase tracking-[0.3em] mb-6">
-                      🏆 {l === "fr" ? "Champion Biblique KONEKSYON PAM" : "Chanpyon Biblik KONEKSYON PAM"}
+                      🏆 {l === "fr" ? "Champion Biblique KONEKSYON PAM" : l === "ht" ? "Chanpyon Biblik KONEKSYON PAM" : "KONEKSYON PAM Biblical Champion"}
                     </p>
 
                     {sortedParticipants[0].user_avatar ? (
@@ -614,7 +614,7 @@ export default function ContestPage() {
                       return (
                         <div className="mt-6 pt-6 border-t border-white/10">
                           <p className="text-white/30 text-[10px] uppercase tracking-widest mb-3">
-                            ❤️ {l === "fr" ? "Prix du Public" : "Pri Piblik"}
+                            ❤️ {l === "fr" ? "Prix du Public" : l === "ht" ? "Pri Piblik" : "People's Choice"}
                           </p>
                           <p className="text-white font-bold">{voteChamp.user_name}</p>
                           <p className="text-white/40 text-xs">{voteChamp.votes_count} {txt.votes}</p>
@@ -643,7 +643,7 @@ export default function ContestPage() {
                 <div className="py-10 text-center">
                   <div className="text-4xl mb-2 opacity-20">👥</div>
                   <p className="text-stone-300 text-xs">
-                    {l === "fr" ? "Aucun participant encore." : "Pa gen patisipan ankò."}
+                    {l === "fr" ? "Aucun participant encore." : l === "ht" ? "Pa gen patisipan ankò." : "No participants yet."}
                   </p>
                 </div>
               ) : (
@@ -666,7 +666,7 @@ export default function ContestPage() {
                         )}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-bold text-[#0b0f1a] truncate">
-                            {p.user_name}{isMe && <span className="text-[#c5a84f] text-[10px] ml-1">(moi)</span>}
+                            {p.user_name}{isMe && <span className="text-[#c5a84f] text-[10px] ml-1">({l === "fr" ? "moi" : l === "ht" ? "mwen" : "me"})</span>}
                           </p>
                           <p className="text-[10px] text-stone-400">
                             {questions.length > 0 ? `${correctCount}/${questions.length} · ` : ""}{p.votes_count} ❤️

@@ -193,23 +193,23 @@ export default function ParticiperPage() {
   const totalScore = myParticipant?.score ?? 0;
 
   const txt = {
-    score: l === "fr" ? "Score" : "Pwen",
-    pts: l === "fr" ? "pts" : "pwen",
-    q: l === "fr" ? "Question" : "Kesyon",
-    of: l === "fr" ? "sur" : "sou",
-    correct: l === "fr" ? "Bonne réponse" : "Bon repons",
-    wrong: l === "fr" ? "Mauvaise réponse" : "Move repons",
-    timeUp: l === "fr" ? "Temps écoulé" : "Tan fini",
-    points: l === "fr" ? "points" : "pwen",
-    waitingStart: l === "fr" ? "Le concours commence bientôt. Restez ici." : "Konkou a ap kòmanse byento. Rete la.",
-    waitingVote: l === "fr" ? "Excellent ! Vous avez répondu à toutes les questions. En attente du vote du public..." : "Ekselan ! Ou reponn tout kesyon yo. Ap tann vòt piblik la...",
-    voting: l === "fr" ? "Vote du public en cours !" : "Vòt piblik la kap fèt !",
-    completed: l === "fr" ? "Concours terminé" : "Konkou a fini",
-    finalScore: l === "fr" ? "Score final" : "Pwen final",
-    seeResults: l === "fr" ? "Voir le classement" : "Wè klasman an",
-    ref: l === "fr" ? "Référence" : "Referans",
-    connecting: l === "fr" ? "Connexion à la salle..." : "Koneksyon nan sal la...",
-    answered: l === "fr" ? "réponses données" : "repons bay",
+    score: l === "fr" ? "Score" : l === "ht" ? "Pwen" : "Score",
+    pts: l === "fr" ? "pts" : l === "ht" ? "pwen" : "pts",
+    q: l === "fr" ? "Question" : l === "ht" ? "Kesyon" : "Question",
+    of: l === "fr" ? "sur" : l === "ht" ? "sou" : "of",
+    correct: l === "fr" ? "Bonne réponse" : l === "ht" ? "Bon repons" : "Correct!",
+    wrong: l === "fr" ? "Mauvaise réponse" : l === "ht" ? "Move repons" : "Wrong answer",
+    timeUp: l === "fr" ? "Temps écoulé" : l === "ht" ? "Tan fini" : "Time's up!",
+    points: l === "fr" ? "points" : l === "ht" ? "pwen" : "points",
+    waitingStart: l === "fr" ? "Le concours commence bientôt. Restez ici." : l === "ht" ? "Konkou a ap kòmanse byento. Rete la." : "The contest starts soon. Stay here.",
+    waitingVote: l === "fr" ? "Excellent ! Vous avez répondu à toutes les questions. En attente du vote du public..." : l === "ht" ? "Ekselan ! Ou reponn tout kesyon yo. Ap tann vòt piblik la..." : "Excellent! You answered all questions. Waiting for the public vote...",
+    voting: l === "fr" ? "Vote du public en cours !" : l === "ht" ? "Vòt piblik la kap fèt !" : "Public vote is open!",
+    completed: l === "fr" ? "Concours terminé" : l === "ht" ? "Konkou a fini" : "Contest finished",
+    finalScore: l === "fr" ? "Score final" : l === "ht" ? "Pwen final" : "Final score",
+    seeResults: l === "fr" ? "Voir le classement" : l === "ht" ? "Wè klasman an" : "See rankings",
+    ref: l === "fr" ? "Référence" : l === "ht" ? "Referans" : "Reference",
+    connecting: l === "fr" ? "Connexion à la salle..." : l === "ht" ? "Koneksyon nan sal la..." : "Connecting to the room...",
+    answered: l === "fr" ? "réponses données" : l === "ht" ? "repons bay" : "answers given",
   };
 
   // ─── SCREENS ──────────────────────────────────────────────────────────────
@@ -270,7 +270,7 @@ export default function ParticiperPage() {
           <div className="text-5xl mb-6">❤️</div>
           <p className="text-white font-black text-xl mb-2">{txt.voting}</p>
           <p className="text-white/40 text-sm mb-8">
-            {l === "fr" ? "Le public vote pour son favori. Suivez le classement en direct." : "Piblik la ap vote pou favori li. Swiv klasman an an dirèk."}
+            {l === "fr" ? "Le public vote pour son favori. Suivez le classement en direct." : l === "ht" ? "Piblik la ap vote pou favori li. Swiv klasman an an dirèk." : "The public is voting for their favorite. Follow the live rankings."}
           </p>
           <ScoreCard score={totalScore} answered={totalAnswered} total={questions.length} txt={txt} />
           <Link href={`/concours/${id}`}
@@ -367,7 +367,7 @@ export default function ParticiperPage() {
               </div>
             )}
             {phase === "feedback" && <span className="text-[10px] text-white/20 font-bold uppercase tracking-wider">
-              {l === "fr" ? "Prochaine dans 3s..." : "Pwochen nan 3s..."}
+              {l === "fr" ? "Prochaine dans 3s..." : l === "ht" ? "Pwochen nan 3s..." : "Next in 3s..."}
             </span>}
           </div>
 

@@ -134,7 +134,7 @@ function ContestCard({ c, l }: { c: Contest; l: Lang }) {
             />
           </span>
           <span className={`font-bold ${pct > 80 ? "text-red-500" : "text-stone-400"}`}>
-            {pct > 80 ? (l === "fr" ? "Presque complet" : "Plis plen") : `${pct}%`}
+            {pct > 80 ? (l === "fr" ? "Presque complet" : l === "ht" ? "Plis plen" : "Almost full") : `${pct}%`}
           </span>
         </div>
 
@@ -272,7 +272,7 @@ export default function ConcoursPage() {
               )}
               {live.length === 0 && coming.length === 0 && (
                 <span className="inline-flex items-center gap-2 border border-white/20 text-white/60 font-bold text-sm px-7 py-3.5 rounded-full">
-                  {l === "fr" ? "Bientôt disponible" : "Byento disponib"}
+                  {l === "fr" ? "Bientôt disponible" : l === "ht" ? "Byento disponib" : "Coming soon"}
                 </span>
               )}
             </div>
@@ -287,12 +287,12 @@ export default function ConcoursPage() {
       <div className="bg-[#0f2044] border-b border-white/5">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <StatCard icon="🌍" value={12} label={l === "fr" ? "Pays représentés" : "Peyi reprezante"} suffix="+" />
-            <StatCard icon="👥" value={platformStats.participants} label={l === "fr" ? "Participants" : "Patisipan"} />
-            <StatCard icon="🏆" value={platformStats.contests} label={l === "fr" ? "Concours organisés" : "Konkou òganize"} />
-            <StatCard icon="📖" value={platformStats.questions || 18} label={l === "fr" ? "Questions bibliques" : "Kesyon biblik"} />
-            <StatCard icon="❤️" value={platformStats.votes} label={l === "fr" ? "Votes du public" : "Vòt piblik" } />
-            <StatCard icon="⭐" value={100} label={l === "fr" ? "Satisfaction" : "Satisfaksyon"} suffix="%" />
+            <StatCard icon="🌍" value={12} label={l === "fr" ? "Pays représentés" : l === "ht" ? "Peyi reprezante" : "Countries"} suffix="+" />
+            <StatCard icon="👥" value={platformStats.participants} label={l === "fr" ? "Participants" : l === "ht" ? "Patisipan" : "Participants"} />
+            <StatCard icon="🏆" value={platformStats.contests} label={l === "fr" ? "Concours organisés" : l === "ht" ? "Konkou òganize" : "Contests held"} />
+            <StatCard icon="📖" value={platformStats.questions || 18} label={l === "fr" ? "Questions bibliques" : l === "ht" ? "Kesyon biblik" : "Biblical questions"} />
+            <StatCard icon="❤️" value={platformStats.votes} label={l === "fr" ? "Votes du public" : l === "ht" ? "Vòt piblik" : "Public votes"} />
+            <StatCard icon="⭐" value={100} label={l === "fr" ? "Satisfaction" : l === "ht" ? "Satisfaksyon" : "Satisfaction"} suffix="%" />
           </div>
         </div>
       </div>
@@ -308,7 +308,7 @@ export default function ConcoursPage() {
           <div className="text-center py-24 rounded-3xl border border-dashed border-stone-200">
             <div className="text-6xl mb-4 opacity-30">📖</div>
             <p className="text-stone-400 text-sm font-medium">
-              {l === "fr" ? "Aucun concours pour le moment. Revenez bientôt." : "Pa gen konkou pou kounye a. Tounen byento."}
+              {l === "fr" ? "Aucun concours pour le moment. Revenez bientôt." : l === "ht" ? "Pa gen konkou pou kounye a. Tounen byento." : "No contests at the moment. Check back soon."}
             </p>
           </div>
         ) : (
@@ -340,7 +340,7 @@ export default function ConcoursPage() {
                       {l === "fr" ? "Inscriptions ouvertes" : l === "ht" ? "Enskripsyon louvri" : "Open registrations"}
                     </h2>
                     <p className="text-stone-400 text-xs mt-0.5">
-                      {l === "fr" ? "Rejoignez avant le début — places limitées" : "Antre anvan kòmansman — plas limite"}
+                      {l === "fr" ? "Rejoignez avant le début — places limitées" : l === "ht" ? "Antre anvan kòmansman — plas limite" : "Join before it starts — limited spots"}
                     </p>
                   </div>
                   <div className="flex-1 h-px bg-gradient-to-r from-[#1d4ed8]/20 to-transparent" />
@@ -374,12 +374,14 @@ export default function ConcoursPage() {
         <div className="max-w-2xl mx-auto px-5 text-center">
           <div className="text-4xl mb-4 opacity-40">✝</div>
           <h3 className="text-white font-black text-2xl mb-3">
-            {l === "fr" ? "Une Mission • Un Dieu • Une Vision" : "Yon Misyon • Yon Bondye • Yon Vizyon"}
+            {l === "fr" ? "Une Mission • Un Dieu • Une Vision" : l === "ht" ? "Yon Misyon • Yon Bondye • Yon Vizyon" : "One Mission • One God • One Vision"}
           </h3>
           <p className="text-white/40 text-sm leading-relaxed">
             {l === "fr"
               ? "Koneksyon Pam vous invite à grandir dans la Parole de Dieu à travers les concours bibliques les plus inspirants du monde."
-              : "Koneksyon Pam envite ou grandi nan Pawòl Bondye a atravè konkou biblik ki pi enpresyonan nan mond lan."}
+              : l === "ht"
+              ? "Koneksyon Pam envite ou grandi nan Pawòl Bondye a atravè konkou biblik ki pi enpresyonan nan mond lan."
+              : "Koneksyon Pam invites you to grow in the Word of God through the most inspiring biblical contests in the world."}
           </p>
         </div>
       </div>
