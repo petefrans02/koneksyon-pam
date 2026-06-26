@@ -3,8 +3,11 @@
 import { useState, useEffect } from "react";
 import { supabase, signInWithGoogle, signOut } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
+import { useLang } from "@/lib/LangContext";
+import Link from "next/link";
 
 export default function AuthButton() {
+  const { lang } = useLang();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
@@ -61,17 +64,26 @@ export default function AuthButton() {
       </button>
 
       {showMenu && (
-        <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border border-stone-200 py-2 w-48 z-50">
-          <div className="px-4 py-2 border-b border-stone-100">
-            <p className="text-sm font-medium text-stone-900">{name}</p>
-            <p className="text-xs text-stone-400">{user.email}</p>
+        <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border border-stone-200 py-2 w-52 z-50">
+          <div className="px-4 py-3 border-b border-stone-100">
+            <p className="text-sm font-semibold text-stone-900">{name}</p>
+            <p className="text-xs text-stone-400 truncate">{user.email}</p>
           </div>
-          <button
-            onClick={() => { signOut(); setShowMenu(false); }}
-            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+          <Link
+            href="/mes-groupes"
+            onClick={() => setShowMenu(false)}
+            className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-stone-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
           >
-            Déconnexion
-          </button>
+            ⛪ {lang === "fr" ? "Mes groupes" : lang === "ht" ? "Gwoup mwen yo" : "My groups"}
+          </Link>
+          <div className="border-t border-stone-100 mt-1 pt-1">
+            <button
+              onClick={() => { signOut(); setShowMenu(false); }}
+              className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+            >
+              {lang === "fr" ? "Déconnexion" : lang === "ht" ? "Dekonekte" : "Sign out"}
+            </button>
+          </div>
         </div>
       )}
     </div>
