@@ -1,332 +1,281 @@
 "use client";
 
 import { useLang } from "@/lib/LangContext";
-import { t } from "@/lib/translations";
 import Link from "next/link";
-import BibleQuiz from "./components/BibleQuiz";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const versePool = [
-  { ref: "Jean 3:16", fr: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.", ht: "Paske Bondye sitèlman renmen lèzòm, li bay sèl Pitit li a pou tout moun ki kwè nan li." },
-  { ref: "Philippiens 4:13", fr: "Je puis tout par celui qui me fortifie.", ht: "Mwen ka fè tout bagay nan Kris la ki ban mwen fòs." },
-  { ref: "Psaumes 23:1", fr: "L'Éternel est mon berger : je ne manquerai de rien.", ht: "Seyè a se gadò mwen; mwen p ap manke anyen." },
-  { ref: "Romains 8:28", fr: "Nous savons, du reste, que toutes choses concourent au bien de ceux qui aiment Dieu.", ht: "Nou konnen ke tout bagay travay ansanm pou byen moun ki renmen Bondye." },
-  { ref: "Ésaïe 41:10", fr: "Ne crains rien, car je suis avec toi ; ne promène pas des regards inquiets, car je suis ton Dieu.", ht: "Pa pè, paske mwen avèk ou; pa dekouraje, paske mwen se Bondye ou." },
-  { ref: "Jérémie 29:11", fr: "Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance.", ht: "Paske mwen konnen plan mwen genyen pou nou, se plan pou fè nou jwenn lapè, pa dezas." },
-  { ref: "Matthieu 11:28", fr: "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos.", ht: "Vini jwenn mwen, nou tout ki fatige ak ki chaje ak fado lou, m ap ban nou repo." },
-  { ref: "Psaumes 119:105", fr: "Ta parole est une lampe à mes pieds, et une lumière sur mon sentier.", ht: "Pawòl ou se yon lanp ki klere pye mwen, yon limyè ki montre mwen wout mwen." },
-  { ref: "Proverbes 3:5-6", fr: "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse ; reconnais-le dans toutes tes voies, et il aplanira tes sentiers.", ht: "Fè konfyans nan Seyè a de tout kè ou, pa konte sou pwòp entèlijans ou. Rekonèt li nan tout chemen ou yo, l ap moutre ou wout la." },
-  { ref: "Matthieu 5:9", fr: "Heureux ceux qui procurent la paix, car ils seront appelés fils de Dieu !", ht: "Benediksyon pou moun ki fè lapè, paske yo pral rele yo pitit Bondye." },
-  { ref: "Psaumes 46:1", fr: "Dieu est notre refuge et notre force, un secours qui ne manque jamais dans la détresse.", ht: "Bondye se pwoteksyon nou ak fòs nou; li toujou la pou ede nou lè nou nan traka." },
-  { ref: "Galates 5:22-23", fr: "Mais le fruit de l'Esprit, c'est l'amour, la joie, la paix, la longanimité, la bonté, la bénignité, la fidélité, la douceur, la tempérance.", ht: "Men fwi Lespri a: renmen, kè kontan, lapè, longanimite, jantiyès, bonte, fidelite, dousè, mètrize tèt ou." },
-  { ref: "2 Chroniques 7:14", fr: "Si mon peuple sur qui est invoqué mon nom s'humilie, prie, et cherche ma face, et s'il se détourne de ses mauvaises voies, je l'exaucerai des cieux.", ht: "Si pèp mwen an, moun yo rele pam yo, imilye yo, lapriyè ak chache figi mwen, m ap koute yo nan syèl la." },
-  { ref: "Hébreux 11:1", fr: "Or la foi est une ferme assurance des choses qu'on espère, une démonstration de celles qu'on ne voit pas.", ht: "Lafwa se gen asirans pou bagay nou espere yo, se prèv bagay nou pa wè yo." },
-  { ref: "1 Jean 4:8", fr: "Celui qui n'aime pas n'a pas connu Dieu, car Dieu est amour.", ht: "Moun ki pa renmen pa konnen Bondye, paske Bondye se renmen." },
-  { ref: "Romains 10:9", fr: "Si tu confesses de ta bouche le Seigneur Jésus, et si tu crois dans ton cœur que Dieu l'a ressuscité des morts, tu seras sauvé.", ht: "Si ou konfese ak bouch ou ke Jezi se Seyè a, e si ou kwè nan kè ou ke Bondye leve li vivan, ou pral sove." },
-  { ref: "Apocalypse 3:20", fr: "Voici, je me tiens à la porte, et je frappe. Si quelqu'un entend ma voix et ouvre la porte, j'entrerai chez lui.", ht: "Gade, mwen kanpe bò pòt la, mwen frape. Si yon moun tande vwa mwen e ouvri pòt la, m ap antre." },
-  { ref: "Psaumes 91:1", fr: "Celui qui demeure sous l'abri du Très-Haut repose à l'ombre du Tout-Puissant.", ht: "Moun ki rete anba pwoteksyon Bondye ki pi Wo a ap viv anba lonbraj Bondye ki Toupuisan an." },
-  { ref: "Éphésiens 2:8-9", fr: "C'est par la grâce que vous êtes sauvés, par le moyen de la foi. Et cela ne vient pas de vous, c'est le don de Dieu.", ht: "Se pa gras Bondye ou sove, se pa fòs pa ou. Se yon kado Bondye ba ou." },
-  { ref: "Jean 14:6", fr: "Jésus lui dit : Je suis le chemin, la vérité, et la vie. Nul ne vient au Père que par moi.", ht: "Jezi di li: Mwen se chemen an, verite a, ak lavi a. Pesonn pa ka al jwenn Papa a si se pa pase nan mwen." },
-  { ref: "Psaumes 34:8", fr: "L'ange de l'Éternel campe autour de ceux qui le craignent, et il les arrache au danger.", ht: "Zanj Seyè a kanpe ozalantou moun ki gen krentif pou li, e li delivre yo nan danje." },
-  { ref: "Psaumes 34:9", fr: "Goûtez et voyez combien l'Éternel est bon ! Heureux l'homme qui cherche en lui son refuge !", ht: "Goute epi wè jan Seyè a bon ! Benediksyon pou moun ki mete konfyans yo nan li !" },
-  { ref: "Romains 12:2", fr: "Ne vous conformez pas au siècle présent, mais soyez transformés par le renouvellement de l'intelligence, afin que vous discerniez quelle est la volonté de Dieu.", ht: "Pa kite monn nan chanje ou, men kite Bondye chanje fason ou panse pou ou ka konnen sa Bondye vle." },
-  { ref: "Ésaïe 40:31", fr: "Mais ceux qui se confient en l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles ; ils courent sans se fatiguer.", ht: "Men moun ki mete espwa yo nan Seyè a pran nouvo fòs. Yo pral vole tankou malfini." },
-  { ref: "Matthieu 6:33", fr: "Cherchez premièrement le royaume et la justice de Dieu ; et toutes ces choses vous seront données par-dessus.", ht: "Men chèche dabò Wayòm Bondye a ak jistis li, tout lòt bagay sa yo ap ban nou tou." },
-  { ref: "1 Corinthiens 13:4-5", fr: "La charité est patiente, elle est pleine de bonté ; la charité n'est point envieuse ; la charité ne se vante point, elle ne s'enfle point d'orgueil.", ht: "Renmen pran pasyans, renmen janti. Renmen pa jalou, li pa vante tèt li, li pa fè lwòj." },
-  { ref: "Nombres 6:24-26", fr: "Que l'Éternel te bénisse, et qu'il te garde ! Que l'Éternel fasse luire sa face sur toi, et qu'il t'accorde sa grâce !", ht: "Ke Seyè a beni ou e pwoteje ou ! Ke Seyè a fè figi li klere sou ou e ba ou gras li !" },
-  { ref: "Luc 1:37", fr: "Car rien n'est impossible à Dieu.", ht: "Paske pa gen anyen ki difisil pou Bondye." },
-  { ref: "Psaumes 27:1", fr: "L'Éternel est ma lumière et mon salut : de qui aurais-je crainte ? L'Éternel est le soutien de ma vie : de qui aurais-je peur ?", ht: "Seyè a se limyè mwen ak delivrans mwen, kilès mwen ta pè ? Seyè a se fòs lavi mwen, kilès mwen ta krent ?" },
-  { ref: "Philippiens 4:6-7", fr: "Ne vous inquiétez de rien ; mais en toutes choses faites connaître vos besoins à Dieu par des prières et des supplications.", ht: "Pa bay kò ou traka pou anyen. Men nan tout bagay, mande Bondye sa ou bezwen nan lapriyè." },
-  { ref: "Jacques 1:2-3", fr: "Mes frères, regardez comme un sujet de joie complète les diverses épreuves auxquelles vous pouvez vous trouver exposés.", ht: "Frè m yo, rejwi ou lè ou pase nan tout kalite eprèv, paske ou konnen ke eprèv fè pasyans ou grandi." },
-  { ref: "2 Timothée 1:7", fr: "Car ce n'est pas un esprit de timidité que Dieu nous a donné, mais un esprit de force, d'amour et de sagesse.", ht: "Paske Bondye pa ba nou yon lespri pè, men yon lespri fòs, renmen ak disiplin." },
-  { ref: "Psaumes 37:4", fr: "Fais de l'Éternel tes délices, et il te donnera ce que ton cœur désire.", ht: "Jwi Seyè a, l ap ba ou sa kè ou vle." },
-  { ref: "Matthieu 5:14", fr: "Vous êtes la lumière du monde. Une ville située sur une montagne ne peut être cachée.", ht: "Nou se limyè monn nan. Yon vil sou tèt yon mòn pa ka kache." },
-  { ref: "Actes 1:8", fr: "Mais vous recevrez une puissance, le Saint-Esprit survenant sur vous, et vous serez mes témoins.", ht: "Men nou pral resevwa pouvwa lè Sentespri a desann sou nou, e nou pral temwen pou mwen." },
-  { ref: "1 Pierre 5:7", fr: "Déchargez-vous sur lui de tous vos soucis, car il prend soin de vous.", ht: "Kite tout enkyetid ou sou li, paske li pran swen ou." },
-  { ref: "Jean 10:10", fr: "Le voleur ne vient que pour dérober, égorger et détruire ; moi, je suis venu afin que les brebis aient la vie, et qu'elles l'aient en abondance.", ht: "Vòlè a pa vini pou anyen, sinon pou vòlè, touye ak detwi. Mwen menm, mwen vini pou mouton yo ka gen lavi, e pou yo gen li an abondans." },
-  { ref: "Psaumes 121:1-2", fr: "Je lève les yeux vers les montagnes... Le secours me vient de l'Éternel, qui a fait les cieux et la terre.", ht: "Mwen leve je mwen gade mòn yo... Sekou mwen soti nan Seyè a, ki fè syèl la ak tè a." },
-  { ref: "Romains 5:8", fr: "Mais Dieu prouve son amour envers nous, en ce que, lorsque nous étions encore des pécheurs, Christ est mort pour nous.", ht: "Men Bondye montre jan li renmen nou, paske lè nou te peche toujou, Kris te mouri pou nou." },
-  { ref: "Deutéronome 31:6", fr: "Fortifiez-vous et ayez du courage ! Ne craignez point et ne soyez point effrayés devant eux ; car l'Éternel, ton Dieu, marche avec toi.", ht: "Fòtifye ou, mete kouraj. Pa pè, pa kite kè ou sote devan yo, paske Seyè a, Bondye ou a, ap mache avèk ou." },
-  { ref: "Michée 6:8", fr: "Il t'a fait connaître, ô homme, ce qui est bien ; et ce que l'Éternel demande de toi, c'est que tu pratiques la justice, que tu aimes la miséricorde, et que tu marches humblement avec ton Dieu.", ht: "Li montre ou, o moun, sa ki bon; sa Seyè a mande ou se pou fè sa ki jis, renmen bonte, e mache avèk Bondye ou an nan imilite." },
-  { ref: "Éphésiens 6:10", fr: "Au reste, fortifiez-vous dans le Seigneur, et par sa force toute-puissante.", ht: "Pran fòs nan Seyè a ak nan gwo pouvwa li a." },
-  { ref: "Psaumes 100:4", fr: "Entrez dans ses portes avec des actions de grâce, dans ses parvis avec des louanges ! Célébrez-le, bénissez son nom !", ht: "Antre nan kay li ak aksyon de gras, antre nan lakou li ak lwanj. Beni non li !" },
-  { ref: "Jean 15:5", fr: "Je suis le cep, vous êtes les sarments. Celui qui demeure en moi et en qui je demeure porte beaucoup de fruit.", ht: "Mwen se pye rezen an, nou menm se branch yo. Moun ki rete nan mwen e mwen rete nan li, li bay anpil fwi." },
-  { ref: "Ésaïe 53:5", fr: "Mais il était blessé pour nos péchés, brisé pour nos iniquités ; le châtiment qui nous donne la paix est tombé sur lui.", ht: "Li te blese pou peche nou yo, li te kraze pou move zak nou yo; pinisyon ki ban nou lapè a tonbe sou li." },
-  { ref: "Genèse 1:1", fr: "Au commencement, Dieu créa les cieux et la terre.", ht: "Nan konmansman, Bondye kreye syèl la ak tè a." },
-  { ref: "Apocalypse 21:4", fr: "Il essuiera toute larme de leurs yeux, et la mort ne sera plus, et il n'y aura plus ni deuil, ni cri, ni douleur.", ht: "L ap siye tout dlo nan je yo; pa pral gen lanmò ankò, pa gen lapenn, pa gen kri, pa gen soufrans." },
-  { ref: "Psaumes 32:8", fr: "Je t'instruirai et te montrerai la voie que tu dois suivre ; je te conseillerai, j'aurai les yeux sur toi.", ht: "M ap moutre ou, m ap anseye ou nan wout ou dwe swiv la; m ap konseye ou e m ap veye sou ou." },
-  { ref: "Matthieu 28:19-20", fr: "Allez, faites de toutes les nations des disciples, les baptisant au nom du Père, du Fils et du Saint-Esprit.", ht: "Al fè tout nasyon tounen disip mwen, batize yo nan non Papa a, Pitit la ak Sentespri a." },
-  { ref: "2 Corinthiens 5:17", fr: "Si quelqu'un est en Christ, il est une nouvelle créature. Les choses anciennes sont passées ; voici, toutes choses sont devenues nouvelles.", ht: "Si yon moun nan Kris, li se yon nouvo kreyati. Bagay lontan yo pase; gade, tout bagay vin nouvo." },
-  { ref: "Proverbes 18:10", fr: "Le nom de l'Éternel est une tour forte ; le juste s'y réfugie et se trouve en sûreté.", ht: "Non Seyè a se yon fò solid; moun ki jis ka kouri mete ladan li pou yo an sekirite." },
-  { ref: "Jean 16:33", fr: "Je vous ai dit ces choses, afin que vous ayez la paix en moi. Vous aurez des tribulations dans le monde ; mais prenez courage, j'ai vaincu le monde.", ht: "Mwen di nou bagay sa yo pou nou ka gen lapè nan mwen. Nan monn nan nou pral gen traka; men pran kouraj, mwen te genyen sou monn nan." },
-  { ref: "Hébreux 13:8", fr: "Jésus-Christ est le même hier, aujourd'hui, et éternellement.", ht: "Jezi Kris la menm yè, jodi a, e pou tout tan." },
+  { ref: "Jean 3:16",        fr: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.", ht: "Paske Bondye sitèlman renmen lèzòm, li bay sèl Pitit li a pou tout moun ki kwè nan li.", en: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life." },
+  { ref: "Philippiens 4:13", fr: "Je puis tout par celui qui me fortifie.", ht: "Mwen ka fè tout bagay nan Kris la ki ban mwen fòs.", en: "I can do all things through Christ who strengthens me." },
+  { ref: "Ésaïe 41:10",     fr: "Ne crains rien, car je suis avec toi ; ne promène pas des regards inquiets, car je suis ton Dieu.", ht: "Pa pè, paske mwen avèk ou; pa dekouraje, paske mwen se Bondye ou.", en: "So do not fear, for I am with you; do not be dismayed, for I am your God." },
+  { ref: "Jérémie 29:11",   fr: "Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance.", ht: "Paske mwen konnen plan mwen genyen pou nou, se plan pou fè nou jwenn lapè, pa dezas.", en: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you." },
+  { ref: "Matthieu 11:28",  fr: "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos.", ht: "Vini jwenn mwen, nou tout ki fatige ak ki chaje ak fado lou, m ap ban nou repo.", en: "Come to me, all you who are weary and burdened, and I will give you rest." },
+  { ref: "Psaumes 23:1",    fr: "L'Éternel est mon berger : je ne manquerai de rien.", ht: "Seyè a se gadò mwen; mwen p ap manke anyen.", en: "The Lord is my shepherd, I lack nothing." },
+  { ref: "Romains 8:28",    fr: "Nous savons, du reste, que toutes choses concourent au bien de ceux qui aiment Dieu.", ht: "Nou konnen ke tout bagay travay ansanm pou byen moun ki renmen Bondye.", en: "And we know that in all things God works for the good of those who love him." },
+  { ref: "Jean 14:6",       fr: "Je suis le chemin, la vérité, et la vie. Nul ne vient au Père que par moi.", ht: "Mwen se chemen an, verite a, ak lavi a. Pesonn pa ka al jwenn Papa a si se pa pase nan mwen.", en: "I am the way and the truth and the life. No one comes to the Father except through me." },
+  { ref: "2 Timothée 1:7",  fr: "Car ce n'est pas un esprit de timidité que Dieu nous a donné, mais un esprit de force, d'amour et de sagesse.", ht: "Paske Bondye pa ba nou yon lespri pè, men yon lespri fòs, renmen ak disiplin.", en: "For God has not given us a spirit of fear, but of power, love and sound mind." },
+  { ref: "1 Pierre 5:7",    fr: "Déchargez-vous sur lui de tous vos soucis, car il prend soin de vous.", ht: "Kite tout enkyetid ou sou li, paske li pran swen ou.", en: "Cast all your anxiety on him because he cares for you." },
+  { ref: "Hébreux 11:1",    fr: "Or la foi est une ferme assurance des choses qu'on espère, une démonstration de celles qu'on ne voit pas.", ht: "Lafwa se gen asirans pou bagay nou espere yo, se prèv bagay nou pa wè yo.", en: "Now faith is confidence in what we hope for and assurance about what we do not see." },
+  { ref: "Romains 12:2",    fr: "Ne vous conformez pas au siècle présent, mais soyez transformés par le renouvellement de l'intelligence.", ht: "Pa kite monn nan chanje ou, men kite Bondye chanje fason ou panse.", en: "Do not conform to the pattern of this world, but be transformed by the renewing of your mind." },
+  { ref: "Ésaïe 40:31",    fr: "Mais ceux qui se confient en l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles.", ht: "Men moun ki mete espwa yo nan Seyè a pran nouvo fòs. Yo pral vole tankou malfini.", en: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles." },
+  { ref: "Psaumes 46:1",    fr: "Dieu est notre refuge et notre force, un secours qui ne manque jamais dans la détresse.", ht: "Bondye se pwoteksyon nou ak fòs nou; li toujou la pou ede nou lè nou nan traka.", en: "God is our refuge and strength, an ever-present help in trouble." },
 ];
 
-function getDayOfYear(): number {
-  const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
-  const diff = now.getTime() - start.getTime();
-  return Math.floor(diff / (1000 * 60 * 60 * 24));
+function getDayOfYear() {
+  const n = new Date();
+  return Math.floor((n.getTime() - new Date(n.getFullYear(), 0, 0).getTime()) / 86400000);
 }
 
-function Hero() {
+type Lang = "fr" | "ht" | "en";
+
+const features = [
+  {
+    href: "/prieres",
+    icon: "✦",
+    fr: { title: "Prière", desc: "Déposez vos requêtes et intercédez pour la communauté." },
+    ht: { title: "Lapriyè", desc: "Depoze demann ou yo epi entèsede pou kominote a." },
+    en: { title: "Prayer", desc: "Post prayer requests and intercede for the community." },
+  },
+  {
+    href: "/etude",
+    icon: "◈",
+    fr: { title: "Étude Biblique", desc: "Explorez les Écritures avec des plans de lecture et des ressources." },
+    ht: { title: "Etid Biblik", desc: "Eksplore Ekriti yo ak plan lekti ak resous." },
+    en: { title: "Bible Study", desc: "Explore Scripture with reading plans and resources." },
+  },
+  {
+    href: "/enseignement",
+    icon: "◉",
+    fr: { title: "Enseignement", desc: "Messages, séries et doctrines partagés par des pasteurs et leaders." },
+    ht: { title: "Ansèyman", desc: "Mesaj, seri ak doktrin pastè ak lidè yo pataje." },
+    en: { title: "Teaching", desc: "Messages, series and doctrine shared by pastors and leaders." },
+  },
+  {
+    href: "/jeu",
+    icon: "◐",
+    fr: { title: "Jeux Bibliques", desc: "Trois formats de défi — versets, vrai/faux, personnages bibliques." },
+    ht: { title: "Jwèt Biblik", desc: "Twa fòma defi — vèsè, vre/fo, pèsonaj biblik." },
+    en: { title: "Bible Games", desc: "Three challenge formats — verses, true/false, biblical figures." },
+  },
+  {
+    href: "/concours",
+    icon: "◆",
+    fr: { title: "Concours du Jour", desc: "Un défi biblique quotidien. Classements, points et récompenses." },
+    ht: { title: "Konkou Jounen an", desc: "Yon defi biblik chak jou. Klasman, pwen ak rekonpans." },
+    en: { title: "Daily Contest", desc: "A daily biblical challenge. Rankings, points and rewards." },
+  },
+  {
+    href: "/eglise",
+    icon: "◎",
+    fr: { title: "Groupes d'Église", desc: "Créez ou rejoignez votre communauté privée avec un code." },
+    ht: { title: "Gwoup Legliz", desc: "Kreye oswa rantre nan kominote prive ou a ak yon kòd." },
+    en: { title: "Church Groups", desc: "Create or join your private community with a code." },
+  },
+];
+
+export default function Home() {
   const { lang } = useLang();
+  const [visible, setVisible] = useState(false);
   const verse = versePool[getDayOfYear() % versePool.length];
-  const [shown, setShown] = useState(false);
+  const l = (["fr","ht","en"].includes(lang) ? lang : "fr") as Lang;
 
   useEffect(() => {
-    const t = setTimeout(() => setShown(true), 100);
+    const t = setTimeout(() => setVisible(true), 80);
     return () => clearTimeout(t);
   }, []);
 
-  const brand = "KONEKSYON PAM".split("");
+  const txt = {
+    headline:
+      l === "fr" ? "La Parole.\nLa Prière.\nLa Communauté."
+      : l === "ht" ? "Pawòl la.\nLapriyè a.\nKominote a."
+      : "The Word.\nThe Prayer.\nThe Community.",
+    sub:
+      l === "fr" ? "Une plateforme sérieuse pour votre vie spirituelle quotidienne."
+      : l === "ht" ? "Yon platfòm serye pou lavi espirityèl chak jou ou a."
+      : "A serious platform for your daily spiritual life.",
+    cta1: l === "fr" ? "Commencer" : l === "ht" ? "Kòmanse" : "Get started",
+    cta2: l === "fr" ? "Rejoindre un groupe" : l === "ht" ? "Rantre nan yon gwoup" : "Join a group",
+    verseLabel: l === "fr" ? "Verset du jour" : l === "ht" ? "Vèsè jounen an" : "Verse of the day",
+    readMore: l === "fr" ? "Lire la Bible" : l === "ht" ? "Li Bib la" : "Read the Bible",
+    sectionTitle: l === "fr" ? "Ce que vous trouverez ici" : l === "ht" ? "Sa ou pral jwenn isit" : "What you'll find here",
+    prayerTitle: l === "fr" ? "Le mur de prière" : l === "ht" ? "Mi lapriyè a" : "The prayer wall",
+    prayerSub: l === "fr" ? "Des frères et sœurs du monde entier déposent leurs requêtes. Priez avec eux."
+             : l === "ht" ? "Frè ak sè nan mond antye ap depoze demann yo. Priye avèk yo."
+             : "Brothers and sisters worldwide post their requests. Pray with them.",
+    prayerBtn: l === "fr" ? "Voir les demandes de prière" : l === "ht" ? "Wè demann lapriyè yo" : "View prayer requests",
+    contestTitle: l === "fr" ? "Défi Biblique · Quotidien" : l === "ht" ? "Defi Biblik · Chak Jou" : "Biblical Challenge · Daily",
+    contestSub: l === "fr" ? "Un nouveau défi chaque jour. Testez votre connaissance des Écritures, montez dans le classement."
+              : l === "ht" ? "Yon nouvo defi chak jou. Teste konesans ou sou Ekriti yo, monte nan klasman an."
+              : "A new challenge every day. Test your knowledge of Scripture, rise in the rankings.",
+    contestBtn: l === "fr" ? "Participer aujourd'hui" : l === "ht" ? "Patisipe jodi a" : "Participate today",
+    open: l === "fr" ? "Ouvrir" : l === "ht" ? "Ouvri" : "Open",
+  };
 
   return (
-    <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white px-6 py-14 relative overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-80 h-80 bg-cyan-300/20 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: "4s" }} />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-purple-400/15 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: "6s", animationDelay: "2s" }} />
-        {[["8%","15%","1s"],["85%","10%","2s"],["20%","80%","3s"],["75%","70%","0.5s"]].map(([l,top,d],i) => (
-          <span key={i} className="absolute text-cyan-300/30 text-sm" style={{ left: l, top, animation: `twinkle 2.5s ease-in-out ${d} infinite` }}>✦</span>
-        ))}
-      </div>
+    <main className="bg-white">
 
-      <div className="max-w-5xl mx-auto relative z-10">
-        <div className="flex flex-col sm:flex-row items-center gap-10">
+      {/* ── Hero ── */}
+      <section className="bg-[#0b0f1a] min-h-[92vh] flex items-center">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-20 w-full">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-16">
 
-          {/* LEFT: Logo + brand + content */}
-          <div className="flex-1 text-center sm:text-left">
-            <div className="flex justify-center sm:justify-start mb-5"
-              style={{ opacity: shown ? 1 : 0, transition: "opacity 0.5s ease-out" }}>
-              <div className="w-16 h-16 rounded-full bg-white/20 p-1 border-2 border-white/30 shadow-lg">
-                <img src="/logo-kp.png" alt="KP" className="w-full h-full rounded-full object-cover" />
-              </div>
-            </div>
+            {/* Left */}
+            <div className="flex-1 min-w-0">
+              <p
+                className="text-[#c5a84f] text-xs font-bold uppercase tracking-[0.25em] mb-8"
+                style={{ opacity: visible ? 1 : 0, transition: "opacity 0.5s ease 0.1s" }}
+              >
+                Koneksyon Pam
+              </p>
 
-            <div className="animate-brand-glow mb-3">
-              {brand.map((char, i) => (
-                <span key={i} className="inline-block font-black text-4xl sm:text-5xl lg:text-6xl"
-                  style={{
-                    color: "#ffffff",
-                    letterSpacing: "0.02em",
-                    textShadow: "0 0 24px rgba(103,232,249,0.5)",
-                    opacity: shown ? 1 : 0,
-                    transform: shown ? "translateY(0) scale(1)" : "translateY(30px) scale(0.8)",
-                    transition: `opacity 0.45s cubic-bezier(0.34,1.56,0.64,1) ${i * 0.05}s, transform 0.45s cubic-bezier(0.34,1.56,0.64,1) ${i * 0.05}s`,
-                    minWidth: char === " " ? "0.4em" : undefined,
-                  }}>
-                  {char === " " ? "\u00A0" : char}
-                </span>
-              ))}
-            </div>
+              <h1
+                className="text-white font-black leading-[1.05] mb-6"
+                style={{
+                  fontSize: "clamp(2.6rem, 6vw, 4.2rem)",
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "none" : "translateY(20px)",
+                  transition: "opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s",
+                  whiteSpace: "pre-line",
+                }}
+              >
+                {txt.headline}
+              </h1>
 
-            <div className="flex justify-center sm:justify-start mb-4">
-              <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent animate-underline" style={{ maxWidth: "260px", width: "100%" }} />
-            </div>
+              <p
+                className="text-white/50 text-base sm:text-lg mb-10 max-w-md leading-relaxed"
+                style={{ opacity: visible ? 1 : 0, transition: "opacity 0.5s ease 0.5s" }}
+              >
+                {txt.sub}
+              </p>
 
-            <p className="text-cyan-200/80 text-xs tracking-[0.2em] uppercase mb-5 font-medium"
-              style={{ opacity: shown ? 1 : 0, transition: "all 0.6s ease-out 0.75s" }}>
-              {lang === "fr" ? "✦ La plateforme des chrétiens connectés" : lang === "ht" ? "✦ Platfòm kretyen ki konekte" : "✦ The platform for connected Christians"}
-            </p>
-
-            <p className="text-blue-100/80 text-sm sm:text-base mb-8 max-w-lg leading-relaxed"
-              style={{ opacity: shown ? 1 : 0, transition: "all 0.6s ease-out 0.9s" }}>
-              {lang === "fr"
-                ? "Prière, louange, études bibliques, communauté, groupes d'église — tout ce dont chaque chrétien a besoin, en un seul endroit."
-                : lang === "ht"
-                ? "Lapriyè, lwanj, etid biblik, kominote, gwoup legliz — tout sa chak kretyen bezwen, nan yon sèl kote."
-                : "Prayer, praise, Bible studies, community, church groups — everything every Christian needs, in one place."}
-            </p>
-
-            <div className="flex flex-wrap justify-center sm:justify-start gap-3"
-              style={{ opacity: shown ? 1 : 0, transition: "all 0.6s ease-out 1.05s" }}>
-              <Link href="/eglise" className="bg-white text-blue-700 px-6 py-3 rounded-full font-bold hover:bg-blue-50 transition-all shadow-xl hover:scale-105">
-                {lang === "fr" ? "⛪ Créer l'espace église" : lang === "ht" ? "⛪ Kreye espas legliz" : "⛪ Create church space"}
-              </Link>
-              <Link href="/communaute" className="bg-white/15 backdrop-blur-sm text-white px-6 py-3 rounded-full font-medium hover:bg-white/25 transition-colors border border-white/20">
-                {lang === "fr" ? "Explorer →" : lang === "ht" ? "Eksplore →" : "Explore →"}
-              </Link>
-            </div>
-          </div>
-
-          {/* RIGHT: Verse card */}
-          <div className="w-full sm:w-80 shrink-0"
-            style={{ opacity: shown ? 1 : 0, transform: shown ? "translateY(0)" : "translateY(20px)", transition: "all 0.7s ease-out 1.1s" }}>
-            <div className="relative animate-float animate-glow rounded-2xl">
-              <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-cyan-400/60 via-white/20 to-blue-400/40" />
-              <div className="relative bg-blue-800/60 backdrop-blur-md rounded-2xl p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span style={{ animation: "twinkle 2s ease-in-out infinite" }}>✨</span>
-                  <span className="animate-shimmer text-xs font-black uppercase tracking-[0.15em]">{t("verseOfDay", lang)}</span>
-                </div>
-                <h3 className="font-black text-xl text-white mb-3">{verse.ref}</h3>
-                <p className="text-cyan-100/90 text-sm italic leading-relaxed">
-                  &ldquo;{lang === "ht" ? verse.ht : verse.fr}&rdquo;
-                </p>
-                <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent my-4" />
-                <Link href="/bible" className="flex items-center gap-2 text-cyan-300 text-xs font-bold hover:text-white transition-colors group">
-                  <span>{lang === "fr" ? "Lire la Bible complète" : lang === "ht" ? "Li Bib la konplè" : "Read full Bible"}</span>
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+              <div
+                className="flex flex-wrap gap-3"
+                style={{ opacity: visible ? 1 : 0, transition: "opacity 0.5s ease 0.65s" }}
+              >
+                <Link
+                  href="/prieres"
+                  className="bg-[#c5a84f] text-[#0b0f1a] px-7 py-3.5 rounded-full text-sm font-black hover:bg-[#d4b85c] transition-colors"
+                >
+                  {txt.cta1}
+                </Link>
+                <Link
+                  href="/eglise"
+                  className="border border-white/15 text-white/70 px-7 py-3.5 rounded-full text-sm font-medium hover:border-white/30 hover:text-white transition-all"
+                >
+                  {txt.cta2}
                 </Link>
               </div>
             </div>
-          </div>
 
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ServicesShowcase() {
-  const { lang } = useLang();
-
-  const services = [
-    { href: "/bible",       icon: "📖", grad: "from-indigo-500 to-blue-600",    glow: "shadow-indigo-500/40", title: lang === "fr" ? "La Bible" : lang === "ht" ? "Bib la" : "The Bible",                desc: lang === "fr" ? "66 livres · 3 langues" : "66 books · 3 languages" },
-    { href: "/prieres",     icon: "🙏", grad: "from-cyan-500 to-teal-600",       glow: "shadow-cyan-500/40",   title: lang === "fr" ? "Prière" : lang === "ht" ? "Lapriyè" : "Prayer",                    desc: lang === "fr" ? "Mur de prière mondial" : "Global prayer wall" },
-    { href: "/temoignages", icon: "✨", grad: "from-pink-500 to-rose-600",       glow: "shadow-pink-500/40",   title: lang === "fr" ? "Témoignages" : lang === "ht" ? "Temwayaj" : "Testimonies",           desc: lang === "fr" ? "Partagez votre histoire" : "Share your story" },
-    { href: "/etude",       icon: "📚", grad: "from-purple-500 to-violet-600",   glow: "shadow-purple-500/40", title: lang === "fr" ? "Études" : lang === "ht" ? "Etid" : "Studies",                     desc: lang === "fr" ? "Études bibliques + IA" : "Bible studies + AI" },
-    { href: "/quiz",        icon: "🏆", grad: "from-amber-400 to-orange-500",    glow: "shadow-amber-500/40",  title: lang === "fr" ? "Quiz Biblique" : lang === "ht" ? "Kiz Biblik" : "Bible Quiz",       desc: lang === "fr" ? "5 niveaux de difficulté" : "5 difficulty levels" },
-    { href: "/jeu",         icon: "🎮", grad: "from-green-500 to-emerald-600",   glow: "shadow-green-500/40",  title: lang === "fr" ? "Jeux Bibliques" : lang === "ht" ? "Jwèt Biblik" : "Bible Games",    desc: lang === "fr" ? "3 jeux interactifs" : "3 interactive games" },
-    { href: "/louange",     icon: "🎵", grad: "from-red-500 to-rose-600",        glow: "shadow-red-500/40",    title: lang === "fr" ? "Louange" : lang === "ht" ? "Lwanj" : "Praise",                     desc: lang === "fr" ? "Musique & adoration" : "Music & worship" },
-    { href: "/communaute",  icon: "🌍", grad: "from-teal-500 to-green-600",      glow: "shadow-teal-500/40",   title: lang === "fr" ? "Communauté" : lang === "ht" ? "Kominote" : "Community",              desc: lang === "fr" ? "Groupes & débats" : "Groups & debates" },
-    { href: "/eglise",      icon: "⛪", grad: "from-blue-600 to-indigo-700",     glow: "shadow-blue-500/40",   title: lang === "fr" ? "Espace Église" : lang === "ht" ? "Espas Legliz" : "Church Space",  desc: lang === "fr" ? "Groupes privés" : "Private groups" },
-    { href: "/don",         icon: "❤️", grad: "from-orange-400 to-amber-500",    glow: "shadow-orange-500/40", title: lang === "fr" ? "Faire un don" : lang === "ht" ? "Fè yon don" : "Donate",            desc: lang === "fr" ? "Soutenir la mission" : "Support the mission" },
-    { href: "/contact",     icon: "📬", grad: "from-slate-500 to-gray-600",      glow: "shadow-slate-500/40",  title: "Contact",                                                                          desc: lang === "fr" ? "Nous écrire" : "Write to us" },
-  ];
-
-  const doubled = [...services, ...services];
-
-  return (
-    <section className="bg-slate-100 py-10 overflow-hidden group-pause">
-      <div className="mb-6 text-center">
-        <p className="text-blue-500 text-xs font-bold uppercase tracking-[0.2em]">
-          ✦ {lang === "fr" ? "Tous nos services" : lang === "ht" ? "Tout sèvis nou yo" : "All our services"}
-        </p>
-      </div>
-
-      {/* Scrolling strip */}
-      <div className="overflow-hidden">
-        <div className="flex gap-4 animate-scroll-x" style={{ width: "max-content" }}>
-          {doubled.map((s, i) => (
-            <Link
-              key={i}
-              href={s.href}
-              className={`flex-shrink-0 w-44 bg-white border border-slate-200 rounded-2xl p-5 text-center hover:shadow-lg hover:-translate-y-1 hover:border-blue-200 transition-all group cursor-pointer`}
+            {/* Right: Verse card */}
+            <div
+              className="w-full lg:w-[360px] shrink-0"
+              style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? "none" : "translateY(16px)",
+                transition: "opacity 0.6s ease 0.8s, transform 0.6s ease 0.8s",
+              }}
             >
-              <div className={`w-12 h-12 bg-gradient-to-br ${s.grad} rounded-xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-md group-hover:scale-110 transition-transform`}>
-                {s.icon}
+              <div className="bg-[#131926] border border-[#1e2740] rounded-2xl overflow-hidden">
+                <div className="border-l-2 border-[#c5a84f] p-7">
+                  <p className="text-[#c5a84f] text-[10px] font-bold uppercase tracking-[0.2em] mb-5">
+                    {txt.verseLabel}
+                  </p>
+                  <p className="text-[#8a9ab8] text-xs font-semibold uppercase tracking-widest mb-3">
+                    {verse.ref}
+                  </p>
+                  <p className="text-white/80 text-sm leading-relaxed italic">
+                    &ldquo;{verse[l]}&rdquo;
+                  </p>
+                  <div className="mt-6 pt-5 border-t border-white/5">
+                    <Link
+                      href="/bible"
+                      className="text-white/30 text-xs hover:text-[#c5a84f] transition-colors font-medium"
+                    >
+                      {txt.readMore} →
+                    </Link>
+                  </div>
+                </div>
               </div>
-              <p className="text-stone-800 font-bold text-sm mb-1 leading-tight">{s.title}</p>
-              <p className="text-slate-400 text-xs leading-tight">{s.desc}</p>
-              <span className="block mt-3 text-blue-500 text-xs group-hover:text-blue-600 font-medium transition-colors">
-                {lang === "fr" ? "Accéder →" : lang === "ht" ? "Antre →" : "Open →"}
-              </span>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+            </div>
 
-function AIBanner() {
-  const { lang } = useLang();
-  return (
-    <section className="max-w-4xl mx-auto px-6 py-4">
-      <div className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 rounded-2xl p-6 text-white overflow-hidden">
-        <div className="absolute top-4 right-8 w-3 h-3 bg-white rounded-full animate-ping opacity-40" style={{ animationDuration: "1.5s" }} />
-        <div className="absolute bottom-6 right-12 w-2 h-2 bg-white rounded-full animate-ping opacity-30" style={{ animationDuration: "2.5s", animationDelay: "1s" }} />
-        <div className="flex items-center gap-5 relative z-10">
-          <div className="shrink-0">
-            <div className="relative">
-              <div className="absolute inset-0 bg-white rounded-full animate-pulse opacity-20 blur-md" />
-              <span className="text-5xl block animate-bounce relative" style={{ animationDuration: "2.5s" }}>🕊️</span>
-            </div>
-          </div>
-          <div className="flex-1">
-            <h2 className="text-xl font-bold mb-1">
-              {lang === "fr" ? "Assistant Biblique IA" : lang === "ht" ? "Asistan Biblik IA" : "AI Bible Assistant"}
-            </h2>
-            <p className="text-purple-200 text-xs">
-              {lang === "fr" ? "Posez n'importe quelle question sur la Bible — réponse instantanée 24h/24" : lang === "ht" ? "Poze nenpòt kesyon sou Bib la — repons imedyat 24h/24" : "Ask any Bible question — instant answer 24/7"}
-            </p>
-            <div className="flex items-center gap-2 mt-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="text-purple-200 text-xs">{lang === "fr" ? "En ligne" : lang === "ht" ? "Anliy" : "Online"}</span>
-            </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-function ChurchCTA() {
-  const { lang } = useLang();
-  return (
-    <section className="max-w-4xl mx-auto px-6 py-10">
-      <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-8 sm:p-10 border border-blue-400/20 text-center relative overflow-hidden">
-        <div className="absolute top-6 left-10 w-32 h-32 bg-white/10 rounded-full blur-[80px]" />
-        <div className="absolute bottom-6 right-10 w-40 h-40 bg-cyan-300/15 rounded-full blur-[80px]" />
-        <div className="relative z-10">
-          <span className="text-5xl block mb-4">🏠</span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-            {lang === "fr" ? "La communauté chrétienne sur KONEKSYON PAM" : lang === "ht" ? "Kominote kretyen sou KONEKSYON PAM" : "The Christian community on KONEKSYON PAM"}
-          </h2>
-          <p className="text-blue-300/60 text-sm mb-6 max-w-lg mx-auto">
-            {lang === "fr"
-              ? "Pasteur, responsable ou croyant — créez votre espace de groupe ou rejoignez une communauté existante. Études, prières, événements, tout centralisé."
-              : lang === "ht"
-              ? "Pastè, responsab oswa kretyen — kreye espas gwoup ou oswa rantre nan yon kominote. Etid, lapriyè, evènman, tout santralize."
-              : "Pastor, leader or believer — create your group space or join an existing community. Studies, prayers, events, all centralized."}
+      {/* ── Features ── */}
+      <section className="bg-[#f8f6f2] py-20 px-5 sm:px-8">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-[#0b0f1a]/40 text-xs font-bold uppercase tracking-[0.25em] mb-12 text-center">
+            {txt.sectionTitle}
           </p>
-          <div className="flex justify-center gap-3">
-            <Link href="/eglise/creer" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/30">
-              {lang === "fr" ? "Créer mon groupe" : lang === "ht" ? "Kreye gwoup mwen" : "Create my group"}
-            </Link>
-            <Link href="/eglise" className="bg-white/10 text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-colors border border-white/10">
-              {lang === "fr" ? "Rejoindre" : lang === "ht" ? "Rantre" : "Join"}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {features.map((f) => (
+              <Link
+                key={f.href}
+                href={f.href}
+                className="group bg-white rounded-2xl p-7 border border-stone-200/60 hover:border-[#c5a84f]/40 hover:shadow-lg hover:shadow-stone-200/80 transition-all flex flex-col gap-4"
+              >
+                <span className="text-[#c5a84f] text-sm font-black">{f.icon}</span>
+                <div>
+                  <p className="text-[#0b0f1a] font-bold text-base mb-1.5">{f[l].title}</p>
+                  <p className="text-stone-400 text-sm leading-relaxed">{f[l].desc}</p>
+                </div>
+                <span className="text-stone-300 text-sm font-medium group-hover:text-[#c5a84f] transition-colors mt-auto">
+                  {txt.open} →
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Daily Contest Banner ── */}
+      <section className="bg-[#0b0f1a] py-20 px-5 sm:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="border border-[#1e2740] rounded-2xl p-8 sm:p-12 flex flex-col sm:flex-row items-start sm:items-center gap-8">
+            <div className="flex-1">
+              <p className="text-[#c5a84f] text-[10px] font-bold uppercase tracking-[0.25em] mb-4">
+                {txt.contestTitle}
+              </p>
+              <p className="text-white font-black text-2xl sm:text-3xl leading-tight mb-4">
+                {l === "fr" ? "Testez vos connaissances." : l === "ht" ? "Teste konesans ou." : "Test your knowledge."}
+              </p>
+              <p className="text-white/40 text-sm leading-relaxed max-w-sm">
+                {txt.contestSub}
+              </p>
+            </div>
+            <Link
+              href="/concours"
+              className="shrink-0 bg-[#c5a84f] text-[#0b0f1a] px-8 py-3.5 rounded-full text-sm font-black hover:bg-[#d4b85c] transition-colors whitespace-nowrap"
+            >
+              {txt.contestBtn}
             </Link>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-function ConnectedWorld() {
-  const { lang } = useLang();
-  const countries = ["🇺🇸", "🇭🇹", "🇫🇷", "🇨🇦", "🇧🇷", "🇬🇧", "🇩🇴", "🇨🇱", "🇧🇪", "🇨🇭", "🇲🇽", "🇨🇲"];
-
-  return (
-    <section className="bg-blue-50 px-6 py-12">
-      <div className="max-w-3xl mx-auto text-center">
-        <p className="text-blue-500 text-sm font-semibold uppercase tracking-widest mb-4">
-          🌍 {countries.length} {t("countries", lang)}
-        </p>
-        <div className="flex flex-wrap justify-center gap-3 mb-6">
-          {countries.map((flag, i) => (
-            <span key={i} className="text-3xl animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>{flag}</span>
-          ))}
+      {/* ── Prayer Wall ── */}
+      <section className="py-20 px-5 sm:px-8 bg-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-[#0b0f1a]/40 text-xs font-bold uppercase tracking-[0.25em] mb-5">
+            {txt.prayerTitle}
+          </p>
+          <h2 className="text-[#0b0f1a] font-black text-2xl sm:text-3xl mb-4 leading-tight">
+            {l === "fr" ? "Personne ne prie seul ici." : l === "ht" ? "Pesonn pa priye pou kont li isit." : "No one prays alone here."}
+          </h2>
+          <p className="text-stone-400 text-sm leading-relaxed mb-8 max-w-lg mx-auto">
+            {txt.prayerSub}
+          </p>
+          <Link
+            href="/prieres"
+            className="inline-block bg-[#0b0f1a] text-white px-8 py-3.5 rounded-full text-sm font-bold hover:bg-[#131926] transition-colors"
+          >
+            {txt.prayerBtn}
+          </Link>
         </div>
-        <p className="text-blue-600/60 text-sm">
-          {lang === "fr" ? "Des frères et sœurs du monde entier connectés par la foi" : lang === "ht" ? "Frè ak sè nan mond antye konekte pa lafwa" : "Brothers and sisters worldwide connected by faith"}
-        </p>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-export default function Home() {
-  return (
-    <div>
-      <Hero />
-      <ServicesShowcase />
-      <ChurchCTA />
-      <AIBanner />
-      <BibleQuiz />
-      <ConnectedWorld />
-    </div>
+    </main>
   );
 }

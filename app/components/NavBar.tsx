@@ -5,137 +5,130 @@ import LangSwitch from "./LangSwitch";
 import AuthButton from "./AuthButton";
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function NavBar() {
   const { lang } = useLang();
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const path = usePathname();
 
-  const menus = [
+  const links = [
     {
-      label: lang === "fr" ? "Adoration" : lang === "ht" ? "Adorasyon" : "Worship",
-      items: [
-        { href: "/bible", label: lang === "fr" ? "📖 La Bible complète" : lang === "ht" ? "📖 Bib la konplè" : "📖 Full Bible" },
-        { href: "/louange", label: lang === "fr" ? "🎵 Louange & Musique" : lang === "ht" ? "🎵 Lwanj & Mizik" : "🎵 Praise & Music" },
-        { href: "/chants", label: lang === "fr" ? "🎶 Chants d'Espérance" : lang === "ht" ? "🎶 Chan Desperans" : "🎶 Hymns" },
-      ],
-    },
-    {
+      href: "/prieres",
       label: lang === "fr" ? "Prière" : lang === "ht" ? "Lapriyè" : "Prayer",
-      items: [
-        { href: "/prieres", label: lang === "fr" ? "🙏 Demandes de prière" : lang === "ht" ? "🙏 Demann lapriyè" : "🙏 Prayer requests" },
-        { href: "/temoignages", label: lang === "fr" ? "✨ Témoignages" : lang === "ht" ? "✨ Temwayaj" : "✨ Testimonies" },
-      ],
     },
     {
-      label: lang === "fr" ? "Apprendre" : lang === "ht" ? "Aprann" : "Learn",
-      items: [
-        { href: "/etude", label: lang === "fr" ? "📚 Études bibliques" : lang === "ht" ? "📚 Etid biblik" : "📚 Bible studies" },
-        { href: "/quiz", label: lang === "fr" ? "🏆 Quiz biblique" : lang === "ht" ? "🏆 Kiz biblik" : "🏆 Bible quiz" },
-      ],
+      href: "/etude",
+      label: lang === "fr" ? "Étude" : lang === "ht" ? "Etid" : "Study",
     },
     {
-      label: lang === "fr" ? "Jeux 🎮" : lang === "ht" ? "Jwèt 🎮" : "Games 🎮",
-      items: [
-        { href: "/quiz", label: lang === "fr" ? "🏆 Quiz Bible" : lang === "ht" ? "🏆 Kiz Bib" : "🏆 Bible Quiz" },
-        { href: "/jeu", label: lang === "fr" ? "🎯 Devine le Verset" : lang === "ht" ? "🎯 Devine Vèsè a" : "🎯 Guess the Verse" },
-        { href: "/jeu#vrai-faux", label: lang === "fr" ? "🃏 Vrai ou Faux ?" : lang === "ht" ? "🃏 Vre oswa Fo ?" : "🃏 True or False?" },
-        { href: "/jeu#speaker", label: lang === "fr" ? "👤 Qui a dit ça ?" : lang === "ht" ? "👤 Ki moun ki di sa ?" : "👤 Who said this?" },
-      ],
+      href: "/enseignement",
+      label: lang === "fr" ? "Enseignement" : lang === "ht" ? "Ansèyman" : "Teaching",
     },
     {
-      label: lang === "fr" ? "Communauté" : lang === "ht" ? "Kominote" : "Community",
-      items: [
-        { href: "/communaute", label: lang === "fr" ? "🌍 Groupes" : lang === "ht" ? "🌍 Gwoup" : "🌍 Groups" },
-        { href: "/eglise", label: lang === "fr" ? "⛪ Espace Église" : lang === "ht" ? "⛪ Espas Legliz" : "⛪ Church Space" },
-      ],
+      href: "/jeu",
+      label: lang === "fr" ? "Jeux" : lang === "ht" ? "Jwèt" : "Games",
+    },
+    {
+      href: "/concours",
+      label: lang === "fr" ? "Concours" : lang === "ht" ? "Konkou" : "Contest",
+    },
+    {
+      href: "/eglise",
+      label: lang === "fr" ? "Groupes" : lang === "ht" ? "Gwoup" : "Groups",
     },
   ];
 
   return (
-    <nav className="bg-white px-4 py-3 sticky top-0 z-50 shadow-sm border-b border-slate-200">
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group" onClick={() => setOpenMenu(null)}>
-          <img src="/logo-kp.png" alt="KP" className="w-11 h-11 rounded-xl group-hover:scale-105 transition-transform" />
-          <div className="hidden sm:block">
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">KONEKSYON PAM</span>
-            <p className="text-[10px] text-blue-400 -mt-0.5 tracking-widest">
-              {lang === "fr" ? "UNE MISSION • UN DIEU • UNE VISION" : lang === "ht" ? "YON MISYON • YON BONDYE • YON VIZYON" : "ONE MISSION • ONE GOD • ONE VISION"}
-            </p>
-          </div>
-          <span className="sm:hidden text-lg font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">KP</span>
+    <nav className="bg-white border-b border-stone-100 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between gap-6">
+
+        {/* Logo */}
+        <Link
+          href="/"
+          onClick={() => setOpen(false)}
+          className="flex items-center gap-2.5 shrink-0 group"
+        >
+          <img
+            src="/logo-kp.png"
+            alt="KP"
+            className="w-8 h-8 rounded-lg group-hover:opacity-80 transition-opacity"
+          />
+          <span className="hidden sm:block font-black text-[#0b0f1a] text-sm tracking-tight">
+            KONEKSYON PAM
+          </span>
+          <span className="sm:hidden font-black text-[#0b0f1a] text-sm">KP</span>
         </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-1">
-          {menus.map((menu) => (
-            <div key={menu.label} className="relative">
-              <button
-                onClick={() => setOpenMenu(openMenu === menu.label ? null : menu.label)}
-                className={`text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${openMenu === menu.label ? "bg-blue-50 text-blue-600" : ""}`}
+        {/* Desktop nav */}
+        <div className="hidden md:flex items-center gap-0.5 flex-1 justify-center">
+          {links.map((l) => {
+            const active = path === l.href || path?.startsWith(l.href + "/");
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
+                  active
+                    ? "text-[#0b0f1a] bg-stone-100"
+                    : "text-stone-500 hover:text-[#0b0f1a] hover:bg-stone-50"
+                }`}
               >
-                {menu.label} ▾
-              </button>
-              {openMenu === menu.label && (
-                <div className="absolute top-full left-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg py-2 w-56 z-50">
-                  {menu.items.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setOpenMenu(null)}
-                      className="block px-4 py-2.5 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+                {l.label}
+              </Link>
+            );
+          })}
         </div>
 
-        <div className="flex items-center gap-2">
-          <Link
-            href="/don"
-            className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-2 rounded-full hover:opacity-90 transition-opacity shadow-md shadow-amber-500/20"
-          >
-            ❤️ {lang === "fr" ? "Donner" : lang === "ht" ? "Fè yon don" : "Donate"}
-          </Link>
-          <LangSwitch />
-          <AuthButton />
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <div className="md:hidden flex flex-wrap justify-center gap-2 mt-2 px-2">
-        {menus.map((menu) => (
-          <div key={menu.label} className="relative">
-            <button
-              onClick={() => setOpenMenu(openMenu === menu.label ? null : menu.label)}
-              className={`text-slate-500 text-xs font-medium px-2 py-1 rounded transition-colors ${openMenu === menu.label ? "text-blue-600 bg-blue-50" : ""}`}
-            >
-              {menu.label} ▾
-            </button>
-            {openMenu === menu.label && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg py-2 w-52 z-50">
-                {menu.items.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setOpenMenu(null)}
-                    className="block px-4 py-2.5 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            )}
+        {/* Right side */}
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="hidden sm:block">
+            <LangSwitch />
           </div>
-        ))}
+          <AuthButton />
+          {/* Hamburger */}
+          <button
+            className="md:hidden p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors"
+            onClick={() => setOpen(!open)}
+            aria-label="Menu"
+          >
+            {open ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* Click outside to close */}
-      {openMenu && (
-        <div className="fixed inset-0 z-40" onClick={() => setOpenMenu(null)} />
+      {/* Mobile menu */}
+      {open && (
+        <div className="md:hidden border-t border-stone-100 bg-white px-4 pb-4 pt-2 flex flex-col gap-0.5">
+          {links.map((l) => {
+            const active = path === l.href || path?.startsWith(l.href + "/");
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  active
+                    ? "text-[#0b0f1a] bg-stone-100"
+                    : "text-stone-600 hover:bg-stone-50"
+                }`}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
+          <div className="mt-2 pt-2 border-t border-stone-100">
+            <LangSwitch />
+          </div>
+        </div>
       )}
     </nav>
   );
