@@ -411,10 +411,10 @@ export default function CreerEglisePage() {
                 required
                 placeholder={
                   selectedType.id === "eglise"
-                    ? (lang === "fr" ? "ex: Tabernacle de la Grâce, Église Béthel..." : "ex: Grace Tabernacle...")
+                    ? (lang === "fr" ? "ex: Tabernacle de la Grâce, Église Béthel..." : lang === "ht" ? "ex: Tabènak Gras la, Legliz Bètel..." : "ex: Grace Tabernacle...")
                     : selectedType.id === "chorale"
-                    ? (lang === "fr" ? "ex: Chœur Céleste, Chorale Résurrection..." : "ex: Heavenly Choir...")
-                    : (lang === "fr" ? "ex: Groupe Jeunesse Feu, Cellule Prière..." : "ex: Fire Youth Group...")
+                    ? (lang === "fr" ? "ex: Chœur Céleste, Chorale Résurrection..." : lang === "ht" ? "ex: Koral Selès, Koral Rezireksyon..." : "ex: Heavenly Choir...")
+                    : (lang === "fr" ? "ex: Groupe Jeunesse Feu, Cellule Prière..." : lang === "ht" ? "ex: Gwoup Jenès Dife, Selil Lapriyè..." : "ex: Fire Youth Group...")
                 }
                 className="w-full border border-stone-300 rounded-xl px-4 py-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none focus:bg-white"
               />
@@ -434,8 +434,8 @@ export default function CreerEglisePage() {
                 required
                 placeholder={
                   selectedType.id === "eglise"
-                    ? (lang === "fr" ? "ex: Pasteur Jean-Baptiste Pierre" : "ex: Pastor John Smith")
-                    : (lang === "fr" ? "ex: Marie Dupont, Jean François..." : "ex: Mary Smith, John Doe...")
+                    ? (lang === "fr" ? "ex: Pasteur Jean-Baptiste Pierre" : lang === "ht" ? "ex: Pastè Jan-Batis Pyè" : "ex: Pastor John Smith")
+                    : (lang === "fr" ? "ex: Marie Dupont, Jean François..." : lang === "ht" ? "ex: Mari Dipon, Jan Franswa..." : "ex: Mary Smith, John Doe...")
                 }
                 className="w-full border border-stone-300 rounded-xl px-4 py-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none focus:bg-white"
               />
@@ -461,7 +461,7 @@ export default function CreerEglisePage() {
               className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-all disabled:opacity-50 shadow-lg shadow-blue-500/20"
             >
               {loading || uploading
-                ? <span className="flex items-center justify-center gap-2"><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />{lang === "fr" ? "Création..." : "Creating..."}</span>
+                ? <span className="flex items-center justify-center gap-2"><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />{lang === "fr" ? "Création..." : lang === "ht" ? "Kap kreye..." : "Creating..."}</span>
                 : groupType === "eglise"
                 ? (lang === "fr" ? "Continuer → Départements" : lang === "ht" ? "Kontinye → Depatman" : "Continue → Departments")
                 : (lang === "fr" ? `Créer ${selectedType.fr}` : lang === "ht" ? `Kreye ${selectedType.ht}` : `Create ${selectedType.en}`)}
@@ -496,7 +496,7 @@ export default function CreerEglisePage() {
 
           <h2 className="text-base font-bold text-stone-700 mb-3">
             {lang === "fr" ? "3. Départements de votre église *" : lang === "ht" ? "3. Depatman legliz ou *" : "3. Your church departments *"}
-            <span className="ml-2 text-xs font-normal text-red-500">({lang === "fr" ? "min. 2 requis" : "min. 2 required"})</span>
+            <span className="ml-2 text-xs font-normal text-red-500">({lang === "fr" ? "min. 2 requis" : lang === "ht" ? "min. 2 obligatwa" : "min. 2 required"})</span>
           </h2>
 
           {/* Quick-add suggestions */}
@@ -581,9 +581,9 @@ export default function CreerEglisePage() {
             className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20"
           >
             {loading
-              ? <span className="flex items-center justify-center gap-2"><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />{lang === "fr" ? "Création en cours..." : "Creating..."}</span>
+              ? <span className="flex items-center justify-center gap-2"><span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />{lang === "fr" ? "Création en cours..." : lang === "ht" ? "Kap kreye..." : "Creating..."}</span>
               : departments.length < 2
-              ? (lang === "fr" ? `Ajoutez au moins 2 départements (${departments.length}/2)` : `Add at least 2 departments (${departments.length}/2)`)
+              ? (lang === "fr" ? `Ajoutez au moins 2 départements (${departments.length}/2)` : lang === "ht" ? `Ajoute omwen 2 depatman (${departments.length}/2)` : `Add at least 2 departments (${departments.length}/2)`)
               : (lang === "fr" ? `⛪ Créer l'église avec ${departments.length} départements` : lang === "ht" ? `⛪ Kreye legliz la ak ${departments.length} depatman` : `⛪ Create church with ${departments.length} departments`)}
           </button>
         </div>

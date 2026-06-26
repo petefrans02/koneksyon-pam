@@ -254,7 +254,7 @@ export default function ChurchPage() {
                 onClick={() => { setShowRequests(!showRequests); if (!showRequests) loadJoinRequests(); }}
                 className="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 rounded-xl px-4 py-2.5 text-xs font-bold transition-colors flex items-center gap-2 justify-center"
               >
-                🔔 {lang === "fr" ? "Demandes d'adhésion" : "Join requests"}
+                🔔 {lang === "fr" ? "Demandes d'adhésion" : lang === "ht" ? "Demann adhesyon" : "Join requests"}
               </button>
             )}
           </div>
@@ -267,13 +267,13 @@ export default function ChurchPage() {
       {isOwner && showRequests && (
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-8">
           <h2 className="font-bold text-amber-900 mb-4">
-            🔔 {lang === "fr" ? "Demandes en attente" : "Pending requests"}
+            🔔 {lang === "fr" ? "Demandes en attente" : lang === "ht" ? "Demann ki ap tann" : "Pending requests"}
             {joinRequests.length > 0 && (
               <span className="ml-2 bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">{joinRequests.length}</span>
             )}
           </h2>
           {joinRequests.length === 0 ? (
-            <p className="text-amber-700/60 text-sm">{lang === "fr" ? "Aucune demande en attente" : "No pending requests"}</p>
+            <p className="text-amber-700/60 text-sm">{lang === "fr" ? "Aucune demande en attente" : lang === "ht" ? "Pa gen demann ki ap tann" : "No pending requests"}</p>
           ) : (
             <div className="space-y-3">
               {joinRequests.map((req) => (
@@ -296,14 +296,14 @@ export default function ChurchPage() {
                       disabled={respondingId === req.id}
                       className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors"
                     >
-                      {respondingId === req.id ? "..." : lang === "fr" ? "✓ Accepter" : "✓ Accept"}
+                      {respondingId === req.id ? "..." : lang === "fr" ? "✓ Accepter" : lang === "ht" ? "✓ Aksepte" : "✓ Accept"}
                     </button>
                     <button
                       onClick={() => respondToRequest(req.id, "rejected")}
                       disabled={respondingId === req.id}
                       className="bg-red-100 hover:bg-red-200 text-red-600 px-4 py-2 rounded-lg text-xs font-bold transition-colors border border-red-200"
                     >
-                      {lang === "fr" ? "✗ Refuser" : "✗ Reject"}
+                      {lang === "fr" ? "✗ Refuser" : lang === "ht" ? "✗ Refize" : "✗ Reject"}
                     </button>
                   </div>
                 </div>
@@ -428,11 +428,11 @@ export default function ChurchPage() {
       {showPostForm && (
         <form onSubmit={handlePost} className="bg-white rounded-2xl border border-blue-100 p-6 mb-6 shadow-sm">
           <input type="hidden" value={typeMap[activeTab]} onChange={(e) => setPostType(e.target.value)} />
-          <input type="text" value={postTitle} onChange={(e) => setPostTitle(e.target.value)} placeholder={lang === "fr" ? "Titre..." : "Title..."} required className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none font-medium" />
-          <textarea value={postContent} onChange={(e) => setPostContent(e.target.value)} placeholder={lang === "fr" ? "Contenu..." : "Content..."} required rows={4} className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none resize-none" />
+          <input type="text" value={postTitle} onChange={(e) => setPostTitle(e.target.value)} placeholder={lang === "fr" ? "Titre..." : lang === "ht" ? "Tit..." : "Title..."} required className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none font-medium" />
+          <textarea value={postContent} onChange={(e) => setPostContent(e.target.value)} placeholder={lang === "fr" ? "Contenu..." : lang === "ht" ? "Kontni..." : "Content..."} required rows={4} className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none resize-none" />
           <div className="flex flex-col gap-3 mb-4">
             <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">📷 {lang === "fr" ? "Ajouter une image" : "Add an image"}</label>
+              <label className="block text-xs font-medium text-stone-500 mb-1">📷 {lang === "fr" ? "Ajouter une image" : lang === "ht" ? "Ajoute yon imaj" : "Add an image"}</label>
               <div className="flex items-center gap-3">
                 <label className="cursor-pointer bg-slate-100 hover:bg-slate-200 border border-stone-300 rounded-xl px-4 py-2.5 text-sm text-stone-600 font-medium transition-colors">
                   {uploading ? "⏳ Upload..." : "📁 Choisir un fichier"}
@@ -443,7 +443,7 @@ export default function ChurchPage() {
               {uploadedUrl && <img src={uploadedUrl} alt="" className="mt-2 w-32 h-32 object-cover rounded-xl border border-stone-200" />}
             </div>
             <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">🎬 {lang === "fr" ? "Lien vidéo YouTube (optionnel)" : "YouTube link (optional)"}</label>
+              <label className="block text-xs font-medium text-stone-500 mb-1">🎬 {lang === "fr" ? "Lien vidéo YouTube (optionnel)" : lang === "ht" ? "Lyen vidéo YouTube (opsyonèl)" : "YouTube link (optional)"}</label>
               <input type="url" value={postVideo} onChange={(e) => setPostVideo(e.target.value)} placeholder="https://youtube.com/..." className="w-full border border-stone-300 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none" />
             </div>
           </div>

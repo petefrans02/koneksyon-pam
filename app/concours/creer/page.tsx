@@ -257,7 +257,7 @@ export default function CreerConcoursPage() {
               {submitting ? (
                 <span className="flex items-center gap-2">
                   <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  {l === "fr" ? "Création..." : "Kap kreye..."}
+                  {l === "fr" ? "Création..." : l === "ht" ? "Kap kreye..." : "Creating..."}
                 </span>
               ) : txt.submit}
             </button>

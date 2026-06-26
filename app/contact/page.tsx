@@ -118,7 +118,7 @@ export default function ContactPage() {
         {[
           { icon: "📧", title: "Email", value: "koneksyonpam@gmail.com" },
           { icon: "📺", title: "YouTube", value: "KONEKSYON PAM", href: "https://www.youtube.com/channel/UCl01tzkV_QzhPvZ-pf9Ey-g" },
-          { icon: "🌍", title: lang === "fr" ? "Communauté" : "Community", value: lang === "fr" ? "12+ pays" : "12+ countries" },
+          { icon: "🌍", title: lang === "fr" ? "Communauté" : lang === "ht" ? "Kominote" : "Community", value: lang === "fr" ? "12+ pays" : lang === "ht" ? "12+ peyi" : "12+ countries" },
         ].map((item) => (
           <div key={item.title} className="bg-white rounded-xl border border-blue-100 p-4 text-center">
             <span className="text-2xl block mb-2">{item.icon}</span>
