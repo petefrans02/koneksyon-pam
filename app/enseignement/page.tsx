@@ -2,7 +2,7 @@
 
 import { useLang } from "@/lib/LangContext";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type Lang = "fr" | "ht" | "en";
 
@@ -116,10 +116,42 @@ export default function EnseignementPage() {
   const l = (["fr", "ht", "en"].includes(lang) ? lang : "fr") as Lang;
   const [openSeries, setOpenSeries] = useState<string | null>(null);
   const [openMsg, setOpenMsg] = useState<{ seriesId: string; msgNum: number } | null>(null);
+  const [aiQuestion, setAiQuestion] = useState("");
+  const [aiAnswer, setAiAnswer] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const aiRef = useRef<HTMLDivElement>(null);
 
   const activeMsg = openMsg
     ? series.find(s => s.id === openMsg.seriesId)?.messages.find(m => m.num === openMsg.msgNum)
     : null;
+
+  function closeModal() {
+    setOpenMsg(null);
+    setAiQuestion("");
+    setAiAnswer("");
+  }
+
+  async function askAI() {
+    if (!aiQuestion.trim() || !activeMsg) return;
+    setAiLoading(true);
+    setAiAnswer("");
+    try {
+      const res = await fetch("/api/ai-explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: aiQuestion,
+          context: activeMsg.body[l],
+          lang,
+        }),
+      });
+      const data = await res.json();
+      setAiAnswer(data.answer || "");
+      setTimeout(() => aiRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
+    } finally {
+      setAiLoading(false);
+    }
+  }
 
   return (
     <div className="bg-white min-h-screen">
@@ -160,7 +192,7 @@ export default function EnseignementPage() {
                 </p>
                 <h2 className="text-white font-bold text-lg leading-snug">{activeMsg.title[l]}</h2>
               </div>
-              <button onClick={() => setOpenMsg(null)}
+              <button onClick={closeModal}
                 className="shrink-0 text-white/50 hover:text-white transition-colors mt-0.5">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -169,12 +201,69 @@ export default function EnseignementPage() {
             </div>
             {/* Modal body */}
             <div className="px-6 py-6 overflow-y-auto flex-1">
+              {/* Message content */}
               {activeMsg.body[l].split("\n\n").map((para, i) => (
                 <p key={i} className="text-[#0f2044]/80 text-sm leading-relaxed mb-4">{para}</p>
               ))}
+
+              {/* AI section */}
+              <div className="mt-6 border-t border-[#bfdbfe] pt-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#1d4ed8] to-[#38bdf8] flex items-center justify-center">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm1 11H9v-2h2v2zm0-4H9V7h2v2z"/>
+                    </svg>
+                  </div>
+                  <p className="text-[#0f2044] font-bold text-sm">
+                    {l === "fr" ? "Approfondir avec l'IA" : l === "ht" ? "Apwfondi ak IA a" : "Explore deeper with AI"}
+                  </p>
+                </div>
+                <p className="text-stone-400 text-xs mb-3">
+                  {l === "fr" ? "Posez une question sur ce message et l'IA vous répondra avec une explication approfondie."
+                 : l === "ht" ? "Poze yon kesyon sou mesaj sa a epi IA a ap repon ou ak yon eksplikasyon pwofon."
+                 : "Ask a question about this message and the AI will respond with a deeper explanation."}
+                </p>
+                <div className="flex gap-2">
+                  <input
+                    value={aiQuestion}
+                    onChange={e => setAiQuestion(e.target.value)}
+                    onKeyDown={e => e.key === "Enter" && askAI()}
+                    placeholder={l === "fr" ? "Ex: Que signifie la sainteté de Dieu pour ma vie ?" : l === "ht" ? "Ex: Kisa sentete Bondye vle di pou lavi mwen ?" : "Ex: What does God's holiness mean for my life?"}
+                    className="flex-1 border border-[#bfdbfe] rounded-lg px-4 py-2.5 text-sm text-[#0f2044] placeholder:text-stone-300 focus:outline-none focus:border-[#1d4ed8] focus:ring-1 focus:ring-[#1d4ed8]"
+                  />
+                  <button
+                    onClick={askAI}
+                    disabled={aiLoading || !aiQuestion.trim()}
+                    className="shrink-0 bg-[#1d4ed8] disabled:opacity-40 text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-colors hover:bg-[#1e40af]"
+                  >
+                    {aiLoading ? (
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        {l === "fr" ? "..." : "..."}
+                      </span>
+                    ) : (l === "fr" ? "Demander" : l === "ht" ? "Mande" : "Ask")}
+                  </button>
+                </div>
+
+                {/* AI Answer */}
+                {aiAnswer && (
+                  <div ref={aiRef} className="mt-4 bg-[#eff6ff] border border-[#bfdbfe] rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-4 h-4 rounded-full bg-gradient-to-br from-[#1d4ed8] to-[#38bdf8]" />
+                      <p className="text-[#1d4ed8] text-[10px] font-bold uppercase tracking-widest">
+                        {l === "fr" ? "Réponse de l'IA" : l === "ht" ? "Repons IA a" : "AI Response"}
+                      </p>
+                    </div>
+                    {aiAnswer.split("\n\n").map((para, i) => (
+                      <p key={i} className="text-[#0f2044]/80 text-sm leading-relaxed mb-2 last:mb-0">{para}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
+
             <div className="px-6 py-4 border-t border-stone-100">
-              <button onClick={() => setOpenMsg(null)}
+              <button onClick={closeModal}
                 className="text-[#1d4ed8] text-sm font-semibold hover:underline">
                 ← {l === "fr" ? "Retour aux séries" : l === "ht" ? "Retounen nan seri yo" : "Back to series"}
               </button>

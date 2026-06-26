@@ -2,6 +2,7 @@
 
 import { useLang } from "@/lib/LangContext";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 type Lang = "fr" | "ht" | "en";
@@ -28,6 +29,108 @@ const features = [
 function getDayOfYear() {
   const n = new Date();
   return Math.floor((n.getTime() - new Date(n.getFullYear(), 0, 0).getTime()) / 86400000);
+}
+
+/* ── ONBOARDING MODAL ── */
+function OnboardingModal({ l, onClose }: { l: Lang; onClose: () => void }) {
+  const [entered, setEntered] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const t = setTimeout(() => setEntered(true), 30);
+    return () => clearTimeout(t);
+  }, []);
+
+  function pick(href: string) {
+    onClose();
+    router.push(href);
+  }
+
+  const services = [
+    { href: "/prieres", icon: "🙏", fr: "Prière & Intercession", ht: "Lapriyè & Entèsesyon", en: "Prayer & Intercession", desc: { fr: "Déposez vos besoins. Intercédez pour d'autres.", ht: "Depoze bezwen ou. Entèsede pou lòt moun.", en: "Share your needs. Intercede for others." }, color: "#1d4ed8" },
+    { href: "/etude", icon: "📖", fr: "Étude Biblique", ht: "Etid Biblik", en: "Bible Study", desc: { fr: "Plans de lecture et ressources théologiques.", ht: "Plan lekti ak resous teyolojik.", en: "Reading plans and theological resources." }, color: "#0f2044" },
+    { href: "/enseignement", icon: "🎓", fr: "Enseignement", ht: "Ansèyman", en: "Teaching", desc: { fr: "Séries et messages de pasteurs et leaders.", ht: "Seri ak mesaj pastè ak lidè.", en: "Series and messages from pastors and leaders." }, color: "#1d4ed8" },
+    { href: "/jeu", icon: "🏛️", fr: "Jeux Bibliques", ht: "Jwèt Biblik", en: "Bible Games", desc: { fr: "Trois formats de défi pour tester vos connaissances.", ht: "Twa fòma defi pou teste konesans ou.", en: "Three challenge formats to test your knowledge." }, color: "#0f2044" },
+    { href: "/concours", icon: "🏆", fr: "Concours Bibliques", ht: "Konkou Biblik", en: "Biblical Contests", desc: { fr: "Compétitions en direct. Le public vote.", ht: "Konpetisyon an dirèk. Piblik la vote.", en: "Live competitions with public voting." }, color: "#1d4ed8" },
+    { href: "/eglise", icon: "⛪", fr: "Groupes d'Église", ht: "Gwoup Legliz", en: "Church Groups", desc: { fr: "Créez ou rejoignez votre communauté.", ht: "Kreye oswa rantre nan kominote ou a.", en: "Create or join your community." }, color: "#0f2044" },
+  ];
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: entered ? "rgba(15,32,68,0.85)" : "rgba(15,32,68,0)", backdropFilter: "blur(6px)", transition: "background-color 0.4s ease" }}
+      onClick={onClose}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          opacity: entered ? 1 : 0,
+          transform: entered ? "scale(1) translateY(0)" : "scale(0.92) translateY(24px)",
+          transition: "all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        }}
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto"
+      >
+        {/* Header */}
+        <div className="bg-[#0f2044] rounded-t-2xl px-8 py-6 relative">
+          <button onClick={onClose} className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div className="flex items-center gap-3 mb-3">
+            <img src="/logo-kp.png" alt="KP" className="w-10 h-10 rounded-lg" />
+            <div>
+              <p className="text-white font-black text-sm">KONEKSYON PAM</p>
+              <p className="text-white/40 text-[10px] uppercase tracking-widest">Plateforme Chrétienne</p>
+            </div>
+          </div>
+          <h2 className="text-white font-black text-xl leading-snug">
+            {l === "fr" ? "Bienvenue. Quel service voulez-vous utiliser ?"
+           : l === "ht" ? "Byenveni. Ki sèvis ou vle itilize ?"
+           : "Welcome. Which service do you want to use?"}
+          </h2>
+          <p className="text-white/50 text-sm mt-1">
+            {l === "fr" ? "Choisissez où vous souhaitez commencer."
+           : l === "ht" ? "Chwazi ki kote ou vle kòmanse."
+           : "Choose where you want to start."}
+          </p>
+        </div>
+
+        {/* Services grid */}
+        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {services.map((s, i) => (
+            <button
+              key={s.href}
+              onClick={() => pick(s.href)}
+              style={{
+                opacity: entered ? 1 : 0,
+                transform: entered ? "translateY(0)" : "translateY(16px)",
+                transition: `all 0.4s ease ${0.15 + i * 0.07}s`,
+              }}
+              className="group flex items-start gap-4 p-4 rounded-xl border-2 border-stone-100 hover:border-[#1d4ed8] hover:shadow-md text-left transition-all"
+            >
+              <span className="text-3xl shrink-0 group-hover:scale-110 transition-transform duration-200">{s.icon}</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[#0f2044] font-bold text-sm group-hover:text-[#1d4ed8] transition-colors">
+                  {l === "fr" ? s.fr : l === "ht" ? s.ht : s.en}
+                </p>
+                <p className="text-stone-400 text-xs mt-0.5 leading-snug">{s.desc[l]}</p>
+              </div>
+              <span className="shrink-0 text-stone-200 group-hover:text-[#1d4ed8] transition-colors mt-0.5">→</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="px-6 pb-6 text-center">
+          <p className="text-stone-300 text-xs">
+            {l === "fr" ? "Vous pouvez changer de section à tout moment via le menu."
+           : l === "ht" ? "Ou ka chanje seksyon nenpòt ki lè via meni an."
+           : "You can switch sections anytime via the menu."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function ServicesSection({ l }: { l: Lang }) {
@@ -108,6 +211,7 @@ export default function Home() {
   const l = (["fr", "ht", "en"].includes(lang) ? lang : "fr") as Lang;
   const [visible, setVisible] = useState(false);
   const [vi, setVi] = useState(getDayOfYear() % verses.length);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => { const t = setTimeout(() => setVisible(true), 60); return () => clearTimeout(t); }, []);
 
@@ -115,6 +219,9 @@ export default function Home() {
 
   return (
     <main>
+
+      {/* Onboarding modal */}
+      {showOnboarding && <OnboardingModal l={l} onClose={() => setShowOnboarding(false)} />}
 
       {/* ── HERO BANNER ── */}
       <section className="bg-[#0f2044]">
@@ -140,10 +247,11 @@ export default function Home() {
                : "Prayer, study, teaching, biblical contests and church groups — all centralized for your spiritual life."}
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/prieres"
+                <button
+                  onClick={() => setShowOnboarding(true)}
                   className="bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-7 py-3 rounded font-bold text-sm transition-colors shadow-lg">
                   {l === "fr" ? "Accéder à la plateforme" : l === "ht" ? "Antre nan platfòm nan" : "Access the platform"}
-                </Link>
+                </button>
                 <Link href="/eglise"
                   className="bg-white/10 hover:bg-white/15 text-white border border-white/20 px-7 py-3 rounded font-semibold text-sm transition-colors">
                   {l === "fr" ? "Rejoindre un groupe" : l === "ht" ? "Rantre nan yon gwoup" : "Join a group"}
