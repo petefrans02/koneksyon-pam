@@ -1,10 +1,10 @@
 "use client";
 import RequireAuth from "@/app/components/RequireAuth";
 import { useLang } from "@/lib/LangContext";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
-// ─── GAME 1: Devine le Verset ───────────────────────────────────────────────
+// ─── Data ────────────────────────────────────────────────────────────────────
 interface VerseChallenge { verse: string; reference: string; missingWord: string; hint: string; options: string[]; }
 const versesChallenges: VerseChallenge[] = [
   { verse: "Car Dieu a tant aimé le _____ qu'il a donné son Fils unique", reference: "Jean 3:16", missingWord: "monde", hint: "La terre entière", options: ["monde", "peuple", "ciel", "royaume"] },
@@ -26,7 +26,7 @@ const versesChallenges: VerseChallenge[] = [
   { verse: "Soyez forts et courageux ! Ne vous effrayez pas et ne vous laissez pas _____ devant eux", reference: "Deutéronome 31:6", missingWord: "abattre", hint: "Perdre courage", options: ["perdre", "abattre", "décourager", "trembler"] },
   { verse: "Car c'est par la _____ que vous êtes sauvés", reference: "Éphésiens 2:8", missingWord: "grâce", hint: "Le don gratuit de Dieu", options: ["foi", "grâce", "prière", "loi"] },
   { verse: "Cherchez premièrement le _____ de Dieu et sa justice", reference: "Matthieu 6:33", missingWord: "royaume", hint: "Le règne de Dieu", options: ["temple", "amour", "royaume", "chemin"] },
-  { verse: "Dieu est notre _____ et notre force", reference: "Psaume 46:2", missingWord: "refuge", hint: "Un abri contre le danger", options: ["refuge", "berger", "juge", "père"] },
+  { verse: "Dieu est notre _____ et notre force", reference: "Psaume 46:1", missingWord: "refuge", hint: "Un abri contre le danger", options: ["refuge", "berger", "juge", "père"] },
   { verse: "Tes paroles sont une _____ à mes pieds", reference: "Psaume 119:105", missingWord: "lampe", hint: "Source de lumière", options: ["lampe", "épée", "force", "joie"] },
   { verse: "Jésus-Christ est le même hier, aujourd'hui et _____", reference: "Hébreux 13:8", missingWord: "éternellement", hint: "Pour toujours", options: ["demain", "éternellement", "toujours", "jamais"] },
   { verse: "Si quelqu'un est en Christ, il est une nouvelle _____", reference: "2 Corinthiens 5:17", missingWord: "création", hint: "Quelque chose de fait à nouveau", options: ["créature", "création", "naissance", "vie"] },
@@ -34,7 +34,6 @@ const versesChallenges: VerseChallenge[] = [
   { verse: "L'Éternel te bénisse et te _____", reference: "Nombres 6:24", missingWord: "garde", hint: "Protéger, surveiller", options: ["garde", "guide", "aime", "sauve"] },
 ];
 
-// ─── GAME 2: Vrai ou Faux ───────────────────────────────────────────────────
 interface VraiFauxQ { question: string; answer: boolean; explication: string; }
 const vraiFauxQuestions: VraiFauxQ[] = [
   { question: "Jésus a jeûné 40 jours dans le désert", answer: true, explication: "Matthieu 4:2 — Jésus a jeûné quarante jours et quarante nuits" },
@@ -59,7 +58,6 @@ const vraiFauxQuestions: VraiFauxQ[] = [
   { question: "Élie a été emporté au ciel dans un tourbillon de feu", answer: true, explication: "2 Rois 2:11 — un char de feu et des chevaux de feu" },
 ];
 
-// ─── GAME 3: Qui a dit ça ? ─────────────────────────────────────────────────
 interface SpeakerQ { quote: string; speaker: string; options: string[]; reference: string; }
 const speakerQuestions: SpeakerQ[] = [
   { quote: "Je suis le chemin, la vérité et la vie", speaker: "Jésus", options: ["Jésus", "Paul", "Jean", "Moïse"], reference: "Jean 14:6" },
@@ -76,11 +74,53 @@ const speakerQuestions: SpeakerQ[] = [
   { quote: "La faveur de l'Éternel est sur ceux qui le craignent", speaker: "David", options: ["David", "Salomon", "Asaph", "Moïse"], reference: "Psaume 103:17" },
 ];
 
-function shuffle<T>(arr: T[]): T[] {
-  return [...arr].sort(() => Math.random() - 0.5);
+function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 0.5); }
+
+// ─── i18n helpers ────────────────────────────────────────────────────────────
+function t(key: string, lang: string): string {
+  const map: Record<string, Record<string, string>> = {
+    back:        { fr: "← Jeux",            ht: "← Jwèt",           en: "← Games" },
+    replay:      { fr: "Rejouer",            ht: "Rejwe",            en: "Play again" },
+    correct:     { fr: "✓ Correct !",        ht: "✓ Kòrèk !",       en: "✓ Correct!" },
+    wrong:       { fr: "✗ C'était :",        ht: "✗ Se te :",        en: "✗ It was:" },
+    nextVerse:   { fr: "Verset suivant →",   ht: "Vèsè swivan →",   en: "Next verse →" },
+    nextQ:       { fr: "Question suivante →",ht: "Kesyon swivan →",  en: "Next question →" },
+    result:      { fr: "Voir le résultat ★", ht: "Wè rezilta ★",    en: "See result ★" },
+    excellent:   { fr: "Excellent !",        ht: "Ekselan !",        en: "Excellent!" },
+    wellDone:    { fr: "Bien joué !",        ht: "Byen jwe !",       en: "Well done!" },
+    keepGoing:   { fr: "Continue !",         ht: "Kontinye !",       en: "Keep going!" },
+    correct_pct: { fr: "de bonnes réponses", ht: "bon repons",       en: "correct" },
+    bestStreak:  { fr: "Meilleure série :",  ht: "Miyò seri :",      en: "Best streak:" },
+    hint:        { fr: "Indice :",           ht: "Konsèy :",         en: "Hint:" },
+    trueBtn:     { fr: "✅ VRAI",            ht: "✅ VRE",           en: "✅ TRUE" },
+    falseBtn:    { fr: "❌ FAUX",            ht: "❌ FO",            en: "❌ FALSE" },
+    wrongWas:    { fr: "C'était",            ht: "Se te",            en: "It was" },
+    whoSaid:     { fr: "Qui a dit ça ?",     ht: "Ki moun ki di sa ?", en: "Who said this?" },
+  };
+  return map[key]?.[lang] ?? map[key]?.["fr"] ?? key;
 }
 
-// ─── SUB-GAME: Devine le Verset ─────────────────────────────────────────────
+function ScoreScreen({ pct, score, total, bestStreak, lang, onBack, onReplay }: {
+  pct: number; score: number; total: number; bestStreak?: number;
+  lang: string; onBack: () => void; onReplay: () => void;
+}) {
+  const msg = pct >= 80 ? t("excellent", lang) : pct >= 50 ? t("wellDone", lang) : t("keepGoing", lang);
+  return (
+    <div className="text-center py-10">
+      <span className="text-6xl block mb-4">{pct >= 80 ? "🏆" : pct >= 50 ? "⭐" : "💪"}</span>
+      <h2 className="text-2xl font-bold text-stone-900 mb-2">{msg}</h2>
+      <div className="text-5xl font-black text-blue-600 my-4">{score}/{total}</div>
+      <p className="text-stone-500 mb-1">{pct}% {t("correct_pct", lang)}</p>
+      {bestStreak !== undefined && <p className="text-amber-600 font-medium mb-6">🔥 {t("bestStreak", lang)} {bestStreak}</p>}
+      <div className="flex justify-center gap-3 mt-6">
+        <button onClick={onBack} className="bg-stone-100 text-stone-600 px-6 py-3 rounded-full font-medium hover:bg-stone-200">{t("back", lang)}</button>
+        <button onClick={onReplay} className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:opacity-90">{t("replay", lang)}</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Game 1: Devine le Verset ─────────────────────────────────────────────────
 function DevineVerset({ lang, onBack }: { lang: string; onBack: () => void }) {
   const [shuffled] = useState(() => shuffle(versesChallenges));
   const [idx, setIdx] = useState(0);
@@ -89,7 +129,6 @@ function DevineVerset({ lang, onBack }: { lang: string; onBack: () => void }) {
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
   const [done, setDone] = useState(false);
-
   const ch = shuffled[idx];
 
   function pick(word: string) {
@@ -100,38 +139,24 @@ function DevineVerset({ lang, onBack }: { lang: string; onBack: () => void }) {
       const ns = streak + 1;
       setStreak(ns);
       if (ns > bestStreak) setBestStreak(ns);
-    } else {
-      setStreak(0);
-    }
+    } else setStreak(0);
   }
 
   function next() {
     if (idx + 1 >= shuffled.length) { setDone(true); return; }
-    setIdx(idx + 1);
-    setSelected(null);
+    setIdx(idx + 1); setSelected(null);
   }
 
   if (done) {
     const pct = Math.round((score / shuffled.length) * 100);
-    return (
-      <div className="text-center py-10">
-        <span className="text-6xl block mb-4">{pct >= 80 ? "🏆" : pct >= 50 ? "⭐" : "💪"}</span>
-        <h2 className="text-2xl font-bold text-stone-900 mb-2">{pct >= 80 ? "Excellent !" : pct >= 50 ? "Bien joué !" : "Continue !"}</h2>
-        <div className="text-5xl font-black text-blue-600 my-4">{score}/{shuffled.length}</div>
-        <p className="text-stone-500 mb-1">{pct}% {lang === "fr" ? "de bonnes réponses" : "correct"}</p>
-        <p className="text-amber-600 font-medium mb-6">🔥 Meilleure série : {bestStreak}</p>
-        <div className="flex justify-center gap-3">
-          <button onClick={onBack} className="bg-stone-100 text-stone-600 px-6 py-3 rounded-full font-medium hover:bg-stone-200">← Jeux</button>
-          <button onClick={() => { setIdx(0); setSelected(null); setScore(0); setStreak(0); setDone(false); }} className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:opacity-90">Rejouer</button>
-        </div>
-      </div>
-    );
+    return <ScoreScreen pct={pct} score={score} total={shuffled.length} bestStreak={bestStreak} lang={lang}
+      onBack={onBack} onReplay={() => { setIdx(0); setSelected(null); setScore(0); setStreak(0); setBestStreak(0); setDone(false); }} />;
   }
 
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
-        <button onClick={onBack} className="text-blue-500 text-sm hover:underline">← Jeux</button>
+        <button onClick={onBack} className="text-blue-500 text-sm hover:underline">{t("back", lang)}</button>
         <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-bold">{idx + 1}/{shuffled.length}</span>
         {streak >= 3 && <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-bold animate-pulse">🔥 {streak}</span>}
         <span className="ml-auto text-sm font-bold text-stone-500">{score} ✓</span>
@@ -150,7 +175,7 @@ function DevineVerset({ lang, onBack }: { lang: string; onBack: () => void }) {
           ))}
         </p>
         <p className="text-center text-blue-500 text-sm mt-4 font-medium">📖 {ch.reference}</p>
-        {!selected && <p className="text-center text-stone-400 text-xs mt-2">💡 {ch.hint}</p>}
+        {!selected && <p className="text-center text-stone-400 text-xs mt-2">💡 {t("hint", lang)} {ch.hint}</p>}
       </div>
       {!selected ? (
         <div className="grid grid-cols-2 gap-3">
@@ -161,10 +186,10 @@ function DevineVerset({ lang, onBack }: { lang: string; onBack: () => void }) {
       ) : (
         <div className="text-center">
           <div className={`inline-block px-6 py-3 rounded-xl font-bold text-lg mb-4 ${selected === ch.missingWord ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-            {selected === ch.missingWord ? "✓ Correct !" : `✗ C'était : ${ch.missingWord}`}
+            {selected === ch.missingWord ? t("correct", lang) : `${t("wrong", lang)} ${ch.missingWord}`}
           </div>
           <button onClick={next} className="block mx-auto bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-8 py-3 rounded-full font-bold hover:opacity-90">
-            {idx + 1 >= shuffled.length ? "Voir le résultat ★" : "Verset suivant →"}
+            {idx + 1 >= shuffled.length ? t("result", lang) : t("nextVerse", lang)}
           </button>
         </div>
       )}
@@ -172,14 +197,13 @@ function DevineVerset({ lang, onBack }: { lang: string; onBack: () => void }) {
   );
 }
 
-// ─── SUB-GAME: Vrai ou Faux ──────────────────────────────────────────────────
+// ─── Game 2: Vrai ou Faux ──────────────────────────────────────────────────────
 function VraiFaux({ lang, onBack }: { lang: string; onBack: () => void }) {
   const [shuffled] = useState(() => shuffle(vraiFauxQuestions));
   const [idx, setIdx] = useState(0);
   const [chosen, setChosen] = useState<boolean | null>(null);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
-
   const q = shuffled[idx];
 
   function pick(val: boolean) {
@@ -190,30 +214,19 @@ function VraiFaux({ lang, onBack }: { lang: string; onBack: () => void }) {
 
   function next() {
     if (idx + 1 >= shuffled.length) { setDone(true); return; }
-    setIdx(idx + 1);
-    setChosen(null);
+    setIdx(idx + 1); setChosen(null);
   }
 
   if (done) {
     const pct = Math.round((score / shuffled.length) * 100);
-    return (
-      <div className="text-center py-10">
-        <span className="text-6xl block mb-4">{pct >= 80 ? "🏆" : pct >= 50 ? "⭐" : "💪"}</span>
-        <h2 className="text-2xl font-bold text-stone-900 mb-2">{pct >= 80 ? "Excellent !" : pct >= 50 ? "Bien joué !" : "Continue !"}</h2>
-        <div className="text-5xl font-black text-blue-600 my-4">{score}/{shuffled.length}</div>
-        <p className="text-stone-500 mb-6">{pct}% de bonnes réponses</p>
-        <div className="flex justify-center gap-3">
-          <button onClick={onBack} className="bg-stone-100 text-stone-600 px-6 py-3 rounded-full font-medium hover:bg-stone-200">← Jeux</button>
-          <button onClick={() => { setIdx(0); setChosen(null); setScore(0); setDone(false); }} className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:opacity-90">Rejouer</button>
-        </div>
-      </div>
-    );
+    return <ScoreScreen pct={pct} score={score} total={shuffled.length} lang={lang}
+      onBack={onBack} onReplay={() => { setIdx(0); setChosen(null); setScore(0); setDone(false); }} />;
   }
 
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
-        <button onClick={onBack} className="text-blue-500 text-sm hover:underline">← Jeux</button>
+        <button onClick={onBack} className="text-blue-500 text-sm hover:underline">{t("back", lang)}</button>
         <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-bold">{idx + 1}/{shuffled.length}</span>
         <span className="ml-auto text-sm font-bold text-stone-500">{score} ✓</span>
       </div>
@@ -225,19 +238,19 @@ function VraiFaux({ lang, onBack }: { lang: string; onBack: () => void }) {
       </div>
       {chosen === null ? (
         <div className="grid grid-cols-2 gap-4">
-          <button onClick={() => pick(true)} className="bg-green-500 hover:bg-green-400 text-white py-6 rounded-2xl text-2xl font-black transition-all hover:scale-105 shadow-lg shadow-green-200">✅ VRAI</button>
-          <button onClick={() => pick(false)} className="bg-red-500 hover:bg-red-400 text-white py-6 rounded-2xl text-2xl font-black transition-all hover:scale-105 shadow-lg shadow-red-200">❌ FAUX</button>
+          <button onClick={() => pick(true)} className="bg-green-500 hover:bg-green-400 text-white py-6 rounded-2xl text-2xl font-black transition-all hover:scale-105 shadow-lg shadow-green-200">{t("trueBtn", lang)}</button>
+          <button onClick={() => pick(false)} className="bg-red-500 hover:bg-red-400 text-white py-6 rounded-2xl text-2xl font-black transition-all hover:scale-105 shadow-lg shadow-red-200">{t("falseBtn", lang)}</button>
         </div>
       ) : (
         <div className="text-center">
           <div className={`rounded-2xl p-5 mb-4 ${chosen === q.answer ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"}`}>
             <p className={`font-bold text-lg mb-2 ${chosen === q.answer ? "text-green-700" : "text-red-700"}`}>
-              {chosen === q.answer ? "✓ Correct !" : `✗ C'était ${q.answer ? "VRAI" : "FAUX"}`}
+              {chosen === q.answer ? t("correct", lang) : `${t("wrong", lang)} ${q.answer ? t("trueBtn", lang).replace(/[✅❌]\s*/,"") : t("falseBtn", lang).replace(/[✅❌]\s*/,"")}`}
             </p>
             <p className="text-stone-600 text-sm">📖 {q.explication}</p>
           </div>
           <button onClick={next} className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold hover:opacity-90">
-            {idx + 1 >= shuffled.length ? "Voir le résultat ★" : "Question suivante →"}
+            {idx + 1 >= shuffled.length ? t("result", lang) : t("nextQ", lang)}
           </button>
         </div>
       )}
@@ -245,14 +258,13 @@ function VraiFaux({ lang, onBack }: { lang: string; onBack: () => void }) {
   );
 }
 
-// ─── SUB-GAME: Qui a dit ça ? ────────────────────────────────────────────────
+// ─── Game 3: Qui a dit ça ? ───────────────────────────────────────────────────
 function QuiADit({ lang, onBack }: { lang: string; onBack: () => void }) {
   const [shuffled] = useState(() => shuffle(speakerQuestions));
   const [idx, setIdx] = useState(0);
   const [chosen, setChosen] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
-
   const q = shuffled[idx];
 
   function pick(opt: string) {
@@ -263,30 +275,19 @@ function QuiADit({ lang, onBack }: { lang: string; onBack: () => void }) {
 
   function next() {
     if (idx + 1 >= shuffled.length) { setDone(true); return; }
-    setIdx(idx + 1);
-    setChosen(null);
+    setIdx(idx + 1); setChosen(null);
   }
 
   if (done) {
     const pct = Math.round((score / shuffled.length) * 100);
-    return (
-      <div className="text-center py-10">
-        <span className="text-6xl block mb-4">{pct >= 80 ? "🏆" : pct >= 50 ? "⭐" : "💪"}</span>
-        <h2 className="text-2xl font-bold text-stone-900 mb-2">{pct >= 80 ? "Excellent !" : pct >= 50 ? "Bien joué !" : "Continue !"}</h2>
-        <div className="text-5xl font-black text-blue-600 my-4">{score}/{shuffled.length}</div>
-        <p className="text-stone-500 mb-6">{pct}% de bonnes réponses</p>
-        <div className="flex justify-center gap-3">
-          <button onClick={onBack} className="bg-stone-100 text-stone-600 px-6 py-3 rounded-full font-medium hover:bg-stone-200">← Jeux</button>
-          <button onClick={() => { setIdx(0); setChosen(null); setScore(0); setDone(false); }} className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-bold hover:opacity-90">Rejouer</button>
-        </div>
-      </div>
-    );
+    return <ScoreScreen pct={pct} score={score} total={shuffled.length} lang={lang}
+      onBack={onBack} onReplay={() => { setIdx(0); setChosen(null); setScore(0); setDone(false); }} />;
   }
 
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
-        <button onClick={onBack} className="text-blue-500 text-sm hover:underline">← Jeux</button>
+        <button onClick={onBack} className="text-blue-500 text-sm hover:underline">{t("back", lang)}</button>
         <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-bold">{idx + 1}/{shuffled.length}</span>
         <span className="ml-auto text-sm font-bold text-stone-500">{score} ✓</span>
       </div>
@@ -294,7 +295,7 @@ function QuiADit({ lang, onBack }: { lang: string; onBack: () => void }) {
         <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all duration-500" style={{ width: `${((idx + 1) / shuffled.length) * 100}%` }} />
       </div>
       <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-8 shadow-sm mb-6 text-center">
-        <p className="text-xs text-amber-600 font-bold mb-3 uppercase tracking-widest">Qui a dit ça ?</p>
+        <p className="text-xs text-amber-600 font-bold mb-3 uppercase tracking-widest">{t("whoSaid", lang)}</p>
         <p className="text-xl font-semibold text-stone-800 italic leading-relaxed">&ldquo;{q.quote}&rdquo;</p>
         <p className="text-sm text-amber-600 mt-3">📖 {q.reference}</p>
       </div>
@@ -308,11 +309,11 @@ function QuiADit({ lang, onBack }: { lang: string; onBack: () => void }) {
         <div className="text-center">
           <div className={`rounded-2xl p-5 mb-4 ${chosen === q.speaker ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"}`}>
             <p className={`font-bold text-lg mb-1 ${chosen === q.speaker ? "text-green-700" : "text-red-700"}`}>
-              {chosen === q.speaker ? "✓ Correct !" : `✗ C'était : ${q.speaker}`}
+              {chosen === q.speaker ? t("correct", lang) : `${t("wrong", lang)} ${q.speaker}`}
             </p>
           </div>
           <button onClick={next} className="bg-gradient-to-r from-amber-400 to-orange-500 text-white px-8 py-3 rounded-full font-bold hover:opacity-90">
-            {idx + 1 >= shuffled.length ? "Voir le résultat ★" : "Question suivante →"}
+            {idx + 1 >= shuffled.length ? t("result", lang) : t("nextQ", lang)}
           </button>
         </div>
       )}
@@ -320,7 +321,7 @@ function QuiADit({ lang, onBack }: { lang: string; onBack: () => void }) {
   );
 }
 
-// ─── HUB ────────────────────────────────────────────────────────────────────
+// ─── Hub ──────────────────────────────────────────────────────────────────────
 type GameMode = null | "devine" | "vraifaux" | "speaker";
 
 export default function JeuPage() {
@@ -335,8 +336,10 @@ export default function JeuPage() {
       bg: "from-blue-50 to-cyan-50",
       border: "border-blue-200",
       title: lang === "fr" ? "Devine le Verset" : lang === "ht" ? "Devine Vèsè a" : "Guess the Verse",
-      desc: lang === "fr" ? "Trouvez le mot manquant dans 25 versets bibliques. Construisez votre série !" : "Find the missing word in 25 Bible verses.",
-      count: `${versesChallenges.length} versets`,
+      desc: lang === "fr" ? "Trouvez le mot manquant dans 25 versets bibliques. Construisez votre série !"
+          : lang === "ht" ? "Jwenn mo ki manke nan 25 vèsè biblik yo. Bati seri ou !"
+          : "Find the missing word in 25 Bible verses. Build your streak!",
+      count: `${versesChallenges.length} ${lang === "en" ? "verses" : lang === "ht" ? "vèsè" : "versets"}`,
     },
     {
       id: "vraifaux" as GameMode,
@@ -345,8 +348,10 @@ export default function JeuPage() {
       bg: "from-purple-50 to-pink-50",
       border: "border-purple-200",
       title: lang === "fr" ? "Vrai ou Faux ?" : lang === "ht" ? "Vre oswa Fo ?" : "True or False?",
-      desc: lang === "fr" ? "20 affirmations bibliques — vrai ou faux ? Testez vos connaissances !" : "20 Bible statements — true or false?",
-      count: `${vraiFauxQuestions.length} questions`,
+      desc: lang === "fr" ? "20 affirmations bibliques — vrai ou faux ? Testez vos connaissances !"
+          : lang === "ht" ? "20 afirmasyon biblik — vre oswa fo ? Teste konesans ou !"
+          : "20 Bible statements — true or false? Test your knowledge!",
+      count: `${vraiFauxQuestions.length} ${lang === "en" ? "questions" : lang === "ht" ? "kesyon" : "questions"}`,
     },
     {
       id: "speaker" as GameMode,
@@ -355,8 +360,10 @@ export default function JeuPage() {
       bg: "from-amber-50 to-orange-50",
       border: "border-amber-200",
       title: lang === "fr" ? "Qui a dit ça ?" : lang === "ht" ? "Ki moun ki di sa ?" : "Who said this?",
-      desc: lang === "fr" ? "Identifiez l'auteur de ces paroles bibliques célèbres. Connaissez-vous la Parole ?" : "Identify who said these famous biblical words.",
-      count: `${speakerQuestions.length} citations`,
+      desc: lang === "fr" ? "Identifiez l'auteur de ces paroles bibliques célèbres. Connaissez-vous la Parole ?"
+          : lang === "ht" ? "Idantifye otè pawòl biblik sa yo. Èske ou konnen Pawòl la ?"
+          : "Identify who said these famous biblical words. Do you know the Word?",
+      count: `${speakerQuestions.length} ${lang === "en" ? "quotes" : lang === "ht" ? "sitasyon" : "citations"}`,
     },
   ];
 
@@ -371,10 +378,12 @@ export default function JeuPage() {
                 {lang === "fr" ? "Jeux Bibliques" : lang === "ht" ? "Jwèt Biblik" : "Bible Games"}
               </h1>
               <p className="text-stone-500">
-                {lang === "fr" ? "Choisissez un jeu et testez votre connaissance de la Bible !" : "Choose a game and test your Bible knowledge!"}
+                {lang === "fr" ? "Choisissez un jeu et testez votre connaissance de la Bible !"
+                : lang === "ht" ? "Chwazi yon jwèt epi teste konesans ou sou Bib la !"
+                : "Choose a game and test your Bible knowledge!"}
               </p>
               <Link href="/quiz" className="inline-flex items-center gap-2 mt-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-full text-sm font-bold hover:opacity-90 transition-opacity">
-                🏆 {lang === "fr" ? "Essayez aussi le Quiz Biblique" : "Also try the Bible Quiz"} →
+                🏆 {lang === "fr" ? "Essayez aussi le Quiz Biblique" : lang === "ht" ? "Eseye Quiz Biblik la tou" : "Also try the Bible Quiz"} →
               </Link>
             </div>
             <div className="grid gap-4">
@@ -402,9 +411,9 @@ export default function JeuPage() {
             </div>
           </>
         )}
-        {mode === "devine" && <DevineVerset lang={lang} onBack={() => setMode(null)} />}
-        {mode === "vraifaux" && <VraiFaux lang={lang} onBack={() => setMode(null)} />}
-        {mode === "speaker" && <QuiADit lang={lang} onBack={() => setMode(null)} />}
+        {mode === "devine"   && <DevineVerset lang={lang} onBack={() => setMode(null)} />}
+        {mode === "vraifaux" && <VraiFaux     lang={lang} onBack={() => setMode(null)} />}
+        {mode === "speaker"  && <QuiADit      lang={lang} onBack={() => setMode(null)} />}
       </div>
     </RequireAuth>
   );
