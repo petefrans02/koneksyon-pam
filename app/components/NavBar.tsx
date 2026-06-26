@@ -145,7 +145,7 @@ export default function NavBar() {
               ) : (
                 <Link href="/concours" onClick={() => setOpen(false)}
                   className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-[#fffbeb] border border-[#c5a84f]/20 text-[#b45309] text-[10px] font-bold">
-                  🏆 <span>{l === "fr" ? "Concours" : "Konkou"}</span>
+                  🏆 <span>{l === "fr" ? "Concours" : l === "ht" ? "Konkou" : "Contests"}</span>
                 </Link>
               )}
             </div>

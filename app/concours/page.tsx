@@ -302,7 +302,7 @@ export default function ConcoursPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
             <div className="w-10 h-10 border-3 border-[#c5a84f] border-t-transparent rounded-full animate-spin" style={{ borderWidth: "3px" }} />
-            <p className="text-stone-400 text-sm">{l === "fr" ? "Chargement des concours..." : "Ap chaje konkou yo..."}</p>
+            <p className="text-stone-400 text-sm">{l === "fr" ? "Chargement des concours..." : l === "ht" ? "Ap chaje konkou yo..." : "Loading contests..."}</p>
           </div>
         ) : contests.length === 0 ? (
           <div className="text-center py-24 rounded-3xl border border-dashed border-stone-200">

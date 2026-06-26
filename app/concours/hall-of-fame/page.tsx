@@ -138,7 +138,7 @@ export default function HallOfFamePage() {
               <div>
                 <div className="flex items-center gap-4 mb-8">
                   <p className="text-[10px] font-black uppercase tracking-widest text-stone-400">
-                    {l === "fr" ? "Tous les champions" : "Tout chanpyon yo"}
+                    {l === "fr" ? "Tous les champions" : l === "ht" ? "Tout chanpyon yo" : "All champions"}
                   </p>
                   <div className="flex-1 h-px bg-stone-100" />
                 </div>

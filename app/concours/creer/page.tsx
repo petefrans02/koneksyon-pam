@@ -57,7 +57,7 @@ export default function CreerConcoursPage() {
     maxLabel: l === "fr" ? "Nombre max de participants" : l === "ht" ? "Maks patisipan" : "Max participants",
     questionsLabel: l === "fr" ? "Questions" : l === "ht" ? "Kesyon" : "Questions",
     questionPlaceholder: l === "fr" ? "Posez votre question ici..." : l === "ht" ? "Poze kesyon ou a isit..." : "Ask your question here...",
-    optionPlaceholder: (i: number) => `${l === "fr" ? "Option" : "Opsyon"} ${String.fromCharCode(65 + i)}`,
+    optionPlaceholder: (i: number) => `${l === "fr" ? "Option" : l === "ht" ? "Opsyon" : "Option"} ${String.fromCharCode(65 + i)}`,
     correctLabel: l === "fr" ? "Réponse correcte" : l === "ht" ? "Bon repons" : "Correct answer",
     refLabel: l === "fr" ? "Référence biblique" : l === "ht" ? "Referans biblik" : "Bible reference",
     timeLabel: l === "fr" ? "Temps par question (sec)" : l === "ht" ? "Tan pou kesyon (sèk)" : "Time per question (sec)",
@@ -76,9 +76,9 @@ export default function CreerConcoursPage() {
 
   async function handleSubmit() {
     setError("");
-    if (!title.trim()) { setError(l === "fr" ? "Le titre est requis." : "Title is required."); return; }
+    if (!title.trim()) { setError(l === "fr" ? "Le titre est requis." : l === "ht" ? "Tit la obligatwa." : "Title is required."); return; }
     if (questions.some(q => !q.question_fr.trim() || q.options_fr.some(o => !o.trim()))) {
-      setError(l === "fr" ? "Remplissez toutes les questions et options." : "Fill all questions and options.");
+      setError(l === "fr" ? "Remplissez toutes les questions et options." : l === "ht" ? "Ranpli tout kesyon ak opsyon yo." : "Fill all questions and options.");
       return;
     }
     setSubmitting(true);
@@ -122,7 +122,7 @@ export default function CreerConcoursPage() {
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 className="w-full border border-stone-200 rounded-xl px-4 py-3 text-[#0b0f1a] text-sm font-medium focus:outline-none focus:border-[#0b0f1a] transition-colors"
-                placeholder={l === "fr" ? "ex. Concours de Pentecôte 2026" : "ex. Konkou Lapannkòt 2026"}
+                placeholder={l === "fr" ? "ex. Concours de Pentecôte 2026" : l === "ht" ? "ex. Konkou Lapannkòt 2026" : "ex. Pentecost Contest 2026"}
               />
             </div>
             <div>
@@ -165,7 +165,7 @@ export default function CreerConcoursPage() {
 
                   <div>
                     <label className="block text-[10px] font-bold text-[#0b0f1a]/50 uppercase tracking-wider mb-2">
-                      {l === "fr" ? "Question" : "Kesyon"}
+                      {l === "fr" ? "Question" : l === "ht" ? "Kesyon" : "Question"}
                     </label>
                     <textarea
                       value={q.question_fr}
