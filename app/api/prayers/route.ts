@@ -1,5 +1,7 @@
 import { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { rateLimit, getIp } from "@/lib/rate-limit";
+import { sanitizeText } from "@/lib/sanitize";
 
 function getSupabase() {
   return createClient(
@@ -20,12 +22,19 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const { name, text, country } = body;
+  // 10 prayer submissions per IP per hour
+  if (!rateLimit(getIp(request.headers), 10, 60 * 60_000)) {
+    return Response.json({ error: "Limite atteinte. Réessayez plus tard." }, { status: 429 });
+  }
 
-  if (!text) return Response.json({ error: "Missing text" }, { status: 400 });
-  if (text.length > 2000) return Response.json({ error: "Text too long" }, { status: 400 });
-  if (name && name.length > 100) return Response.json({ error: "Name too long" }, { status: 400 });
+  const body = await request.json().catch(() => ({}));
+  const text    = sanitizeText(body.text, 2000);
+  const name    = sanitizeText(body.name, 100);
+  const country = sanitizeText(body.country, 10);
+
+  if (!text || text.length < 10) {
+    return Response.json({ error: "Prière trop courte (min. 10 caractères)" }, { status: 400 });
+  }
 
   const { data, error } = await getSupabase()
     .from("prayers")
@@ -38,12 +47,16 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  const body = await request.json();
-  const { id } = body;
+  if (!rateLimit(getIp(request.headers), 120, 60 * 60_000)) {
+    return Response.json({ error: "Limite atteinte." }, { status: 429 });
+  }
 
+  const body = await request.json().catch(() => ({}));
+  const id = sanitizeText(body.id, 64);
   if (!id) return Response.json({ error: "Missing id" }, { status: 400 });
 
   const { data: prayer } = await getSupabase().from("prayers").select("pray_count").eq("id", id).single();
+  if (!prayer) return Response.json({ error: "Not found" }, { status: 404 });
   const newCount = (prayer?.pray_count || 0) + 1;
 
   await getSupabase().from("prayers").update({ pray_count: newCount }).eq("id", id);

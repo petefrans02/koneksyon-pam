@@ -5,6 +5,7 @@ import { supabase, signInWithGoogle, signOut } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import { useLang } from "@/lib/LangContext";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function AuthButton() {
   const { lang } = useLang();
@@ -54,7 +55,7 @@ export default function AuthButton() {
         className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-2 py-1 rounded-lg transition-all"
       >
         {avatar ? (
-          <img src={avatar} alt="" className="w-7 h-7 rounded-full" />
+          <Image src={avatar} alt="" width={28} height={28} className="rounded-full" unoptimized />
         ) : (
           <div className="w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
             {name[0].toUpperCase()}

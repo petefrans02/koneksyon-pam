@@ -2,6 +2,7 @@
 
 import { useLang } from "@/lib/LangContext";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function ContactPage() {
   const { lang } = useLang();
@@ -39,7 +40,7 @@ export default function ContactPage() {
       <div className="text-center mb-10">
         <div className="flex justify-center mb-4">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-1 border border-blue-400/20">
-            <img src="/logo-kp.png" alt="KP" className="w-full h-full rounded-full object-cover" />
+            <Image src="/logo-kp.png" alt="KP" width={64} height={64} className="rounded-full object-cover" />
           </div>
         </div>
         <h1 className="text-3xl font-bold text-stone-900">
@@ -116,7 +117,7 @@ export default function ContactPage() {
 
       <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { icon: "📧", title: "Email", value: "koneksyonpam@gmail.com" },
+          { icon: "📧", title: "Email", value: "contact@koneksyonpam.com", href: "mailto:contact@koneksyonpam.com" },
           { icon: "📺", title: "YouTube", value: "KONEKSYON PAM", href: "https://www.youtube.com/channel/UCl01tzkV_QzhPvZ-pf9Ey-g" },
           { icon: "🌍", title: lang === "fr" ? "Communauté" : lang === "ht" ? "Kominote" : "Community", value: lang === "fr" ? "12+ pays" : lang === "ht" ? "12+ peyi" : "12+ countries" },
         ].map((item) => (

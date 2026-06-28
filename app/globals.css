@@ -21,3 +21,36 @@
   100% { transform: translateX(-50%); }
 }
 .animate-scroll-x { animation: scroll-x 45s linear infinite; }
+
+/* Hero animations */
+@keyframes heroGlowPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.65; transform: scale(1.06); }
+}
+@keyframes heroGlowSide {
+  0%, 100% { opacity: 0.8; }
+  50%       { opacity: 0.4; }
+}
+@keyframes floatParticle {
+  0%, 100% { transform: translateY(0px); opacity: inherit; }
+  50%       { transform: translateY(-18px); }
+}
+@keyframes floatParticleB {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  33%       { transform: translateY(-12px) translateX(6px); }
+  66%       { transform: translateY(8px) translateX(-4px); }
+}
+@keyframes shimmerGold {
+  0%, 100% { opacity: 0.18; }
+  50%       { opacity: 0.30; }
+}
+@keyframes crossFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-12px) rotate(0.5deg); }
+}
+.animate-hero-glow    { animation: heroGlowPulse 9s ease-in-out infinite; }
+.animate-hero-side    { animation: heroGlowSide 7s ease-in-out infinite; }
+.animate-float-a      { animation: floatParticle 4s ease-in-out infinite; }
+.animate-float-b      { animation: floatParticleB 6s ease-in-out infinite; }
+.animate-shimmer-gold { animation: shimmerGold 6s ease-in-out infinite; }
+.animate-cross        { animation: crossFloat 14s ease-in-out infinite; }

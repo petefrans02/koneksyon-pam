@@ -352,6 +352,8 @@ function ScoreScreen({ pct, score, total, bestStreak, lang, onBack, onReplay }: 
 }
 
 // ─── Game 1: Guess the Verse ───────────────────────────────────────────────────
+// optOrder stores shuffled indices (0-3) so the display order is stable across
+// language switches — only the label text changes with lang, not the positions.
 function DevineVerset({ lang, onBack }: { lang: Lang; onBack: () => void }) {
   const [shuffled] = useState(() => shuffle(versesChallenges));
   const [idx, setIdx] = useState(0);
@@ -360,10 +362,12 @@ function DevineVerset({ lang, onBack }: { lang: Lang; onBack: () => void }) {
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
   const [done, setDone] = useState(false);
-  const [shuffledOpts, setShuffledOpts] = useState<string[]>(() => shuffle(shuffled[0][lang].options));
+  const [optOrder, setOptOrder] = useState<number[]>(() => shuffle([0, 1, 2, 3]));
 
   const ch = shuffled[idx];
   const c = ch[lang];
+  // Derive options from current language using stable shuffle order
+  const displayedOpts = optOrder.map(i => c.options[i]);
 
   function pick(word: string) {
     if (selected) return;
@@ -379,13 +383,13 @@ function DevineVerset({ lang, onBack }: { lang: Lang; onBack: () => void }) {
     const ni = idx + 1;
     if (ni >= shuffled.length) { setDone(true); return; }
     setIdx(ni); setSelected(null);
-    setShuffledOpts(shuffle(shuffled[ni][lang].options));
+    setOptOrder(shuffle([0, 1, 2, 3]));
   }
 
   if (done) {
     const pct = Math.round((score / shuffled.length) * 100);
     return <ScoreScreen pct={pct} score={score} total={shuffled.length} bestStreak={bestStreak} lang={lang}
-      onBack={onBack} onReplay={() => { setIdx(0); setSelected(null); setScore(0); setStreak(0); setBestStreak(0); setDone(false); setShuffledOpts(shuffle(shuffled[0][lang].options)); }} />;
+      onBack={onBack} onReplay={() => { setIdx(0); setSelected(null); setScore(0); setStreak(0); setBestStreak(0); setDone(false); setOptOrder(shuffle([0, 1, 2, 3])); }} />;
   }
 
   return (
@@ -414,7 +418,7 @@ function DevineVerset({ lang, onBack }: { lang: Lang; onBack: () => void }) {
       </div>
       {!selected ? (
         <div className="grid grid-cols-2 gap-3">
-          {shuffledOpts.map((opt) => (
+          {displayedOpts.map((opt) => (
             <button key={opt} onClick={() => pick(opt)} className="bg-white border-2 border-stone-200 rounded-xl py-4 px-4 text-center font-medium text-stone-800 hover:border-blue-400 hover:bg-blue-50 transition-all">{opt}</button>
           ))}
         </div>
@@ -505,10 +509,11 @@ function QuiADit({ lang, onBack }: { lang: Lang; onBack: () => void }) {
   const [chosen, setChosen] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
-  const [shuffledOpts, setShuffledOpts] = useState<string[]>(() => shuffle(shuffled[0][lang].options));
+  const [optOrder, setOptOrder] = useState<number[]>(() => shuffle([0, 1, 2, 3]));
 
   const q = shuffled[idx];
   const c = q[lang];
+  const displayedOpts = optOrder.map(i => c.options[i]);
 
   function pick(opt: string) {
     if (chosen) return;
@@ -520,13 +525,13 @@ function QuiADit({ lang, onBack }: { lang: Lang; onBack: () => void }) {
     const ni = idx + 1;
     if (ni >= shuffled.length) { setDone(true); return; }
     setIdx(ni); setChosen(null);
-    setShuffledOpts(shuffle(shuffled[ni][lang].options));
+    setOptOrder(shuffle([0, 1, 2, 3]));
   }
 
   if (done) {
     const pct = Math.round((score / shuffled.length) * 100);
     return <ScoreScreen pct={pct} score={score} total={shuffled.length} lang={lang}
-      onBack={onBack} onReplay={() => { setIdx(0); setChosen(null); setScore(0); setDone(false); setShuffledOpts(shuffle(shuffled[0][lang].options)); }} />;
+      onBack={onBack} onReplay={() => { setIdx(0); setChosen(null); setScore(0); setDone(false); setOptOrder(shuffle([0, 1, 2, 3])); }} />;
   }
 
   return (
@@ -546,7 +551,7 @@ function QuiADit({ lang, onBack }: { lang: Lang; onBack: () => void }) {
       </div>
       {!chosen ? (
         <div className="grid grid-cols-2 gap-3">
-          {shuffledOpts.map((opt) => (
+          {displayedOpts.map((opt) => (
             <button key={opt} onClick={() => pick(opt)} className="bg-white border-2 border-stone-200 rounded-xl py-4 px-3 text-center font-medium text-stone-800 hover:border-amber-400 hover:bg-amber-50 transition-all text-sm">{opt}</button>
           ))}
         </div>

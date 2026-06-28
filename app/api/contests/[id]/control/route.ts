@@ -86,9 +86,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   }
 
   if (action === "reset") {
-    // Delete all participants and votes, reset to upcoming
+    // Delete all participants, votes, and notification logs so admins can re-notify after reset
     await db.from("contest_votes").delete().eq("contest_id", id);
     await db.from("contest_participants").delete().eq("contest_id", id);
+    await db.from("notification_logs").delete().eq("contest_id", id);
     await db.from("contests").update({ status: "upcoming", current_question: 0 }).eq("id", id);
     return Response.json({ ok: true, status: "upcoming", current_question: 0 });
   }

@@ -2,157 +2,83 @@
 
 import { useLang } from "@/lib/LangContext";
 import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
-import MissionBanner from "@/app/components/MissionBanner";
+import { useEffect, useState, useCallback } from "react";
 
 type Lang = "fr" | "ht" | "en";
 
 interface Contest {
   id: string;
   title: string;
-  description: string;
-  status: "upcoming" | "active" | "voting" | "completed";
-  start_at: string | null;
+  title_ht?: string;
+  title_en?: string;
+  status: "upcoming" | "active" | "completed";
+  scheduled_start_at?: string;
+  theme?: string;
   max_participants: number;
-  contest_participants: { count: number }[];
+  contest_participants?: { count: number }[];
+  contest_sessions?: { count: number }[];
 }
 
-interface PlatformStats {
-  participants: number;
-  contests: number;
-  questions: number;
-  votes: number;
+function pad(n: number) {
+  return String(n).padStart(2, "0");
 }
 
-function useCountUp(target: number, duration = 1800) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
+function useCountdown(target: string | null) {
+  const [parts, setParts] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, expired: false });
+
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
-        let start = 0;
-        const step = target / (duration / 16);
-        const timer = setInterval(() => {
-          start += step;
-          if (start >= target) { setCount(target); clearInterval(timer); }
-          else setCount(Math.floor(start));
-        }, 16);
-      },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [target, duration]);
-  return { count, ref };
+    if (!target) return;
+    function calc() {
+      const diff = new Date(target!).getTime() - Date.now();
+      if (diff <= 0) { setParts({ days: 0, hours: 0, minutes: 0, seconds: 0, expired: true }); return; }
+      const totalSec = Math.floor(diff / 1000);
+      setParts({
+        days: Math.floor(totalSec / 86400),
+        hours: Math.floor((totalSec % 86400) / 3600),
+        minutes: Math.floor((totalSec % 3600) / 60),
+        seconds: totalSec % 60,
+        expired: false,
+      });
+    }
+    calc();
+    const t = setInterval(calc, 1000);
+    return () => clearInterval(t);
+  }, [target]);
+
+  return parts;
 }
 
-function StatCard({ icon, value, label, suffix = "" }: { icon: string; value: number; label: string; suffix?: string }) {
-  const { count, ref } = useCountUp(value);
+function CountdownBlock({ value, label }: { value: number; label: string }) {
   return (
-    <div ref={ref} className="relative group flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-[#c5a84f]/40 transition-all duration-500 text-center">
-      <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">{icon}</div>
-      <div className="text-3xl font-black text-white mb-1 tabular-nums">
-        {count.toLocaleString()}{suffix}
+    <div className="flex flex-col items-center">
+      <div className="relative">
+        <div className="w-20 sm:w-28 h-20 sm:h-28 rounded-2xl flex items-center justify-center font-black text-white"
+          style={{
+            fontSize: "clamp(2rem, 5vw, 3.5rem)",
+            background: "rgba(255,255,255,0.07)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            boxShadow: "0 4px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)"
+          }}>
+          {pad(value)}
+        </div>
       </div>
-      <p className="text-white/50 text-xs font-medium tracking-wide leading-relaxed">{label}</p>
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#c5a84f]/0 to-[#c5a84f]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <p className="text-white/40 text-[9px] font-black uppercase tracking-[0.25em] mt-2">{label}</p>
     </div>
   );
 }
 
-function ContestCard({ c, l }: { c: Contest; l: Lang }) {
-  const count = c.contest_participants?.[0]?.count ?? 0;
-  const pct = Math.round((count / (c.max_participants || 10)) * 100);
-  const isLive = c.status === "active" || c.status === "voting";
-
-  const statusConfig = {
-    upcoming:  { label: { fr: "Inscriptions ouvertes", ht: "Enskripsyon louvri", en: "Open" }, color: "text-[#1d4ed8] bg-[#eff6ff] border-[#bfdbfe]", dot: "bg-[#1d4ed8]" },
-    active:    { label: { fr: "En cours", ht: "Kap fèt", en: "Live" }, color: "text-green-700 bg-green-50 border-green-200", dot: "bg-green-500" },
-    voting:    { label: { fr: "Vote ouvert", ht: "Ap vote", en: "Voting" }, color: "text-amber-700 bg-amber-50 border-amber-200", dot: "bg-amber-500" },
-    completed: { label: { fr: "Terminé", ht: "Fini", en: "Done" }, color: "text-stone-500 bg-stone-50 border-stone-200", dot: "bg-stone-400" },
+function StatusBadge({ status, l }: { status: Contest["status"]; l: Lang }) {
+  const map = {
+    upcoming: { bg: "bg-blue-500/15", text: "text-blue-400", border: "border-blue-500/30", dot: "bg-blue-400", label: { fr: "À venir", ht: "Ap vini", en: "Upcoming" } },
+    active:   { bg: "bg-green-500/15", text: "text-green-400", border: "border-green-500/30", dot: "bg-green-400 animate-pulse", label: { fr: "En direct", ht: "An dirèk", en: "Live" } },
+    completed:{ bg: "bg-stone-500/10", text: "text-stone-400", border: "border-stone-500/20", dot: "bg-stone-400", label: { fr: "Terminé", ht: "Fini", en: "Ended" } },
   };
-  const cfg = statusConfig[c.status];
-
-  const ctaLabel = {
-    upcoming:  { fr: "S'inscrire", ht: "Enskri", en: "Register" },
-    active:    { fr: "Regarder en direct", ht: "Gade an dirèk", en: "Watch live" },
-    voting:    { fr: "Voter maintenant", ht: "Vote kounye a", en: "Vote now" },
-    completed: { fr: "Voir les résultats", ht: "Rezilta", en: "Results" },
-  };
-
+  const m = map[status];
   return (
-    <Link href={`/concours/${c.id}`} className="group block">
-      <div className={`relative h-full flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#0f2044]/20 ${
-        isLive ? "border-[#1d4ed8]/40 shadow-md shadow-[#1d4ed8]/10" : "border-stone-200 hover:border-[#0f2044]/30"
-      } bg-white`}>
-
-        {/* Live gradient bar */}
-        {isLive && <div className="h-1 bg-gradient-to-r from-[#0f2044] via-[#1d4ed8] to-[#38bdf8]" />}
-
-        {/* Gold accent top for upcoming */}
-        {c.status === "upcoming" && <div className="h-0.5 bg-gradient-to-r from-transparent via-[#c5a84f]/50 to-transparent" />}
-
-        {/* Card header with cross decoration */}
-        <div className="relative px-6 pt-6 pb-4">
-          <div className="absolute top-4 right-4 opacity-5 text-6xl select-none pointer-events-none">✝</div>
-
-          {/* Status badge */}
-          <div className="flex items-center gap-2 mb-3">
-            <span className={`inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border ${cfg.color}`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot} ${isLive ? "animate-pulse" : ""}`} />
-              {cfg.label[l]}
-            </span>
-            {isLive && (
-              <span className="text-[10px] text-green-600 font-bold animate-pulse">● LIVE</span>
-            )}
-          </div>
-
-          <h3 className="font-black text-[#0f2044] text-base leading-snug mb-2 group-hover:text-[#1d4ed8] transition-colors">
-            {c.title}
-          </h3>
-          {c.description && (
-            <p className="text-stone-400 text-xs leading-relaxed line-clamp-2">{c.description}</p>
-          )}
-        </div>
-
-        {/* Divider */}
-        <div className="mx-6 border-t border-stone-100" />
-
-        {/* Stats row */}
-        <div className="px-6 py-3 flex items-center gap-4 text-xs text-stone-400">
-          <span className="flex items-center gap-1">
-            <span className="text-[#c5a84f]">👥</span>
-            {count}<span className="text-stone-300">/</span>{c.max_participants}
-          </span>
-          <span className="flex-1 h-1.5 bg-stone-100 rounded-full overflow-hidden">
-            <span
-              className={`block h-full rounded-full transition-all duration-700 ${
-                pct > 80 ? "bg-red-400" : pct > 50 ? "bg-amber-400" : "bg-[#1d4ed8]"
-              }`}
-              style={{ width: `${pct}%` }}
-            />
-          </span>
-          <span className={`font-bold ${pct > 80 ? "text-red-500" : "text-stone-400"}`}>
-            {pct > 80 ? (l === "fr" ? "Presque complet" : l === "ht" ? "Plis plen" : "Almost full") : `${pct}%`}
-          </span>
-        </div>
-
-        {/* CTA footer */}
-        <div className="mt-auto px-6 pb-6">
-          <div className={`w-full py-2.5 rounded-xl text-center text-xs font-black uppercase tracking-wider transition-all duration-200 ${
-            isLive
-              ? "bg-[#0f2044] text-white group-hover:bg-[#1d4ed8]"
-              : c.status === "completed"
-              ? "border border-stone-200 text-stone-500 group-hover:border-[#0f2044] group-hover:text-[#0f2044]"
-              : "border border-[#0f2044]/20 text-[#0f2044] group-hover:bg-[#0f2044] group-hover:text-white"
-          }`}>
-            {ctaLabel[c.status][l]} →
-          </div>
-        </div>
-      </div>
-    </Link>
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${m.bg} ${m.text} ${m.border}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${m.dot}`} />
+      {m.label[l]}
+    </span>
   );
 }
 
@@ -161,242 +87,169 @@ export default function ConcoursPage() {
   const l = (["fr", "ht", "en"].includes(lang) ? lang : "fr") as Lang;
   const [contests, setContests] = useState<Contest[]>([]);
   const [loading, setLoading] = useState(true);
-  const [platformStats, setPlatformStats] = useState<PlatformStats>({ participants: 0, contests: 0, questions: 0, votes: 0 });
 
-  useEffect(() => {
-    fetch("/api/contests")
-      .then(r => r.json())
-      .then(d => {
-        const list: Contest[] = d.contests || [];
-        setContests(list);
-        setLoading(false);
-        // Compute stats from loaded contests
-        const totalParts = list.reduce((s, c) => s + (c.contest_participants?.[0]?.count ?? 0), 0);
-        setPlatformStats(prev => ({ ...prev, participants: totalParts, contests: list.length }));
-      });
-    // Fetch deeper stats
-    fetch("/api/platform-stats")
-      .then(r => r.ok ? r.json() : null)
-      .then(d => { if (d) setPlatformStats(prev => ({ ...prev, ...d })); })
-      .catch(() => {});
+  const load = useCallback(async () => {
+    const res = await fetch("/api/contests");
+    const d = await res.json();
+    setContests(d.contests || []);
+    setLoading(false);
   }, []);
 
-  const live   = contests.filter(c => c.status === "active" || c.status === "voting");
-  const coming = contests.filter(c => c.status === "upcoming");
-  const past   = contests.filter(c => c.status === "completed");
+  useEffect(() => { load(); }, [load]);
+
+  const active = contests.find(c => c.status === "active");
+  const nextUpcoming = contests.find(c => c.status === "upcoming" && c.scheduled_start_at);
+  const featured = active ?? nextUpcoming ?? null;
+  const others = contests.filter(c => c.id !== featured?.id);
+
+  const countdown = useCountdown(featured?.scheduled_start_at ?? null);
+
+  const title = (c: Contest) => l === "ht" ? (c.title_ht || c.title) : l === "en" ? (c.title_en || c.title) : c.title;
+  const participantCount = (c: Contest) => {
+    if (c.contest_sessions?.length) return c.contest_sessions[0].count;
+    if (c.contest_participants?.length) return c.contest_participants[0].count;
+    return 0;
+  };
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen" style={{ background: "#030918" }}>
 
-      {/* ══════════ HERO ══════════ */}
-      <div className="relative overflow-hidden bg-[#0a1628]" style={{ minHeight: "clamp(460px, 65vh, 680px)" }}>
+      {/* ── Hero ── */}
+      <div className="relative overflow-hidden" style={{ minHeight: "clamp(420px, 60vh, 700px)" }}>
+        {/* BG layers */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 10%, rgba(197,168,79,0.18) 0%, rgba(99,102,241,0.08) 40%, transparent 70%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 50% 70% at 0% 60%, rgba(29,78,216,0.10) 0%, transparent 55%)" }} />
+        <div className="absolute right-4 bottom-0 text-white select-none pointer-events-none opacity-[0.025] leading-none" style={{ fontSize: "clamp(160px, 22vw, 300px)" }}>✝</div>
+        <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(197,168,79,0.6), transparent)" }} />
 
-        {/* Animated background layers */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0f2044] via-[#0a1628] to-[#060d1a]" />
+        <div className="relative z-10 max-w-5xl mx-auto px-5 py-16 flex flex-col items-center text-center">
+          <p className="text-[#c5a84f] text-[10px] font-black uppercase tracking-[0.3em] mb-4">
+            {l === "fr" ? "Championnat Biblique Hebdomadaire" : l === "ht" ? "Chanpyona Biblik Chak Semèn" : "Weekly Biblical Championship"}
+          </p>
+          <h1 className="text-white font-black mb-3" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>
+            {l === "fr" ? "Concours Bibliques" : l === "ht" ? "Konkou Biblik" : "Biblical Contests"}
+          </h1>
+          <p className="text-white/40 text-sm max-w-lg mb-10">
+            {l === "fr" ? "45 minutes. Une seule chance. Des milliers de chrétiens à travers le monde."
+           : l === "ht" ? "45 minit. Yon sèl chans. Dè milye kretyen atravè mond lan."
+           : "45 minutes. One chance. Thousands of Christians around the world."}
+          </p>
 
-        {/* Radial glow — golden light from above */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full opacity-20"
-          style={{ background: "radial-gradient(ellipse at center top, #c5a84f 0%, transparent 70%)" }} />
-
-        {/* Stars / particles */}
-        {[...Array(20)].map((_, i) => (
-          <div key={i} className="absolute rounded-full bg-white animate-pulse"
-            style={{
-              width: `${Math.random() * 2 + 1}px`, height: `${Math.random() * 2 + 1}px`,
-              left: `${Math.random() * 100}%`, top: `${Math.random() * 80}%`,
-              animationDuration: `${Math.random() * 3 + 2}s`, animationDelay: `${Math.random() * 2}s`,
-              opacity: Math.random() * 0.5 + 0.1,
-            }} />
-        ))}
-
-        {/* Globe decoration right */}
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 w-[500px] h-[500px] rounded-full border border-white/5 opacity-30"
-          style={{ background: "radial-gradient(circle at 35% 40%, #1d4ed820, transparent)" }} />
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 translate-x-1/4 w-[380px] h-[380px] rounded-full border border-[#c5a84f]/10" />
-
-        {/* Cross decoration */}
-        <div className="absolute right-16 top-16 opacity-5 text-[200px] text-[#c5a84f] select-none font-serif pointer-events-none leading-none">✝</div>
-
-        {/* Bible icon — floating */}
-        <div className="absolute right-12 bottom-8 opacity-[0.07] text-[120px] select-none pointer-events-none"
-          style={{ animation: "float 6s ease-in-out infinite" }}>
-          📖
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 flex flex-col justify-center h-full"
-          style={{ minHeight: "clamp(460px, 65vh, 680px)" }}>
-          <div className="max-w-3xl py-20">
-
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 border border-[#c5a84f]/30 bg-[#c5a84f]/10 rounded-full px-4 py-2 mb-8">
-              <span className="w-1.5 h-1.5 bg-[#c5a84f] rounded-full animate-pulse" />
-              <span className="text-[#c5a84f] text-[11px] font-black uppercase tracking-[0.2em]">
-                {l === "fr" ? "Championnat Biblique International" : l === "ht" ? "Chanpyona Biblik Entènasyonal" : "International Biblical Championship"}
-              </span>
-            </div>
-
-            {/* Main title */}
-            <h1 className="font-black text-white leading-tight mb-6" style={{ fontSize: "clamp(2rem, 5vw, 4rem)" }}>
-              {l === "fr" ? <>Les Plus Grands<br /><span className="text-[#c5a84f]">Concours Bibliques</span><br />Internationaux</> :
-               l === "ht" ? <>Pi Gran<br /><span className="text-[#c5a84f]">Konkou Biblik</span><br />Entènasyonal</> :
-               <>The World&apos;s Greatest<br /><span className="text-[#c5a84f]">Biblical Championships</span></>}
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-white/55 text-base leading-relaxed mb-10 max-w-xl">
-              {l === "fr"
-                ? "Étudiez la Parole de Dieu, relevez les défis bibliques, gagnez des récompenses et inspirez des milliers de croyants à travers le monde."
-                : l === "ht"
-                ? "Etidye Pawòl Bondye, releye defi biblik yo, genyen rekonpans epi enspire dè milye kwayan atravè mond lan."
-                : "Study the Word of God, tackle biblical challenges, win rewards and inspire thousands of believers across the world."}
-            </p>
-
-            {/* CTA buttons */}
-            <div className="flex flex-wrap gap-4">
-              {coming.length > 0 && (
-                <Link href={`/concours/${coming[0].id}`}
-                  className="inline-flex items-center gap-2 bg-[#c5a84f] hover:bg-[#d4b86a] text-[#0f2044] font-black text-sm px-7 py-3.5 rounded-full transition-all duration-200 hover:shadow-lg hover:shadow-[#c5a84f]/30 hover:-translate-y-0.5">
-                  {l === "fr" ? "Participer" : l === "ht" ? "Patisipe" : "Participate"} →
-                </Link>
-              )}
-              <Link href="/concours/hall-of-fame"
-                className="inline-flex items-center gap-2 border border-[#c5a84f]/30 hover:border-[#c5a84f]/60 text-[#c5a84f] font-bold text-sm px-7 py-3.5 rounded-full transition-all duration-200">
-                🏆 {l === "fr" ? "Hall of Fame" : "Hall of Fame"}
-              </Link>
-              {live.length > 0 && (
-                <Link href={`/concours/${live[0].id}`}
-                  className="inline-flex items-center gap-2 border border-white/20 hover:border-white/50 text-white font-bold text-sm px-7 py-3.5 rounded-full transition-all duration-200 backdrop-blur-sm">
-                  <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                  {l === "fr" ? "Regarder en direct" : l === "ht" ? "Gade an dirèk" : "Watch live"}
-                </Link>
-              )}
-              {live.length === 0 && coming.length === 0 && (
-                <span className="inline-flex items-center gap-2 border border-white/20 text-white/60 font-bold text-sm px-7 py-3.5 rounded-full">
-                  {l === "fr" ? "Bientôt disponible" : l === "ht" ? "Byento disponib" : "Coming soon"}
+          {/* Active: EN DIRECT banner */}
+          {active && (
+            <Link href={`/concours/${active.id}`} className="group flex flex-col items-center gap-5">
+              <div className="flex items-center gap-3 bg-green-500/15 border border-green-500/30 rounded-full px-5 py-2.5">
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-green-400 font-black text-sm uppercase tracking-widest">
+                  {l === "fr" ? "Maintenant en direct" : l === "ht" ? "Kounye a an dirèk" : "Live now"}
                 </span>
+              </div>
+              <p className="text-white font-black text-2xl group-hover:text-[#c5a84f] transition-colors">{title(active)}</p>
+              <div className="inline-flex items-center gap-2 bg-[#c5a84f] text-[#030918] font-black text-sm px-8 py-3.5 rounded-full hover:bg-[#d4b85c] transition-colors"
+                style={{ boxShadow: "0 4px 24px rgba(197,168,79,0.35)" }}>
+                {l === "fr" ? "Rejoindre maintenant →" : l === "ht" ? "Antre kounye a →" : "Join now →"}
+              </div>
+            </Link>
+          )}
+
+          {/* Upcoming: countdown */}
+          {!active && featured && featured.status === "upcoming" && (
+            <div className="flex flex-col items-center gap-6 w-full">
+              {featured.theme && (
+                <p className="text-white/60 text-sm">
+                  {l === "fr" ? "Thème : " : l === "ht" ? "Tèm : " : "Theme: "}
+                  <span className="text-[#c5a84f] font-bold">{featured.theme}</span>
+                </p>
               )}
+              {featured.scheduled_start_at && (
+                <p className="text-white/40 text-xs">
+                  {new Date(featured.scheduled_start_at).toLocaleString(l === "ht" ? "fr" : l, {
+                    weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit"
+                  })}
+                </p>
+              )}
+              {!countdown.expired ? (
+                <div className="flex items-start gap-3 sm:gap-5">
+                  <CountdownBlock value={countdown.days} label={l === "ht" ? "Jou" : l === "en" ? "Days" : "Jours"} />
+                  <span className="text-white/30 font-black text-3xl sm:text-5xl mt-4">:</span>
+                  <CountdownBlock value={countdown.hours} label={l === "ht" ? "Èdtan" : l === "en" ? "Hours" : "Heures"} />
+                  <span className="text-white/30 font-black text-3xl sm:text-5xl mt-4">:</span>
+                  <CountdownBlock value={countdown.minutes} label="Min" />
+                  <span className="text-white/30 font-black text-3xl sm:text-5xl mt-4">:</span>
+                  <CountdownBlock value={countdown.seconds} label="Sec" />
+                </div>
+              ) : (
+                <p className="text-[#c5a84f] font-black text-xl">
+                  {l === "fr" ? "Le concours commence..." : l === "ht" ? "Konkou a kòmanse..." : "Contest starting..."}
+                </p>
+              )}
+              <Link href={`/concours/${featured.id}`}
+                className="inline-flex items-center gap-2 border border-white/20 bg-white/5 hover:bg-white/10 text-white font-bold text-sm px-7 py-3 rounded-full transition-all">
+                {l === "fr" ? "S'inscrire →" : l === "ht" ? "Enskri →" : "Register →"}
+              </Link>
             </div>
-          </div>
-        </div>
+          )}
 
-        {/* Gold bottom border */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c5a84f]/40 to-transparent" />
-      </div>
-
-      {/* ══════════ STATS ══════════ */}
-      <div className="bg-[#0f2044] border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <StatCard icon="🌍" value={12} label={l === "fr" ? "Pays représentés" : l === "ht" ? "Peyi reprezante" : "Countries"} suffix="+" />
-            <StatCard icon="👥" value={platformStats.participants} label={l === "fr" ? "Participants" : l === "ht" ? "Patisipan" : "Participants"} />
-            <StatCard icon="🏆" value={platformStats.contests} label={l === "fr" ? "Concours organisés" : l === "ht" ? "Konkou òganize" : "Contests held"} />
-            <StatCard icon="📖" value={platformStats.questions || 18} label={l === "fr" ? "Questions bibliques" : l === "ht" ? "Kesyon biblik" : "Biblical questions"} />
-            <StatCard icon="❤️" value={platformStats.votes} label={l === "fr" ? "Votes du public" : l === "ht" ? "Vòt piblik" : "Public votes"} />
-            <StatCard icon="⭐" value={100} label={l === "fr" ? "Satisfaction" : l === "ht" ? "Satisfaksyon" : "Satisfaction"} suffix="%" />
-          </div>
+          {/* No upcoming */}
+          {!active && !featured && !loading && (
+            <p className="text-white/30 text-sm">
+              {l === "fr" ? "Aucun concours programmé pour le moment" : l === "ht" ? "Pa gen konkou pwograme pou kounye a" : "No contest scheduled at this time"}
+            </p>
+          )}
         </div>
       </div>
 
-      {/* ══════════ CONTESTS ══════════ */}
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16 flex flex-col gap-16">
+      {/* ── Contest list ── */}
+      <div className="max-w-5xl mx-auto px-5 py-12">
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-24 gap-4">
-            <div className="w-10 h-10 border-3 border-[#c5a84f] border-t-transparent rounded-full animate-spin" style={{ borderWidth: "3px" }} />
-            <p className="text-stone-400 text-sm">{l === "fr" ? "Chargement des concours..." : l === "ht" ? "Ap chaje konkou yo..." : "Loading contests..."}</p>
+          <div className="flex justify-center py-16">
+            <div className="w-8 h-8 border-2 border-[#c5a84f] border-t-transparent rounded-full animate-spin" />
           </div>
-        ) : contests.length === 0 ? (
-          <div className="text-center py-24 rounded-3xl border border-dashed border-stone-200">
-            <div className="text-6xl mb-4 opacity-30">📖</div>
-            <p className="text-stone-400 text-sm font-medium">
-              {l === "fr" ? "Aucun concours pour le moment. Revenez bientôt." : l === "ht" ? "Pa gen konkou pou kounye a. Tounen byento." : "No contests at the moment. Check back soon."}
+        ) : others.length > 0 ? (
+          <>
+            <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.25em] mb-6">
+              {l === "fr" ? "Tous les concours" : l === "ht" ? "Tout konkou yo" : "All contests"}
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {others.map(c => (
+                <Link key={c.id} href={`/concours/${c.id}`}
+                  className="group block rounded-2xl border border-white/8 hover:border-[#c5a84f]/30 transition-all duration-300 overflow-hidden"
+                  style={{ background: "rgba(255,255,255,0.04)" }}>
+                  <div className="px-5 py-5">
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <StatusBadge status={c.status} l={l} />
+                      <span className="text-white/25 text-[10px]">{participantCount(c)} <span className="text-white/20">{l === "fr" ? "joueurs" : l === "ht" ? "jwè" : "players"}</span></span>
+                    </div>
+                    <p className="text-white font-black text-base leading-snug group-hover:text-[#c5a84f] transition-colors mb-1">{title(c)}</p>
+                    {c.theme && <p className="text-white/30 text-xs">{c.theme}</p>}
+                    {c.scheduled_start_at && c.status === "upcoming" && (
+                      <p className="text-white/25 text-[10px] mt-2">
+                        {new Date(c.scheduled_start_at).toLocaleDateString(l === "ht" ? "fr" : l, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                      </p>
+                    )}
+                  </div>
+                  <div className="px-5 py-3 border-t border-white/5 flex items-center justify-between">
+                    <span className="text-white/25 text-[10px]">{c.max_participants} max</span>
+                    <span className="text-[#c5a84f] text-[10px] font-black group-hover:translate-x-0.5 transition-transform">
+                      {c.status === "completed" ? (l === "fr" ? "Voir résultats →" : l === "ht" ? "Wè rezilta →" : "See results →")
+                       : (l === "fr" ? "Voir →" : l === "ht" ? "Wè →" : "View →")}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </>
+        ) : null}
+
+        {!loading && contests.length === 0 && (
+          <div className="text-center py-20">
+            <p className="text-5xl mb-4">🏆</p>
+            <p className="text-white/30 text-sm">
+              {l === "fr" ? "Aucun concours pour le moment. Revenez bientôt !" : l === "ht" ? "Pa gen konkou pou kounye a. Tounen byento !" : "No contests yet. Check back soon!"}
             </p>
           </div>
-        ) : (
-          <>
-            {/* LIVE */}
-            {live.length > 0 && (
-              <section>
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
-                    <h2 className="text-[#0f2044] font-black text-xl">
-                      {l === "fr" ? "En cours maintenant" : l === "ht" ? "Kap fèt kounye a" : "Happening now"}
-                    </h2>
-                  </div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-green-200 to-transparent" />
-                </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {live.map(c => <ContestCard key={c.id} c={c} l={l} />)}
-                </div>
-              </section>
-            )}
-
-            {/* UPCOMING */}
-            {coming.length > 0 && (
-              <section>
-                <div className="flex items-center gap-4 mb-8">
-                  <div>
-                    <h2 className="text-[#0f2044] font-black text-xl">
-                      {l === "fr" ? "Inscriptions ouvertes" : l === "ht" ? "Enskripsyon louvri" : "Open registrations"}
-                    </h2>
-                    <p className="text-stone-400 text-xs mt-0.5">
-                      {l === "fr" ? "Rejoignez avant le début — places limitées" : l === "ht" ? "Antre anvan kòmansman — plas limite" : "Join before it starts — limited spots"}
-                    </p>
-                  </div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-[#1d4ed8]/20 to-transparent" />
-                </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {coming.map(c => <ContestCard key={c.id} c={c} l={l} />)}
-                </div>
-              </section>
-            )}
-
-            {/* COMPLETED */}
-            {past.length > 0 && (
-              <section>
-                <div className="flex items-center gap-4 mb-8">
-                  <h2 className="text-[#0f2044] font-black text-xl opacity-60">
-                    {l === "fr" ? "Concours terminés" : l === "ht" ? "Konkou fini" : "Completed contests"}
-                  </h2>
-                  <div className="flex-1 h-px bg-gradient-to-r from-stone-200 to-transparent" />
-                </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {past.map(c => <ContestCard key={c.id} c={c} l={l} />)}
-                </div>
-              </section>
-            )}
-          </>
         )}
       </div>
-
-      {/* ══════════ FOOTER CTA ══════════ */}
-      <div className="bg-[#0a1628] py-16">
-        <div className="max-w-2xl mx-auto px-5 text-center">
-          <div className="text-4xl mb-4 opacity-40">✝</div>
-          <h3 className="text-white font-black text-2xl mb-3">
-            {l === "fr" ? "Une Mission • Un Dieu • Une Vision" : l === "ht" ? "Yon Misyon • Yon Bondye • Yon Vizyon" : "One Mission • One God • One Vision"}
-          </h3>
-          <p className="text-white/40 text-sm leading-relaxed">
-            {l === "fr"
-              ? "Koneksyon Pam vous invite à grandir dans la Parole de Dieu à travers les concours bibliques les plus inspirants du monde."
-              : l === "ht"
-              ? "Koneksyon Pam envite ou grandi nan Pawòl Bondye a atravè konkou biblik ki pi enpresyonan nan mond lan."
-              : "Koneksyon Pam invites you to grow in the Word of God through the most inspiring biblical contests in the world."}
-          </p>
-        </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-5 sm:px-8 pb-10">
-        <MissionBanner variant="card" />
-      </div>
-
-      <style jsx global>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-      `}</style>
     </div>
   );
 }

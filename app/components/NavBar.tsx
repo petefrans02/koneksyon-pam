@@ -3,7 +3,9 @@
 import { useLang } from "@/lib/LangContext";
 import LangSwitch from "./LangSwitch";
 import AuthButton from "./AuthButton";
+import NotificationCenter from "./NotificationCenter";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -65,7 +67,7 @@ export default function NavBar() {
               🔍 {l === "fr" ? "Découvrir" : l === "ht" ? "Dekouvri" : "Discover"}
             </Link>
             <Link href="/don"
-              className="hidden sm:flex items-center gap-1.5 text-rose-300/70 text-[10px] font-bold uppercase tracking-wider hover:text-rose-300 transition-colors">
+              className="hidden sm:flex items-center gap-1.5 bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/30 text-rose-300 text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full transition-all">
               ❤ {l === "fr" ? "Soutenir" : l === "ht" ? "Sipòte" : "Support"}
             </Link>
             <div className="w-px h-4 bg-white/20 hidden sm:block" />
@@ -73,12 +75,13 @@ export default function NavBar() {
               <Link href="/dashboard"
                 className="hidden sm:flex items-center gap-1.5 text-white/60 text-[10px] font-bold uppercase tracking-wider hover:text-white transition-colors">
                 {user.avatar
-                  ? <img src={user.avatar} className="w-4 h-4 rounded-full" alt="" />
+                  ? <Image src={user.avatar} width={16} height={16} className="rounded-full" alt="" unoptimized />
                   : <span className="w-4 h-4 rounded-full bg-[#c5a84f] flex items-center justify-center text-[8px] font-black text-[#0f2044]">{user.name?.[0] ?? "?"}</span>
                 }
                 Dashboard
               </Link>
             )}
+            <NotificationCenter />
             <LangSwitch />
             <AuthButton />
           </div>
@@ -92,7 +95,7 @@ export default function NavBar() {
           {/* Logo */}
           <Link href="/" onClick={() => setOpen(false)}
             className="flex items-center gap-2.5 shrink-0 group">
-            <img src="/logo-kp.png" alt="KP" className="w-9 h-9 rounded-lg group-hover:opacity-85 transition-opacity" />
+            <Image src="/logo-kp.png" alt="KP" width={36} height={36} priority className="rounded-lg group-hover:opacity-85 transition-opacity" />
             <div className="hidden lg:block">
               <p className="text-[#0f2044] font-black text-sm leading-tight">KONEKSYON PAM</p>
               <p className="text-[#7c3aed] text-[8px] font-bold tracking-[0.2em] uppercase">{l === "fr" ? "Plateforme Chrétienne" : l === "ht" ? "Platfòm Kretyen" : "Christian Platform"}</p>
@@ -132,7 +135,7 @@ export default function NavBar() {
         {open && (
           <div className="md:hidden border-t border-stone-100 bg-white px-4 pb-5 pt-3">
             {/* Quick links */}
-            <div className="grid grid-cols-3 gap-2 mb-3">
+            <div className="grid grid-cols-4 gap-2 mb-3">
               <Link href="/aujourd-hui" onClick={() => setOpen(false)}
                 className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-gradient-to-b from-[#c5a84f]/10 to-[#c5a84f]/5 border border-[#c5a84f]/20 text-[#b45309] text-[10px] font-bold">
                 ✨ <span>{l === "fr" ? "Aujourd'hui" : l === "ht" ? "Jodi a" : "Today"}</span>
@@ -152,6 +155,10 @@ export default function NavBar() {
                   🏆 <span>{l === "fr" ? "Concours" : l === "ht" ? "Konkou" : "Contests"}</span>
                 </Link>
               )}
+              <Link href="/don" onClick={() => setOpen(false)}
+                className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-[10px] font-bold">
+                ❤️ <span>{l === "fr" ? "Soutenir" : l === "ht" ? "Sipòte" : "Support"}</span>
+              </Link>
             </div>
 
             <div className="grid grid-cols-2 gap-2">

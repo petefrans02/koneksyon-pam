@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     ],
     mode: "payment",
     billing_address_collection: "auto",
-    success_url: `${request.headers.get("origin")}/don?success=1&session_id={CHECKOUT_SESSION_ID}`,
+    success_url: `${request.headers.get("origin")}/don/merci?amount=${amount}&provider=stripe&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${request.headers.get("origin")}/don`,
   });
 

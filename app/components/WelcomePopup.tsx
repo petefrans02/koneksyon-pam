@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useLang } from "@/lib/LangContext";
 import { supabase, signInWithGoogle } from "@/lib/supabase";
 
@@ -33,7 +34,7 @@ export default function WelcomePopup() {
 
         <div className="flex justify-center mb-5">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-1.5 border border-blue-400/30">
-            <img src="/logo-kp.png" alt="KP" className="w-full h-full rounded-full object-cover" />
+            <Image src="/logo-kp.png" alt="KP" width={80} height={80} className="rounded-full object-cover" />
           </div>
         </div>
 

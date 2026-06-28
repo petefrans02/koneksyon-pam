@@ -2,6 +2,7 @@
 
 import { useLang } from "@/lib/LangContext";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { supabase, signInWithGoogle } from "@/lib/supabase";
 import { SECTIONS } from "@/app/components/NavBar";
@@ -102,7 +103,7 @@ export default function DashboardPage() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] opacity-10 pointer-events-none"
         style={{ background: "radial-gradient(ellipse, #c5a84f 0%, transparent 70%)" }} />
       <div className="relative z-10 max-w-sm">
-        <img src="/logo-kp.png" alt="KP" className="w-16 h-16 rounded-2xl mx-auto mb-6" />
+        <Image src="/logo-kp.png" alt="KP" width={64} height={64} className="rounded-2xl mx-auto mb-6" />
         <h1 className="text-white font-black text-2xl mb-3">KONEKSYON PAM</h1>
         <p className="text-white/40 text-sm leading-relaxed mb-8">{t("signin")}</p>
         <button onClick={() => signInWithGoogle("/dashboard")}
@@ -135,7 +136,7 @@ export default function DashboardPage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               {s.avatar
-                ? <img src={s.avatar} className="w-14 h-14 rounded-full border-2 border-[#c5a84f]/50 shadow-lg" alt="" />
+                ? <Image src={s.avatar} width={56} height={56} className="rounded-full border-2 border-[#c5a84f]/50 shadow-lg" alt="" unoptimized />
                 : <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#c5a84f] to-[#e8c97a] flex items-center justify-center text-[#0f2044] font-black text-xl shadow-lg">
                     {s.name?.[0] ?? "?"}
                   </div>

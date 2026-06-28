@@ -114,5 +114,25 @@ export async function POST(request: NextRequest) {
     html,
   });
 
+  // Record in Supabase
+  try {
+    const { createClient } = await import("@supabase/supabase-js");
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+    await supabase.from("donations").upsert(
+      {
+        paypal_order_id: `stripe_${session_id}`,
+        amount: parseFloat(amount),
+        currency: session.currency?.toUpperCase() ?? "USD",
+        status: "completed",
+        donor_email: email,
+        donor_name: name || null,
+      },
+      { onConflict: "paypal_order_id" }
+    );
+  } catch {}
+
   return Response.json({ ok: true });
 }

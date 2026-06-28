@@ -31,8 +31,15 @@ export default function CreerConcoursPage() {
   const router = useRouter();
 
   const [title, setTitle] = useState("");
+  const [titleHt, setTitleHt] = useState("");
+  const [titleEn, setTitleEn] = useState("");
   const [description, setDescription] = useState("");
-  const [maxParticipants, setMaxParticipants] = useState(10);
+  const [descriptionHt, setDescriptionHt] = useState("");
+  const [descriptionEn, setDescriptionEn] = useState("");
+  const [theme, setTheme] = useState("");
+  const [scheduledStartAt, setScheduledStartAt] = useState("");
+  const [durationMinutes, setDurationMinutes] = useState(45);
+  const [maxParticipants, setMaxParticipants] = useState(1000);
   const [questions, setQuestions] = useState<Question[]>([emptyQuestion()]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -85,7 +92,15 @@ export default function CreerConcoursPage() {
     const res = await fetch("/api/contests", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, description, max_participants: maxParticipants, questions }),
+      body: JSON.stringify({
+        title, title_ht: titleHt || null, title_en: titleEn || null,
+        description, description_ht: descriptionHt || null, description_en: descriptionEn || null,
+        theme: theme || null,
+        scheduled_start_at: scheduledStartAt || null,
+        duration_minutes: durationMinutes,
+        max_participants: maxParticipants,
+        questions,
+      }),
     });
     const data = await res.json();
     setSubmitting(false);
@@ -116,30 +131,92 @@ export default function CreerConcoursPage() {
 
           {/* Basic info */}
           <section className="flex flex-col gap-5">
-            <div>
-              <label className="block text-xs font-bold text-[#0b0f1a]/60 uppercase tracking-wider mb-2">{txt.titleLabel}</label>
+            {/* Title — FR (required) + HT + EN */}
+            <div className="flex flex-col gap-3">
+              <label className="block text-xs font-bold text-[#0b0f1a]/60 uppercase tracking-wider">{txt.titleLabel}</label>
+              {[
+                { flag: "🇫🇷", lang: "Français", value: title, set: setTitle, placeholder: "ex. Concours de Pentecôte 2026", required: true },
+                { flag: "🇭🇹", lang: "Kreyòl", value: titleHt, set: setTitleHt, placeholder: "ex. Konkou Lapannkòt 2026", required: false },
+                { flag: "🇺🇸", lang: "English", value: titleEn, set: setTitleEn, placeholder: "ex. Pentecost Contest 2026", required: false },
+              ].map(({ flag, lang: langName, value, set, placeholder, required }) => (
+                <div key={langName} className="flex items-center gap-3">
+                  <span className="text-lg w-7 flex-shrink-0">{flag}</span>
+                  <input
+                    value={value}
+                    onChange={e => set(e.target.value)}
+                    className="flex-1 border border-stone-200 rounded-xl px-4 py-2.5 text-[#0b0f1a] text-sm font-medium focus:outline-none focus:border-[#0b0f1a] transition-colors"
+                    placeholder={placeholder}
+                    required={required}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Description — FR + HT + EN */}
+            <div className="flex flex-col gap-3">
+              <label className="block text-xs font-bold text-[#0b0f1a]/60 uppercase tracking-wider">{txt.descLabel}</label>
+              {[
+                { flag: "🇫🇷", lang: "Français", value: description, set: setDescription },
+                { flag: "🇭🇹", lang: "Kreyòl", value: descriptionHt, set: setDescriptionHt },
+                { flag: "🇺🇸", lang: "English", value: descriptionEn, set: setDescriptionEn },
+              ].map(({ flag, lang: langName, value, set }) => (
+                <div key={langName} className="flex items-start gap-3">
+                  <span className="text-lg w-7 flex-shrink-0 mt-2.5">{flag}</span>
+                  <textarea
+                    value={value}
+                    onChange={e => set(e.target.value)}
+                    rows={2}
+                    className="flex-1 border border-stone-200 rounded-xl px-4 py-2.5 text-[#0b0f1a] text-sm focus:outline-none focus:border-[#0b0f1a] transition-colors resize-none"
+                  />
+                </div>
+              ))}
+            </div>
+            {/* Theme + scheduling */}
+            <div className="flex flex-col gap-3">
+              <label className="block text-xs font-bold text-[#0b0f1a]/60 uppercase tracking-wider">
+                {l === "fr" ? "Thème du concours" : l === "ht" ? "Tèm konkou a" : "Contest theme"}
+              </label>
               <input
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-                className="w-full border border-stone-200 rounded-xl px-4 py-3 text-[#0b0f1a] text-sm font-medium focus:outline-none focus:border-[#0b0f1a] transition-colors"
-                placeholder={l === "fr" ? "ex. Concours de Pentecôte 2026" : l === "ht" ? "ex. Konkou Lapannkòt 2026" : "ex. Pentecost Contest 2026"}
+                value={theme}
+                onChange={e => setTheme(e.target.value)}
+                placeholder={l === "fr" ? "ex. La vie de Paul" : l === "ht" ? "ex. Lavi Pòl" : "ex. The life of Paul"}
+                className="border border-stone-200 rounded-xl px-4 py-2.5 text-[#0b0f1a] text-sm font-medium focus:outline-none focus:border-[#0b0f1a] transition-colors"
               />
             </div>
-            <div>
-              <label className="block text-xs font-bold text-[#0b0f1a]/60 uppercase tracking-wider mb-2">{txt.descLabel}</label>
-              <textarea
-                value={description}
-                onChange={e => setDescription(e.target.value)}
-                rows={2}
-                className="w-full border border-stone-200 rounded-xl px-4 py-3 text-[#0b0f1a] text-sm focus:outline-none focus:border-[#0b0f1a] transition-colors resize-none"
-              />
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-[#0b0f1a]/60 uppercase tracking-wider mb-2">
+                  {l === "fr" ? "Date et heure de début" : l === "ht" ? "Dat ak lè kòmanse" : "Scheduled start"}
+                </label>
+                <input
+                  type="datetime-local"
+                  value={scheduledStartAt}
+                  onChange={e => setScheduledStartAt(e.target.value)}
+                  className="w-full border border-stone-200 rounded-xl px-4 py-3 text-[#0b0f1a] text-sm font-medium focus:outline-none focus:border-[#0b0f1a] transition-colors"
+                />
+                <p className="text-[10px] text-stone-400 mt-1">
+                  {l === "fr" ? "Le concours démarre automatiquement." : "Démarre automatiquement."}
+                </p>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-[#0b0f1a]/60 uppercase tracking-wider mb-2">
+                  {l === "fr" ? "Durée (minutes)" : l === "ht" ? "Dire (minit)" : "Duration (min)"}
+                </label>
+                <input
+                  type="number" min={10} max={120} value={durationMinutes}
+                  onChange={e => setDurationMinutes(Number(e.target.value))}
+                  className="w-full border border-stone-200 rounded-xl px-4 py-3 text-[#0b0f1a] text-sm font-bold focus:outline-none focus:border-[#0b0f1a] transition-colors"
+                />
+              </div>
             </div>
+
             <div className="w-48">
               <label className="block text-xs font-bold text-[#0b0f1a]/60 uppercase tracking-wider mb-2">{txt.maxLabel}</label>
               <input
                 type="number"
                 min={2}
-                max={100}
+                max={10000}
                 value={maxParticipants}
                 onChange={e => setMaxParticipants(Number(e.target.value))}
                 className="w-full border border-stone-200 rounded-xl px-4 py-3 text-[#0b0f1a] text-sm font-bold focus:outline-none focus:border-[#0b0f1a] transition-colors"

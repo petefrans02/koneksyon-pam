@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "petefrans03@gmail.com")
-  .split(",")
-  .map((e) => e.trim().toLowerCase());
+// Supports multiple admins via ADMIN_EMAILS env var (comma-separated)
+// Primary admin is always included as a failsafe
+const PRIMARY_ADMIN = "petefrans03@gmail.com";
+const ADMIN_EMAILS = [
+  PRIMARY_ADMIN,
+  ...(process.env.ADMIN_EMAILS ?? "")
+    .split(",").map(e => e.trim().toLowerCase()).filter(Boolean),
+];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (!pathname.startsWith("/admin")) return NextResponse.next();

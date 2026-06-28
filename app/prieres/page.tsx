@@ -6,6 +6,7 @@ import { t, type Lang } from "@/lib/translations";
 import { useCountry } from "@/lib/useCountry";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import { DEMO_PRAYERS, PRAYER_CATEGORIES, type DemoPrayer } from "@/lib/demo-data";
 
 interface Prayer {
   id: string;
@@ -17,19 +18,6 @@ interface Prayer {
   prayed: boolean;
   featured?: boolean;
 }
-
-const GLOBAL_PRAYERS: Prayer[] = [
-  { id: "g1", name: "Marie-Claire", country: "🇭🇹", text: "Seigneur, guéris ma mère qui souffre depuis des mois. Tu es le Dieu qui fait des miracles. Nous croyons en Ta puissance.", pray_count: 2847, created_at: new Date(Date.now() - 86400000 * 2).toISOString(), prayed: false, featured: true },
-  { id: "g2", name: "Pastor David", country: "🇧🇷", text: "Lord Jesus, pour your Holy Spirit on our church. We need revival! Let the fire of God fall on Brazil and all nations. Amen!", pray_count: 5312, created_at: new Date(Date.now() - 86400000 * 5).toISOString(), prayed: false, featured: true },
-  { id: "g3", name: "Émilie", country: "🇫🇷", text: "Père céleste, je te demande la paix pour ma famille qui traverse une période difficile. Tu es notre refuge et notre force. Merci Seigneur.", pray_count: 1934, created_at: new Date(Date.now() - 86400000 * 1).toISOString(), prayed: false, featured: true },
-  { id: "g4", name: "Josué", country: "🇨🇩", text: "Bon Dieu, protège toute la famille chrétienne en République Démocratique du Congo. Que Ta paix règne dans notre pays. Nous T'adorons.", pray_count: 3721, created_at: new Date(Date.now() - 86400000 * 3).toISOString(), prayed: false, featured: true },
-  { id: "g5", name: "Grace", country: "🇳🇬", text: "Father God, I pray for divine provision for my family. You said You will supply all our needs according to Your riches in glory. I trust You Lord.", pray_count: 4156, created_at: new Date(Date.now() - 86400000 * 1).toISOString(), prayed: false, featured: true },
-  { id: "g6", name: "Jean-Baptiste", country: "🇨🇦", text: "Seigneur Jésus, je Te demande de toucher le cœur de mon fils qui s'est éloigné de la foi. Ramène-le à Toi. Tu es le Bon Berger.", pray_count: 2103, created_at: new Date(Date.now() - 86400000 * 4).toISOString(), prayed: false, featured: true },
-  { id: "g7", name: "Ana", country: "🇲🇽", text: "Dios mío, sana mi cuerpo y restaura mi salud. Tú eres mi médico celestial. Gracias por Tu amor y misericordia infinita. Amén.", pray_count: 1876, created_at: new Date(Date.now() - 86400000 * 2).toISOString(), prayed: false },
-  { id: "g8", name: "Claudette", country: "🇭🇹", text: "Bondye bon, ede pèp Ayiti a. Rele nan nou. Fè lapriyè nou monte devan ou. Nou bezwen ou plis pase tout bagay.", pray_count: 6234, created_at: new Date(Date.now() - 86400000 * 6).toISOString(), prayed: false, featured: true },
-  { id: "g9", name: "Samuel", country: "🇰🇪", text: "Lord God, protect our missionaries in Africa. Keep them safe and let their work bear fruit for Your Kingdom. Give them strength and courage.", pray_count: 2987, created_at: new Date(Date.now() - 86400000 * 3).toISOString(), prayed: false },
-  { id: "g10", name: "Isabelle", country: "🇧🇪", text: "Seigneur, guéris ceux qui souffrent de dépression et d'anxiété. Rappelle-leur que Tu es avec eux. Tu ne nous abandonnes jamais.", pray_count: 4521, created_at: new Date(Date.now() - 86400000 * 1).toISOString(), prayed: false, featured: true },
-];
 
 const LIVE_STATS = [
   { flag: "🇭🇹", country: "Haïti", count: 12847 },
@@ -60,7 +48,11 @@ export default function PrieresPage() {
   const [name, setName] = useState("");
   const [text, setText] = useState("");
   const [realPrayers, setRealPrayers] = useState<Prayer[]>([]);
-  const [globalPrayers, setGlobalPrayers] = useState<Prayer[]>(GLOBAL_PRAYERS);
+  const [globalPrayers, setGlobalPrayers] = useState<DemoPrayer[]>(DEMO_PRAYERS);
+  const [demoPrayCounts, setDemoPrayCounts] = useState<Record<string, number>>(
+    Object.fromEntries(DEMO_PRAYERS.map(p => [p.id, p.pray_count]))
+  );
+  const [demoPrayed, setDemoPrayed] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<unknown>(null);
   const [statIdx, setStatIdx] = useState(0);
@@ -89,9 +81,9 @@ export default function PrieresPage() {
 
   async function handlePray(id: string, isGlobal: boolean) {
     if (isGlobal) {
-      setGlobalPrayers(globalPrayers.map((p) =>
-        p.id === id ? { ...p, pray_count: p.prayed ? p.pray_count - 1 : p.pray_count + 1, prayed: !p.prayed } : p
-      ));
+      const wasPrayed = demoPrayed.has(id);
+      setDemoPrayed(prev => { const s = new Set(prev); wasPrayed ? s.delete(id) : s.add(id); return s; });
+      setDemoPrayCounts(prev => ({ ...prev, [id]: prev[id] + (wasPrayed ? -1 : 1) }));
       return;
     }
     setRealPrayers(realPrayers.map((p) =>
@@ -121,7 +113,7 @@ export default function PrieresPage() {
     setShowForm(false);
   }
 
-  const totalPrays = [...globalPrayers, ...realPrayers].reduce((a, p) => a + p.pray_count, 0);
+  const totalPrays = DEMO_PRAYERS.reduce((a, p) => a + p.pray_count, 0) + realPrayers.reduce((a, p) => a + p.pray_count, 0);
   const displayedGlobal = filter === "featured" ? globalPrayers.filter((p) => p.featured) : globalPrayers;
   const stat = LIVE_STATS[statIdx];
 
@@ -210,7 +202,7 @@ export default function PrieresPage() {
         </div>
       )}
 
-      {/* Global Prayers */}
+      {/* Global (Demo) Prayers */}
       {loading ? (
         <div className="flex justify-center py-12">
           <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
@@ -218,9 +210,17 @@ export default function PrieresPage() {
       ) : (
         <div className="space-y-4">
           {displayedGlobal
-            .sort((a, b) => b.pray_count - a.pray_count)
+            .sort((a, b) => (demoPrayCounts[b.id] ?? b.pray_count) - (demoPrayCounts[a.id] ?? a.pray_count))
             .map((prayer) => (
-              <PrayerCard key={prayer.id} prayer={prayer} lang={lang} userFlag={userCountry.flag} isGlobal={true} onPray={handlePray} />
+              <DemoPrayerCard
+                key={prayer.id}
+                prayer={prayer}
+                lang={lang as Lang}
+                userFlag={userCountry.flag}
+                prayed={demoPrayed.has(prayer.id)}
+                prayCount={demoPrayCounts[prayer.id] ?? prayer.pray_count}
+                onPray={() => handlePray(prayer.id, true)}
+              />
             ))}
         </div>
       )}
@@ -229,20 +229,61 @@ export default function PrieresPage() {
   );
 }
 
+function DemoPrayerCard({ prayer, lang, userFlag, prayed, prayCount, onPray }: {
+  prayer: DemoPrayer; lang: Lang; userFlag: string; prayed: boolean; prayCount: number; onPray: () => void;
+}) {
+  const hot = prayCount > 3000;
+  const cat = PRAYER_CATEGORIES[prayer.category];
+  return (
+    <div className={`bg-white rounded-2xl border ${hot ? "border-orange-200" : "border-stone-200"} p-5 hover:shadow-md transition-all`}>
+      <div className="flex items-center gap-2 mb-3 flex-wrap">
+        {hot && (
+          <span className="inline-flex items-center gap-1 bg-orange-50 text-orange-600 text-xs font-bold px-2 py-0.5 rounded-full">
+            🔥 {lang === "fr" ? "Très prié" : lang === "ht" ? "Anpil lapriyè" : "Highly prayed"}
+          </span>
+        )}
+        <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full"
+          style={{ backgroundColor: `${cat.color}15`, color: cat.color }}>
+          {cat[lang as Lang]}
+        </span>
+      </div>
+      <div className="flex items-start gap-3 mb-3">
+        <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center text-xl shrink-0">
+          {prayer.flag}
+        </div>
+        <div>
+          <p className="font-bold text-stone-900 text-sm">{prayer.name}</p>
+          <p className="text-stone-400 text-xs">{prayer.countryName[lang as Lang]} · {timeAgo(prayer.created_at, lang)}</p>
+        </div>
+      </div>
+      <p className="text-stone-700 leading-relaxed mb-4 text-sm italic">&ldquo;{prayer.text[lang as Lang]}&rdquo;</p>
+      <div className="flex items-center justify-between">
+        <button
+          onClick={onPray}
+          className={`flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold transition-all ${
+            prayed ? "bg-blue-600 text-white shadow-lg shadow-blue-200" : "bg-blue-50 text-blue-700 hover:bg-blue-100"
+          }`}
+        >
+          🙏 {prayed ? `Amen ${userFlag}` : t("prayerButton", lang)}
+        </button>
+        <span className="text-sm text-stone-500">
+          <strong className="text-blue-500 text-base">{prayCount.toLocaleString()}</strong>
+          <span className="text-xs ml-1">{lang === "fr" ? "personnes ont prié" : lang === "ht" ? "moun priye" : "prayed"}</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function PrayerCard({ prayer, lang, userFlag, isGlobal, onPray }: {
   prayer: Prayer; lang: Lang; userFlag: string; isGlobal: boolean; onPray: (id: string, g: boolean) => void;
 }) {
   const hot = prayer.pray_count > 3000;
   return (
-    <div className={`bg-white rounded-2xl border ${hot ? "border-orange-200 shadow-orange-50" : "border-stone-200"} p-5 hover:shadow-md transition-all`}>
+    <div className={`bg-white rounded-2xl border ${hot ? "border-orange-200" : "border-stone-200"} p-5 hover:shadow-md transition-all`}>
       {hot && (
         <span className="inline-flex items-center gap-1 bg-orange-50 text-orange-600 text-xs font-bold px-2 py-0.5 rounded-full mb-3">
           🔥 {lang === "fr" ? "Très prié" : lang === "ht" ? "Anpil lapriyè" : "Highly prayed"}
-        </span>
-      )}
-      {prayer.featured && !hot && (
-        <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-600 text-xs font-bold px-2 py-0.5 rounded-full mb-3">
-          ⭐ {lang === "fr" ? "En vedette" : lang === "ht" ? "Prezante" : "Featured"}
         </span>
       )}
       <div className="flex items-start gap-3 mb-3">
@@ -254,14 +295,12 @@ function PrayerCard({ prayer, lang, userFlag, isGlobal, onPray }: {
           <p className="text-stone-400 text-xs">· {timeAgo(prayer.created_at, lang)}</p>
         </div>
       </div>
-      <p className="text-stone-700 leading-relaxed mb-4 text-sm italic">"{prayer.text}"</p>
+      <p className="text-stone-700 leading-relaxed mb-4 text-sm italic">&ldquo;{prayer.text}&rdquo;</p>
       <div className="flex items-center justify-between">
         <button
           onClick={() => onPray(prayer.id, isGlobal)}
           className={`flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold transition-all ${
-            prayer.prayed
-              ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
-              : "bg-blue-50 text-blue-700 hover:bg-blue-100"
+            prayer.prayed ? "bg-blue-600 text-white shadow-lg shadow-blue-200" : "bg-blue-50 text-blue-700 hover:bg-blue-100"
           }`}
         >
           🙏 {prayer.prayed ? `Amen ${userFlag}` : t("prayerButton", lang)}

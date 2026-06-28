@@ -25,11 +25,16 @@ interface ContestRow {
   id: string;
   title: string;
   description: string;
-  status: "upcoming" | "active" | "voting" | "completed";
+  status: "upcoming" | "active" | "completed";
   max_participants: number;
   current_question: number;
   created_at: string;
+  scheduled_start_at?: string;
+  theme?: string;
+  generated_by_ai?: boolean;
+  enabled?: boolean;
   contest_participants: { count: number }[];
+  contest_sessions?: { count: number }[];
 }
 
 interface Question {
@@ -44,7 +49,6 @@ interface Question {
 interface Participant {
   id: string;
   score: number;
-  votes_count: number;
   profiles: { name: string; avatar_url: string | null } | null;
 }
 
@@ -58,7 +62,12 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<Stats | null>(null);
   const [statsError, setStatsError] = useState(false);
-  const [activeTab, setActiveTab] = useState<Tab>("overview");
+  const [activeTab, setActiveTab] = useState<Tab>(() => {
+    if (typeof window === "undefined") return "overview";
+    const p = new URLSearchParams(window.location.search).get("tab") as Tab | null;
+    const valid: Tab[] = ["overview", "contests", "prayers", "testimonies", "churches", "contacts", "users"];
+    return p && valid.includes(p) ? p : "overview";
+  });
   const [rows, setRows] = useState<Row[]>([]);
   const [loadingData, setLoadingData] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -70,6 +79,9 @@ export default function AdminPage() {
   const [contestDetail, setContestDetail] = useState<Record<string, ContestDetail>>({});
   const [controlling, setControlling] = useState<string | null>(null);
   const [deletingContest, setDeletingContest] = useState<string | null>(null);
+  const [sendingNotif, setSendingNotif] = useState<string | null>(null);
+  const [notifResult, setNotifResult] = useState<Record<string, string>>({});
+  const [notifSummary, setNotifSummary] = useState<Record<string, { sent: number; failed: number; last_sent: string }>>({});
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -88,6 +100,12 @@ export default function AdminPage() {
       })
       .catch(() => setStatsError(true));
   }, [user]);
+
+  function changeTab(tab: Tab) {
+    setActiveTab(tab);
+    const url = tab === "overview" ? "/admin" : `/admin?tab=${tab}`;
+    history.replaceState(null, "", url);
+  }
 
   const loadTable = useCallback((tab: Tab) => {
     if (tab === "overview") return;
@@ -109,13 +127,18 @@ export default function AdminPage() {
     loadTable(activeTab);
   }, [activeTab, loadTable]);
 
-  // Load contests when tab is selected
+  // Load contests + notification summary when tab is selected
   useEffect(() => {
     if (activeTab !== "contests" || !user) return;
     setLoadingContests(true);
-    fetch("/api/contests")
-      .then(r => r.json())
-      .then(d => { setContests(d.contests || []); setLoadingContests(false); });
+    Promise.all([
+      fetch("/api/contests").then(r => r.json()),
+      fetch("/api/admin/notifications").then(r => r.json()),
+    ]).then(([contestsData, notifData]) => {
+      setContests(contestsData.contests || []);
+      setNotifSummary(notifData.summary || {});
+      setLoadingContests(false);
+    }).catch(() => setLoadingContests(false));
   }, [activeTab, user]);
 
   async function loadDetail(contestId: string) {
@@ -130,7 +153,7 @@ export default function AdminPage() {
   }
 
   async function resetContest(contestId: string, title: string) {
-    if (!confirm(`Réinitialiser « ${title} » ? Tous les participants et votes seront supprimés, le statut revient à "inscriptions ouvertes".`)) return;
+    if (!confirm(`Réinitialiser « ${title} » ? Toutes les sessions et réponses seront supprimées, le statut revient à "programmé".`)) return;
     setControlling(contestId);
     const res = await fetch(`/api/contests/${contestId}/control`, {
       method: "POST", headers: { "Content-Type": "application/json" },
@@ -170,6 +193,49 @@ export default function AdminPage() {
     await fetch(`/api/contests/${contestId}`, { method: "DELETE" });
     setContests(prev => prev.filter(c => c.id !== contestId));
     setDeletingContest(null);
+  }
+
+  async function toggleContestEnabled(contestId: string, currentEnabled: boolean) {
+    const newEnabled = !currentEnabled;
+    // Optimistic update
+    setContests(prev => prev.map(c => c.id === contestId ? { ...c, enabled: newEnabled } as ContestRow & { enabled: boolean } : c));
+    const res = await fetch(`/api/contests/${contestId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ enabled: newEnabled }),
+    });
+    if (!res.ok) {
+      // Revert on failure
+      setContests(prev => prev.map(c => c.id === contestId ? { ...c, enabled: currentEnabled } as ContestRow & { enabled: boolean } : c));
+    }
+  }
+
+  async function sendContestNotification(contestId: string) {
+    setSendingNotif(contestId);
+    setNotifResult(prev => ({ ...prev, [contestId]: "" }));
+    const res = await fetch("/api/admin/notifications", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contest_id: contestId }),
+    });
+    const data = await res.json();
+    setSendingNotif(null);
+    if (data.ok) {
+      setNotifSummary(prev => ({
+        ...prev,
+        [contestId]: {
+          sent: (prev[contestId]?.sent ?? 0) + data.sent,
+          failed: (prev[contestId]?.failed ?? 0) + data.failed,
+          last_sent: new Date().toISOString(),
+        },
+      }));
+    }
+    setNotifResult(prev => ({
+      ...prev,
+      [contestId]: data.ok
+        ? `✅ ${data.sent} envoyé(s) · ${data.failed} erreur(s) · ${data.already_sent} déjà notifiés`
+        : `❌ ${data.error}`,
+    }));
   }
 
   async function deleteRow(tab: Tab, id: string) {
@@ -244,6 +310,7 @@ export default function AdminPage() {
     { id: "contacts",   icon: "📧", label: "Messages",        count: stats.contacts },
     { id: "users",      icon: "👥", label: "Utilisateurs",    count: stats.users },
   ];
+  // Note: Votes tab removed — contest system migrated to performance-based scoring
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -277,7 +344,7 @@ export default function AdminPage() {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => changeTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
                 activeTab === tab.id
                   ? "bg-blue-600 text-white shadow-md"
@@ -294,6 +361,13 @@ export default function AdminPage() {
               )}
             </button>
           ))}
+          {/* AI generation shortcut — links to dedicated page */}
+          <Link
+            href="/admin/concours/generer"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all bg-gradient-to-r from-[#c5a84f] to-[#d4b96a] text-[#0f2044] shadow-md hover:opacity-90"
+          >
+            ✨ Générer IA
+          </Link>
         </div>
 
         {/* ── OVERVIEW ── */}
@@ -323,7 +397,11 @@ export default function AdminPage() {
                   { href: "/eglise", label: "⛪ Groupes" },
                   { href: "/prieres", label: "🙏 Prières" },
                   { href: "/temoignages", label: "✨ Témoignages" },
-                  { href: "/don", label: "💝 Dons" },
+                  { href: "/admin/dons", label: "💝 Dashboard Dons" },
+                  { href: "/admin/analytiques", label: "📊 Analytiques" },
+                  { href: "/admin/integrations", label: "🔗 Intégrations" },
+                  { href: "/admin/campaigns", label: "📣 Campagnes email" },
+                  { href: "/concours/creer", label: "🏆 Créer un concours" },
                 ].map((l) => (
                   <Link
                     key={l.href}
@@ -370,13 +448,14 @@ export default function AdminPage() {
             ) : contests.length === 0 ? (
               <div className="bg-white rounded-2xl border border-stone-200 p-12 text-center text-stone-400 text-sm">Aucun concours</div>
             ) : contests.map(c => {
-              const count = c.contest_participants?.[0]?.count ?? 0;
+              const count = c.contest_sessions?.[0]?.count ?? c.contest_participants?.[0]?.count ?? 0;
               const statusColor: Record<string, string> = {
-                upcoming: "bg-blue-100 text-blue-700", active: "bg-green-100 text-green-700",
-                voting: "bg-amber-100 text-amber-700", completed: "bg-stone-100 text-stone-500",
+                upcoming: "bg-blue-100 text-blue-700",
+                active: "bg-green-100 text-green-700",
+                completed: "bg-stone-100 text-stone-500",
               };
               const statusLabel: Record<string, string> = {
-                upcoming: "Inscriptions ouvertes", active: "En cours", voting: "Vote en cours", completed: "Terminé",
+                upcoming: "Programmé", active: "En direct", completed: "Terminé",
               };
               return (
                 <div key={c.id} className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
@@ -384,19 +463,30 @@ export default function AdminPage() {
                   <div className="px-6 py-5 flex flex-col sm:flex-row sm:items-center gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${statusColor[c.status]}`}>
+                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${statusColor[c.status] ?? "bg-stone-100 text-stone-500"}`}>
                           {c.status === "active" && <span className="w-1.5 h-1.5 bg-green-500 rounded-full inline-block mr-1 animate-pulse" />}
-                          {statusLabel[c.status]}
+                          {statusLabel[c.status] ?? c.status}
                         </span>
-                        <span className="text-stone-400 text-xs">{count}/{c.max_participants} participants</span>
+                        {c.generated_by_ai && (
+                          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-100 text-purple-700">⚡ IA</span>
+                        )}
+                        <span className="text-stone-400 text-xs">{count}/{c.max_participants}</span>
+                        {c.scheduled_start_at && (
+                          <span className="text-stone-400 text-xs">
+                            · {new Date(c.scheduled_start_at).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" })}
+                          </span>
+                        )}
                       </div>
                       <h3 className="font-bold text-stone-900">{c.title}</h3>
-                      {c.description && <p className="text-stone-400 text-xs mt-0.5 line-clamp-1">{c.description}</p>}
+                      {c.theme && (
+                        <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-[#c5a84f]/10 text-[#c5a84f]">
+                          {c.theme}
+                        </span>
+                      )}
                     </div>
 
                     {/* Controls */}
                     <div className="flex items-center gap-2 flex-wrap shrink-0">
-                      {/* Status controls */}
                       {c.status === "upcoming" && (
                         <button onClick={() => controlContest(c.id, "next_status")} disabled={controlling === c.id}
                           className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-50 transition-colors">
@@ -404,40 +494,60 @@ export default function AdminPage() {
                         </button>
                       )}
                       {c.status === "active" && (
-                        <>
-                          <button onClick={() => controlContest(c.id, "advance_question")} disabled={controlling === c.id}
-                            className="bg-[#0f2044] hover:bg-[#1d4ed8] text-white px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-50 transition-colors">
-                            {controlling === c.id ? "..." : `Q.${c.current_question + 1} → Suivante`}
-                          </button>
-                          <button onClick={() => controlContest(c.id, "next_status")} disabled={controlling === c.id}
-                            className="border border-amber-400 text-amber-600 px-4 py-2 rounded-lg text-xs font-bold hover:bg-amber-50 disabled:opacity-50 transition-colors">
-                            Ouvrir le vote
-                          </button>
-                        </>
-                      )}
-                      {c.status === "voting" && (
                         <button onClick={() => controlContest(c.id, "next_status")} disabled={controlling === c.id}
                           className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-50 transition-colors">
-                          {controlling === c.id ? "..." : "Terminer & publier"}
+                          {controlling === c.id ? "..." : "Terminer"}
                         </button>
                       )}
-                      {/* View detail */}
+                      <button
+                        onClick={() => toggleContestEnabled(c.id, c.enabled !== false)}
+                        className={`px-4 py-2 rounded-lg text-xs font-bold border transition-colors ${
+                          c.enabled === false
+                            ? "bg-stone-50 text-stone-400 border-stone-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200"
+                            : "bg-green-50 text-green-700 border-green-200 hover:bg-stone-50 hover:text-stone-500"
+                        }`}>
+                        {c.enabled === false ? "⏸ Inactif" : "✅ Actif"}
+                      </button>
+                      <button onClick={() => sendContestNotification(c.id)} disabled={sendingNotif === c.id}
+                        className="bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-50 transition-colors">
+                        {sendingNotif === c.id ? "Envoi..." : "📣 Notifier"}
+                      </button>
+                      <Link href={`/admin/concours/${c.id}`}
+                        className="border border-stone-200 text-stone-600 hover:border-stone-400 px-4 py-2 rounded-lg text-xs font-medium transition-colors">
+                        Détails
+                      </Link>
                       <button onClick={() => loadDetail(c.id)}
                         className="border border-stone-200 text-stone-600 hover:border-stone-400 px-4 py-2 rounded-lg text-xs font-medium transition-colors">
-                        {expandedContest === c.id ? "Masquer" : "Questions & Votes"}
+                        {expandedContest === c.id ? "▲" : "▼ Questions"}
                       </button>
-                      {/* Reset */}
                       <button onClick={() => resetContest(c.id, c.title)} disabled={controlling === c.id}
                         className="bg-orange-50 text-orange-600 hover:bg-orange-100 border border-orange-200 px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-50 transition-colors">
-                        {controlling === c.id ? "..." : "Réinitialiser"}
+                        {controlling === c.id ? "..." : "Reset"}
                       </button>
-                      {/* Delete */}
                       <button onClick={() => deleteContest(c.id, c.title)} disabled={deletingContest === c.id}
                         className="bg-red-50 text-red-500 hover:bg-red-100 border border-red-200 px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-50 transition-colors">
                         {deletingContest === c.id ? "..." : "Supprimer"}
                       </button>
                     </div>
                   </div>
+
+                  {/* Notification summary (historical) */}
+                  {notifSummary[c.id] && !notifResult[c.id] && (
+                    <div className="px-6 py-2 text-xs text-stone-500 border-t border-stone-100 bg-stone-50 flex items-center gap-2">
+                      <span>📬</span>
+                      <span>
+                        {notifSummary[c.id].sent} email{notifSummary[c.id].sent !== 1 ? "s" : ""} envoyé{notifSummary[c.id].sent !== 1 ? "s" : ""}
+                        {notifSummary[c.id].failed > 0 && ` · ${notifSummary[c.id].failed} erreur(s)`}
+                        {notifSummary[c.id].last_sent && ` · dernier envoi ${new Date(notifSummary[c.id].last_sent).toLocaleDateString("fr")}`}
+                      </span>
+                    </div>
+                  )}
+                  {/* Notification result (after clicking Notifier) */}
+                  {notifResult[c.id] && (
+                    <div className={`px-6 py-2 text-xs font-medium border-t ${notifResult[c.id].startsWith("✅") ? "bg-green-50 text-green-700 border-green-100" : "bg-red-50 text-red-600 border-red-100"}`}>
+                      {notifResult[c.id]}
+                    </div>
+                  )}
 
                   {/* Detail panel — questions + participants side by side */}
                   {expandedContest === c.id && (
@@ -481,7 +591,7 @@ export default function AdminPage() {
                             )}
                           </div>
 
-                          {/* Participants / votes */}
+                          {/* Participants */}
                           <div className="lg:w-64 shrink-0">
                             <p className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-3">
                               Participants ({contestDetail[c.id].participants.length})
@@ -491,13 +601,13 @@ export default function AdminPage() {
                             ) : (
                               <div className="space-y-2">
                                 {[...contestDetail[c.id].participants]
-                                  .sort((a, b) => (b.score + b.votes_count * 25) - (a.score + a.votes_count * 25))
+                                  .sort((a, b) => b.score - a.score)
                                   .map((p, i) => (
                                   <div key={p.id} className="bg-white rounded-xl px-4 py-3 border border-stone-200 flex items-center gap-3">
                                     <span className="text-xs font-black text-stone-300 w-4 shrink-0">{i + 1}</span>
                                     <div className="flex-1 min-w-0">
                                       <p className="text-xs font-bold text-stone-800 truncate">{p.profiles?.name ?? "Anonyme"}</p>
-                                      <p className="text-[10px] text-stone-400">{p.score} pts · {p.votes_count} vote{p.votes_count !== 1 ? "s" : ""}</p>
+                                      <p className="text-[10px] text-stone-400">{p.score} pts</p>
                                     </div>
                                   </div>
                                 ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useLang } from "@/lib/LangContext";
+import Image from "next/image";
 
 export default function AProposPage() {
   const { lang } = useLang();
@@ -10,7 +11,7 @@ export default function AProposPage() {
       <div className="text-center mb-10">
         <div className="flex justify-center mb-4">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-1 border border-blue-400/20">
-            <img src="/logo-kp.png" alt="KP" className="w-full h-full rounded-full object-cover" />
+            <Image src="/logo-kp.png" alt="KP" width={64} height={64} className="rounded-full object-cover" />
           </div>
         </div>
         <h1 className="text-3xl font-bold text-stone-900">

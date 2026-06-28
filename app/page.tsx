@@ -2,11 +2,13 @@
 
 import { useLang } from "@/lib/LangContext";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import NextStep from "@/app/components/NextStep";
 import ShareButton from "@/app/components/ShareButton";
 import MissionBanner from "@/app/components/MissionBanner";
+import { DEMO_ACTIVITY, DEMO_PRAYERS, PRAYER_CATEGORIES, DEMO_TESTIMONIES } from "@/lib/demo-data";
 
 type Lang = "fr" | "ht" | "en";
 
@@ -74,12 +76,38 @@ function useCountUp(target: number, duration = 2000) {
 
 function AnimatedStat({ value, suffix = "", label }: { value: number; suffix?: string; label: string }) {
   const { count, ref } = useCountUp(value);
+  if (value === 0) return null;
   return (
     <div ref={ref} className="text-center">
       <p className="text-white font-black text-3xl sm:text-4xl tabular-nums">{count.toLocaleString()}{suffix}</p>
       <p className="text-white/40 text-xs font-medium mt-1 leading-tight">{label}</p>
     </div>
   );
+}
+
+interface PlatformStats {
+  members: number;
+  prayers: number;
+  testimonies: number;
+  churches: number;
+  contests: number;
+  votes: number;
+  hasRealData: boolean;
+  loaded: boolean;
+}
+
+function usePlatformStats(): PlatformStats {
+  const [s, setS] = useState<PlatformStats>({
+    members: 0, prayers: 0, testimonies: 0, churches: 0, contests: 0, votes: 0,
+    hasRealData: false, loaded: false,
+  });
+  useEffect(() => {
+    fetch("/api/platform-stats")
+      .then(r => r.json())
+      .then(d => setS({ ...d, loaded: true }))
+      .catch(() => setS(prev => ({ ...prev, loaded: true })));
+  }, []);
+  return s;
 }
 
 export default function Home() {
@@ -89,6 +117,8 @@ export default function Home() {
   const day = getDay();
   const verse = VERSES[day % VERSES.length];
   const challenge = CHALLENGES[day % CHALLENGES.length];
+
+  const platformStats = usePlatformStats();
 
   const [visible, setVisible] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -118,66 +148,155 @@ export default function Home() {
     <main className="bg-white">
 
       {/* ══════ HERO ══════ */}
-      <section className="relative overflow-hidden bg-[#080d18]" style={{ minHeight: "clamp(520px, 70vh, 740px)" }}>
-        {/* Gold radial */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] opacity-[0.12] pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at center top, #c5a84f 0%, transparent 65%)" }} />
-        {/* Cross */}
-        <div className="absolute right-0 bottom-0 text-[320px] text-white opacity-[0.025] select-none pointer-events-none leading-none pr-4">✝</div>
-        {/* Stars */}
-        {[...Array(18)].map((_, i) => (
-          <div key={i} className="absolute rounded-full bg-white animate-pulse pointer-events-none"
-            style={{ width: `${1 + Math.sin(i)*1}px`, height: `${1 + Math.sin(i)*1}px`, left: `${(i*17.3)%100}%`, top: `${(i*13.7+8)%80}%`, animationDuration: `${2+i%3}s`, opacity: 0.08 + (i%4)*0.04 }} />
+      <section className="relative overflow-hidden" style={{
+        minHeight: "clamp(600px, 82vh, 860px)",
+        background: "linear-gradient(145deg, #020717 0%, #07102a 30%, #0d0b2c 60%, #06091c 100%)"
+      }}>
+        {/* ── Central divine glow ── */}
+        <div className="absolute inset-0 pointer-events-none animate-hero-glow" style={{
+          background: "radial-gradient(ellipse 75% 55% at 50% 15%, rgba(197,168,79,0.22) 0%, rgba(99,102,241,0.10) 40%, transparent 68%)"
+        }} />
+        {/* ── Blue depth left ── */}
+        <div className="absolute inset-0 pointer-events-none animate-hero-side" style={{
+          background: "radial-gradient(ellipse 55% 75% at -5% 55%, rgba(29,78,216,0.14) 0%, transparent 58%)"
+        }} />
+        {/* ── Purple depth right ── */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: "radial-gradient(ellipse 48% 65% at 105% 25%, rgba(124,58,237,0.11) 0%, transparent 58%)",
+          animation: "heroGlowSide 11s ease-in-out infinite 2s"
+        }} />
+        {/* ── Soft blur center shimmer ── */}
+        <div className="absolute pointer-events-none animate-shimmer-gold" style={{
+          top: "-10%", left: "25%", right: "25%", height: "45%",
+          background: "radial-gradient(ellipse at center, rgba(197,168,79,0.07) 0%, transparent 70%)",
+          filter: "blur(48px)"
+        }} />
+        {/* ── Top accent line ── */}
+        <div className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+          style={{ background: "linear-gradient(90deg, transparent 0%, rgba(197,168,79,0.5) 35%, rgba(197,168,79,0.7) 50%, rgba(197,168,79,0.5) 65%, transparent 100%)" }} />
+
+        {/* ── Cross watermark ── */}
+        <div className="absolute right-4 sm:right-8 bottom-0 select-none pointer-events-none leading-none text-white animate-cross"
+          style={{ fontSize: "clamp(180px, 26vw, 360px)", opacity: 0.028 }}>✝</div>
+
+        {/* ── White star particles ── */}
+        {[...Array(22)].map((_, i) => (
+          <div key={i} className="absolute rounded-full bg-white pointer-events-none"
+            style={{
+              width: `${0.7 + (i % 4) * 0.55}px`, height: `${0.7 + (i % 4) * 0.55}px`,
+              left: `${(i * 14.3 + 5) % 100}%`, top: `${(i * 11.7 + 8) % 88}%`,
+              opacity: 0.05 + (i % 5) * 0.025,
+              animation: `${i % 2 === 0 ? "floatParticle" : "floatParticleB"} ${3.5 + (i % 5) * 0.8}s ease-in-out infinite`,
+              animationDelay: `${(i * 0.4) % 4}s`
+            }} />
+        ))}
+        {/* ── Golden particles ── */}
+        {[...Array(7)].map((_, i) => (
+          <div key={`g${i}`} className="absolute rounded-full pointer-events-none"
+            style={{
+              width: `${1.2 + (i % 3) * 0.7}px`, height: `${1.2 + (i % 3) * 0.7}px`,
+              backgroundColor: "#c5a84f",
+              left: `${8 + i * 13}%`, top: `${12 + (i * 17) % 65}%`,
+              opacity: 0.18 + (i % 3) * 0.07,
+              animation: `floatParticle ${4.5 + i * 0.7}s ease-in-out infinite`,
+              animationDelay: `${i * 0.6}s`
+            }} />
         ))}
 
+        {/* ── Content ── */}
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 flex flex-col justify-center"
-          style={{ minHeight: "clamp(520px, 70vh, 740px)" }}>
-          <div className="grid lg:grid-cols-2 gap-12 items-center py-16">
+          style={{ minHeight: "clamp(600px, 82vh, 860px)" }}>
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-20">
 
             {/* Left — headline */}
-            <div style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(20px)", transition: "all 0.7s ease" }}>
+            <div style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(30px)", transition: "all 1s cubic-bezier(0.16,1,0.3,1)" }}>
+
               {greeting && (
-                <div className="inline-flex items-center gap-2 bg-[#c5a84f]/10 border border-[#c5a84f]/20 rounded-full px-4 py-2 mb-5">
+                <div className="inline-flex items-center gap-2 bg-[#c5a84f]/10 border border-[#c5a84f]/25 rounded-full px-4 py-2 mb-5 backdrop-blur-sm">
+                  <span className="w-1.5 h-1.5 bg-[#c5a84f] rounded-full animate-pulse" />
                   <span className="text-[#c5a84f] text-xs font-bold">{greeting}</span>
                 </div>
               )}
 
-              <div className="inline-flex items-center gap-2 border border-white/10 bg-white/5 rounded-full px-4 py-2 mb-6">
+              <div className="inline-flex items-center gap-2 border border-white/12 rounded-full px-4 py-2 mb-7 backdrop-blur-sm"
+                style={{ background: "rgba(255,255,255,0.05)" }}>
                 <span className="w-1.5 h-1.5 bg-[#c5a84f] rounded-full animate-pulse" />
-                <span className="text-white/50 text-[10px] font-bold uppercase tracking-[0.2em]">
+                <span className="text-white/55 text-[10px] font-bold uppercase tracking-[0.22em]">
                   {l === "fr" ? "Communauté Chrétienne Mondiale" : l === "ht" ? "Kominote Kretyen Mondyal" : "Global Christian Community"}
                 </span>
               </div>
 
-              <h1 className="text-white font-black leading-[1.06] mb-6" style={{ fontSize: "clamp(2.2rem, 5vw, 3.8rem)" }}>
-                {l === "fr" ? <>Grandissez dans la foi.<br /><span className="text-[#c5a84f]">Ensemble.</span></> :
-                 l === "ht" ? <>Grandi nan lafwa.<br /><span className="text-[#c5a84f]">Ansanm.</span></> :
-                 <>Grow in faith.<br /><span className="text-[#c5a84f]">Together.</span></>}
+              <h1 className="font-black leading-[1.04] mb-6" style={{ fontSize: "clamp(2.7rem, 5.5vw, 4.9rem)" }}>
+                <span className="block text-white/90">
+                  {l === "fr" ? "Grandissez dans" : l === "ht" ? "Grandi nan" : "Grow in"}
+                </span>
+                <span className="block" style={{
+                  background: "linear-gradient(135deg, #c5a84f 0%, #f0d888 45%, #c5a84f 75%, #9d8035 100%)",
+                  WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"
+                }}>
+                  {l === "fr" ? "la Foi." : l === "ht" ? "Lafwa." : "the Faith."}
+                </span>
+                <span className="block text-white">
+                  {l === "fr" ? "Ensemble." : l === "ht" ? "Ansanm." : "Together."}
+                </span>
               </h1>
 
-              <p className="text-white/45 text-base leading-relaxed mb-8 max-w-lg">
-                {l === "fr" ? "Prière, étude biblique, concours, enseignements et communautés d'église — tout ce dont vous avez besoin pour votre croissance spirituelle."
-               : l === "ht" ? "Lapriyè, etid biblik, konkou, ansèyman ak kominote legliz — tout sa ou bezwen pou kwasans espirityèl ou."
-               : "Prayer, Bible study, contests, teachings and church communities — everything you need for your spiritual growth."}
+              <p className="text-white/48 leading-relaxed mb-9 max-w-lg"
+                style={{ fontSize: "clamp(0.95rem, 1.6vw, 1.1rem)" }}>
+                {l === "fr" ? "Une plateforme chrétienne internationale — prière, études bibliques, concours, enseignements et communautés d'église pour votre croissance spirituelle."
+               : l === "ht" ? "Yon platfòm kretyen entènasyonal — lapriyè, etid biblik, konkou, ansèyman ak kominote legliz pou kwasans espirityèl ou."
+               : "An international Christian platform — prayer, Bible studies, contests, teachings and church communities for your spiritual growth."}
               </p>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3"
+                style={{ opacity: visible ? 1 : 0, transition: "opacity 0.8s ease 0.35s" }}>
                 <Link href="/aujourd-hui"
-                  className="inline-flex items-center gap-2 bg-[#c5a84f] hover:bg-[#d4b85c] text-[#0f2044] font-black text-sm px-7 py-3.5 rounded-full transition-all hover:shadow-lg hover:shadow-[#c5a84f]/20 hover:-translate-y-0.5">
-                  ✨ {l === "fr" ? "Commencer aujourd'hui" : l === "ht" ? "Kòmanse jodi a" : "Start today"}
+                  className="group inline-flex items-center gap-2.5 font-black text-sm px-8 py-4 rounded-full transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+                  style={{
+                    background: "linear-gradient(135deg, #c5a84f 0%, #d8bc5e 50%, #b89440 100%)",
+                    color: "#07102a",
+                    boxShadow: "0 4px 28px rgba(197,168,79,0.28), inset 0 1px 0 rgba(255,255,255,0.18)"
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 40px rgba(197,168,79,0.45), inset 0 1px 0 rgba(255,255,255,0.18)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 28px rgba(197,168,79,0.28), inset 0 1px 0 rgba(255,255,255,0.18)"; }}>
+                  <span>✨</span>
+                  {l === "fr" ? "Commencer aujourd'hui" : l === "ht" ? "Kòmanse jodi a" : "Start today"}
                 </Link>
                 <Link href="/decouvrir"
-                  className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white font-bold text-sm px-7 py-3.5 rounded-full transition-all">
+                  className="inline-flex items-center gap-2 border border-white/18 hover:border-white/35 text-white hover:text-white/90 font-bold text-sm px-8 py-4 rounded-full transition-all duration-300 backdrop-blur-sm"
+                  style={{ background: "rgba(255,255,255,0.05)" }}>
                   {l === "fr" ? "Découvrir" : l === "ht" ? "Dekouvri" : "Discover"} →
                 </Link>
               </div>
+
+              {/* Social proof */}
+              <div className="flex items-center gap-3 mt-7"
+                style={{ opacity: visible ? 1 : 0, transition: "opacity 0.8s ease 0.55s" }}>
+                <div className="flex -space-x-1.5">
+                  {["G","M","P","J","A"].map((letter, i) => (
+                    <div key={i} className="w-7 h-7 rounded-full border-2 flex items-center justify-center text-[9px] font-black text-white"
+                      style={{ backgroundColor: ["#7c3aed","#1d4ed8","#b45309","#16a34a","#0891b2"][i], borderColor: "#07102a" }}>
+                      {letter}
+                    </div>
+                  ))}
+                </div>
+                <p className="text-white/35 text-xs leading-tight">
+                  {l === "fr" ? "Des milliers de chrétiens vous ont rejoint" : l === "ht" ? "Milye kretyen deja antre" : "Thousands of Christians joined"}
+                </p>
+              </div>
             </div>
 
-            {/* Right — Today's content card */}
-            <div style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(20px)", transition: "all 0.7s ease 0.2s" }}>
-              <div className="bg-white/[0.06] border border-white/10 rounded-3xl overflow-hidden backdrop-blur-sm">
+            {/* Right — Today card */}
+            <div style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(30px)", transition: "all 1s cubic-bezier(0.16,1,0.3,1) 0.22s" }}>
+              <div className="rounded-3xl overflow-hidden backdrop-blur-md"
+                style={{
+                  background: "rgba(255,255,255,0.055)",
+                  border: "1px solid rgba(255,255,255,0.10)",
+                  boxShadow: "0 12px 72px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.04) inset"
+                }}>
                 {/* Card header */}
-                <div className="bg-gradient-to-r from-[#c5a84f]/20 to-transparent border-b border-white/10 px-6 py-4 flex items-center justify-between">
+                <div className="border-b px-6 py-4 flex items-center justify-between"
+                  style={{ background: "linear-gradient(90deg, rgba(197,168,79,0.18) 0%, transparent 100%)", borderColor: "rgba(255,255,255,0.08)" }}>
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-[#c5a84f] rounded-full animate-pulse" />
                     <span className="text-[#c5a84f] text-[10px] font-black uppercase tracking-[0.2em]">
@@ -190,7 +309,7 @@ export default function Home() {
                 </div>
 
                 {/* Verse */}
-                <div className="px-6 py-5 border-b border-white/8">
+                <div className="px-6 py-5" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
                   <p className="text-white/30 text-[9px] uppercase tracking-widest font-bold mb-2">📖 {l === "fr" ? "Verset du jour" : l === "ht" ? "Vèsè jou a" : "Verse of the day"}</p>
                   <blockquote className="text-white text-sm font-semibold leading-relaxed italic mb-1">
                     &ldquo;{verse[l]}&rdquo;
@@ -199,7 +318,7 @@ export default function Home() {
                 </div>
 
                 {/* Challenge */}
-                <div className="px-6 py-4 border-b border-white/8">
+                <div className="px-6 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
                   <p className="text-white/30 text-[9px] uppercase tracking-widest font-bold mb-2">🏛️ {l === "fr" ? "Défi du jour" : l === "ht" ? "Defi jou a" : "Daily challenge"}</p>
                   <p className="text-white/70 text-xs font-medium mb-3">{challenge[l]}</p>
                   {!showAnswer ? (
@@ -237,18 +356,64 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c5a84f]/30 to-transparent" />
+        {/* Bottom gradient separator */}
+        <div className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
+          style={{ background: "linear-gradient(90deg, transparent 0%, rgba(197,168,79,0.35) 50%, transparent 100%)" }} />
       </section>
 
       {/* ══════ STATS BAR ══════ */}
       <section className="bg-[#0f2044] border-b border-white/5">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-10">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-6">
-            <AnimatedStat value={12} suffix="+" label={l === "fr" ? "Pays représentés" : l === "ht" ? "Peyi reprezante" : "Countries"} />
-            <AnimatedStat value={500} suffix="+" label={l === "fr" ? "Membres actifs" : l === "ht" ? "Manm aktif" : "Active members"} />
-            <AnimatedStat value={1200} suffix="+" label={l === "fr" ? "Prières publiées" : l === "ht" ? "Lapriyè pibliye" : "Prayers shared"} />
-            <AnimatedStat value={98} suffix="%" label={l === "fr" ? "Satisfaction membres" : l === "ht" ? "Satisfaksyon manm" : "Member satisfaction"} />
-          </div>
+          {platformStats.loaded && !platformStats.hasRealData ? (
+            /* Launch message — shown only while platform is brand new */
+            <div className="text-center py-4">
+              <p className="text-[#c5a84f] font-black text-lg mb-2">
+                {l === "fr" ? "🌱 Rejoignez les premiers membres fondateurs"
+                 : l === "ht" ? "🌱 Rantre nan premye manm fondatè yo"
+                 : "🌱 Join the founding members"}
+              </p>
+              <p className="text-white/40 text-sm max-w-xl mx-auto leading-relaxed">
+                {l === "fr" ? "KONEKSYON PAM vient de lancer. Votre inscription compte — soyez parmi les premières pierres de cette communauté mondiale."
+                 : l === "ht" ? "KONEKSYON PAM fèk lanse. Enskripsyon ou konte — swa youn nan premye wòch kominote mondyal sa a."
+                 : "KONEKSYON PAM just launched. Your registration matters — be among the first stones of this global community."}
+              </p>
+              <Link href="/auth"
+                className="inline-flex items-center gap-2 mt-5 bg-[#c5a84f] hover:bg-[#d4b85c] text-[#0f2044] font-black text-sm px-7 py-3 rounded-full transition-all">
+                {l === "fr" ? "Devenir membre fondateur →"
+                 : l === "ht" ? "Tounen manm fondatè →"
+                 : "Become a founding member →"}
+              </Link>
+            </div>
+          ) : (
+            /* Real stats — shown as soon as we have real data */
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-6">
+              {platformStats.members > 0 && (
+                <AnimatedStat value={platformStats.members}
+                  label={l === "fr" ? "Membres inscrits" : l === "ht" ? "Manm enskri" : "Members"} />
+              )}
+              {platformStats.prayers > 0 && (
+                <AnimatedStat value={platformStats.prayers}
+                  label={l === "fr" ? "Prières partagées" : l === "ht" ? "Lapriyè pataje" : "Prayers shared"} />
+              )}
+              {platformStats.testimonies > 0 && (
+                <AnimatedStat value={platformStats.testimonies}
+                  label={l === "fr" ? "Témoignages" : l === "ht" ? "Temwayaj" : "Testimonies"} />
+              )}
+              {platformStats.churches > 0 && (
+                <AnimatedStat value={platformStats.churches}
+                  label={l === "fr" ? "Groupes actifs" : l === "ht" ? "Gwoup aktif" : "Active groups"} />
+              )}
+              {/* Fallback cols when some stats are still 0 */}
+              {platformStats.contests > 0 && platformStats.churches === 0 && (
+                <AnimatedStat value={platformStats.contests}
+                  label={l === "fr" ? "Concours organisés" : l === "ht" ? "Konkou òganize" : "Contests held"} />
+              )}
+              {platformStats.votes > 0 && platformStats.testimonies === 0 && (
+                <AnimatedStat value={platformStats.votes}
+                  label={l === "fr" ? "Votes exprimés" : l === "ht" ? "Vòt eksprime" : "Votes cast"} />
+              )}
+            </div>
+          )}
         </div>
       </section>
 
@@ -334,6 +499,145 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ══════ COMMUNITY ACTIVITY ══════ */}
+      <section className="py-16 px-5 sm:px-8 bg-white border-t border-stone-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+
+            {/* Activity feed */}
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-stone-400 mb-2">
+                {l === "fr" ? "En ce moment" : l === "ht" ? "Kounye a" : "Right now"}
+              </p>
+              <h2 className="text-[#0f2044] font-black text-2xl sm:text-3xl mb-8">
+                {l === "fr" ? "La communauté en action" : l === "ht" ? "Kominote a an aksyon" : "The community in action"}
+              </h2>
+              <div className="space-y-3">
+                {DEMO_ACTIVITY.map((item, i) => (
+                  <div key={item.id}
+                    className="flex items-center gap-4 p-4 rounded-2xl border border-stone-100 hover:border-stone-200 transition-all"
+                    style={{ animationDelay: `${i * 0.05}s` }}>
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0"
+                      style={{ backgroundColor: `${item.color}15` }}>
+                      {item.action[l] === item.action[l] ? item.icon : ""}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-stone-800 text-sm">
+                        <span className="font-black">{item.name}</span>
+                        <span className="text-stone-400 mx-1">{item.flag}</span>
+                        <span className="text-stone-500">{item.action[l]}</span>
+                      </p>
+                      <p className="text-stone-300 text-[10px] mt-0.5">{item.countryName[l]} · {item.time}</p>
+                    </div>
+                    <span className="w-2 h-2 rounded-full shrink-0 animate-pulse"
+                      style={{ backgroundColor: item.color }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Prayer preview */}
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-stone-400 mb-2">
+                {l === "fr" ? "Mur de prière" : l === "ht" ? "Mi lapriyè" : "Prayer wall"}
+              </p>
+              <h2 className="text-[#0f2044] font-black text-2xl sm:text-3xl mb-8">
+                {l === "fr" ? "Priez avec eux" : l === "ht" ? "Priye avèk yo" : "Pray with them"}
+              </h2>
+              <div className="space-y-4">
+                {DEMO_PRAYERS.filter(p => p.featured).slice(0, 3).map(prayer => {
+                  const cat = PRAYER_CATEGORIES[prayer.category];
+                  return (
+                    <div key={prayer.id} className="bg-white border border-stone-200 rounded-2xl p-5 hover:shadow-sm transition-shadow">
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-xl bg-stone-50 shrink-0">
+                          {prayer.flag}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <p className="text-stone-900 font-bold text-sm">{prayer.name}</p>
+                            <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full"
+                              style={{ backgroundColor: `${cat.color}15`, color: cat.color }}>
+                              {cat[l]}
+                            </span>
+                          </div>
+                          <p className="text-stone-400 text-xs">{prayer.countryName[l]}</p>
+                        </div>
+                        <span className="text-stone-200 font-bold text-xs shrink-0">
+                          🙏 {prayer.pray_count.toLocaleString()}
+                        </span>
+                      </div>
+                      <p className="text-stone-600 text-xs leading-relaxed line-clamp-2 italic">
+                        &ldquo;{prayer.text[l].slice(0, 120)}…&rdquo;
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+              <Link href="/prieres"
+                className="mt-5 inline-flex items-center gap-2 text-[#7c3aed] text-sm font-black hover:opacity-75 transition-opacity">
+                {l === "fr" ? "Voir toutes les demandes →" : l === "ht" ? "Wè tout demann yo →" : "See all prayer requests →"}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════ TESTIMONIAL PREVIEW ══════ */}
+      <section className="py-16 px-5 sm:px-8 bg-[#080d18]">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30 mb-2">
+                {l === "fr" ? "Témoignages" : l === "ht" ? "Temwayaj" : "Testimonies"}
+              </p>
+              <h2 className="text-white font-black text-2xl sm:text-3xl">
+                {l === "fr" ? "Ce que Dieu a fait dans nos vies" : l === "ht" ? "Sa Bondye fè nan lavi nou" : "What God has done in our lives"}
+              </h2>
+            </div>
+            <Link href="/temoignages"
+              className="hidden sm:block text-white/30 text-sm font-black hover:text-white transition-colors shrink-0">
+              {l === "fr" ? "Tous les témoignages →" : l === "ht" ? "Tout temwayaj →" : "All testimonies →"}
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {DEMO_TESTIMONIES.slice(0, 3).map(testimony => (
+              <div key={testimony.id}
+                className="bg-white/[0.04] border border-white/8 rounded-2xl p-6 hover:border-white/20 transition-all">
+                <span className="inline-flex items-center gap-1 text-[10px] font-black px-2.5 py-1 rounded-full mb-4"
+                  style={{ backgroundColor: `${testimony.avatarColor}20`, color: testimony.avatarColor }}>
+                  {testimony.categoryIcon} {testimony.category[l]}
+                </span>
+                <p className="text-white/55 text-sm leading-relaxed mb-5 line-clamp-4 italic">
+                  &ldquo;{testimony.text[l].slice(0, 200)}…&rdquo;
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-black text-sm shrink-0"
+                    style={{ backgroundColor: testimony.avatarColor }}>
+                    {testimony.name[0]}
+                  </div>
+                  <div>
+                    <p className="text-white/70 text-xs font-bold">{testimony.name} {testimony.flag}</p>
+                    <p className="text-white/30 text-[10px]">{testimony.countryName[l]}</p>
+                  </div>
+                  <div className="ml-auto flex gap-0.5">
+                    {[1,2,3,4,5].map(s => <span key={s} className="text-amber-400 text-[10px]">★</span>)}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <Link href="/temoignages"
+              className="inline-flex items-center gap-2 border border-white/20 text-white font-bold px-7 py-3 rounded-full hover:border-white/40 transition-colors text-sm">
+              {l === "fr" ? "Lire tous les témoignages" : l === "ht" ? "Li tout temwayaj yo" : "Read all testimonies"} →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ══════ SHARE / INVITE ══════ */}
       <section className="py-12 px-5 sm:px-8">
         <div className="max-w-3xl mx-auto">
@@ -361,7 +665,7 @@ export default function Home() {
       <section className="bg-[#0f2044] py-8 px-5 sm:px-8">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-5">
           <div className="flex items-center gap-3">
-            <img src="/logo-kp.png" alt="KP" className="w-8 h-8 rounded-lg" />
+            <Image src="/logo-kp.png" alt="KP" width={32} height={32} className="rounded-lg" />
             <div>
               <p className="text-white font-black text-sm">KONEKSYON PAM</p>
               <p className="text-white/30 text-[9px] uppercase tracking-widest">

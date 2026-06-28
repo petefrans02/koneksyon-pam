@@ -19,7 +19,18 @@ export default function ShareButton({ title, message, url, context = "default", 
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
 
-  const shareUrl = url || (typeof window !== "undefined" ? window.location.href : "");
+  // Build share URL with current language so recipients land in the right language
+  const shareUrl = (() => {
+    const base = url || (typeof window !== "undefined" ? window.location.href : "");
+    if (!base) return base;
+    try {
+      const u = new URL(base);
+      u.searchParams.set("lang", l);
+      return u.toString();
+    } catch {
+      return base;
+    }
+  })();
 
   const defaultMessages: Record<string, Record<Lang, string>> = {
     contest: {
