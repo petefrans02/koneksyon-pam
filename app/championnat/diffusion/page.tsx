@@ -177,7 +177,9 @@ export default function DiffusionPage() {
 
   // Questions « jeu télé » = EXACTEMENT le sous-ensemble de la journée en cours (identique aux joueurs).
   const liveWaveKey = live[0] ? waveKeyOf(live[0].stage, live[0].round_number) : "";
-  const quiz = liveWaveKey && rounds.length ? flattenForBroadcast(subsetForSeed(rounds, liveWaveKey)) : [];
+  // Les questions sont propres a chaque match : la diffusion montre celles du
+  // match actuellement a l'antenne.
+  const quiz = feat && rounds.length ? flattenForBroadcast(subsetForSeed(rounds, feat.id)) : [];
   // SYNCHRONISÉ : même horloge que les joueurs (départ de la journée) → même question au même moment.
   const startedAtMs = live[0]?.started_at ? new Date(live[0].started_at).getTime() : 0;
   const sync = clockState(startedAtMs, nowMs, quiz.length);

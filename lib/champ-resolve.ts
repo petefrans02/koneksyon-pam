@@ -14,8 +14,8 @@ async function seasonRounds(db: SupabaseClient, seasonId: string): Promise<SubRo
   const { data: rounds } = await db.from("contest_rounds").select("round_number, round_type, questions, time_limit_sec").eq("contest_id", season.contest_id).order("round_number");
   return (rounds ?? []) as SubRound[];
 }
-function countFor(rounds: SubRound[], stage: string, round_number: number | null): number {
-  return flattenForBroadcast(subsetForSeed(rounds, waveKeyOf(stage, round_number))).length || 15;
+function countFor(rounds: SubRound[], matchId: string): number {
+  return flattenForBroadcast(subsetForSeed(rounds, matchId)).length || 15;
 }
 
 // Résout UN match. BARÈME PARTAGÉ : chaque question distribue 100 points au
@@ -24,7 +24,7 @@ function countFor(rounds: SubRound[], stage: string, round_number: number | null
 // répondu ; seules les IA sont simulées.
 export async function resolveMatch(db: SupabaseClient, match: ChampMatch, count?: number): Promise<{ score_a: number; score_b: number; winner: string | null }> {
   const a = match.team_a, b = match.team_b;
-  if (count === undefined) { const r = await seasonRounds(db, match.season_id); count = countFor(r, match.stage, match.round_number); }
+  if (count === undefined) { const r = await seasonRounds(db, match.season_id); count = countFor(r, match.id); }
   const { data: members } = await db.from("champ_members").select("id, team_id, skill, speed, is_ai").in("team_id", [a, b]);
   const roster = (members ?? []) as Member[];
 
@@ -109,7 +109,7 @@ export async function autoResolveReady(db: SupabaseClient, seasonId: string): Pr
 
   let resolved = 0;
   for (const m of liveMatches) {
-    const count = countFor(rounds, m.stage as string, (m.round_number as number) ?? null);
+    const count = countFor(rounds, m.id as string);
     const syncDuration = count * Q_TOTAL; // durée exacte de la manche synchronisée
     const realIds = [...(realByTeam[m.team_a as string] ?? []), ...(realByTeam[m.team_b as string] ?? [])];
     const submitted = subByMatch[m.id as string] ?? new Set();

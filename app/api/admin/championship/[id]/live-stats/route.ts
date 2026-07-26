@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   // Questions partagées de la journée (avec bonnes réponses).
   const { data: season } = await db.from("champ_seasons").select("contest_id").eq("id", match.season_id).maybeSingle();
   const { data: rounds } = await db.from("contest_rounds").select("round_number, round_type, questions, time_limit_sec").eq("contest_id", season?.contest_id).order("round_number");
-  const seed = waveKeyOf(match.stage as string, (match.round_number as number) ?? null);
+  const seed = matchId; // questions propres a ce match
   const questions = flattenForBroadcast(subsetForSeed((rounds ?? []) as SubRound[], seed));
   const count = questions.length;
 

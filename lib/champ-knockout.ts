@@ -15,6 +15,29 @@ export type KnockoutResult =
   | { ok: true; phase: "finished"; champion: string; vice: string; third: string | null }
   | { ok: false; reason: "not_found" | "groups_pending" | "not_enough_teams" | "round_in_progress" };
 
+
+// ANTI-DOUBLON. Plusieurs sondages (diffusion, admin, joueurs) appellent
+// advanceSeason en même temps : tous voient « pas encore de tableau » et créent
+// chacun leur tour éliminatoire → les quarts ont été générés en triple.
+// On dédoublonne de façon déterministe : pour chaque (phase, slot) on garde la
+// ligne au plus petit identifiant, et on supprime les copies qui n'ont pas été
+// jouées. Toutes les instances convergent vers le même résultat.
+async function dedupeStage(db: SupabaseClient, seasonId: string, stage: string): Promise<number> {
+  const { data } = await db.from("champ_matches")
+    .select("id, slot, status").eq("season_id", seasonId).eq("stage", stage);
+  const bySlot: Record<string, { id: string; status: string }[]> = {};
+  for (const m of data ?? []) (bySlot[String(m.slot)] ??= []).push({ id: m.id as string, status: m.status as string });
+  const toDelete: string[] = [];
+  for (const rows of Object.values(bySlot)) {
+    if (rows.length < 2) continue;
+    rows.sort((x, y) => x.id.localeCompare(y.id));
+    const keep = rows.find((r) => r.status === "done") ?? rows[0];
+    for (const r of rows) if (r.id !== keep.id && r.status !== "done") toDelete.push(r.id);
+  }
+  if (toDelete.length) await db.from("champ_matches").delete().in("id", toDelete);
+  return toDelete.length;
+}
+
 export async function advanceKnockout(db: SupabaseClient, seasonId: string): Promise<KnockoutResult> {
   const { data: season } = await db.from("champ_seasons").select("*").eq("id", seasonId).maybeSingle();
   if (!season) return { ok: false, reason: "not_found" };
@@ -27,6 +50,9 @@ export async function advanceKnockout(db: SupabaseClient, seasonId: string): Pro
   const { data: teams } = await db.from("champ_teams").select("*").eq("season_id", seasonId);
   const nameById: Record<string, string> = {};
   for (const t of teams ?? []) nameById[t.id as string] = t.name as string;
+
+  // On nettoie d'abord les doublons eventuels d'une precedente course.
+  for (const st of ["quarter", "semi", "final", "third"]) await dedupeStage(db, seasonId, st);
 
   const { data: ko } = await db.from("champ_matches")
     .select("id, stage, slot, team_a, team_b, winner, status")
@@ -61,6 +87,7 @@ export async function advanceKnockout(db: SupabaseClient, seasonId: string): Pro
     const rows = [];
     for (let i = 0; i < size / 2; i++) rows.push({ season_id: seasonId, stage: firstStage, slot: i, team_a: bracket[i], team_b: bracket[size - 1 - i], status: "scheduled" });
     await mk(rows);
+    await dedupeStage(db, seasonId, firstStage);
     return { ok: true, phase: firstStage as "quarter" | "semi" | "final", created: rows.length };
   }
 
@@ -71,6 +98,7 @@ export async function advanceKnockout(db: SupabaseClient, seasonId: string): Pro
     const rows = [];
     for (let i = 0; i < w.length; i += 2) rows.push({ season_id: seasonId, stage: "semi", slot: i / 2, team_a: w[i], team_b: w[i + 1], status: "scheduled" });
     await mk(rows);
+    await dedupeStage(db, seasonId, "semi");
     return { ok: true, phase: "semi", created: rows.length };
   }
 
@@ -83,6 +111,8 @@ export async function advanceKnockout(db: SupabaseClient, seasonId: string): Pro
     const rows = [{ season_id: seasonId, stage: "final", slot: 0, team_a: winnersKo[0], team_b: winnersKo[1], status: "scheduled" }];
     if (losers.length === 2) rows.push({ season_id: seasonId, stage: "third", slot: 0, team_a: losers[0], team_b: losers[1], status: "scheduled" });
     await mk(rows);
+    await dedupeStage(db, seasonId, "final");
+    await dedupeStage(db, seasonId, "third");
     return { ok: true, phase: "final", created: rows.length };
   }
 

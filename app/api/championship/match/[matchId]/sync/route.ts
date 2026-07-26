@@ -35,7 +35,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ matc
   let questions: { prompt: string; options: string[]; correct: number; ref: string }[] = [];
   if (season?.contest_id) {
     const { data: rounds } = await db.from("contest_rounds").select("round_number, round_type, questions, time_limit_sec").eq("contest_id", season.contest_id).order("round_number");
-    const seed = waveKeyOf(m.stage as string, (m.round_number as number) ?? null);
+    // Graine = identifiant du MATCH : chaque match a ses propres questions.
+    const seed = matchId;
     questions = flattenForBroadcast(subsetForSeed((rounds ?? []) as SubRound[], seed));
   }
 

@@ -252,6 +252,7 @@ function fadeOutLayer(layer: MusicLayer, fade: number) {
     try { layer.el.pause(); } catch { /* ignore */ }
     try { layer.node.disconnect(); layer.gain.disconnect(); } catch { /* ignore */ }
     layer.el.src = "";
+    allLayers.delete(layer);
   };
   if (fade > 0 && ctx) {
     const now = ctx.currentTime;
@@ -266,9 +267,27 @@ function fadeOutLayer(layer: MusicLayer, fade: number) {
   }
 }
 
+// Toutes les couches jamais créées. Sert de filet de sécurité : avant d'en
+// démarrer une nouvelle, on coupe net tout ce qui pourrait encore jouer.
+// Sans ça, deux musiques pouvaient se superposer si un fondu de sortie était
+// interrompu (changement de page, double appel simultané…).
+const allLayers = new Set<MusicLayer>();
+
+function killAllLayers(except?: MusicLayer) {
+  for (const l of allLayers) {
+    if (l === except) continue;
+    try { l.el.pause(); } catch { /* déjà arrêté */ }
+    try { l.node.disconnect(); l.gain.disconnect(); } catch { /* déjà détaché */ }
+    l.el.src = "";
+    allLayers.delete(l);
+  }
+}
+
 // Démarre réellement une couche musicale (fondu d'entrée depuis le silence).
 function startLayer(key: MusicKey, fadeIn: number, loop: boolean) {
   const c = getCtx();
+  // UNE SEULE MUSIQUE À LA FOIS : on coupe tout résidu avant de démarrer.
+  killAllLayers();
   const { src, vol } = MUSIC[key];
   const el = new Audio(src);
   el.loop = loop;
@@ -286,6 +305,7 @@ function startLayer(key: MusicKey, fadeIn: number, loop: boolean) {
   el.play().catch(() => { /* ignore */ });
 
   current = { key, el, gain, node };
+  allLayers.add(current);
 
   // Remet le ducking à plat pour la nouvelle piste.
   if (musicDuck) {
