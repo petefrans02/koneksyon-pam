@@ -5,6 +5,8 @@ import { supabase, signInWithGoogle, signOut } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import { useLang } from "@/lib/LangContext";
 import Link from "next/link";
+import Image from "next/image";
+import Icon from "@/app/components/Icon";
 
 export default function AuthButton() {
   const { lang } = useLang();
@@ -39,7 +41,7 @@ export default function AuthButton() {
           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
         </svg>
-        {lang === "fr" ? "Connexion" : lang === "ht" ? "Konekte" : "Sign in"}
+        {lang === "fr" ? "Connexion" : lang === "ht" ? "Konekte" : lang === "es" ? "Iniciar sesión" : "Sign in"}
       </button>
     );
   }
@@ -54,7 +56,7 @@ export default function AuthButton() {
         className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-2 py-1 rounded-lg transition-all"
       >
         {avatar ? (
-          <img src={avatar} alt="" className="w-7 h-7 rounded-full" />
+          <Image src={avatar} alt="" width={28} height={28} className="rounded-full" unoptimized />
         ) : (
           <div className="w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
             {name[0].toUpperCase()}
@@ -64,27 +66,51 @@ export default function AuthButton() {
       </button>
 
       {showMenu && (
-        <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl border border-stone-200 py-2 w-52 z-50">
-          <div className="px-4 py-3 border-b border-stone-100">
-            <p className="text-sm font-semibold text-stone-900">{name}</p>
-            <p className="text-xs text-stone-400 truncate">{user.email}</p>
+        <>
+          {/* Backdrop */}
+          <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+
+          <div className="absolute right-0 top-full mt-2 rounded-2xl py-2 w-56 z-50"
+            style={{ background: "rgba(8,14,28,0.97)", border: "1px solid rgba(255,255,255,0.10)", boxShadow: "0 16px 48px rgba(0,0,0,0.5)", backdropFilter: "blur(20px)" }}>
+
+            {/* User info */}
+            <div className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+              <p className="text-white text-sm font-bold truncate">{name}</p>
+              <p className="text-white/35 text-xs truncate mt-0.5">{user.email}</p>
+            </div>
+
+            {/* Menu items */}
+            <div className="py-1">
+              <Link href="/dashboard" onClick={() => setShowMenu(false)}
+                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/06 transition-colors">
+                <Icon name="home" size={17} /> {lang === "fr" ? "Mon tableau de bord" : lang === "ht" ? "Tablo de bò mwen" : lang === "es" ? "Mi panel" : "My dashboard"}
+              </Link>
+              <Link href="/aujourd-hui" onClick={() => setShowMenu(false)}
+                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/06 transition-colors">
+                <Icon name="etincelles" size={17} /> {lang === "fr" ? "Verset du jour" : lang === "ht" ? "Vèsè jou a" : lang === "es" ? "Versículo del día" : "Verse of the day"}
+              </Link>
+              <Link href="/trophees" onClick={() => setShowMenu(false)}
+                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/06 transition-colors">
+                <Icon name="medaille" size={17} /> {lang === "fr" ? "Mes trophées" : lang === "ht" ? "Twofè mwen" : lang === "es" ? "Mis trofeos" : "My trophies"}
+              </Link>
+              <Link href="/profile" onClick={() => setShowMenu(false)}
+                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/06 transition-colors">
+                <Icon name="profil" size={17} /> {lang === "fr" ? "Mon profil" : lang === "ht" ? "Pwofil mwen" : lang === "es" ? "Mi perfil" : "My profile"}
+              </Link>
+            </div>
+
+            {/* Sign out */}
+            <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }} className="pt-1">
+              <button onClick={() => { signOut(); setShowMenu(false); }}
+                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm transition-colors text-left"
+                style={{ color: "rgba(248,113,113,0.80)" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#f87171")}
+                onMouseLeave={e => (e.currentTarget.style.color = "rgba(248,113,113,0.80)")}>
+                <Icon name="deconnexion" size={17} /> {lang === "fr" ? "Déconnexion" : lang === "ht" ? "Dekonekte" : lang === "es" ? "Cerrar sesión" : "Sign out"}
+              </button>
+            </div>
           </div>
-          <Link
-            href="/mes-groupes"
-            onClick={() => setShowMenu(false)}
-            className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-stone-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-          >
-            ⛪ {lang === "fr" ? "Mes groupes" : lang === "ht" ? "Gwoup mwen yo" : "My groups"}
-          </Link>
-          <div className="border-t border-stone-100 mt-1 pt-1">
-            <button
-              onClick={() => { signOut(); setShowMenu(false); }}
-              className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
-            >
-              {lang === "fr" ? "Déconnexion" : lang === "ht" ? "Dekonekte" : "Sign out"}
-            </button>
-          </div>
-        </div>
+        </>
       )}
     </div>
   );

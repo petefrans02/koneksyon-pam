@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Icon, { IconName } from "@/app/components/Icon";
 
 interface Church {
   id: string;
@@ -132,7 +133,6 @@ export default function ChurchPage() {
     });
     const result = await res.json();
     if (result.ok) {
-      // Confirm from server that it was actually saved
       const verify = await fetch(`/api/churches/memberships?church_id=${id}`);
       const verifyData = await verify.json();
       setMemberDeptId(verifyData.membership?.department_id ?? deptId);
@@ -183,19 +183,23 @@ export default function ChurchPage() {
   if (!church) {
     return (
       <div className="max-w-lg mx-auto px-6 py-20 text-center">
-        <p className="text-5xl mb-4">⛪</p>
-        <p className="text-stone-500">{lang === "fr" ? "Église non trouvée" : lang === "ht" ? "Legliz pa jwenn" : "Church not found"}</p>
-        <Link href="/eglise" className="text-blue-500 hover:underline mt-4 block">← {lang === "fr" ? "Retour" : lang === "ht" ? "Tounen" : "Back"}</Link>
+        <p className="mb-4 flex justify-center"><Icon name="eglise" size={48} /></p>
+        <p className="text-stone-500">
+          {lang === "fr" ? "Église non trouvée" : lang === "ht" ? "Legliz pa jwenn" : lang === "es" ? "Iglesia no encontrada" : "Church not found"}
+        </p>
+        <Link href="/communaute" className="text-blue-500 hover:underline mt-4 block">
+          ← {lang === "fr" ? "Retour" : lang === "ht" ? "Tounen" : lang === "es" ? "Volver" : "Back"}
+        </Link>
       </div>
     );
   }
 
   const tabs = [
-    { id: "annonces", icon: "📣", label: lang === "fr" ? "Annonces" : lang === "ht" ? "Anons" : "Announcements" },
-    { id: "etudes", icon: "📖", label: lang === "fr" ? "Études" : lang === "ht" ? "Etid" : "Studies" },
-    { id: "prieres", icon: "🙏", label: lang === "fr" ? "Prières" : lang === "ht" ? "Lapriyè" : "Prayers" },
-    { id: "evenements", icon: "📅", label: lang === "fr" ? "Événements" : lang === "ht" ? "Evènman" : "Events" },
-    { id: "jeux", icon: "🎯", label: lang === "fr" ? "Jeux & Concours" : lang === "ht" ? "Jwèt & Konkou" : "Games & Contests" },
+    { id: "annonces", icon: "notifications", label: lang === "fr" ? "Annonces" : lang === "ht" ? "Anons" : lang === "es" ? "Anuncios" : "Announcements" },
+    { id: "etudes", icon: "etude", label: lang === "fr" ? "Études" : lang === "ht" ? "Etid" : lang === "es" ? "Estudios" : "Studies" },
+    { id: "prieres", icon: "priere", label: lang === "fr" ? "Prières" : lang === "ht" ? "Lapriyè" : lang === "es" ? "Oraciones" : "Prayers" },
+    { id: "evenements", icon: "evenements", label: lang === "fr" ? "Événements" : lang === "ht" ? "Evènman" : lang === "es" ? "Eventos" : "Events" },
+    { id: "jeux", icon: "cible", label: lang === "fr" ? "Jeux & Concours" : lang === "ht" ? "Jwèt & Konkou" : lang === "es" ? "Juegos y Concursos" : "Games & Contests" },
   ];
 
   const typeMap: Record<string, string> = { annonces: "announcement", etudes: "study", prieres: "prayer", evenements: "event", jeux: "game" };
@@ -203,15 +207,14 @@ export default function ChurchPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
-      <Link href="/eglise" className="text-blue-500 text-sm hover:underline mb-6 block">
-        ← {lang === "fr" ? "Toutes les églises" : lang === "ht" ? "Tout legliz yo" : "All churches"}
+      <Link href="/communaute" className="text-blue-500 text-sm hover:underline mb-6 block">
+        ← {lang === "fr" ? "Toutes les églises" : lang === "ht" ? "Tout legliz yo" : lang === "es" ? "Todos los grupos" : "All churches"}
       </Link>
 
       {/* Church Header */}
       <div className="bg-gradient-to-br from-[#0a1628] to-[#0f2044] rounded-2xl p-8 mb-8 border border-blue-800/30">
         {(() => {
           const raw = church.description || "";
-          // Strip any leading/trailing brackets variants: [content] or [content] — desc
           const typeMatch = raw.match(/^\[([^\]]+)\](?:\s*[—-]\s*(.*))?$/) || raw.match(/^([^[—\n]+?)(?:\s*[—-]\s*(.*))?$/);
           const hasBracket = raw.startsWith("[");
           const typeTag = hasBracket && typeMatch ? typeMatch[1].trim() : "";
@@ -235,13 +238,17 @@ export default function ChurchPage() {
               </span>
             )}
             {church.pastor_name && (
-              <p className="text-blue-300/50 text-xs mt-2 uppercase tracking-widest">{lang === "fr" ? "Responsable" : lang === "ht" ? "Responsab" : "Leader"} · {church.pastor_name}</p>
+              <p className="text-blue-300/50 text-xs mt-2 uppercase tracking-widest">
+                {lang === "fr" ? "Responsable" : lang === "ht" ? "Responsab" : lang === "es" ? "Líder" : "Leader"} · {church.pastor_name}
+              </p>
             )}
             {descText && <p className="text-blue-200/40 text-xs mt-1 leading-relaxed">{descText}</p>}
           </div>
           <div className="sm:ml-auto flex flex-col gap-2">
             <div className="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-sm rounded-2xl px-5 py-4 text-center border border-white/20 shadow-inner">
-              <p className="text-blue-300/50 text-xs mb-1.5 uppercase tracking-[0.2em] font-medium">{lang === "fr" ? "Code d'accès" : lang === "ht" ? "Kòd aksè" : "Access code"}</p>
+              <p className="text-blue-300/50 text-xs mb-1.5 uppercase tracking-[0.2em] font-medium">
+                {lang === "fr" ? "Code d'accès" : lang === "ht" ? "Kòd aksè" : lang === "es" ? "Código de acceso" : "Access code"}
+              </p>
               <p className="text-white font-mono font-black text-2xl tracking-[0.35em]">{church.join_code}</p>
               <div className="mt-2 flex items-center justify-center gap-1">
                 {church.join_code.split("").map((c, i) => (
@@ -254,7 +261,7 @@ export default function ChurchPage() {
                 onClick={() => { setShowRequests(!showRequests); if (!showRequests) loadJoinRequests(); }}
                 className="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 rounded-xl px-4 py-2.5 text-xs font-bold transition-colors flex items-center gap-2 justify-center"
               >
-                🔔 {lang === "fr" ? "Demandes d'adhésion" : lang === "ht" ? "Demann adhesyon" : "Join requests"}
+                <Icon name="notifications" size={14} /> {lang === "fr" ? "Demandes d'adhésion" : lang === "ht" ? "Demann adhesyon" : lang === "es" ? "Solicitudes de adhesión" : "Join requests"}
               </button>
             )}
           </div>
@@ -266,14 +273,16 @@ export default function ChurchPage() {
       {/* Join Requests Panel — owner only */}
       {isOwner && showRequests && (
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-8">
-          <h2 className="font-bold text-amber-900 mb-4">
-            🔔 {lang === "fr" ? "Demandes en attente" : lang === "ht" ? "Demann ki ap tann" : "Pending requests"}
+          <h2 className="font-bold text-amber-900 mb-4 flex items-center gap-2">
+            <Icon name="notifications" size={18} /> {lang === "fr" ? "Demandes en attente" : lang === "ht" ? "Demann ki ap tann" : lang === "es" ? "Solicitudes pendientes" : "Pending requests"}
             {joinRequests.length > 0 && (
               <span className="ml-2 bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">{joinRequests.length}</span>
             )}
           </h2>
           {joinRequests.length === 0 ? (
-            <p className="text-amber-700/60 text-sm">{lang === "fr" ? "Aucune demande en attente" : lang === "ht" ? "Pa gen demann ki ap tann" : "No pending requests"}</p>
+            <p className="text-amber-700/60 text-sm">
+              {lang === "fr" ? "Aucune demande en attente" : lang === "ht" ? "Pa gen demann ki ap tann" : lang === "es" ? "Sin solicitudes pendientes" : "No pending requests"}
+            </p>
           ) : (
             <div className="space-y-3">
               {joinRequests.map((req) => (
@@ -296,14 +305,14 @@ export default function ChurchPage() {
                       disabled={respondingId === req.id}
                       className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors"
                     >
-                      {respondingId === req.id ? "..." : lang === "fr" ? "✓ Accepter" : lang === "ht" ? "✓ Aksepte" : "✓ Accept"}
+                      {respondingId === req.id ? "..." : lang === "fr" ? "✓ Accepter" : lang === "ht" ? "✓ Aksepte" : lang === "es" ? "✓ Aceptar" : "✓ Accept"}
                     </button>
                     <button
                       onClick={() => respondToRequest(req.id, "rejected")}
                       disabled={respondingId === req.id}
                       className="bg-red-100 hover:bg-red-200 text-red-600 px-4 py-2 rounded-lg text-xs font-bold transition-colors border border-red-200"
                     >
-                      {lang === "fr" ? "✗ Refuser" : lang === "ht" ? "✗ Refize" : "✗ Reject"}
+                      {lang === "fr" ? "✗ Refuser" : lang === "ht" ? "✗ Refize" : lang === "es" ? "✗ Rechazar" : "✗ Reject"}
                     </button>
                   </div>
                 </div>
@@ -318,11 +327,11 @@ export default function ChurchPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-bold text-stone-900">
-              {lang === "fr" ? "Départements" : lang === "ht" ? "Depatman" : "Departments"}
+              {lang === "fr" ? "Départements" : lang === "ht" ? "Depatman" : lang === "es" ? "Departamentos" : "Departments"}
             </h2>
             {isOwner && isEglise && (
               <button onClick={() => setShowSubgroupForm(!showSubgroupForm)} className="text-blue-500 text-sm font-medium hover:underline">
-                + {lang === "fr" ? "Ajouter" : lang === "ht" ? "Ajoute" : "Add"}
+                + {lang === "fr" ? "Ajouter" : lang === "ht" ? "Ajoute" : lang === "es" ? "Agregar" : "Add"}
               </button>
             )}
           </div>
@@ -335,7 +344,14 @@ export default function ChurchPage() {
                   <option key={e} value={e}>{e}</option>
                 ))}
               </select>
-              <input type="text" value={newSubName} onChange={(e) => setNewSubName(e.target.value)} placeholder={lang === "fr" ? "Nom du département..." : lang === "ht" ? "Non depatman..." : "Department name..."} required className="flex-1 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+              <input
+                type="text"
+                value={newSubName}
+                onChange={(e) => setNewSubName(e.target.value)}
+                placeholder={lang === "fr" ? "Nom du département..." : lang === "ht" ? "Non depatman..." : lang === "es" ? "Nombre del departamento..." : "Department name..."}
+                required
+                className="flex-1 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              />
               <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-500">OK</button>
             </form>
           )}
@@ -344,10 +360,16 @@ export default function ChurchPage() {
           {!isOwner && currentUserId && subgroups.length > 0 && memberDeptId === null && (
             <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-2xl p-5 mb-4">
               <p className="font-bold text-blue-900 mb-1">
-                {lang === "fr" ? "👇 Choisissez votre département" : lang === "ht" ? "👇 Chwazi depatman ou" : "👇 Choose your department"}
+                {lang === "fr" ? "Choisissez votre département" : lang === "ht" ? "Chwazi depatman ou" : lang === "es" ? "Elige tu departamento" : "Choose your department"}
               </p>
               <p className="text-blue-700 text-sm mb-1">
-                {lang === "fr" ? "Sélectionnez le département auquel vous appartenez dans cette église." : lang === "ht" ? "Chwazi depatman ou ap fè parti nan legliz sa a." : "Select the department you belong to in this church."}
+                {lang === "fr"
+                  ? "Sélectionnez le département auquel vous appartenez dans cette église."
+                  : lang === "ht"
+                  ? "Chwazi depatman ou ap fè parti nan legliz sa a."
+                  : lang === "es"
+                  ? "Selecciona el departamento al que perteneces en esta iglesia."
+                  : "Select the department you belong to in this church."}
               </p>
             </div>
           )}
@@ -355,15 +377,17 @@ export default function ChurchPage() {
           {/* Member: current dept */}
           {!isOwner && currentUserId && memberDeptId && (
             <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-3 flex items-center gap-3">
-              <span className="text-green-600 font-bold text-sm">✓ {lang === "fr" ? "Votre département :" : lang === "ht" ? "Depatman ou :" : "Your department:"}</span>
+              <span className="text-green-600 font-bold text-sm">
+                ✓ {lang === "fr" ? "Votre département :" : lang === "ht" ? "Depatman ou :" : lang === "es" ? "Tu departamento:" : "Your department:"}
+              </span>
               <span className="font-bold text-green-800">{subgroups.find(s => s.id === memberDeptId)?.icon} {subgroups.find(s => s.id === memberDeptId)?.name}</span>
               <button onClick={() => setMemberDeptId(null)} className="ml-auto text-xs text-stone-400 hover:text-stone-600 underline">
-                {lang === "fr" ? "Changer" : lang === "ht" ? "Chanje" : "Change"}
+                {lang === "fr" ? "Changer" : lang === "ht" ? "Chanje" : lang === "es" ? "Cambiar" : "Change"}
               </button>
             </div>
           )}
 
-          {/* Dept cards — clickable for members, display-only for owner */}
+          {/* Dept cards */}
           {subgroups.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {subgroups.map((sg) => {
@@ -411,7 +435,7 @@ export default function ChurchPage() {
                 : "bg-white text-stone-600 border border-stone-200 hover:border-blue-300"
             }`}
           >
-            <span>{tab.icon}</span> {tab.label}
+            <Icon name={tab.icon as IconName} size={16} /> {tab.label}
           </button>
         ))}
       </div>
@@ -421,21 +445,37 @@ export default function ChurchPage() {
         onClick={() => setShowPostForm(!showPostForm)}
         className="w-full bg-blue-50 border border-blue-200 rounded-xl p-4 text-left text-blue-600 font-medium hover:bg-blue-100 transition-colors mb-6"
       >
-        + {lang === "fr" ? "Publier dans cette section" : lang === "ht" ? "Pibliye nan seksyon sa a" : "Post in this section"}
+        + {lang === "fr" ? "Publier dans cette section" : lang === "ht" ? "Pibliye nan seksyon sa a" : lang === "es" ? "Publicar en esta sección" : "Post in this section"}
       </button>
 
       {/* Post Form */}
       {showPostForm && (
         <form onSubmit={handlePost} className="bg-white rounded-2xl border border-blue-100 p-6 mb-6 shadow-sm">
           <input type="hidden" value={typeMap[activeTab]} onChange={(e) => setPostType(e.target.value)} />
-          <input type="text" value={postTitle} onChange={(e) => setPostTitle(e.target.value)} placeholder={lang === "fr" ? "Titre..." : lang === "ht" ? "Tit..." : "Title..."} required className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none font-medium" />
-          <textarea value={postContent} onChange={(e) => setPostContent(e.target.value)} placeholder={lang === "fr" ? "Contenu..." : lang === "ht" ? "Kontni..." : "Content..."} required rows={4} className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none resize-none" />
+          <input
+            type="text"
+            value={postTitle}
+            onChange={(e) => setPostTitle(e.target.value)}
+            placeholder={lang === "fr" ? "Titre..." : lang === "ht" ? "Tit..." : lang === "es" ? "Título..." : "Title..."}
+            required
+            className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none font-medium"
+          />
+          <textarea
+            value={postContent}
+            onChange={(e) => setPostContent(e.target.value)}
+            placeholder={lang === "fr" ? "Contenu..." : lang === "ht" ? "Kontni..." : lang === "es" ? "Contenido..." : "Content..."}
+            required
+            rows={4}
+            className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none resize-none"
+          />
           <div className="flex flex-col gap-3 mb-4">
             <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">📷 {lang === "fr" ? "Ajouter une image" : lang === "ht" ? "Ajoute yon imaj" : "Add an image"}</label>
+              <label className="text-xs font-medium text-stone-500 mb-1 flex items-center gap-1.5">
+                <Icon name="image" size={14} /> {lang === "fr" ? "Ajouter une image" : lang === "ht" ? "Ajoute yon imaj" : lang === "es" ? "Agregar una imagen" : "Add an image"}
+              </label>
               <div className="flex items-center gap-3">
-                <label className="cursor-pointer bg-slate-100 hover:bg-slate-200 border border-stone-300 rounded-xl px-4 py-2.5 text-sm text-stone-600 font-medium transition-colors">
-                  {uploading ? "⏳ Upload..." : "📁 Choisir un fichier"}
+                <label className="cursor-pointer bg-slate-100 hover:bg-slate-200 border border-stone-300 rounded-xl px-4 py-2.5 text-sm text-stone-600 font-medium transition-colors inline-flex items-center gap-2">
+                  {uploading ? <><Icon name="chrono" size={14} /> Upload...</> : <><Icon name="module" size={14} /> Choisir un fichier</>}
                   <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
                 </label>
                 {uploadedUrl && <span className="text-green-600 text-xs font-medium">✓ Image ajoutée</span>}
@@ -443,12 +483,20 @@ export default function ChurchPage() {
               {uploadedUrl && <img src={uploadedUrl} alt="" className="mt-2 w-32 h-32 object-cover rounded-xl border border-stone-200" />}
             </div>
             <div>
-              <label className="block text-xs font-medium text-stone-500 mb-1">🎬 {lang === "fr" ? "Lien vidéo YouTube (optionnel)" : lang === "ht" ? "Lyen vidéo YouTube (opsyonèl)" : "YouTube link (optional)"}</label>
-              <input type="url" value={postVideo} onChange={(e) => setPostVideo(e.target.value)} placeholder="https://youtube.com/..." className="w-full border border-stone-300 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none" />
+              <label className="text-xs font-medium text-stone-500 mb-1 flex items-center gap-1.5">
+                <Icon name="video" size={14} /> {lang === "fr" ? "Lien vidéo YouTube (optionnel)" : lang === "ht" ? "Lyen vidéo YouTube (opsyonèl)" : lang === "es" ? "Enlace de YouTube (opcional)" : "YouTube link (optional)"}
+              </label>
+              <input
+                type="url"
+                value={postVideo}
+                onChange={(e) => setPostVideo(e.target.value)}
+                placeholder="https://youtube.com/..."
+                className="w-full border border-stone-300 rounded-xl px-4 py-2.5 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none"
+              />
             </div>
           </div>
           <button type="submit" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-2.5 rounded-xl font-medium hover:opacity-90 transition-opacity text-sm">
-            {lang === "fr" ? "Publier" : lang === "ht" ? "Pibliye" : "Publish"}
+            {lang === "fr" ? "Publier" : lang === "ht" ? "Pibliye" : lang === "es" ? "Publicar" : "Publish"}
           </button>
         </form>
       )}
@@ -456,16 +504,21 @@ export default function ChurchPage() {
       {/* Posts */}
       {filteredPosts.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-2xl border border-stone-200">
-          <p className="text-4xl mb-3">{tabs.find((t) => t.id === activeTab)?.icon}</p>
+          <p className="mb-3 flex justify-center"><Icon name={(tabs.find((t) => t.id === activeTab)?.icon ?? "info") as IconName} size={40} /></p>
           <p className="text-stone-500">
-            {lang === "fr" ? "Rien ici pour le moment. Soyez le premier à publier !" : lang === "ht" ? "Pa gen anyen isit pou kounye a. Soyez premye a pibliye !" : "Nothing here yet. Be the first to post!"}
+            {lang === "fr"
+              ? "Rien ici pour le moment. Soyez le premier à publier !"
+              : lang === "ht"
+              ? "Pa gen anyen isit pou kounye a. Soyez premye a pibliye !"
+              : lang === "es"
+              ? "Nada aquí por ahora. ¡Sé el primero en publicar!"
+              : "Nothing here yet. Be the first to post!"}
           </p>
         </div>
       ) : (
         <div className="space-y-4">
           {filteredPosts.map((post) => (
             <div key={post.id} className="bg-white rounded-2xl border border-stone-200 p-6 hover:shadow-md transition-shadow">
-              {/* Author row */}
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white text-sm font-bold shrink-0 overflow-hidden">
                   {post.author_avatar ? (

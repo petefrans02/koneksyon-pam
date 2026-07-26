@@ -3,8 +3,9 @@
 import { useLang } from "@/lib/LangContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Icon from "@/app/components/Icon";
 
-type Lang = "fr" | "ht" | "en";
+type Lang = "fr" | "ht" | "en" | "es";
 
 interface Champion {
   id: string;
@@ -21,7 +22,7 @@ interface Champion {
 
 export default function HallOfFamePage() {
   const { lang } = useLang();
-  const l = (["fr", "ht", "en"].includes(lang) ? lang : "fr") as Lang;
+  const l = (["fr", "ht", "en", "es"].includes(lang) ? lang : "fr") as Lang;
   const [champions, setChampions] = useState<Champion[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,28 +34,29 @@ export default function HallOfFamePage() {
   }, []);
 
   const txt = {
-    title: { fr: "Hall of Fame", ht: "Hall of Fame", en: "Hall of Fame" },
+    title: { fr: "Hall of Fame", ht: "Hall of Fame", en: "Hall of Fame", es: "Hall of Fame" },
     subtitle: {
       fr: "Les Champions Bibliques de KONEKSYON PAM",
       ht: "Chanpyon Biblik KONEKSYON PAM yo",
       en: "KONEKSYON PAM Biblical Champions",
+      es: "Campeones Bíblicos de KONEKSYON PAM",
     },
-    score: { fr: "Score", ht: "Pwen", en: "Score" },
-    votes: { fr: "votes du public", ht: "vòt piblik", en: "public votes" },
-    correct: { fr: "bonnes réponses", ht: "bon repons", en: "correct answers" },
-    noData: { fr: "Aucun champion pour le moment. Soyez le premier !", ht: "Pa gen chanpyon ankò. Soyez premye a !", en: "No champions yet. Be the first!" },
-    back: { fr: "Retour aux concours", ht: "Tounen nan konkou", en: "Back to contests" },
-    champion: { fr: "Champion Biblique", ht: "Chanpyon Biblik", en: "Biblical Champion" },
-    publicPrize: { fr: "Prix du Public", ht: "Pri Piblik", en: "Public Prize" },
+    score: { fr: "Score", ht: "Pwen", en: "Score", es: "Puntos" },
+    votes: { fr: "votes du public", ht: "vòt piblik", en: "public votes", es: "votos del público" },
+    correct: { fr: "bonnes réponses", ht: "bon repons", en: "correct answers", es: "respuestas correctas" },
+    noData: { fr: "Aucun champion pour le moment. Soyez le premier !", ht: "Pa gen chanpyon ankò. Soyez premye a !", en: "No champions yet. Be the first!", es: "¡Aún no hay campeones. Sé el primero!" },
+    back: { fr: "Retour aux concours", ht: "Tounen nan konkou", en: "Back to contests", es: "Volver a los concursos" },
+    champion: { fr: "Champion Biblique", ht: "Chanpyon Biblik", en: "Biblical Champion", es: "Campeón Bíblico" },
+    publicPrize: { fr: "Prix du Public", ht: "Pri Piblik", en: "Public Prize", es: "Premio del Público" },
   };
 
   const t = (key: keyof typeof txt) => txt[key][l];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="animate-page-awaken min-h-screen" style={{ background: "linear-gradient(180deg, #04080f 0%, #050a12 100%)", color: "#fff" }}>
 
       {/* Hero */}
-      <div className="relative overflow-hidden bg-[#080d18]">
+      <div className="relative overflow-hidden" style={{ background: "linear-gradient(180deg, #060d1e 0%, #04080f 100%)" }}>
         {/* Gold radial glow */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-20"
@@ -75,7 +77,7 @@ export default function HallOfFamePage() {
           <Link href="/concours" className="text-white/30 text-xs hover:text-white/60 transition-colors mb-8 inline-block">
             ← {t("back")}
           </Link>
-          <div className="text-5xl mb-6">🏆</div>
+          <div className="mb-6 flex justify-center"><Icon name="trophee" size={48} color="#c5a84f" /></div>
           <div className="inline-flex items-center gap-2 border border-[#c5a84f]/30 bg-[#c5a84f]/10 rounded-full px-4 py-2 mb-6">
             <span className="text-[#c5a84f] text-[10px] font-black uppercase tracking-[0.2em]">KONEKSYON PAM</span>
           </div>
@@ -91,12 +93,12 @@ export default function HallOfFamePage() {
       <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16">
         {loading ? (
           <div className="flex justify-center py-20">
-            <div className="w-10 h-10 border-3 border-[#c5a84f] border-t-transparent rounded-full animate-spin" style={{ borderWidth: 3 }} />
+            <div className="w-10 h-10 border-t-transparent rounded-full animate-spin" style={{ borderWidth: 3, borderColor: "#c5a84f", borderStyle: "solid" }} />
           </div>
         ) : champions.length === 0 ? (
-          <div className="text-center py-24 rounded-3xl border border-dashed border-stone-200">
-            <div className="text-5xl mb-4 opacity-30">🏆</div>
-            <p className="text-stone-400 text-sm">{t("noData")}</p>
+          <div className="text-center py-24 rounded-3xl" style={{ border: "1px dashed rgba(255,255,255,0.12)" }}>
+            <div className="mb-4 flex justify-center opacity-30"><Icon name="trophee" size={48} color="#c5a84f" /></div>
+            <p className="text-white/35 text-sm">{t("noData")}</p>
           </div>
         ) : (
           <>
@@ -107,8 +109,9 @@ export default function HallOfFamePage() {
                 {champions[1] && (
                   <div className="flex flex-col items-center sm:mb-0">
                     <PodiumCard champion={champions[1]} rank={2} l={l} t={t} />
-                    <div className="w-full h-24 bg-gradient-to-b from-stone-100 to-stone-50 rounded-t-xl border border-stone-200 flex items-center justify-center mt-3">
-                      <span className="text-stone-400 font-black text-3xl">🥈</span>
+                    <div className="w-full h-24 rounded-t-xl flex items-center justify-center mt-3"
+                      style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)", border: "1px solid rgba(255,255,255,0.10)", borderBottom: "none" }}>
+                      <Icon name="medaille" size={30} color="#c0c0c0" />
                     </div>
                   </div>
                 )}
@@ -116,8 +119,9 @@ export default function HallOfFamePage() {
                 {/* 1st place — tallest */}
                 <div className="flex flex-col items-center">
                   <PodiumCard champion={champions[0]} rank={1} l={l} t={t} featured />
-                  <div className="w-full h-36 bg-gradient-to-b from-[#c5a84f]/20 to-[#c5a84f]/5 rounded-t-xl border border-[#c5a84f]/30 flex items-center justify-center mt-3">
-                    <span className="text-4xl">🥇</span>
+                  <div className="w-full h-36 rounded-t-xl flex items-center justify-center mt-3"
+                    style={{ background: "linear-gradient(180deg, rgba(212,160,23,0.18) 0%, rgba(212,160,23,0.05) 100%)", border: "1px solid rgba(212,160,23,0.30)", borderBottom: "none" }}>
+                    <Icon name="medaille" size={36} color="#c5a84f" />
                   </div>
                 </div>
 
@@ -125,8 +129,9 @@ export default function HallOfFamePage() {
                 {champions[2] && (
                   <div className="flex flex-col items-center">
                     <PodiumCard champion={champions[2]} rank={3} l={l} t={t} />
-                    <div className="w-full h-16 bg-gradient-to-b from-amber-50 to-orange-50 rounded-t-xl border border-orange-100 flex items-center justify-center mt-3">
-                      <span className="text-stone-500 font-black text-3xl">🥉</span>
+                    <div className="w-full h-16 rounded-t-xl flex items-center justify-center mt-3"
+                      style={{ background: "linear-gradient(180deg, rgba(205,127,50,0.12) 0%, rgba(205,127,50,0.04) 100%)", border: "1px solid rgba(205,127,50,0.20)", borderBottom: "none" }}>
+                      <Icon name="medaille" size={30} color="#cd7f32" />
                     </div>
                   </div>
                 )}
@@ -137,10 +142,10 @@ export default function HallOfFamePage() {
             {champions.length > 3 && (
               <div>
                 <div className="flex items-center gap-4 mb-8">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-stone-400">
-                    {l === "fr" ? "Tous les champions" : l === "ht" ? "Tout chanpyon yo" : "All champions"}
+                  <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.30)" }}>
+                    {l === "fr" ? "Tous les champions" : l === "ht" ? "Tout chanpyon yo" : l === "es" ? "Todos los campeones" : "All champions"}
                   </p>
-                  <div className="flex-1 h-px bg-stone-100" />
+                  <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {champions.slice(3).map((c, i) => (
@@ -161,28 +166,30 @@ function PodiumCard({ champion: c, rank, l, t, featured = false }: {
   champion: Champion; rank: number; l: Lang; t: (k: TxtKey) => string; featured?: boolean;
 }) {
   const year = new Date(c.created_at).getFullYear();
+  const borderColor = rank === 1 ? "rgba(197,168,79,0.70)" : rank === 2 ? "rgba(192,192,192,0.50)" : "rgba(205,127,50,0.50)";
   return (
     <div className={`flex flex-col items-center text-center w-48 sm:w-52 ${featured ? "scale-105" : ""}`}>
       <div className={`relative ${featured ? "w-24 h-24" : "w-16 h-16"} mb-3`}>
         {c.user_avatar ? (
-          <img src={c.user_avatar} className={`w-full h-full rounded-full object-cover border-4 ${
-            rank === 1 ? "border-[#c5a84f] shadow-lg shadow-[#c5a84f]/30" : rank === 2 ? "border-stone-300" : "border-amber-400/60"
-          }`} alt="" />
+          <img src={c.user_avatar} className="w-full h-full rounded-full object-cover border-4" style={{ borderColor }} alt="" />
         ) : (
-          <div className={`w-full h-full rounded-full flex items-center justify-center font-black text-white ${
-            rank === 1 ? "bg-gradient-to-br from-[#c5a84f] to-[#e8c97a] text-[#0f2044]" : "bg-[#0f2044]"
-          } ${featured ? "text-3xl" : "text-xl"}`}>
+          <div className={`w-full h-full rounded-full flex items-center justify-center font-black ${featured ? "text-3xl" : "text-xl"}`}
+            style={{
+              background: rank === 1 ? "linear-gradient(135deg, #c5a84f, #e8c97a)" : "rgba(255,255,255,0.08)",
+              color: rank === 1 ? "#04040d" : "#fff",
+              border: `3px solid ${borderColor}`,
+            }}>
             {c.user_name[0]}
           </div>
         )}
       </div>
-      <p className={`font-black ${featured ? "text-[#0f2044] text-base" : "text-[#0f2044] text-sm"}`}>{c.user_name}</p>
-      <p className="text-stone-400 text-xs mt-0.5 line-clamp-1">{c.contest_title}</p>
+      <p className="font-black text-white" style={{ fontSize: featured ? "1rem" : "0.875rem" }}>{c.user_name}</p>
+      <p className="text-xs mt-0.5 line-clamp-1" style={{ color: "rgba(255,255,255,0.35)" }}>{c.contest_title}</p>
       <div className="flex items-center gap-2 mt-2">
-        <span className={`font-black ${featured ? "text-[#c5a84f] text-lg" : "text-stone-600 text-sm"}`}>{c.score}</span>
-        <span className="text-stone-300 text-xs">{t("score")}</span>
+        <span className="font-black" style={{ color: rank === 1 ? "#c5a84f" : "rgba(255,255,255,0.65)", fontSize: featured ? "1.125rem" : "0.875rem" }}>{c.score}</span>
+        <span className="text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>{t("score")}</span>
       </div>
-      <p className="text-stone-300 text-[10px] mt-1">{year}</p>
+      <p className="text-[10px] mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>{year}</p>
     </div>
   );
 }
@@ -192,22 +199,24 @@ function ChampionRow({ champion: c, rank, l: _l, t }: {
 }) {
   const year = new Date(c.created_at).getFullYear();
   return (
-    <div className="flex items-center gap-4 p-4 rounded-2xl border border-stone-100 hover:border-[#c5a84f]/30 transition-colors bg-white hover:shadow-sm">
-      <span className="text-stone-300 font-black text-sm w-6 text-center shrink-0">#{rank}</span>
+    <div className="flex items-center gap-4 p-4 rounded-2xl transition-colors"
+      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+      <span className="font-black text-sm w-6 text-center shrink-0" style={{ color: "rgba(255,255,255,0.25)" }}>#{rank}</span>
       {c.user_avatar ? (
-        <img src={c.user_avatar} className="w-12 h-12 rounded-full border border-stone-100 shrink-0" alt="" />
+        <img src={c.user_avatar} className="w-12 h-12 rounded-full shrink-0" style={{ border: "1px solid rgba(255,255,255,0.12)" }} alt="" />
       ) : (
-        <div className="w-12 h-12 rounded-full bg-[#0f2044] flex items-center justify-center text-white font-black shrink-0">
+        <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-black shrink-0"
+          style={{ background: "rgba(255,255,255,0.08)" }}>
           {c.user_name[0]}
         </div>
       )}
       <div className="flex-1 min-w-0">
-        <p className="font-bold text-[#0f2044] text-sm truncate">{c.user_name}</p>
-        <p className="text-stone-400 text-xs truncate">{c.contest_title} · {year}</p>
+        <p className="font-bold text-white text-sm truncate">{c.user_name}</p>
+        <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.35)" }}>{c.contest_title} · {year}</p>
       </div>
       <div className="text-right shrink-0">
-        <p className="font-black text-[#0f2044] text-sm">{c.score}</p>
-        <p className="text-stone-300 text-[10px]">{t("score")}</p>
+        <p className="font-black text-white text-sm">{c.score}</p>
+        <p className="text-[10px]" style={{ color: "rgba(255,255,255,0.25)" }}>{t("score")}</p>
       </div>
     </div>
   );

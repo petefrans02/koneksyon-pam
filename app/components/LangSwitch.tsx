@@ -3,11 +3,13 @@
 import { useLang } from "@/lib/LangContext";
 import { Lang } from "@/lib/translations";
 import { useState } from "react";
+import Icon from "@/app/components/Icon";
 
-const langs: { code: Lang; flag: string; label: string; name: string }[] = [
-  { code: "fr", flag: "🇫🇷", label: "FR", name: "Français" },
-  { code: "ht", flag: "🇭🇹", label: "KR", name: "Kreyòl" },
-  { code: "en", flag: "🇺🇸", label: "EN", name: "English" },
+const langs: { code: Lang; label: string; name: string }[] = [
+  { code: "fr", label: "FR", name: "Français" },
+  { code: "ht", label: "KR", name: "Kreyòl" },
+  { code: "en", label: "EN", name: "English" },
+  { code: "es", label: "ES", name: "Español" },
 ];
 
 export default function LangSwitch() {
@@ -24,12 +26,12 @@ export default function LangSwitch() {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-[#1a3568] text-xs font-bold transition-all border border-slate-200"
         aria-label="Change language"
       >
-        <span>{current.flag}</span>
+        <Icon name="monde" size={15} />
         <span>{current.label}</span>
-        <svg className={`w-3 h-3 text-white/50 transition-transform ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+        <svg className={`w-3 h-3 text-[#1a3568]/60 transition-transform ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
       </button>
@@ -48,9 +50,8 @@ export default function LangSwitch() {
                     : "text-stone-700 hover:bg-stone-50"
                 }`}
               >
-                <span className="text-sm">{l.flag}</span>
                 <span>{l.name}</span>
-                {lang === l.code && <span className="ml-auto text-[#1d4ed8]">✓</span>}
+                {lang === l.code && <span className="ml-auto text-[#1d4ed8]"><Icon name="valider" size={14} /></span>}
               </button>
             ))}
           </div>

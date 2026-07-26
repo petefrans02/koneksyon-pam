@@ -16,3 +16,19 @@ CREATE TABLE IF NOT EXISTS church_join_requests (
 
 -- Index pour les requêtes du propriétaire
 CREATE INDEX IF NOT EXISTS idx_join_requests_church ON church_join_requests(church_id, status);
+
+-- ============================================================
+-- Championnat biblique v2 — Migration badges
+-- Ajouter la colonne badges à contest_sessions
+-- ============================================================
+ALTER TABLE contest_sessions ADD COLUMN IF NOT EXISTS badges jsonb DEFAULT '[]';
+
+-- Ajouter round_breakdown sur le leaderboard pour analyse par manche
+ALTER TABLE contest_leaderboard ADD COLUMN IF NOT EXISTS round_breakdown jsonb;
+
+-- Supprimer le système de votes (remplacé par scoring de performance)
+DROP TABLE IF EXISTS contest_votes CASCADE;
+
+-- Supprimer les fonctions de votes
+DROP FUNCTION IF EXISTS increment_votes(uuid);
+DROP FUNCTION IF EXISTS decrement_votes(uuid);

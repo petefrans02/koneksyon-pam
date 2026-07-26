@@ -14,7 +14,7 @@ export default function AuthRedirect() {
     router.replace(dest);
   }, [router]);
 
-  const msg = lang === "ht" ? "Ap konekte..." : lang === "en" ? "Signing in..." : "Connexion en cours...";
+  const msg = lang === "ht" ? "Ap konekte..." : lang === "en" ? "Signing in..." : lang === "es" ? "Iniciando sesión..." : "Connexion en cours...";
 
   return (
     <div className="min-h-screen bg-[#0f2044] flex items-center justify-center">

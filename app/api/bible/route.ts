@@ -24,6 +24,13 @@ async function fetchEnglish(bookId: number, chapter: number): Promise<string> {
   return (data.verses || []).map((v: { verse: number; text: string }) => `${v.verse}. ${v.text.trim()}`).join("\n");
 }
 
+async function fetchSpanish(bookId: number, chapter: number): Promise<string> {
+  const res = await fetch(`https://api.getbible.net/v2/valera/${bookId}/${chapter}.json`, { signal: AbortSignal.timeout(10000) });
+  if (!res.ok) return "";
+  const data = await res.json();
+  return (data.verses || []).map((v: { verse: number; text: string }) => `${v.verse}. ${v.text.trim()}`).join("\n");
+}
+
 export async function GET(request: NextRequest) {
   const bookId = parseInt(request.nextUrl.searchParams.get("book") || "1");
   const chapter = parseInt(request.nextUrl.searchParams.get("chapter") || "1");
@@ -35,7 +42,8 @@ export async function GET(request: NextRequest) {
   switch (lang) {
     case "fr": text = await fetchFrench(bookId, chapter); translation = "Louis Segond 1910"; break;
     case "ht": text = await fetchHaitian(bookId, chapter); translation = "Bib La (Kreyòl Ayisyen)"; break;
-    default: text = await fetchEnglish(bookId, chapter); translation = "King James Version"; break;
+    case "es": text = await fetchSpanish(bookId, chapter); translation = "Reina-Valera 1909"; break;
+    default:   text = await fetchEnglish(bookId, chapter); translation = "King James Version"; break;
   }
 
   return Response.json({ text, translation });

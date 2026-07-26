@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useLang } from "@/lib/LangContext";
 import { Lang } from "@/lib/translations";
+import Icon from "@/app/components/Icon";
 
 interface QuizQuestion {
   question: Partial<Record<Lang, string>>;
@@ -17,140 +18,160 @@ const questions: QuizQuestion[] = [
       fr: "Qui a construit l'arche ?",
       ht: "Ki moun ki te bati lach la ?",
       en: "Who built the ark?",
+      es: "¿Quién construyó el arca?",
     },
     options: {
       fr: ["Abraham", "Moïse", "Noé", "David"],
       ht: ["Abraram", "Moyiz", "Noe", "David"],
       en: ["Abraham", "Moses", "Noah", "David"],
+      es: ["Abraham", "Moisés", "Noé", "David"],
     },
     correct: 2,
-    verse: { fr: "Genèse 6:14", ht: "Jenèz 6:14", en: "Genesis 6:14" },
+    verse: { fr: "Genèse 6:14", ht: "Jenèz 6:14", en: "Genesis 6:14", es: "Génesis 6:14" },
   },
   {
     question: {
       fr: "Combien de jours Jésus a-t-il jeûné dans le désert ?",
       ht: "Konbyen jou Jezi te fè jèn nan dezè a ?",
       en: "How many days did Jesus fast in the desert?",
+      es: "¿Cuántos días ayunó Jesús en el desierto?",
     },
     options: {
       fr: ["7 jours", "21 jours", "40 jours", "12 jours"],
       ht: ["7 jou", "21 jou", "40 jou", "12 jou"],
       en: ["7 days", "21 days", "40 days", "12 days"],
+      es: ["7 días", "21 días", "40 días", "12 días"],
     },
     correct: 2,
-    verse: { fr: "Matthieu 4:2", ht: "Matye 4:2", en: "Matthew 4:2" },
+    verse: { fr: "Matthieu 4:2", ht: "Matye 4:2", en: "Matthew 4:2", es: "Mateo 4:2" },
   },
   {
     question: {
       fr: "Quel Psaume dit 'L'Éternel est mon berger' ?",
       ht: "Ki Sòm ki di 'Senyè a se gadò mwen' ?",
       en: "Which Psalm says 'The Lord is my shepherd'?",
+      es: "¿Qué Salmo dice 'El Señor es mi pastor'?",
     },
     options: {
       fr: ["Psaume 1", "Psaume 23", "Psaume 91", "Psaume 150"],
       ht: ["Sòm 1", "Sòm 23", "Sòm 91", "Sòm 150"],
       en: ["Psalm 1", "Psalm 23", "Psalm 91", "Psalm 150"],
+      es: ["Salmo 1", "Salmo 23", "Salmo 91", "Salmo 150"],
     },
     correct: 1,
-    verse: { fr: "Psaume 23:1", ht: "Sòm 23:1", en: "Psalm 23:1" },
+    verse: { fr: "Psaume 23:1", ht: "Sòm 23:1", en: "Psalm 23:1", es: "Salmo 23:1" },
   },
   {
     question: {
       fr: "Qui a tué Goliath ?",
       ht: "Ki moun ki te touye Golyat ?",
       en: "Who killed Goliath?",
+      es: "¿Quién mató a Goliat?",
     },
     options: {
       fr: ["Saül", "Jonathan", "David", "Samson"],
       ht: ["Sol", "Jonatan", "David", "Sanson"],
       en: ["Saul", "Jonathan", "David", "Samson"],
+      es: ["Saúl", "Jonatán", "David", "Sansón"],
     },
     correct: 2,
-    verse: { fr: "1 Samuel 17:50", ht: "1 Samyèl 17:50", en: "1 Samuel 17:50" },
+    verse: { fr: "1 Samuel 17:50", ht: "1 Samyèl 17:50", en: "1 Samuel 17:50", es: "1 Samuel 17:50" },
   },
   {
     question: {
       fr: "Combien d'apôtres Jésus a-t-il choisis ?",
       ht: "Konbyen apot Jezi te chwazi ?",
       en: "How many apostles did Jesus choose?",
+      es: "¿Cuántos apóstoles eligió Jesús?",
     },
     options: {
       fr: ["7", "10", "12", "70"],
       ht: ["7", "10", "12", "70"],
       en: ["7", "10", "12", "70"],
+      es: ["7", "10", "12", "70"],
     },
     correct: 2,
-    verse: { fr: "Luc 6:13", ht: "Lik 6:13", en: "Luke 6:13" },
+    verse: { fr: "Luc 6:13", ht: "Lik 6:13", en: "Luke 6:13", es: "Lucas 6:13" },
   },
   {
     question: {
       fr: "Quel est le premier livre de la Bible ?",
       ht: "Ki premye liv Bib la ?",
       en: "What is the first book of the Bible?",
+      es: "¿Cuál es el primer libro de la Biblia?",
     },
     options: {
       fr: ["Exode", "Genèse", "Matthieu", "Psaumes"],
       ht: ["Egzòd", "Jenèz", "Matye", "Sòm"],
       en: ["Exodus", "Genesis", "Matthew", "Psalms"],
+      es: ["Éxodo", "Génesis", "Mateo", "Salmos"],
     },
     correct: 1,
-    verse: { fr: "Genèse 1:1", ht: "Jenèz 1:1", en: "Genesis 1:1" },
+    verse: { fr: "Genèse 1:1", ht: "Jenèz 1:1", en: "Genesis 1:1", es: "Génesis 1:1" },
   },
   {
     question: {
       fr: "Qui a été avalé par un gros poisson ?",
       ht: "Ki moun ki te vale pa yon gwo pwason ?",
       en: "Who was swallowed by a great fish?",
+      es: "¿Quién fue tragado por un gran pez?",
     },
     options: {
       fr: ["Élie", "Jonas", "Pierre", "Paul"],
       ht: ["Eli", "Jonas", "Pyè", "Pòl"],
       en: ["Elijah", "Jonah", "Peter", "Paul"],
+      es: ["Elías", "Jonás", "Pedro", "Pablo"],
     },
     correct: 1,
-    verse: { fr: "Jonas 1:17", ht: "Jonas 1:17", en: "Jonah 1:17" },
+    verse: { fr: "Jonas 1:17", ht: "Jonas 1:17", en: "Jonah 1:17", es: "Jonás 1:17" },
   },
   {
     question: {
       fr: "Quelle mer Moïse a-t-il ouverte ?",
       ht: "Ki lanmè Moyiz te ouvri ?",
       en: "Which sea did Moses part?",
+      es: "¿Qué mar cruzó Moisés?",
     },
     options: {
       fr: ["Mer Morte", "Mer Rouge", "Mer de Galilée", "Mer Méditerranée"],
       ht: ["Lanmè Mò a", "Lanmè Wouj la", "Lanmè Galile a", "Lanmè Mediterane a"],
       en: ["Dead Sea", "Red Sea", "Sea of Galilee", "Mediterranean Sea"],
+      es: ["Mar Muerto", "Mar Rojo", "Mar de Galilea", "Mar Mediterráneo"],
     },
     correct: 1,
-    verse: { fr: "Exode 14:21", ht: "Egzòd 14:21", en: "Exodus 14:21" },
+    verse: { fr: "Exode 14:21", ht: "Egzòd 14:21", en: "Exodus 14:21", es: "Éxodo 14:21" },
   },
   {
     question: {
       fr: "Quel est le plus grand commandement selon Jésus ?",
       ht: "Ki pi gwo kòmandman dapre Jezi ?",
       en: "What is the greatest commandment according to Jesus?",
+      es: "¿Cuál es el mayor mandamiento según Jesús?",
     },
     options: {
       fr: ["Ne pas voler", "Aimer Dieu de tout son cœur", "Honorer ses parents", "Ne pas mentir"],
       ht: ["Pa vòlè", "Renmen Bondye ak tout kè ou", "Onore paran ou", "Pa bay manti"],
       en: ["Do not steal", "Love God with all your heart", "Honor your parents", "Do not lie"],
+      es: ["No robar", "Amar a Dios con todo el corazón", "Honrar a los padres", "No mentir"],
     },
     correct: 1,
-    verse: { fr: "Matthieu 22:37", ht: "Matye 22:37", en: "Matthew 22:37" },
+    verse: { fr: "Matthieu 22:37", ht: "Matye 22:37", en: "Matthew 22:37", es: "Mateo 22:37" },
   },
   {
     question: {
       fr: "Combien de livres y a-t-il dans la Bible ?",
       ht: "Konbyen liv ki gen nan Bib la ?",
       en: "How many books are in the Bible?",
+      es: "¿Cuántos libros tiene la Biblia?",
     },
     options: {
       fr: ["39", "52", "66", "73"],
       ht: ["39", "52", "66", "73"],
       en: ["39", "52", "66", "73"],
+      es: ["39", "52", "66", "73"],
     },
     correct: 2,
-    verse: { fr: "66 livres : 39 AT + 27 NT", ht: "66 liv : 39 AT + 27 NT", en: "66 books: 39 OT + 27 NT" },
+    verse: { fr: "66 livres : 39 AT + 27 NT", ht: "66 liv : 39 AT + 27 NT", en: "66 books: 39 OT + 27 NT", es: "66 libros: 39 AT + 27 NT" },
   },
 ];
 
@@ -184,18 +205,18 @@ export default function BibleQuiz() {
     setCurrent((current + 1) % questions.length);
   }
 
-  const title = lang === "fr" ? "Quiz Biblique" : lang === "ht" ? "Kiz Biblik" : "Bible Quiz";
+  const title = lang === "fr" ? "Quiz Biblique" : lang === "ht" ? "Kiz Biblik" : lang === "es" ? "Quiz Bíblico" : "Bible Quiz";
 
   return (
     <section className="max-w-3xl mx-auto px-6 py-8">
       <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-6 text-white">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">📖</span>
+            <Icon name="bible" size={24} />
             <h3 className="font-bold text-lg">{title}</h3>
           </div>
-          <div className="bg-white/20 px-3 py-1 rounded-full text-sm">
-            ✓ {score}/{total}
+          <div className="bg-white/20 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1.5">
+            <Icon name="valider" size={14} /> {score}/{total}
           </div>
         </div>
 
@@ -224,19 +245,20 @@ export default function BibleQuiz() {
 
         {selected !== null && (
           <div className="mt-4 flex items-center justify-between">
-            <p className="text-sm text-white/80">
+            <p className="text-sm text-white/80 flex items-center gap-1.5 flex-wrap">
               {selected === q.correct
-                ? (lang === "fr" ? "✓ Correct !" : lang === "ht" ? "✓ Kòrèk !" : "✓ Correct!")
-                : (lang === "fr" ? "✗ La bonne réponse était : " : lang === "ht" ? "✗ Bon repons la te : " : "✗ The correct answer was: ")}
+                ? <><Icon name="succes" size={16} /> {lang === "fr" ? "Correct !" : lang === "ht" ? "Kòrèk !" : lang === "es" ? "¡Correcto!" : "Correct!"}</>
+                : <><Icon name="fermer" size={16} /> {lang === "fr" ? "La bonne réponse était : " : lang === "ht" ? "Bon repons la te : " : lang === "es" ? "La respuesta correcta era: " : "The correct answer was: "}</>}
               {selected !== q.correct && <strong>{gla(q.options)[q.correct]}</strong>}
               <span className="ml-2 opacity-60">— {gl(q.verse)}</span>
             </p>
             {showNext && (
               <button
                 onClick={nextQuestion}
-                className="bg-white text-indigo-700 px-4 py-2 rounded-full text-sm font-bold hover:bg-indigo-50 transition-colors"
+                className="bg-white text-indigo-700 px-4 py-2 rounded-full text-sm font-bold hover:bg-indigo-50 transition-colors inline-flex items-center gap-1.5"
               >
-                {lang === "fr" ? "Suivant →" : lang === "ht" ? "Pwochen →" : "Next →"}
+                {lang === "fr" ? "Suivant" : lang === "ht" ? "Pwochen" : lang === "es" ? "Siguiente" : "Next"}
+                <Icon name="fleche_droite" size={16} />
               </button>
             )}
           </div>

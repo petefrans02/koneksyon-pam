@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useLang } from "@/lib/LangContext";
 import { supabase, signInWithGoogle } from "@/lib/supabase";
+import Icon from "@/app/components/Icon";
 
 export default function WelcomePopup() {
   const { lang } = useLang();
@@ -29,24 +31,27 @@ export default function WelcomePopup() {
     <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={dismiss} />
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-in">
-        <button onClick={dismiss} className="absolute top-4 right-4 text-stone-400 hover:text-stone-600 text-xl">✕</button>
+        <button onClick={dismiss} className="absolute top-4 right-4 text-stone-400 hover:text-stone-600"><Icon name="fermer" size={20} /></button>
 
         <div className="flex justify-center mb-5">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-1.5 border border-blue-400/30">
-            <img src="/logo-kp.png" alt="KP" className="w-full h-full rounded-full object-cover" />
+            <Image src="/logo-kpf.png" alt="KP" width={80} height={80} className="rounded-full object-cover" />
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-stone-900 mb-2">
-          {lang === "fr" ? "Bienvenue ! 🙏" : lang === "ht" ? "Byenveni ! 🙏" : "Welcome! 🙏"}
+        <h2 className="text-2xl font-bold text-stone-900 mb-2 flex items-center justify-center gap-2">
+          {lang === "fr" ? "Bienvenue !" : lang === "ht" ? "Byenveni !" : lang === "es" ? "¡Bienvenido!" : "Welcome!"}
+          <Icon name="monde" size={22} />
         </h2>
 
         <p className="text-stone-600 mb-6 leading-relaxed">
           {lang === "fr"
-            ? "Bienvenue sur la plateforme des chrétiens connectés. Créez un compte gratuitement et rejoignez cette belle famille !"
+            ? "KONEKSYON PAM est une plateforme éducative mondiale — championnats, apprentissage, communauté. Gratuit pour tous, créé par la communauté chrétienne. Rejoins-nous !"
             : lang === "ht"
-            ? "Byenveni sou platfòm kretyen ki konekte. Kreye yon kont gratis epi rantre nan bèl fanmi sa a !"
-            : "Welcome to the platform for connected Christians. Create a free account and join this beautiful family!"}
+            ? "KONEKSYON PAM se yon platfòm edikatif mondyal — chanpyona, aprantisaj, kominote. Gratis pou tout moun, kreye pa kominote kretyen an. Rantre ak nou !"
+            : lang === "es"
+            ? "KONEKSYON PAM es una plataforma educativa mundial — campeonatos, aprendizaje, comunidad. Gratuita para todos, creada por la comunidad cristiana. ¡Únete!"
+            : "KONEKSYON PAM is a global educational platform — championships, learning, community. Free for everyone, built by the Christian community. Join us!"}
         </p>
 
         <button
@@ -59,11 +64,11 @@ export default function WelcomePopup() {
             <path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
             <path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
-          {lang === "fr" ? "Créer un compte avec Google" : lang === "ht" ? "Kreye yon kont ak Google" : "Create account with Google"}
+          {lang === "fr" ? "Créer un compte avec Google" : lang === "ht" ? "Kreye yon kont ak Google" : lang === "es" ? "Crear una cuenta con Google" : "Create account with Google"}
         </button>
 
         <button onClick={dismiss} className="text-stone-400 text-sm hover:text-stone-600 transition-colors">
-          {lang === "fr" ? "Plus tard" : lang === "ht" ? "Pita" : "Later"}
+          {lang === "fr" ? "Plus tard" : lang === "ht" ? "Pita" : lang === "es" ? "Más tarde" : "Later"}
         </button>
       </div>
     </div>

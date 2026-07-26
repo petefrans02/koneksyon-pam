@@ -20,17 +20,29 @@ async function getAuthUser(request: NextRequest) {
   return user;
 }
 
-// GET — list all contests
-export async function GET() {
+// GET — list all contests (public: only enabled; admin: all)
+export async function GET(request: NextRequest) {
   const db = getDb();
-  const { data: contests } = await db
-    .from("contests")
-    .select(`
-      id, title, description, status, start_at, created_at, max_participants,
-      contest_participants(count)
-    `)
-    .order("created_at", { ascending: false });
 
+  // Check if caller is admin to show disabled contests
+  let isAdminUser = false;
+  try {
+    const user = await getAuthUser(request);
+    isAdminUser = !!(user && isAdmin(user));
+  } catch {}
+
+  const baseCols = `id, title, title_ht, title_en, title_es, description, description_ht, description_en, description_es, status, start_at, scheduled_start_at, duration_minutes, theme, week_number, season_number, created_at, max_participants, enabled, is_private, invite_code, allow_rejoin, contest_participants(count), contest_sessions(count)`;
+
+  const runQuery = (cols: string) => {
+    let q = db.from("contests").select(cols).order("scheduled_start_at", { ascending: false, nullsFirst: false });
+    if (!isAdminUser) q = q.neq("enabled", false); // hide disabled contests from public
+    return q;
+  };
+
+  // Inclut solo_enabled / contest_type si les colonnes existent ; repli progressif sinon.
+  let { data: contests, error } = await runQuery(`${baseCols}, solo_enabled, contest_type`);
+  if (error) ({ data: contests, error } = await runQuery(`${baseCols}, solo_enabled`));
+  if (error) ({ data: contests } = await runQuery(baseCols));
   return Response.json({ contests: contests || [] });
 }
 
@@ -41,7 +53,13 @@ export async function POST(request: NextRequest) {
   if (!isAdmin(user)) return Response.json({ error: "Accès refusé" }, { status: 403 });
 
   const body = await request.json();
-  const { title, description, start_at, max_participants, church_id, questions } = body;
+  const {
+    title, title_ht, title_en, title_es,
+    description, description_ht, description_en, description_es,
+    start_at, scheduled_start_at, duration_minutes,
+    max_participants, church_id, theme,
+    week_number, season_number, questions,
+  } = body;
 
   if (!title) return Response.json({ error: "Missing title" }, { status: 400 });
 
@@ -51,13 +69,25 @@ export async function POST(request: NextRequest) {
     .from("contests")
     .insert({
       title,
+      title_ht: title_ht || null,
+      title_en: title_en || null,
+      title_es: title_es || null,
       description: description || "",
+      description_ht: description_ht || null,
+      description_en: description_en || null,
+      description_es: description_es || null,
       start_at: start_at || null,
-      max_participants: max_participants || 10,
+      scheduled_start_at: scheduled_start_at || null,
+      duration_minutes: duration_minutes || 45,
+      theme: theme || null,
+      week_number: week_number || null,
+      season_number: season_number || 1,
+      max_participants: max_participants || 1000,
       church_id: church_id || null,
       created_by: user.id,
       status: "upcoming",
       current_question: 0,
+      enabled: true,
     })
     .select("id")
     .single();

@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useLang } from "@/lib/LangContext";
+import Icon from "@/app/components/Icon";
 
-type Lang = "fr" | "ht" | "en";
+type Lang = "fr" | "ht" | "en" | "es";
 
 interface ShareButtonProps {
   title: string;         // Contest/study title
@@ -15,32 +16,47 @@ interface ShareButtonProps {
 
 export default function ShareButton({ title, message, url, context = "default", variant = "full" }: ShareButtonProps) {
   const { lang } = useLang();
-  const l = (["fr","ht","en"].includes(lang) ? lang : "fr") as Lang;
+  const l = (["fr","ht","en","es"].includes(lang) ? lang : "fr") as Lang;
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
 
-  const shareUrl = url || (typeof window !== "undefined" ? window.location.href : "");
+  // Build share URL with current language so recipients land in the right language
+  const shareUrl = (() => {
+    const base = url || (typeof window !== "undefined" ? window.location.href : "");
+    if (!base) return base;
+    try {
+      const u = new URL(base);
+      u.searchParams.set("lang", l);
+      return u.toString();
+    } catch {
+      return base;
+    }
+  })();
 
   const defaultMessages: Record<string, Record<Lang, string>> = {
     contest: {
       fr: `🏆 Je viens de participer au concours biblique "${title}" sur KONEKSYON PAM — la plateforme chrétienne ! Venez nous rejoindre 👇`,
       ht: `🏆 Mwen fèk patisipe nan konkou biblik "${title}" sou KONEKSYON PAM — platfòm kretyen an ! Vin jwenn nou 👇`,
       en: `🏆 I just participated in the biblical contest "${title}" on KONEKSYON PAM — the Christian platform! Come join us 👇`,
+      es: `🏆 Acabo de participar en el concurso bíblico "${title}" en KONEKSYON PAM — ¡la plataforma cristiana! ¡Únete a nosotros 👇`,
     },
     study: {
       fr: `📖 Je viens de terminer une étude biblique sur "${title}" sur KONEKSYON PAM. Venez grandir dans la Parole ! 👇`,
       ht: `📖 Mwen fèk fini yon etid biblik sou "${title}" sou KONEKSYON PAM. Vin grandi nan Pawòl la ! 👇`,
       en: `📖 I just completed a Bible study on "${title}" on KONEKSYON PAM. Come grow in the Word! 👇`,
+      es: `📖 Acabo de completar un estudio bíblico sobre "${title}" en KONEKSYON PAM. ¡Ven a crecer en la Palabra! 👇`,
     },
     teaching: {
       fr: `🎓 J'ai écouté un excellent enseignement "${title}" sur KONEKSYON PAM. Je vous le recommande vivement ! 👇`,
       ht: `🎓 Mwen koute yon ekselan ansèyman "${title}" sou KONEKSYON PAM. Mwen rekòmande li anpil ! 👇`,
       en: `🎓 I just listened to an excellent teaching "${title}" on KONEKSYON PAM. I highly recommend it! 👇`,
+      es: `🎓 Acabo de escuchar una excelente enseñanza "${title}" en KONEKSYON PAM. ¡Te la recomiendo ampliamente! 👇`,
     },
     default: {
       fr: `✝️ Découvrez KONEKSYON PAM — la communauté chrétienne francophone mondiale. Prière, étude, concours bibliques et bien plus ! 👇`,
       ht: `✝️ Dekouvri KONEKSYON PAM — kominote kretyen frankofòn mondyal la. Lapriyè, etid, konkou biblik ak anpil lòt bagay ! 👇`,
       en: `✝️ Discover KONEKSYON PAM — the global French-speaking Christian community. Prayer, study, biblical contests and more! 👇`,
+      es: `✝️ ¡Descubre KONEKSYON PAM — la comunidad cristiana mundial de habla francesa. Oración, estudio, concursos bíblicos y más! 👇`,
     },
   };
 
@@ -81,13 +97,13 @@ export default function ShareButton({ title, message, url, context = "default", 
   const whatsAppUrl = `https://wa.me/?text=${encodeURIComponent(fullShareText)}`;
 
   const txt = {
-    share: { fr: "Partager", ht: "Pataje", en: "Share" },
-    invite: { fr: "Inviter un ami", ht: "Envite yon zanmi", en: "Invite a friend" },
-    church: { fr: "Partager avec mon église", ht: "Pataje ak legliz mwen", en: "Share with my church" },
-    copy: { fr: "Copier le lien", ht: "Kopye lyen an", en: "Copy link" },
-    copied: { fr: "Lien copié !", ht: "Lyen kopye !", en: "Link copied!" },
-    whatsapp: { fr: "WhatsApp", ht: "WhatsApp", en: "WhatsApp" },
-    prompt: { fr: "Partagez cette expérience avec votre communauté", ht: "Pataje eksperyans sa a ak kominote ou a", en: "Share this experience with your community" },
+    share: { fr: "Partager", ht: "Pataje", en: "Share", es: "Compartir" },
+    invite: { fr: "Inviter un ami", ht: "Envite yon zanmi", en: "Invite a friend", es: "Invitar a un amigo" },
+    church: { fr: "Partager avec mon église", ht: "Pataje ak legliz mwen", en: "Share with my church", es: "Compartir con mi iglesia" },
+    copy: { fr: "Copier le lien", ht: "Kopye lyen an", en: "Copy link", es: "Copiar enlace" },
+    copied: { fr: "Lien copié !", ht: "Lyen kopye !", en: "Link copied!", es: "¡Enlace copiado!" },
+    whatsapp: { fr: "WhatsApp", ht: "WhatsApp", en: "WhatsApp", es: "WhatsApp" },
+    prompt: { fr: "Partagez cette expérience avec votre communauté", ht: "Pataje eksperyans sa a ak kominote ou a", en: "Share this experience with your community", es: "Comparte esta experiencia con tu comunidad" },
   };
   const t = (k: keyof typeof txt) => txt[k][l];
 
@@ -108,7 +124,7 @@ export default function ShareButton({ title, message, url, context = "default", 
       <div className="bg-gradient-to-r from-[#0f2044] to-[#1e3a6e] rounded-2xl p-6">
         <p className="text-white font-black text-base mb-1">{t("prompt")}</p>
         <p className="text-white/40 text-sm mb-5">
-          {l === "fr" ? "Un ami pourrait avoir besoin de ça aujourd'hui." : l === "ht" ? "Yon zanmi ka bezwen sa a jodi a." : "A friend might need this today."}
+          {l === "fr" ? "Un ami pourrait avoir besoin de ça aujourd'hui." : l === "ht" ? "Yon zanmi ka bezwen sa a jodi a." : l === "es" ? "Un amigo podría necesitar esto hoy." : "A friend might need this today."}
         </p>
         <div className="flex flex-wrap gap-2">
           <button onClick={share}
@@ -127,7 +143,7 @@ export default function ShareButton({ title, message, url, context = "default", 
           </a>
           <button onClick={copyToClipboard}
             className="flex items-center gap-2 border border-white/20 text-white/70 hover:text-white hover:border-white/40 px-5 py-2.5 rounded-full text-xs font-bold transition-colors">
-            {copied ? "✓ " + t("copied") : t("copy")}
+            {copied ? <><Icon name="valider" size={14} /> {t("copied")}</> : t("copy")}
           </button>
         </div>
       </div>
@@ -155,7 +171,7 @@ export default function ShareButton({ title, message, url, context = "default", 
         </a>
         <button onClick={copyToClipboard}
           className="flex items-center gap-2 border border-stone-200 text-stone-500 hover:border-[#1d4ed8] hover:text-[#1d4ed8] px-4 py-2.5 rounded-xl text-xs font-bold transition-colors">
-          {copied ? "✓ " + t("copied") : t("copy")}
+          {copied ? <><Icon name="valider" size={14} /> {t("copied")}</> : t("copy")}
         </button>
       </div>
     </div>

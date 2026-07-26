@@ -1,0 +1,24 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/contests",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/daily-post",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/generate-lesson",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/generate-quiz",
+      "schedule": "0 5 * * *"
+    },
+    {
+      "path": "/api/cron/generate-discussions",
+      "schedule": "0 */3 * * *"
+    }
+  ]
+}

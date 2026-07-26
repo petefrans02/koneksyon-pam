@@ -1,16 +1,17 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
+import Icon, { IconName } from "@/app/components/Icon";
 
-interface Toast { id: string; message: string; icon: string; type: "info" | "success" | "gold"; }
+interface Toast { id: string; message: string; icon: IconName; type: "info" | "success" | "gold"; }
 
 interface Props { contestId: string; lang: string; }
 
 export default function ToastNotifications({ contestId, lang }: Props) {
-  const l = lang === "ht" ? "ht" : lang === "en" ? "en" : "fr";
+  const l = lang === "ht" ? "ht" : lang === "en" ? "en" : lang === "es" ? "es" : "fr";
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const addToast = useCallback((icon: string, message: string, type: Toast["type"] = "info") => {
+  const addToast = useCallback((icon: IconName, message: string, type: Toast["type"] = "info") => {
     const id = Math.random().toString(36).slice(2);
     setToasts(prev => [...prev.slice(-3), { id, message, icon, type }]);
     setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 4000);
@@ -21,15 +22,15 @@ export default function ToastNotifications({ contestId, lang }: Props) {
       .on("postgres_changes",
         { event: "INSERT", schema: "public", table: "contest_participants", filter: `contest_id=eq.${contestId}` },
         () => {
-          const msg = l === "fr" ? "Un nouveau participant vient de rejoindre !" : l === "ht" ? "Yon nouvo patisipan rantre !" : "New participant joined!";
-          addToast("👤", msg, "info");
+          const msg = l === "fr" ? "Un nouveau participant vient de rejoindre !" : l === "ht" ? "Yon nouvo patisipan rantre !" : l === "es" ? "¡Un nuevo participante acaba de unirse!" : "New participant joined!";
+          addToast("utilisateur", msg, "info");
         }
       )
       .on("postgres_changes",
         { event: "INSERT", schema: "public", table: "contest_votes", filter: `contest_id=eq.${contestId}` },
         () => {
-          const msg = l === "fr" ? "Nouveau vote enregistré !" : l === "ht" ? "Nouvo vòt anrejistre !" : "New vote recorded!";
-          addToast("❤️", msg, "gold");
+          const msg = l === "fr" ? "Nouveau vote enregistré !" : l === "ht" ? "Nouvo vòt anrejistre !" : l === "es" ? "¡Nuevo voto registrado!" : "New vote recorded!";
+          addToast("coeur", msg, "gold");
         }
       )
       .on("postgres_changes",
@@ -37,12 +38,12 @@ export default function ToastNotifications({ contestId, lang }: Props) {
         (payload) => {
           const s = (payload.new as { status: string }).status;
           if (s === "active") {
-            const msg = l === "fr" ? "Le concours vient de commencer !" : l === "ht" ? "Konkou a kòmanse !" : "Contest has started!";
-            addToast("🏆", msg, "success");
+            const msg = l === "fr" ? "Le concours vient de commencer !" : l === "ht" ? "Konkou a kòmanse !" : l === "es" ? "¡El concurso acaba de comenzar!" : "Contest has started!";
+            addToast("trophee", msg, "success");
           }
           if (s === "voting") {
-            const msg = l === "fr" ? "Phase de vote ouverte — votez maintenant !" : l === "ht" ? "Faz vote a louvri — vote kounye a !" : "Voting phase open — vote now!";
-            addToast("🗳️", msg, "gold");
+            const msg = l === "fr" ? "Phase de vote ouverte — votez maintenant !" : l === "ht" ? "Faz vote a louvri — vote kounye a !" : l === "es" ? "Fase de votación abierta — ¡vota ahora!" : "Voting phase open — vote now!";
+            addToast("jaime", msg, "gold");
           }
         }
       )
@@ -64,7 +65,7 @@ export default function ToastNotifications({ contestId, lang }: Props) {
               : "bg-[#0f2044]/90 border-white/10 text-white"
             }`}
           style={{ animation: "slideLeft 0.3s ease", maxWidth: "280px" }}>
-          <span className="shrink-0">{t.icon}</span>
+          <span className="shrink-0"><Icon name={t.icon} size={18} /></span>
           <span>{t.message}</span>
         </div>
       ))}

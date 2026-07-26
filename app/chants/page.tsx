@@ -3,6 +3,7 @@
 import { useLang } from "@/lib/LangContext";
 import { useState } from "react";
 import Link from "next/link";
+import Icon from "@/app/components/Icon";
 
 const chants = [
   { num: 1, title: "Bon Dieu tout puissant" },
@@ -81,25 +82,28 @@ export default function ChantsPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
-      <Link href="/" className="text-blue-500 text-sm hover:underline mb-6 block">← {lang === "fr" ? "Accueil" : lang === "ht" ? "Akèy" : "Home"}</Link>
+      <Link href="/" className="text-blue-500 text-sm hover:underline mb-6 block">← {lang === "fr" ? "Accueil" : lang === "ht" ? "Akèy" : lang === "es" ? "Inicio" : "Home"}</Link>
 
       <div className="text-center mb-8">
         <img src="https://cdn-icons-png.flaticon.com/512/2936/2936690.png" alt="" className="w-14 h-14 mx-auto mb-3" />
         <h1 className="text-3xl font-bold text-stone-900">
-          {lang === "fr" ? "Chants d'Espérance" : lang === "ht" ? "Chan Desperans" : "Songs of Hope"}
+          {lang === "fr" ? "Chants d'Espérance" : lang === "ht" ? "Chan Desperans" : lang === "es" ? "Cánticos de Esperanza" : "Songs of Hope"}
         </h1>
         <p className="text-stone-500 mt-2">
-          {lang === "fr" ? "Le cantique le plus aimé de l'Église haïtienne" : lang === "ht" ? "Kantik ki pi renmen nan Legliz Ayisyen" : "The most beloved hymnal of the Haitian Church"}
+          {lang === "fr" ? "Le cantique le plus aimé de l'Église haïtienne" : lang === "ht" ? "Kantik ki pi renmen nan Legliz Ayisyen" : lang === "es" ? "El himnario más amado de la Iglesia haitiana" : "The most beloved hymnal of the Haitian Church"}
         </p>
       </div>
 
-      <div className="mb-6">
+      <div className="mb-6 relative">
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none flex items-center">
+          <Icon name="recherche" size={18} />
+        </span>
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder={lang === "fr" ? "🔍 Chercher par numéro ou titre..." : lang === "ht" ? "🔍 Chèche pa nimewo oswa tit..." : "🔍 Search by number or title..."}
-          className="w-full border border-blue-200 rounded-xl px-5 py-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm"
+          placeholder={lang === "fr" ? "Chercher par numéro ou titre..." : lang === "ht" ? "Chèche pa nimewo oswa tit..." : lang === "es" ? "Buscar por número o título..." : "Search by number or title..."}
+          className="w-full border border-blue-200 rounded-xl pl-11 pr-5 py-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm"
         />
       </div>
 
@@ -119,8 +123,8 @@ export default function ChantsPage() {
                 <h3 className="font-semibold text-stone-900">{chant.title}</h3>
                 <p className="text-xs text-stone-400">Chant d&apos;Espérance #{chant.num}</p>
               </div>
-              <span className="text-blue-500 text-sm shrink-0">
-                {selectedChant?.num === chant.num ? "✕" : "📖"}
+              <span className="text-blue-500 shrink-0 flex items-center">
+                <Icon name={selectedChant?.num === chant.num ? "fermer" : "bible"} size={18} />
               </span>
             </button>
 
@@ -129,7 +133,7 @@ export default function ChantsPage() {
                 {loading ? (
                   <div className="flex items-center gap-3 text-blue-500">
                     <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                    <span className="text-sm">Chargement des paroles...</span>
+                    <span className="text-sm">{lang === "fr" ? "Chargement des paroles..." : lang === "ht" ? "Chajman pawòl yo..." : lang === "es" ? "Cargando la letra..." : "Loading lyrics..."}</span>
                   </div>
                 ) : (
                   <div className="text-stone-700 leading-relaxed whitespace-pre-line text-[15px]">
@@ -144,8 +148,8 @@ export default function ChantsPage() {
 
       {filtered.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-4xl mb-3">🎵</p>
-          <p className="text-stone-500">{lang === "fr" ? "Aucun chant trouvé" : lang === "ht" ? "Pa gen chant jwenn" : "No hymn found"}</p>
+          <p className="mb-3 flex justify-center"><Icon name="chants" size={40} /></p>
+          <p className="text-stone-500">{lang === "fr" ? "Aucun chant trouvé" : lang === "ht" ? "Pa gen chant jwenn" : lang === "es" ? "No se encontró ningún canto" : "No hymn found"}</p>
         </div>
       )}
     </div>

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 interface Props { targetDate: string; lang: string; }
 
 export default function Countdown({ targetDate, lang }: Props) {
-  const l = lang === "ht" ? "ht" : lang === "en" ? "en" : "fr";
+  const l = lang === "ht" ? "ht" : lang === "en" ? "en" : lang === "es" ? "es" : "fr";
   const [diff, setDiff] = useState(0);
 
   useEffect(() => {
@@ -24,11 +24,12 @@ export default function Countdown({ targetDate, lang }: Props) {
     fr: ["Jours", "Heures", "Min", "Sec"],
     ht: ["Jou", "Èd tan", "Min", "Sek"],
     en: ["Days", "Hours", "Min", "Sec"],
+    es: ["Días", "Horas", "Min", "Seg"],
   };
 
   if (diff <= 0) return null;
 
-  const lbl = labels[l];
+  const lbl = labels[l as keyof typeof labels];
 
   return (
     <div className="flex items-center gap-2 sm:gap-3">

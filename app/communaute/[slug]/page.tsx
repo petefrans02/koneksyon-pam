@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useCountry } from "@/lib/useCountry";
 import Link from "next/link";
+import Icon, { IconName } from "@/app/components/Icon";
 
 interface Post {
   id: string;
@@ -71,7 +72,7 @@ export default function GroupPage() {
     await fetch("/api/groups", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ group_slug: slug, section_slug: activeSection, author_name: name.trim() || (lang === "fr" ? "Anonyme" : lang === "ht" ? "Anonim" : "Anonymous"), author_country: userCountry.flag, title: title.trim(), content: content.trim() }),
+      body: JSON.stringify({ group_slug: slug, section_slug: activeSection, author_name: name.trim() || (lang === "fr" ? "Anonyme" : lang === "ht" ? "Anonim" : lang === "es" ? "Anónimo" : "Anonymous"), author_country: userCountry.flag, title: title.trim(), content: content.trim() }),
     });
     setTitle("");
     setContent("");
@@ -83,16 +84,16 @@ export default function GroupPage() {
   if (!group) {
     return (
       <div className="max-w-lg mx-auto px-6 py-20 text-center">
-        <p className="text-5xl mb-4">🌍</p>
-        <p className="text-stone-500">{lang === "fr" ? "Groupe non trouvé" : lang === "ht" ? "Gwoup pa jwenn" : "Group not found"}</p>
-        <Link href="/communaute" className="text-blue-500 hover:underline mt-4 block">← {lang === "fr" ? "Retour" : lang === "ht" ? "Tounen" : "Back"}</Link>
+        <p className="mb-4 flex justify-center"><Icon name="monde" size={48} /></p>
+        <p className="text-stone-500">{lang === "fr" ? "Groupe non trouvé" : lang === "ht" ? "Gwoup pa jwenn" : lang === "es" ? "Grupo no encontrado" : "Group not found"}</p>
+        <Link href="/communaute" className="text-blue-500 hover:underline mt-4 block">← {lang === "fr" ? "Retour" : lang === "ht" ? "Tounen" : lang === "es" ? "Volver" : "Back"}</Link>
       </div>
     );
   }
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
-      <Link href="/communaute" className="text-blue-500 text-sm hover:underline mb-6 block">← {lang === "fr" ? "Communauté" : lang === "ht" ? "Kominote" : "Community"}</Link>
+      <Link href="/communaute" className="text-blue-500 text-sm hover:underline mb-6 block">← {lang === "fr" ? "Communauté" : lang === "ht" ? "Kominote" : lang === "es" ? "Comunidad" : "Community"}</Link>
 
       <div className={`bg-gradient-to-br ${group.color} rounded-2xl p-6 mb-8 flex items-center gap-4`}>
         <img src={group.image} alt="" className="w-14 h-14 drop-shadow-lg" />
@@ -113,7 +114,7 @@ export default function GroupPage() {
                 : "bg-white text-stone-600 border border-stone-200 hover:border-blue-300"
             }`}
           >
-            <span>{s.icon}</span> {s.title[lang] || s.title.fr}
+            <Icon name={s.icon as IconName} size={16} /> {s.title[lang] || s.title.fr}
           </button>
         ))}
       </div>
@@ -122,16 +123,16 @@ export default function GroupPage() {
         onClick={() => { if (!user) { supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${window.location.origin}/communaute/${slug}` } }); return; } setShowForm(!showForm); }}
         className="w-full bg-blue-50 border border-blue-200 rounded-xl p-4 text-left text-blue-600 font-medium hover:bg-blue-100 transition-colors mb-6"
       >
-        + {lang === "fr" ? "Publier dans ce groupe" : lang === "ht" ? "Pibliye nan gwoup sa a" : "Post in this group"}
+        + {lang === "fr" ? "Publier dans ce groupe" : lang === "ht" ? "Pibliye nan gwoup sa a" : lang === "es" ? "Publicar en este grupo" : "Post in this group"}
       </button>
 
       {showForm && (
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-blue-100 p-6 mb-6 shadow-sm">
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={lang === "fr" ? "Votre nom..." : lang === "ht" ? "Non ou..." : "Your name..."} className="w-full border border-stone-300 rounded-xl px-4 py-2.5 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none" />
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={lang === "fr" ? "Titre..." : lang === "ht" ? "Tit..." : "Title..."} required className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none font-medium" />
-          <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder={lang === "fr" ? "Contenu..." : lang === "ht" ? "Kontni..." : "Content..."} required rows={4} className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none resize-none" />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={lang === "fr" ? "Votre nom..." : lang === "ht" ? "Non ou..." : lang === "es" ? "Tu nombre..." : "Your name..."} className="w-full border border-stone-300 rounded-xl px-4 py-2.5 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none" />
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={lang === "fr" ? "Titre..." : lang === "ht" ? "Tit..." : lang === "es" ? "Título..." : "Title..."} required className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none font-medium" />
+          <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder={lang === "fr" ? "Contenu..." : lang === "ht" ? "Kontni..." : lang === "es" ? "Contenido..." : "Content..."} required rows={4} className="w-full border border-stone-300 rounded-xl px-4 py-3 mb-3 text-sm bg-slate-50 focus:border-blue-500 focus:outline-none resize-none" />
           <button type="submit" className={`bg-gradient-to-r ${group.color} text-white px-6 py-2.5 rounded-xl font-medium hover:opacity-90 transition-opacity text-sm`}>
-            {lang === "fr" ? "Publier" : lang === "ht" ? "Pibliye" : "Publish"}
+            {lang === "fr" ? "Publier" : lang === "ht" ? "Pibliye" : lang === "es" ? "Publicar" : "Publish"}
           </button>
         </form>
       )}
@@ -142,8 +143,8 @@ export default function GroupPage() {
         </div>
       ) : posts.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-2xl border border-stone-200">
-          <p className="text-4xl mb-3">{group.sections.find((s) => s.slug === activeSection)?.icon || "📝"}</p>
-          <p className="text-stone-500">{lang === "fr" ? "Rien ici pour le moment. Soyez le premier à publier !" : lang === "ht" ? "Pa gen anyen isit ankò. Soyez premye a pibliye !" : "Nothing here yet. Be the first to post!"}</p>
+          <p className="flex justify-center mb-3"><Icon name={(group.sections.find((s) => s.slug === activeSection)?.icon || "editer") as IconName} size={36} color="#94a3b8" /></p>
+          <p className="text-stone-500">{lang === "fr" ? "Rien ici pour le moment. Soyez le premier à publier !" : lang === "ht" ? "Pa gen anyen isit ankò. Soyez premye a pibliye !" : lang === "es" ? "Nada aquí todavía. ¡Sé el primero en publicar!" : "Nothing here yet. Be the first to post!"}</p>
         </div>
       ) : (
         <div className="space-y-4">

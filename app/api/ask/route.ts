@@ -1,10 +1,32 @@
 import { NextRequest } from "next/server";
 
-const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY || "";
+const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY || process.env.ANTHROPIC_API_KEY || "";
+
+const LANG_NAME: Record<string, string> = {
+  fr: "français",
+  ht: "créole haïtien",
+  en: "English",
+  es: "español",
+};
+
+const ERR_MSG: Record<string, string> = {
+  fr: "Erreur de connexion. Réessayez.",
+  ht: "Erè koneksyon. Eseye ankò.",
+  en: "Connection error. Please try again.",
+  es: "Error de conexión. Inténtalo de nuevo.",
+};
+
+const NO_ANSWER: Record<string, string> = {
+  fr: "Pas de réponse.",
+  ht: "Pa gen repons.",
+  en: "No answer.",
+  es: "Sin respuesta.",
+};
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const { question, studyTitle, studyContent, lang } = body;
+  const l: string = ["fr", "ht", "en", "es"].includes(lang) ? lang : "fr";
 
   if (!question) {
     return Response.json({ error: "Missing question" }, { status: 400 });
@@ -14,7 +36,7 @@ export async function POST(request: NextRequest) {
   }
 
   if (!CLAUDE_API_KEY) {
-    return Response.json({ answer: "API non configurée." }, { status: 200 });
+    return Response.json({ answer: ERR_MSG[l] }, { status: 200 });
   }
 
   const systemPrompt = `Tu es un assistant biblique sage et bienveillant pour l'app KONEKSYON PAM.
@@ -29,7 +51,7 @@ RÈGLES DE FORMAT :
 - Maximum 3-4 paragraphes
 
 RÈGLES DE CONTENU :
-- Réponds en ${lang === "fr" ? "français" : lang === "ht" ? "créole haïtien" : "anglais"}
+- Réponds en ${LANG_NAME[l]}
 - Cite toujours au moins un verset biblique pertinent
 - Sois respectueux de toutes les dénominations chrétiennes
 - Laisse la Bible parler plutôt que donner ton opinion
@@ -55,14 +77,14 @@ ${studyTitle ? `\nL'utilisateur étudie : ${studyTitle}. Contenu : ${studyConten
     if (!res.ok) {
       const err = await res.text();
       console.error("Claude API error:", err);
-      return Response.json({ answer: "Erreur de connexion. Réessayez." });
+      return Response.json({ answer: ERR_MSG[l] });
     }
 
     const data = await res.json();
-    const answer = data.content?.[0]?.text || "Pas de réponse.";
+    const answer = data.content?.[0]?.text || NO_ANSWER[l];
     return Response.json({ answer });
   } catch (e) {
     console.error("Claude API error:", e);
-    return Response.json({ answer: "Erreur de connexion. Réessayez." });
+    return Response.json({ answer: ERR_MSG[l] });
   }
 }

@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
         <!-- Header -->
         <tr><td style="background:linear-gradient(135deg,#0a1628,#0f2044);border-radius:16px 16px 0 0;padding:40px 40px 30px;text-align:center;">
-          <img src="https://koneksyonpam.com/logo-kp.png" alt="KP" width="70" height="70" style="border-radius:50%;border:3px solid rgba(255,255,255,0.2);margin-bottom:16px;" />
+          <img src="https://koneksyonpam.com/logo-kpf.png" alt="KP" width="70" height="70" style="border-radius:50%;border:3px solid rgba(255,255,255,0.2);margin-bottom:16px;" />
           <h1 style="color:#fff;font-size:26px;font-weight:800;margin:0 0 6px;">KONEKSYON PAM</h1>
           <p style="color:rgba(147,197,253,0.7);font-size:12px;margin:0;letter-spacing:2px;text-transform:uppercase;">La plateforme des chrétiens connectés</p>
         </td></tr>
@@ -113,6 +113,26 @@ export async function POST(request: NextRequest) {
     subject: `🙏 Merci pour votre don de $${amount} — KONEKSYON PAM`,
     html,
   });
+
+  // Record in Supabase
+  try {
+    const { createClient } = await import("@supabase/supabase-js");
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+    await supabase.from("donations").upsert(
+      {
+        paypal_order_id: `stripe_${session_id}`,
+        amount: parseFloat(amount),
+        currency: session.currency?.toUpperCase() ?? "USD",
+        status: "completed",
+        donor_email: email,
+        donor_name: name || null,
+      },
+      { onConflict: "paypal_order_id" }
+    );
+  } catch {}
 
   return Response.json({ ok: true });
 }

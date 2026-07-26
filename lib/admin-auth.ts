@@ -3,9 +3,21 @@ import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "petefrans03@gmail.com")
-  .split(",")
-  .map((e) => e.trim().toLowerCase());
+function parseAdminEmails(): string[] {
+  const sources = [
+    process.env.ADMIN_EMAILS,
+    process.env.NEXT_PUBLIC_ADMIN_EMAILS,
+    "contact@koneksyonpam.com",
+  ];
+  return [...new Set(
+    sources
+      .flatMap(s => (s || "").split(","))
+      .map(e => e.trim().toLowerCase())
+      .filter(Boolean)
+  )];
+}
+
+const ADMIN_EMAILS = parseAdminEmails();
 
 export function isAdminEmail(email: string) {
   return ADMIN_EMAILS.includes(email.toLowerCase());
