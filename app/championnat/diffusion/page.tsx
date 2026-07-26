@@ -493,7 +493,7 @@ export default function DiffusionPage() {
             })()}
 
             {/* 🎯 Probabilité de victoire en direct */}
-            {feat && tmap[feat.team_a] && tmap[feat.team_b] && (() => {
+            {!inQuestion && feat && tmap[feat.team_a] && tmap[feat.team_b] && (() => {
               const a = tmap[feat.team_a], b = tmap[feat.team_b];
               return (
                 <div style={{ maxWidth: 720, margin: "0 auto clamp(16px,2vw,26px)" }}>
@@ -510,50 +510,41 @@ export default function DiffusionPage() {
               );
             })()}
 
-            {/* TOUS LES MATCHS EN DIRECT — chaque équipe qui joue est visible,
-                avec son score du match et ses points au classement. Le match
-                actuellement à l'antenne est mis en avant (diaporama). */}
+            {/* TOUS LES MATCHS EN DIRECT — bandeau compact sur UNE seule ligne.
+                Version haute (2 rangées + « pts au classement » sur 3 lignes)
+                poussait la question hors de l'écran. */}
             {live.length > 0 && (
-              <div style={{ maxWidth: 1180, margin: "0 auto clamp(12px,1.6vw,22px)" }}>
-                <div style={{ fontSize: "clamp(9px,0.95vw,13px)", fontWeight: 900, letterSpacing: "0.2em", color: GOLD, textTransform: "uppercase", marginBottom: 8, textAlign: "center" }}>
-                  ⚽ {live.length} match{live.length > 1 ? "s" : ""} en direct — toutes les équipes
+              <div style={{ maxWidth: 1180, margin: "0 auto clamp(8px,1vw,14px)" }}>
+                <div style={{ fontSize: "clamp(8px,0.85vw,11px)", fontWeight: 900, letterSpacing: "0.18em", color: `${GOLD}bb`, textTransform: "uppercase", marginBottom: 5, textAlign: "center" }}>
+                  ⚽ {live.length} match{live.length > 1 ? "s" : ""} en direct
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: `repeat(auto-fit,minmax(${live.length > 4 ? 210 : 260}px,1fr))`, gap: "clamp(7px,0.9vw,12px)" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(5px,0.7vw,9px)", justifyContent: "center" }}>
                   {live.map((m, i) => {
                     const a = tmap[m.team_a], b = tmap[m.team_b]; if (!a || !b) return null;
                     const onAir = i === featIdx;
                     const sa = onAir ? featScoreA : Math.round(m.score_a ?? 0);
                     const sb = onAir ? featScoreB : Math.round(m.score_b ?? 0);
-                    const side = (t: Team, sc: number, lead: boolean) => (
-                      <div style={{ display: "flex", alignItems: "center", gap: 7, minWidth: 0, flex: 1 }}>
-                        <span style={{ width: 24, height: 24, borderRadius: 7, background: t.color, color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 10, flexShrink: 0 }}>{t.logo_seed}</span>
-                        <div style={{ minWidth: 0, flex: 1 }}>
-                          <div style={{ fontSize: "clamp(11px,1vw,14px)", fontWeight: 800, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{short(t.name)}</div>
-                          <div style={{ fontSize: "clamp(8px,0.8vw,10px)", color: "rgba(255,255,255,0.45)", fontWeight: 700 }}>{t.points} pts au classement</div>
-                        </div>
-                        <span style={{ fontSize: "clamp(15px,1.5vw,22px)", fontWeight: 900, color: lead ? GOLD : "rgba(255,255,255,0.75)", fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>{sc}</span>
-                      </div>
+                    const chip = (t: Team) => (
+                      <span style={{ width: 18, height: 18, borderRadius: 5, background: t.color, color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 8, flexShrink: 0 }}>{t.logo_seed}</span>
                     );
                     return (
                       <div key={m.id} style={{
                         position: "relative", overflow: "hidden",
-                        background: onAir ? `linear-gradient(135deg,${GOLD}22,rgba(255,255,255,0.04))` : "rgba(255,255,255,0.04)",
-                        border: `1px solid ${onAir ? GOLD + "aa" : "rgba(255,255,255,0.09)"}`,
-                        borderRadius: 14, padding: "clamp(7px,0.9vw,11px) clamp(10px,1.1vw,14px)",
-                        boxShadow: onAir ? `0 10px 34px ${GOLD}22` : "none",
-                        transition: "background .5s ease, border-color .5s ease, box-shadow .5s ease",
-                        animation: "bfx-card-in .5s ease both",
+                        display: "inline-flex", alignItems: "center", gap: 6,
+                        background: onAir ? `linear-gradient(135deg,${GOLD}26,rgba(255,255,255,0.05))` : "rgba(255,255,255,0.04)",
+                        border: `1px solid ${onAir ? GOLD + "aa" : "rgba(255,255,255,0.1)"}`,
+                        borderRadius: 999, padding: "4px 10px",
+                        boxShadow: onAir ? `0 6px 20px ${GOLD}22` : "none",
+                        transition: "background .5s ease, border-color .5s ease",
                       }}>
-                        {/* Balayage lumineux sur le match à l'antenne */}
                         {onAir && !light && (
-                          <span style={{ position: "absolute", top: 0, bottom: 0, width: "45%", background: `linear-gradient(90deg,transparent,${GOLD}22,transparent)`, animation: "bfx-sweep 3.4s ease-in-out infinite", pointerEvents: "none" }} />
+                          <span style={{ position: "absolute", top: 0, bottom: 0, width: "40%", background: `linear-gradient(90deg,transparent,${GOLD}22,transparent)`, animation: "bfx-sweep 3.4s ease-in-out infinite", pointerEvents: "none" }} />
                         )}
-                        <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 8 }}>
-                          {side(a, sa, sa >= sb)}
-                          <span style={{ color: "rgba(255,255,255,0.3)", fontWeight: 900, flexShrink: 0 }}>:</span>
-                          {side(b, sb, sb >= sa)}
-                        </div>
-                        {onAir && <div style={{ position: "relative", marginTop: 4, fontSize: 8, fontWeight: 900, letterSpacing: "0.18em", color: GOLD, textAlign: "center" }}>● À L&apos;ANTENNE</div>}
+                        {chip(a)}
+                        <b style={{ fontSize: "clamp(11px,1vw,15px)", color: sa >= sb ? GOLD : "#fff", fontVariantNumeric: "tabular-nums" }}>{sa}</b>
+                        <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 10 }}>:</span>
+                        <b style={{ fontSize: "clamp(11px,1vw,15px)", color: sb >= sa ? GOLD : "#fff", fontVariantNumeric: "tabular-nums" }}>{sb}</b>
+                        {chip(b)}
                       </div>
                     );
                   })}

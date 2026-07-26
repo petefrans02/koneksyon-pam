@@ -112,7 +112,7 @@ export function ChampionPlaque({
 // Met le contenu À L'ÉCHELLE pour qu'il tienne TOUJOURS dans la hauteur donnée :
 // en diffusion (TV / plein écran) rien ne doit être coupé ni demander de scroll.
 // On mesure la hauteur réelle du contenu et on applique un simple scale.
-export function FitToScreen({ children, padding = 0 }: { children: React.ReactNode; padding?: number }) {
+export function FitToScreen({ children, padding = 12 }: { children: React.ReactNode; padding?: number }) {
   const outer = useRef<HTMLDivElement | null>(null);
   const inner = useRef<HTMLDivElement | null>(null);
   const [scale, setScale] = useState(1);
@@ -134,7 +134,9 @@ export function FitToScreen({ children, padding = 0 }: { children: React.ReactNo
       // sous 68 % : en dessous les textes deviennent illisibles sur un
       // téléviseur. Si ça ne tient toujours pas, c'est qu'il faut retirer un
       // bloc de la page, pas rapetisser davantage.
-      const next = Math.max(0.68, Math.min(1, avail / h));
+      // Plancher a 55 % : en dessous c'est illisible, mais mieux vaut un texte
+      // un peu plus petit qu'une question coupee en bas de l'ecran.
+      const next = Math.max(0.55, Math.min(1, avail / h));
       setScale((prev) => (Math.abs(prev - next) > 0.004 ? next : prev));
     };
     measure();
