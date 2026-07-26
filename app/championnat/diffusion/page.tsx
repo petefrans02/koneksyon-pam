@@ -53,12 +53,18 @@ export default function DiffusionPage() {
 
   // Manches du concours (réservé admin) — on en extrait le sous-ensemble de la JOURNÉE en cours.
   const [rounds, setRounds] = useState<SubRound[]>([]);
+  // Decalage horloge locale -> horloge serveur (comme le fait l'ecran joueur).
+  const serverOffsetRef = useRef(0);
   useEffect(() => {
     let iv: ReturnType<typeof setInterval> | null = null;
     fetch("/api/championship").then(r => r.json()).then(d => {
       const s = (d.seasons ?? [])[0];
       if (!s) return;
-      const refresh = () => fetch(`/api/championship/${s.id}`).then(r => r.json()).then(setDetail).catch(() => {});
+      const refresh = () => fetch(`/api/championship/${s.id}`).then(r => r.json()).then((d) => {
+        // Ecart entre l'horloge du televiseur et celle du serveur.
+        if (d?.server_now) serverOffsetRef.current = new Date(d.server_now).getTime() - Date.now();
+        setDetail(d);
+      }).catch(() => {});
       refresh();
       iv = setInterval(refresh, 3000);
       fetch(`/api/admin/championship/${s.id}/quiz`).then(r => r.ok ? r.json() : { rounds: [] }).then(q => setRounds(q.rounds ?? [])).catch(() => {});
@@ -174,8 +180,8 @@ export default function DiffusionPage() {
   const FEAT_MS = 12000;
   const featIdx = live.length ? Math.floor(nowMs / FEAT_MS) % live.length : 0;
   const feat = live[featIdx];
-  const onDeck = (detail?.matches ?? []).filter(m => m.status === "scheduled" && m.started_at && new Date(m.started_at).getTime() > nowMs);
-  const kickoffSecs = onDeck.length ? Math.max(0, Math.ceil((Math.min(...onDeck.map(m => new Date(m.started_at!).getTime())) - nowMs) / 1000)) : 0;
+  const onDeck = (detail?.matches ?? []).filter(m => m.status === "scheduled" && m.started_at && new Date(m.started_at).getTime() > nowMs + serverOffsetRef.current);
+  const kickoffSecs = onDeck.length ? Math.max(0, Math.ceil((Math.min(...onDeck.map(m => new Date(m.started_at!).getTime())) - (nowMs + serverOffsetRef.current)) / 1000)) : 0;
   const kickoffAtKey = onDeck.length ? String(Math.min(...onDeck.map(m => new Date(m.started_at!).getTime()))) : "";
   // Répartit le temps disponible entre toutes les annonces en attente.
   if (elimQueue.length > 0) {
@@ -190,8 +196,11 @@ export default function DiffusionPage() {
   // match actuellement a l'antenne.
   const quiz = feat && rounds.length ? flattenForBroadcast(subsetForSeed(rounds, feat.id)) : [];
   // SYNCHRONISÉ : même horloge que les joueurs (départ de la journée) → même question au même moment.
-  const startedAtMs = live[0]?.started_at ? new Date(live[0].started_at).getTime() : 0;
-  const sync = clockState(startedAtMs, nowMs, quiz.length);
+  // SYNCHRONISATION AVEC LES JOUEURS : l'horloge doit venir du MÊME match que
+  // les questions affichées (le match vedette), sinon l'écran de diffusion
+  // montre la question n°X d'un match et le chrono d'un autre.
+  const startedAtMs = feat?.started_at ? new Date(feat.started_at).getTime() : 0;
+  const sync = clockState(startedAtMs, nowMs + serverOffsetRef.current, quiz.length);
   const qIndex = Math.min(sync.index, Math.max(0, quiz.length - 1));
   const qReveal = sync.phase === "reveal";
   const qSecLeft = sync.secLeft;

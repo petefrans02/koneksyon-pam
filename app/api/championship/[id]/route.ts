@@ -61,5 +61,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     });
   }
 
-  return NextResponse.json({ season, groups, matches: matches ?? [] });
+  // `server_now` permet a la diffusion de se caler sur l'horloge du serveur,
+  // exactement comme les joueurs : sans ca, un televiseur dont l'heure derive
+  // de quelques secondes affiche une autre question que les joueurs.
+  return NextResponse.json({ season, groups, matches: matches ?? [], server_now: new Date().toISOString() });
 }
