@@ -340,7 +340,7 @@ export default function DiffusionPage() {
 
       {/* 🔥 MVP du match (côté droit) */}
       {liveStats.mvp && live.length > 0 && (
-        <div style={{ position: "fixed", right: "clamp(10px,1.5vw,26px)", top: "clamp(120px,20vh,230px)", zIndex: 6, width: "clamp(170px,16vw,230px)", background: `linear-gradient(135deg,rgba(230,184,60,0.16),rgba(2,7,23,0.72))`, border: `1px solid ${GOLD}55`, borderRadius: 16, padding: "12px 14px", backdropFilter: "blur(6px)", animation: "diff-in .5s ease both" }}>
+        <div style={{ position: "fixed", right: "clamp(10px,1.5vw,26px)", top: "clamp(84px,12vh,150px)", zIndex: 6, width: "clamp(160px,14vw,230px)", background: `linear-gradient(135deg,rgba(230,184,60,0.16),rgba(2,7,23,0.72))`, border: `1px solid ${GOLD}55`, borderRadius: 16, padding: "12px 14px", backdropFilter: "blur(6px)", animation: "diff-in .5s ease both" }}>
           <div style={{ fontSize: 10, fontWeight: 900, color: GOLD, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 8 }}>🔥 MVP du match</div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ width: 40, height: 40, borderRadius: "50%", background: `linear-gradient(135deg,${GOLD},#a97d18)`, color: "#1a1203", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 18, flexShrink: 0 }}>{(liveStats.mvp.name[0] || "?").toUpperCase()}</span>
@@ -354,7 +354,7 @@ export default function DiffusionPage() {
 
       {/* Fil d'activité en direct */}
       {feed.length > 0 && (
-        <div style={{ position: "fixed", left: "clamp(10px,1.5vw,26px)", bottom: "clamp(66px,8vw,102px)", zIndex: 6, width: "clamp(230px,22vw,320px)", display: "grid", gap: 6 }}>
+        <div style={{ position: "fixed", left: "clamp(10px,1.5vw,26px)", bottom: "clamp(66px,8vw,102px)", zIndex: 6, width: "clamp(180px,15vw,250px)", display: "grid", gap: 6 }}>
           <div style={{ fontSize: 11, fontWeight: 900, color: GOLD, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 2, display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 8, height: 8, borderRadius: "50%", background: "#f87171", animation: "bfx-glow 1.2s ease-in-out infinite" }} /> Activité en direct</div>
           {feed.slice(0, 5).map(f => (
             <div key={f.id} style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(2,7,23,0.72)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, padding: "8px 12px", animation: "bfx-feed-in .4s ease both", backdropFilter: "blur(6px)" }}>
@@ -484,34 +484,6 @@ export default function DiffusionPage() {
                     <div style={{ width: `${probA}%`, background: a.color, transition: "width .6s cubic-bezier(0.22,1,0.36,1)" }} />
                     <div style={{ width: `${100 - probA}%`, background: b.color, transition: "width .6s cubic-bezier(0.22,1,0.36,1)" }} />
                   </div>
-                </div>
-              );
-            })()}
-
-            {/* 👥 Statuts des joueurs des 2 équipes */}
-            {feat && liveStats.rosters && (liveStats.rosters.a.length + liveStats.rosters.b.length) > 0 && (() => {
-              const a = tmap[feat.team_a], b = tmap[feat.team_b]; if (!a || !b) return null;
-              const col = (team: Team, players: { name: string; answered: boolean; correct: number }[], align: "left" | "right") => (
-                <div style={{ flex: 1, maxWidth: 340 }}>
-                  <div style={{ fontSize: "clamp(10px,1vw,13px)", fontWeight: 900, color: "#fff", marginBottom: 6, textAlign: align }}>{short(team.name)}</div>
-                  <div style={{ display: "grid", gap: 4 }}>
-                    {players.slice(0, 10).map((p, i) => {
-                      const icon = p.answered ? "🟢" : (qReveal ? "🔴" : "🟡");
-                      return (
-                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 7, flexDirection: align === "right" ? "row-reverse" : "row", fontSize: "clamp(11px,1vw,14px)", background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "4px 10px" }}>
-                          <span style={{ flexShrink: 0 }}>{icon}</span>
-                          <span style={{ flex: 1, textAlign: align, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontWeight: 600 }}>{p.name}</span>
-                          {p.correct > 0 && <span style={{ color: "#4ade80", fontWeight: 800, flexShrink: 0 }}>✔{p.correct}</span>}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-              return (
-                <div style={{ display: "flex", gap: "clamp(12px,3vw,50px)", justifyContent: "center", maxWidth: 820, margin: "0 auto clamp(16px,2vw,26px)" }}>
-                  {col(a, liveStats.rosters.a, "right")}
-                  {col(b, liveStats.rosters.b, "left")}
                 </div>
               );
             })()}
@@ -695,6 +667,43 @@ export default function DiffusionPage() {
       </div>
       </FitToScreen>
       </div>
+
+      {/* JOUEURS DES DEUX ÉQUIPES — sur les flancs, façon retransmission sportive.
+          Hors du flux central : ça libère toute la hauteur pour la question. */}
+      {feat && liveStats.rosters && statsFresh && (["a", "b"] as const).map((side) => {
+        const team = side === "a" ? tmap[feat.team_a] : tmap[feat.team_b];
+        const players = (side === "a" ? liveStats.rosters!.a : liveStats.rosters!.b) ?? [];
+        if (!team || players.length === 0) return null;
+        return (
+          <div key={side} style={{
+            position: "fixed", top: "50%", transform: "translateY(-50%)",
+            [side === "a" ? "left" : "right"]: "clamp(10px,1.6vw,30px)",
+            zIndex: 7, width: "clamp(160px,14vw,250px)",
+            background: "linear-gradient(180deg,rgba(2,7,23,0.82),rgba(2,7,23,0.55))",
+            border: `1px solid ${team.color}66`, borderRadius: 16, overflow: "hidden",
+            backdropFilter: "blur(8px)", boxShadow: `0 16px 50px rgba(0,0,0,0.45)`,
+            animation: "bfx-card-in .5s ease both",
+          }}>
+            {/* Bandeau aux couleurs de l'équipe */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, background: team.color, padding: "7px 11px" }}>
+              <span style={{ width: 22, height: 22, borderRadius: 6, background: "rgba(0,0,0,0.25)", color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 10 }}>{team.logo_seed}</span>
+              <b style={{ color: "#fff", fontSize: "clamp(11px,1vw,15px)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", textShadow: "0 1px 3px rgba(0,0,0,0.5)" }}>{short(team.name)}</b>
+            </div>
+            <div style={{ display: "grid", gap: 3, padding: "7px 8px" }}>
+              {players.slice(0, 8).map((p, i) => {
+                const state = p.answered ? "#4ade80" : (qReveal ? "#f87171" : "#fbbf24");
+                return (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 7, background: "rgba(255,255,255,0.05)", borderRadius: 8, padding: "4px 8px" }}>
+                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: state, flexShrink: 0, boxShadow: `0 0 8px ${state}` }} />
+                    <span style={{ flex: 1, minWidth: 0, fontSize: "clamp(10px,0.9vw,13px)", fontWeight: 600, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</span>
+                    {p.correct > 0 && <span style={{ color: "#4ade80", fontWeight: 900, fontSize: "clamp(9px,0.85vw,12px)", flexShrink: 0 }}>✔{p.correct}</span>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
 
       {/* ANNONCE D'ÉLIMINATION — plein écran, grosses lettres, diaporama */}
       {elimShown && (
