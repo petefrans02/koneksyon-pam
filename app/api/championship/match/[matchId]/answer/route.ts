@@ -29,9 +29,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ mat
   // Questions partagées de la journée + bonne réponse.
   const { data: season } = await db.from("champ_seasons").select("contest_id").eq("id", m.season_id).maybeSingle();
   const { data: rounds } = await db.from("contest_rounds").select("round_number, round_type, questions, time_limit_sec").eq("contest_id", season?.contest_id).order("round_number");
-  // Graine = identifiant du MATCH : chaque match a ses propres questions
-  // (avant, toute la journee partageait le meme jeu).
-  const seed = matchId;
+  // Graine = SAISON + JOURNÉE (identique pour toutes les équipes qui jouent
+  // en même temps) — doit correspondre exactement à celle de /sync.
+  const seed = `${m.season_id}:${waveKeyOf(m.stage as string, (m.round_number as number) ?? null)}`;
   const questions = flattenForBroadcast(subsetForSeed((rounds ?? []) as SubRound[], seed));
 
   // On n'accepte que la question EN COURS pendant sa fenêtre de réponse.

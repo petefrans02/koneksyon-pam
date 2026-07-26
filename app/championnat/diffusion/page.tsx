@@ -192,9 +192,11 @@ export default function DiffusionPage() {
 
   // Questions « jeu télé » = EXACTEMENT le sous-ensemble de la journée en cours (identique aux joueurs).
   const liveWaveKey = live[0] ? waveKeyOf(live[0].stage, live[0].round_number) : "";
-  // Les questions sont propres a chaque match : la diffusion montre celles du
-  // match actuellement a l'antenne.
-  const quiz = feat && rounds.length ? flattenForBroadcast(subsetForSeed(rounds, feat.id)) : [];
+  // Même graine que les joueurs : saison + journée. La diffusion montre donc
+  // exactement la question que toutes les équipes ont sous les yeux.
+  const quiz = feat && rounds.length && detail
+    ? flattenForBroadcast(subsetForSeed(rounds, `${detail.season.id}:${waveKeyOf(feat.stage, feat.round_number)}`))
+    : [];
   // SYNCHRONISÉ : même horloge que les joueurs (départ de la journée) → même question au même moment.
   // SYNCHRONISATION AVEC LES JOUEURS : l'horloge doit venir du MÊME match que
   // les questions affichées (le match vedette), sinon l'écran de diffusion

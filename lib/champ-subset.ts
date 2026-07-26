@@ -40,15 +40,35 @@ export function waveKeyOf(stage: string, round_number: number | null): string {
 }
 
 // Choisit un sous-ensemble déterministe de manches à partir d'une CLÉ (la même clé → le même jeu).
+// Petit générateur déterministe : la même graine donne toujours la même suite.
+function seeded(seed: string) {
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i++) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return () => { h ^= h << 13; h >>>= 0; h ^= h >>> 17; h ^= h << 5; h >>>= 0; return h / 4294967296; };
+}
+
 export function subsetForSeed(all: SubRound[], seed: string): SubRound[] {
   const good = all.map(cleanRound).filter((r) => r.questions.length > 0);
   if (good.length <= ROUNDS_PER_MATCH) return good;
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
-  const start = hash % good.length;
-  const out: SubRound[] = [];
-  for (let i = 0; i < ROUNDS_PER_MATCH; i++) out.push(good[(start + i) % good.length]);
-  return out;
+  // On MÉLANGE l'ordre des manches puis on prend les premières : avant, on
+  // prenait 3 manches CONSÉCUTIVES, si bien que deux journées voisines se
+  // retrouvaient avec presque les mêmes questions.
+  const rnd = seeded(seed);
+  const idx = good.map((_, i) => i);
+  for (let i = idx.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [idx[i], idx[j]] = [idx[j], idx[i]];
+  }
+  const picked = idx.slice(0, ROUNDS_PER_MATCH).map((i) => good[i]);
+  // On mélange aussi les questions à l'intérieur de chaque manche.
+  return picked.map((r) => {
+    const qs = [...r.questions];
+    for (let i = qs.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      [qs[i], qs[j]] = [qs[j], qs[i]];
+    }
+    return { ...r, questions: qs };
+  });
 }
 
 // Aplati les manches en questions affichables (avec bonne réponse) pour la page de diffusion.
