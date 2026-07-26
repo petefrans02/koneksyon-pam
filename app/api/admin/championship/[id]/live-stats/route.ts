@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin, adminDb } from "@/lib/admin-auth";
 import { subsetForSeed, waveKeyOf, flattenForBroadcast, type SubRound } from "@/lib/champ-subset";
 import { clockState, ANSWER_SEC } from "@/lib/champ-sync";
+import { sharePointsPerQuestion } from "@/lib/champ-score";
 
 // Générateur pseudo-aléatoire déterministe (stable entre les sondages) à partir d'une graine.
 function rand(seed: string): number {
@@ -45,7 +46,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   // Choix d'une IA pour une question (déterministe) : bonne réponse selon son niveau, sinon un mauvais choix.
   const aiAnswer = (mid: string, qi: number, skill: number, optCount: number) => {
-    const correct = rand(`${mid}:${qi}`) < Math.max(0.15, Math.min(0.95, skill || 0.6));
+    const correct = rand(`${mid}:${qi}`) < Math.max(0.05, Math.min(0.55, skill || 0.2));
     const q = questions[qi];
     if (!q) return { choice: 0, correct: false };
     if (correct) return { choice: q.correct, correct: true };
@@ -64,17 +65,30 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const curQ = questions[curIdx];
   const optCount = curQ ? Math.max(2, curQ.options.filter((o) => o && o.trim()).length) : 4;
 
+  // BARÈME PARTAGÉ (identique au résultat final, cf. lib/champ-score.ts) :
+  // 100 points par question répartis entre ceux qui ont trouvé, les humains
+  // comptant double. On reconstitue d'abord qui a trouvé quoi.
+  const winnersByQuestion: string[][] = [];
+  const correctByMember: Record<string, number> = {};
+  for (let qi = 0; qi < doneUpTo && qi < count; qi++) {
+    const optN = Math.max(2, (questions[qi]?.options.filter((o) => o && o.trim()).length) || 4);
+    const winners: string[] = [];
+    for (const mem of members ?? []) {
+      const mid = mem.id as string;
+      const ok = mem.is_ai
+        ? aiAnswer(mid, qi, mem.skill as number, optN).correct
+        : !!realByMember[mid]?.[qi]?.correct;
+      if (ok) { winners.push(mid); correctByMember[mid] = (correctByMember[mid] ?? 0) + 1; }
+    }
+    winnersByQuestion.push(winners);
+  }
+  const aiIds = new Set((members ?? []).filter((m) => m.is_ai).map((m) => m.id as string));
+  const sharedPoints = sharePointsPerQuestion(winnersByQuestion, (id) => aiIds.has(id));
+
   for (const mem of members ?? []) {
     const mid = mem.id as string, isAi = !!mem.is_ai, skill = mem.skill as number, speed = mem.speed as number;
-    let correctTotal = 0;
-    // Score cumulé sur les questions dont la fenêtre est passée.
-    for (let qi = 0; qi < doneUpTo && qi < count; qi++) {
-      let res: { choice: number; correct: boolean } | null = null;
-      if (isAi) res = aiAnswer(mid, qi, skill, Math.max(2, (questions[qi]?.options.filter((o) => o && o.trim()).length) || 4));
-      else res = realByMember[mid]?.[qi] ?? null;
-      if (res?.correct) correctTotal++;
-    }
-    scoreByTeam[mem.team_id as string] = (scoreByTeam[mem.team_id as string] ?? 0) + correctTotal * 100;
+    const correctTotal = correctByMember[mid] ?? 0;
+    scoreByTeam[mem.team_id as string] = (scoreByTeam[mem.team_id as string] ?? 0) + (sharedPoints[mid] ?? 0);
     perMember[mid] = { correct: correctTotal };
 
     // Statut + répartition pour la question EN COURS.

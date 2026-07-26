@@ -7,7 +7,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ChampionSparkles } from "@/lib/championship-premium";
 import { subsetForSeed, waveKeyOf, flattenForBroadcast, type SubRound } from "@/lib/champ-subset";
 import { clockState } from "@/lib/champ-sync";
-import { AnimatedNumber, LiveParticles, FloatingReactions, ConfettiBurst, StadiumBackground, PresenterAvatar, AdBreak, FitToScreen, BROADCAST_CSS } from "@/lib/broadcast-fx";
+import { AnimatedNumber, LiveParticles, FloatingReactions, ConfettiBurst, StadiumBackground, PresenterAvatar, AdBreak, FitToScreen, ChampionPlaque, BROADCAST_CSS } from "@/lib/broadcast-fx";
 import { playChime } from "@/lib/sound";
 
 const GOLD = "#e6b83c";
@@ -99,7 +99,14 @@ export default function DiffusionPage() {
           if (w) { push(m.stage === "group" ? "🏁" : "🏆", m.stage === "group" ? `${w} gagne son match !` : `${w} se qualifie !`); if (m.stage !== "group") fire(); }
         }
       }
-      for (const t of allT) if (t.eliminated && !prev.elim.has(t.id)) push("❌", `${nm[t.id]} est éliminée.`);
+      for (const t of allT) if (t.eliminated && !prev.elim.has(t.id)) {
+        push("❌", `${nm[t.id]} est éliminée.`);
+        // …et on la met dans la file d'annonces plein écran (une seule fois).
+        if (!elimSeen.current.has(t.id)) {
+          elimSeen.current.add(t.id);
+          setElimQueue((q) => [...q, { name: short(t.name), color: t.color, seed: t.logo_seed }]);
+        }
+      }
       if (champ && champ.id !== prev.champion) { push("👑", `${nm[champ.id]} est CHAMPION BIBLIQUE !`); fire(); }
     }
     prevRef.current = {
@@ -108,6 +115,31 @@ export default function DiffusionPage() {
       elim: new Set(allT.filter(t => t.eliminated).map(t => t.id)),
     };
   }, [detail]);
+
+  // ANNONCE D'ÉLIMINATION plein écran : dès qu'une équipe est éliminée, tous les
+  // téléspectateurs la voient s'afficher en grand, une équipe après l'autre.
+  const [elimQueue, setElimQueue] = useState<{ name: string; color: string; seed: string }[]>([]);
+  const elimSeen = useRef<Set<string>>(new Set());
+  const elimShown = elimQueue[0] ?? null;
+  useEffect(() => {
+    if (!elimShown) return;
+    const t = setTimeout(() => setElimQueue((q) => q.slice(1)), 6500);
+    return () => clearTimeout(t);
+  }, [elimShown]);
+
+  // FIN DU CHAMPIONNAT : après 15 s de célébration, l'écran retourne à l'accueil.
+  const [homeIn, setHomeIn] = useState(15);
+  const finishedNow = detail?.season.status === "finished";
+  useEffect(() => {
+    if (!finishedNow) { setHomeIn(15); return; }
+    const iv = setInterval(() => {
+      setHomeIn((n) => {
+        if (n <= 1) { clearInterval(iv); window.location.href = "/"; return 0; }
+        return n - 1;
+      });
+    }, 1000);
+    return () => clearInterval(iv);
+  }, [finishedNow]);
 
   const LETTERS = ["A", "B", "C", "D", "E", "F"];
 
@@ -323,14 +355,19 @@ export default function DiffusionPage() {
 
         {/* ZONE PRINCIPALE */}
         {finished && champion ? (
-          <div style={{ position: "relative", textAlign: "center", padding: "clamp(30px,6vw,90px) 20px", animation: "diff-in .8s ease both" }}>
+          <div style={{ position: "relative", textAlign: "center", padding: "clamp(16px,3vw,50px) 20px", animation: "diff-in .8s ease both" }}>
             {!light && <ChampionSparkles accent={GOLD} embedded />}
             <div style={{ position: "relative", zIndex: 3 }}>
-              <div style={{ fontSize: "clamp(70px,12vw,180px)", lineHeight: 1 }}>🏆</div>
-              <div style={{ fontSize: "clamp(12px,1.4vw,20px)", fontWeight: 900, letterSpacing: "0.4em", color: GOLD, marginTop: 8 }}>CHAMPION BIBLIQUE</div>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 20, marginTop: 20 }}>
-                <Logo t={champion} size={90} />
-                <span style={{ fontSize: "clamp(40px,8vw,110px)", fontWeight: 900, fontFamily: "'Playfair Display',Georgia,serif" }}>{short(champion.name)}</span>
+              {/* PLAQUE D'HONNEUR gravee au nom du champion */}
+              <ChampionPlaque
+                teamName={short(champion.name)}
+                logoSeed={champion.logo_seed}
+                color={champion.color}
+                season={seasonNum}
+                light={light}
+              />
+              <div style={{ marginTop: 14, fontSize: "clamp(11px,1.2vw,17px)", fontWeight: 800, color: "rgba(255,255,255,0.55)" }}>
+                Retour à l&apos;accueil dans {homeIn}s…
               </div>
             </div>
           </div>
@@ -589,6 +626,31 @@ export default function DiffusionPage() {
       </div>
       </FitToScreen>
       </div>
+
+      {/* ANNONCE D'ÉLIMINATION — plein écran, grosses lettres, diaporama */}
+      {elimShown && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 40, display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center", gap: "clamp(10px,1.6vw,24px)",
+          background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(120,10,10,0.92), rgba(3,6,15,0.97))",
+          backdropFilter: "blur(6px)", animation: "diff-in .45s ease both", pointerEvents: "none",
+        }}>
+          <div style={{ fontSize: "clamp(60px,12vw,180px)", lineHeight: 1, animation: "bfx-pop .7s cubic-bezier(0.34,1.56,0.64,1) both" }}>❌</div>
+          <div style={{ fontSize: "clamp(11px,1.4vw,22px)", fontWeight: 900, letterSpacing: "0.45em", color: "#fca5a5", animation: "bfx-engrave 1s ease .2s both" }}>ÉQUIPE ÉLIMINÉE</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "clamp(12px,2vw,32px)", animation: "bfx-slide-in .7s cubic-bezier(0.22,1,0.36,1) .25s both" }}>
+            <span style={{ width: "clamp(50px,6vw,104px)", height: "clamp(50px,6vw,104px)", borderRadius: 20, background: elimShown.color, color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: "clamp(20px,2.4vw,40px)", boxShadow: "0 12px 40px rgba(0,0,0,0.6)" }}>{elimShown.seed}</span>
+            <span style={{ fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 900, fontSize: "clamp(42px,10vw,150px)", lineHeight: 1, color: "#fff", textShadow: "0 6px 40px rgba(248,113,113,0.7)" }}>{elimShown.name.toUpperCase()}</span>
+          </div>
+          <div style={{ fontSize: "clamp(13px,1.6vw,26px)", fontWeight: 800, color: "rgba(255,255,255,0.7)", animation: "bfx-slide-up .7s ease .5s both" }}>
+            Merci pour ce beau parcours 🙏
+          </div>
+          {elimQueue.length > 1 && (
+            <div style={{ fontSize: "clamp(10px,1.1vw,15px)", fontWeight: 800, color: "rgba(255,255,255,0.35)", letterSpacing: "0.2em", marginTop: 6 }}>
+              +{elimQueue.length - 1} autre(s) annonce(s)…
+            </div>
+          )}
+        </div>
+      )}
 
       {/* BANDEAU DÉFILANT « TÉLÉ » (verset • équipes • sponsors) */}
       <div style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 6, display: "flex", alignItems: "center", height: "clamp(42px,4.6vw,66px)", background: "linear-gradient(90deg,#0a1330,#16264d)", borderTop: `2px solid ${GOLD}`, overflow: "hidden", boxShadow: "0 -8px 24px rgba(0,0,0,0.4)" }}>

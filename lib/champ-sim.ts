@@ -9,7 +9,10 @@ export function rand(seed: string): number {
   return (h >>> 0) / 4294967296;
 }
 
-const clampSkill = (s: number) => Math.max(0.15, Math.min(0.95, s || 0.6));
+// Plafond bas volontaire : meme une IA « expert » ne depasse pas ~55 % de
+// reussite. Le defaut (skill absent ou 0) etait a 0.6 — une IA sans profil
+// jouait donc mieux qu'un expert. Ramene a 0.2.
+const clampSkill = (s: number) => Math.max(0.05, Math.min(0.55, s || 0.2));
 
 // Une IA a-t-elle la bonne réponse à la question qi ? (déterministe)
 export function aiIsCorrect(memberId: string, qi: number, skill: number): boolean {

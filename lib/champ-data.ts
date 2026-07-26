@@ -44,11 +44,14 @@ const AI_COUNTRIES = [
 // ── Niveaux IA → compétence (prob. bonne réponse) + rapidité ────────────────
 export type AILevel = "debutant" | "moyen" | "fort" | "expert";
 // Niveaux volontairement BEATABLES : un vrai joueur qui connaît bien la Bible doit pouvoir gagner.
+// Niveaux volontairement MODESTES : les IA remplissent les equipes, elles ne
+// doivent pas ecraser les vrais joueurs. skill = taux de bonnes reponses.
+// (abaisses le 2026-07-25 : l'IA dominait les humains)
 const LEVEL_PROFILE: Record<AILevel, { skill: number; speed: number }> = {
-  debutant: { skill: 0.22, speed: 0.4 },
-  moyen: { skill: 0.35, speed: 0.52 },
-  fort: { skill: 0.48, speed: 0.64 },
-  expert: { skill: 0.6, speed: 0.78 },
+  debutant: { skill: 0.12, speed: 0.4 },
+  moyen: { skill: 0.22, speed: 0.52 },
+  fort: { skill: 0.32, speed: 0.64 },
+  expert: { skill: 0.42, speed: 0.78 },
 };
 
 function pick<T>(arr: T[], i: number): T { return arr[i % arr.length]; }
@@ -88,7 +91,7 @@ export function makeAIPlayer(index: number, difficulty: "easy" | "medium" | "har
   const last = pick(AI_LAST, index * 5 + 1);
   const country = pick(AI_COUNTRIES, index * 3 + 2);
   // Variation individuelle pour que ça paraisse humain.
-  const skill = Math.max(0.2, Math.min(0.97, prof.skill + rand(-0.08, 0.08)));
+  const skill = Math.max(0.08, Math.min(0.55, prof.skill + rand(-0.06, 0.06)));
   const speed = Math.max(0.2, Math.min(0.97, prof.speed + rand(-0.1, 0.1)));
   return {
     name: `${first} ${last}`,

@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { subsetForSeed, waveKeyOf, flattenForBroadcast, type SubRound } from "@/lib/champ-subset";
-import { aiCorrectCount } from "@/lib/champ-sim";
+import { aiIsCorrect } from "@/lib/champ-sim";
+import { sharePointsPerQuestion } from "@/lib/champ-score";
 import { ANSWER_SEC, REVEAL_SEC } from "@/lib/champ-sync";
 
 const Q_TOTAL = ANSWER_SEC + REVEAL_SEC;
@@ -17,30 +18,52 @@ function countFor(rounds: SubRound[], stage: string, round_number: number | null
   return flattenForBroadcast(subsetForSeed(rounds, waveKeyOf(stage, round_number))).length || 15;
 }
 
-// Résout UN match. Score = bonnes réponses × 100 pour TOUT LE MONDE (aucun bonus).
-// Un joueur RÉEL ne marque que ce qu'il a réellement répondu : s'il n'a pas joué,
-// il marque 0. Seuls les membres IA sont simulés (sinon un absent gagnerait des
-// points sans toucher à son écran).
+// Résout UN match. BARÈME PARTAGÉ : chaque question distribue 100 points au
+// total, répartis entre tous les participants du match qui ont trouvé (cf.
+// lib/champ-score.ts). Un joueur RÉEL ne marque que ce qu'il a réellement
+// répondu ; seules les IA sont simulées.
 export async function resolveMatch(db: SupabaseClient, match: ChampMatch, count?: number): Promise<{ score_a: number; score_b: number; winner: string | null }> {
   const a = match.team_a, b = match.team_b;
   if (count === undefined) { const r = await seasonRounds(db, match.season_id); count = countFor(r, match.stage, match.round_number); }
   const { data: members } = await db.from("champ_members").select("id, team_id, skill, speed, is_ai").in("team_id", [a, b]);
-  const { data: prs } = await db.from("champ_player_results").select("member_id, score, correct").eq("match_id", match.id);
-  const real: Record<string, { score: number; correct: number }> = {};
-  for (const p of prs ?? []) real[p.member_id as string] = { score: Number(p.score ?? 0), correct: Number(p.correct ?? 0) };
+  const roster = (members ?? []) as Member[];
+
+  // Réponses réelles, question par question.
+  const { data: answers } = await db.from("champ_answers").select("member_id, q_index, correct").eq("match_id", match.id);
+  const realCorrect: Record<string, Set<number>> = {};
+  for (const r of answers ?? []) {
+    if (r.correct) (realCorrect[r.member_id as string] ??= new Set()).add(r.q_index as number);
+  }
+
+  // Pour chaque question, qui a trouvé ? (humains d'après leurs réponses, IA simulées)
+  const winnersByQuestion: string[][] = [];
+  const correctCount: Record<string, number> = {};
+  for (let qi = 0; qi < count; qi++) {
+    const winners: string[] = [];
+    for (const m of roster) {
+      const ok = m.is_ai ? aiIsCorrect(m.id, qi, m.skill) : !!realCorrect[m.id]?.has(qi);
+      if (ok) { winners.push(m.id); correctCount[m.id] = (correctCount[m.id] ?? 0) + 1; }
+    }
+    winnersByQuestion.push(winners);
+  }
+  const aiIds = new Set(roster.filter((m) => m.is_ai).map((m) => m.id));
+  const points = sharePointsPerQuestion(winnersByQuestion, (id) => aiIds.has(id));
 
   const teamTotals: Record<string, { score: number; correct: number }> = { [a]: { score: 0, correct: 0 }, [b]: { score: 0, correct: 0 } };
-  for (const m of (members ?? []) as Member[]) {
-    let r = real[m.id];
-    if (!r) {
-      // Membre IA → simulation. Joueur réel absent → 0, pas de points offerts.
-      const c = m.is_ai ? aiCorrectCount(m.id, m.skill, count) : 0;
-      r = { correct: c, score: c * 100 };
-    }
+  for (const m of roster) {
     const tt = teamTotals[m.team_id]; if (!tt) continue;
-    tt.score += r.score; tt.correct += r.correct;
+    tt.score += points[m.id] ?? 0;
+    tt.correct += correctCount[m.id] ?? 0;
   }
-  const sa = teamTotals[a].score, sb = teamTotals[b].score;
+  // Les scores individuels sont recalculés ici (le client ne decide pas du bareme).
+  for (const m of roster) {
+    if (m.is_ai) continue;
+    await db.from("champ_player_results")
+      .update({ score: Math.round(points[m.id] ?? 0), correct: correctCount[m.id] ?? 0 })
+      .eq("match_id", match.id).eq("member_id", m.id);
+  }
+
+  const sa = Math.round(teamTotals[a].score), sb = Math.round(teamTotals[b].score);
   let winner: string | null = sa > sb ? a : sb > sa ? b : null;
   if (winner === null && match.stage !== "group") winner = teamTotals[a].correct >= teamTotals[b].correct ? a : b;
 
@@ -92,8 +115,13 @@ export async function autoResolveReady(db: SupabaseClient, seasonId: string): Pr
     const submitted = subByMatch[m.id as string] ?? new Set();
     const done = realIds.filter((id) => submitted.has(id)).length;
     const elapsed = m.started_at ? (Date.now() - new Date(m.started_at as string).getTime()) / 1000 : 0;
-    // Tous ont fini, OU l'horloge des questions est terminée (+4 s pour les dernières réponses), OU sécurité.
-    if (done >= realIds.length || elapsed > syncDuration + 4 || elapsed > MAX_MATCH_SEC) {
+    // Un match SANS aucun vrai joueur (IA contre IA) se résolvait instantanément
+    // — `0 >= 0` était vrai — et le championnat sautait au vainqueur sans jamais
+    // poser les questions. Il doit maintenant vivre sa durée normale, comme les
+    // autres : les questions defilent a l'ecran de diffusion.
+    const allHumansDone = realIds.length > 0 && done >= realIds.length;
+    const clockOver = elapsed > syncDuration + 4;
+    if (allHumansDone || clockOver || elapsed > MAX_MATCH_SEC) {
       await resolveMatch(db, m as Parameters<typeof resolveMatch>[1], count);
       resolved++;
     }

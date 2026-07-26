@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ChampionSparkles, ChampionCertificate } from "@/lib/championship-premium";
 import { useLang } from "@/lib/LangContext";
@@ -19,6 +20,7 @@ interface Detail { season: Season; groups: Record<string, Team[]>; matches: Matc
 const GOLD = "#e6b83c";
 
 export default function ChampionnatPage() {
+  const router = useRouter();
   const { lang } = useLang();
   const [detail, setDetail] = useState<Detail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -65,6 +67,19 @@ export default function ChampionnatPage() {
     } catch { setJoinMsg("Erreur réseau"); }
     setJoining(false);
   }
+
+  // ENTRÉE AUTOMATIQUE DANS LA SALLE : dès que l'admin lance la journée, le
+  // match du joueur passe en compte à rebours puis en direct — on l'y emmène
+  // tout seul pour qu'il voie le compteur et que le match démarre sans clic.
+  const autoEntered = useRef(false);
+  useEffect(() => {
+    if (autoEntered.current) return;
+    const mm = (myMatches?.matches ?? []) as { match_id: string; status: string; played: boolean; starts_in_sec: number | null }[];
+    const next = mm.find((m) => !m.played && (m.status === "live" || m.starts_in_sec !== null));
+    if (!next) return;
+    autoEntered.current = true;
+    router.push(`/championnat/jouer/${next.match_id}`);
+  }, [myMatches, router]);
 
   useEffect(() => {
     let iv: ReturnType<typeof setInterval> | null = null;

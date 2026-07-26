@@ -9,6 +9,7 @@ import SyncPlay from "./SyncPlay";
 import WaitingMiniGame from "@/app/components/WaitingMiniGame";
 import { teamLabel } from "@/lib/champ-data";
 import { playTick, playSad, playChime, armAudio } from "@/lib/sound";
+import { startLobbyMusic, stopMusic, resumeAudio, preloadMatchAudio } from "@/lib/championship-audio";
 
 interface Info {
   match: { id: string; stage: string; status: string; score_a: number | null; score_b: number | null; winner: string | null; team_a: string; team_b: string; round_number: number | null };
@@ -39,16 +40,33 @@ export default function MatchRoomPage() {
   const [done, setDone] = useState(false);
   const [localSecs, setLocalSecs] = useState<number | null>(null);
   const [waitingNext, setWaitingNext] = useState(false);
+  const [audioReady, setAudioReady] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Débloque l'audio du navigateur dès la 1re interaction (nécessaire pour le son automatique).
   useEffect(() => {
     armAudio();
-    const arm = () => armAudio();
+    // On tente tout de suite : si le joueur arrive d'un match precedent dans le
+    // meme onglet, l'audio est deja autorise et la musique demarre sans clic.
+    resumeAudio(); preloadMatchAudio(); setAudioReady(true);
+    // Le 1er geste debloque aussi la bande-son (les navigateurs refusent
+    // l'audio automatique tant que l'utilisateur n'a rien touche).
+    const arm = () => { armAudio(); resumeAudio(); preloadMatchAudio(); setAudioReady(true); };
     window.addEventListener("pointerdown", arm);
     window.addEventListener("touchstart", arm);
     return () => { window.removeEventListener("pointerdown", arm); window.removeEventListener("touchstart", arm); };
   }, []);
+
+  // MUSIQUE D'ATTENTE : elle tourne pendant le compte a rebours et entre deux
+  // matchs (avant, ces ecrans etaient silencieux). SyncPlay prend le relais
+  // des que le match demarre, et coupe en quittant la page.
+  const waitingRoom = !!info && !info.can_play;
+  useEffect(() => {
+    if (!audioReady) return;
+    if (waitingRoom) startLobbyMusic();
+    else stopMusic(1.2);
+  }, [audioReady, waitingRoom]);
+  useEffect(() => () => { stopMusic(1); }, []);
 
   // Compte à rebours local fluide (1 s) + son TIC-TAC automatique pour attirer l'attention.
   useEffect(() => { setLocalSecs(info?.starts_in_sec ?? null); }, [info?.starts_in_sec]);
@@ -223,7 +241,7 @@ export default function MatchRoomPage() {
             {backBtn}
           </>)
         : info.can_play ? (
-          <SyncPlay matchId={String(matchId)} teamA={info.teamA} teamB={info.teamB} onFinish={() => setDone(true)} />
+          <SyncPlay matchId={String(matchId)} teamA={info.teamA} teamB={info.teamB} soundOn={audioReady} onFinish={() => setDone(true)} />
         )
         : shell(<><p style={{ fontSize: 40 }}>📭</p><p>{l === "fr" ? "Rien à jouer pour le moment." : "Nothing to play."}</p>{backBtn}</>)}
     </RequireAuth>

@@ -25,7 +25,89 @@ export const BROADCAST_CSS = `
 @keyframes bfx-slide-up { 0% { opacity:0; transform: translateY(16px) scale(.98); } 100% { opacity:1; transform:none; } }
 @keyframes bfx-card-in { 0% { opacity:0; transform: translateY(10px); } 100% { opacity:1; transform:none; } }
 @keyframes bfx-sweep { 0% { transform: translateX(-120%); } 100% { transform: translateX(220%); } }
+/* Plaque d'honneur du champion : gravure, lumiere et faisceaux */
+@keyframes bfx-plaque-in { 0% { opacity:0; transform: perspective(1200px) rotateX(28deg) scale(.72); filter: blur(8px); } 60% { opacity:1; transform: perspective(1200px) rotateX(-5deg) scale(1.04); filter: blur(0); } 100% { opacity:1; transform: perspective(1200px) rotateX(0) scale(1); } }
+@keyframes bfx-plaque-shine { 0% { transform: translateX(-140%) skewX(-18deg); } 55%,100% { transform: translateX(260%) skewX(-18deg); } }
+@keyframes bfx-plaque-glow { 0%,100% { box-shadow: 0 0 60px rgba(230,184,60,.35), inset 0 2px 0 rgba(255,255,255,.5), inset 0 -3px 10px rgba(0,0,0,.4); } 50% { box-shadow: 0 0 130px rgba(230,184,60,.75), inset 0 2px 0 rgba(255,255,255,.7), inset 0 -3px 10px rgba(0,0,0,.4); } }
+@keyframes bfx-engrave { 0% { opacity:0; letter-spacing:.5em; } 100% { opacity:1; letter-spacing:.06em; } }
+@keyframes bfx-beam { 0%,100% { opacity:.18; transform: translateX(-50%) rotate(var(--ang,0deg)) scaleY(1); } 50% { opacity:.5; transform: translateX(-50%) rotate(var(--ang,0deg)) scaleY(1.12); } }
+@keyframes bfx-star-twinkle { 0%,100% { opacity:.25; transform: scale(.7); } 50% { opacity:1; transform: scale(1.25); } }
 `;
+
+// PLAQUE D'HONNEUR du champion : plaque doree gravee au nom de l'equipe,
+// faisceaux de lumiere, reflet qui balaye et etoiles scintillantes.
+export function ChampionPlaque({
+  teamName, logoSeed, color = "#e6b83c", subtitle = "CHAMPION BIBLIQUE", season, light = false,
+}: {
+  teamName: string; logoSeed?: string; color?: string; subtitle?: string; season?: string; light?: boolean;
+}) {
+  const GOLD = "#e6b83c";
+  return (
+    <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", padding: "clamp(10px,2vw,26px) 0" }}>
+      {/* Faisceaux de projecteurs */}
+      {!light && [-26, -9, 9, 26].map((ang, i) => (
+        <span key={i} aria-hidden style={{
+          position: "absolute", top: "-12%", left: "50%", width: "clamp(60px,7vw,120px)", height: "150%",
+          background: `linear-gradient(to bottom, ${GOLD}55, transparent 72%)`,
+          filter: "blur(22px)", transformOrigin: "top center",
+          ["--ang" as string]: `${ang}deg`,
+          animation: `bfx-beam ${3.4 + i * 0.45}s ease-in-out infinite`, pointerEvents: "none",
+        }} />
+      ))}
+      {/* Etoiles scintillantes */}
+      {!light && Array.from({ length: 14 }).map((_, i) => (
+        <span key={`s${i}`} aria-hidden style={{
+          position: "absolute", left: `${(i * 37) % 100}%`, top: `${(i * 53) % 100}%`,
+          fontSize: 10 + (i % 3) * 5, color: GOLD, opacity: .3,
+          animation: `bfx-star-twinkle ${1.8 + (i % 5) * 0.5}s ease-in-out ${i * 0.17}s infinite`, pointerEvents: "none",
+        }}>✦</span>
+      ))}
+
+      {/* La plaque */}
+      <div style={{
+        position: "relative", overflow: "hidden", zIndex: 3,
+        padding: "clamp(18px,2.6vw,40px) clamp(26px,4vw,68px)",
+        borderRadius: 22,
+        background: "linear-gradient(160deg,#3a2c07 0%,#7a5c12 18%,#e6b83c 45%,#fff3c4 52%,#e6b83c 60%,#7a5c12 86%,#3a2c07 100%)",
+        border: "3px solid rgba(255,240,190,0.75)",
+        animation: light ? "bfx-plaque-in .9s cubic-bezier(0.22,1,0.36,1) both" : "bfx-plaque-in .9s cubic-bezier(0.22,1,0.36,1) both, bfx-plaque-glow 2.6s ease-in-out .9s infinite",
+      }}>
+        {/* Reflet qui balaye la plaque */}
+        {!light && <span aria-hidden style={{
+          position: "absolute", top: 0, bottom: 0, width: "38%",
+          background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.75),transparent)",
+          animation: "bfx-plaque-shine 3.8s ease-in-out 1s infinite", pointerEvents: "none",
+        }} />}
+
+        <div style={{ position: "relative", textAlign: "center", color: "#2a1e02" }}>
+          <div style={{ fontSize: "clamp(9px,1vw,14px)", fontWeight: 900, letterSpacing: "0.42em", opacity: .72 }}>
+            {season ? `SAISON ${season} · ` : ""}{subtitle}
+          </div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "clamp(10px,1.6vw,24px)", margin: "clamp(6px,1vw,14px) 0" }}>
+            {logoSeed && (
+              <span style={{
+                width: "clamp(42px,5vw,76px)", height: "clamp(42px,5vw,76px)", borderRadius: 16, background: color,
+                color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center",
+                fontWeight: 900, fontSize: "clamp(17px,2vw,30px)", boxShadow: "0 8px 26px rgba(0,0,0,0.45)", flexShrink: 0,
+              }}>{logoSeed}</span>
+            )}
+            <span style={{
+              fontFamily: "'Playfair Display',Georgia,serif", fontWeight: 900,
+              fontSize: "clamp(30px,6vw,86px)", lineHeight: 1,
+              textShadow: "0 2px 0 rgba(255,255,255,.55), 0 -1px 0 rgba(0,0,0,.35)",
+              animation: "bfx-engrave 1.1s ease .5s both",
+            }}>{teamName.toUpperCase()}</span>
+          </div>
+          <div style={{ fontSize: "clamp(16px,2vw,30px)" }}>🏆</div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 12, fontSize: "clamp(10px,1.1vw,15px)", fontWeight: 800, letterSpacing: "0.3em", color: `${GOLD}cc`, animation: "bfx-engrave 1.1s ease .9s both" }}>
+        KONEKSYON PAM
+      </div>
+    </div>
+  );
+}
 
 // Met le contenu À L'ÉCHELLE pour qu'il tienne TOUJOURS dans la hauteur donnée :
 // en diffusion (TV / plein écran) rien ne doit être coupé ni demander de scroll.

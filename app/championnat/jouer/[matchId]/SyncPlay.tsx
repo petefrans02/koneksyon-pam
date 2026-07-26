@@ -19,7 +19,7 @@ const short = (n: string) => n.replace(/^Équipe\s+/i, "");
 
 // Écran de jeu SYNCHRONISÉ et IMMERSIF (proche de la diffusion) : même question/chrono pour tous,
 // dans une ambiance premium « championnat mondial » pour captiver le joueur.
-export default function SyncPlay({ matchId, teamA, teamB, onFinish }: { matchId: string; teamA?: TeamInfo | null; teamB?: TeamInfo | null; onFinish: (r: { score: number; correct: number; answered: number }) => void }) {
+export default function SyncPlay({ matchId, teamA, teamB, soundOn = false, onFinish }: { matchId: string; teamA?: TeamInfo | null; teamB?: TeamInfo | null; soundOn?: boolean; onFinish: (r: { score: number; correct: number; answered: number }) => void }) {
   const [data, setData] = useState<SyncData | null>(null);
   const [now, setNow] = useState(Date.now());
   const [answered, setAnswered] = useState<Record<number, number>>({});
@@ -29,7 +29,8 @@ export default function SyncPlay({ matchId, teamA, teamB, onFinish }: { matchId:
   const prevIdxRef = useRef(-1);
   // La musique ne peut démarrer qu'après un geste de l'utilisateur (règle des
   // navigateurs) : le bouton 🔊 sert d'autorisation explicite.
-  const [audioOn, setAudioOn] = useState(false);
+  // Herite de la salle d'attente : si la musique y tournait deja, elle continue.
+  const [audioOn, setAudioOn] = useState(soundOn);
   const revealSoundRef = useRef(-1);
 
   useEffect(() => {
