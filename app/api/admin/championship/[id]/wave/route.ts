@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin, adminDb } from "@/lib/admin-auth";
-import { waveKeyOf, scheduleNextWave } from "@/lib/champ-sequence";
+import { waveKeyOf, scheduleNextWave, KICKOFF_DELAY_MS } from "@/lib/champ-sequence";
 import { resolveMatch } from "@/lib/champ-resolve";
 
 // POST { wave: "group-1"|"quarter"|"semi"|"finals", action: "start"|"resolve" }
@@ -23,8 +23,18 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const otherLive = (all ?? []).some((m) => m.status === "live" && waveKeyOf(m as { stage: string; round_number: number | null }) !== wave);
     if (otherLive) return NextResponse.json({ error: "Une autre journée est en cours. Termine-la d'abord." }, { status: 409 });
     const ids = waveMatches.filter((m) => m.status === "scheduled").map((m) => m.id);
-    if (ids.length) await db.from("champ_matches").update({ status: "live", started_at: new Date().toISOString() }).in("id", ids);
-    return NextResponse.json({ ok: true, started: ids.length });
+    // On ne passe PAS en direct tout de suite : on programme le coup d'envoi
+    // dans 30 s. Pendant ce temps les joueurs sont amenés automatiquement dans
+    // la salle, voient le compte à rebours avec la musique, et le match démarre
+    // tout seul (advanceSeason bascule les matchs en direct à l'heure dite).
+    const kickoff = new Date(Date.now() + KICKOFF_DELAY_MS).toISOString();
+    if (ids.length) await db.from("champ_matches").update({ started_at: kickoff }).in("id", ids);
+    return NextResponse.json({
+      ok: true,
+      started: ids.length,
+      kickoff_at: kickoff,
+      countdown_sec: Math.round(KICKOFF_DELAY_MS / 1000),
+    });
   }
 
   // ── TERMINER la journée : résout tous les matchs en cours de la journée, puis programme la suivante ──

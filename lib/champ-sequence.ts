@@ -5,9 +5,12 @@ import { advanceKnockout } from "@/lib/champ-knockout";
 // Structure de championnat par JOURNÉES (vagues) : à chaque journée, TOUTES les équipes
 // concernées jouent EN MÊME TEMPS. Une équipe ne joue qu'un match par journée.
 // Quand toute la journée est finie, la suivante démarre après ce délai.
-// 45 s entre deux journées : il faut le temps d'annoncer les équipes éliminées
-// à l'antenne avant que le match suivant ne démarre.
-export const KICKOFF_DELAY_MS = 45_000;
+// Coup d'envoi du TOUT PREMIER match : 30 s, comme demandé — le temps que les
+// joueurs entrent dans la salle et voient le compteur tourner avec la musique.
+export const KICKOFF_DELAY_MS = 30_000;
+// Entre deux journées : plus long, parce qu'il faut annoncer à l'antenne les
+// équipes éliminées avant que le match suivant ne démarre.
+export const KICKOFF_DELAY_NEXT_MS = 45_000;
 
 interface SeqMatch { id: string; stage: string; round_number: number | null; status: string; started_at: string | null }
 
@@ -49,7 +52,11 @@ export async function scheduleNextWave(db: SupabaseClient, seasonId: string): Pr
   if (all.some((m) => m.status === "scheduled" && m.started_at)) return null;  // une journée est déjà programmée
   const wave = nextPendingWave(all);
   if (wave.length === 0) return null;                                          // plus rien à jouer
-  const kickoff = new Date(Date.now() + KICKOFF_DELAY_MS).toISOString();
+  // Première journée du championnat (rien n'a encore été joué) → 30 s.
+  // Journées suivantes → 45 s, pour laisser passer les annonces d'élimination.
+  const isFirstWave = !all.some((m) => m.status === "done");
+  const delay = isFirstWave ? KICKOFF_DELAY_MS : KICKOFF_DELAY_NEXT_MS;
+  const kickoff = new Date(Date.now() + delay).toISOString();
   await db.from("champ_matches").update({ started_at: kickoff }).in("id", wave.map((m) => m.id));
   return { wave: waveKeyOf(wave[0]), count: wave.length, kickoff_at: kickoff };
 }

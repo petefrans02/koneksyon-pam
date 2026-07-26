@@ -33,7 +33,7 @@ export default function AdminChampionshipPage() {
       const res = await fetch(`/api/admin/championship/${seasonId}/wave`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ wave, action }) });
       const d = await res.json().catch(() => ({}));
       if (!res.ok) setMsg("❌ " + (d.error || "Erreur"));
-      else if (action === "start") setMsg("▶ Journée lancée — les équipes jouent !");
+      else if (action === "start") setMsg(`▶ Coup d'envoi dans ${d.countdown_sec ?? 30} s — les joueurs entrent dans la salle et le match démarre tout seul`);
       else if (action === "resolve") setMsg("✅ Journée terminée — points mis à jour");
       openDetail(seasonId);
     } catch { /* ignore */ }

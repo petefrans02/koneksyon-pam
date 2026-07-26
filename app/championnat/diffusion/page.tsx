@@ -197,6 +197,19 @@ export default function DiffusionPage() {
   const qSecLeft = sync.secLeft;
   const curQ = sync.over || sync.phase === "pre" ? undefined : quiz[sync.index];
 
+  // VERSET DE LA QUESTION — la question ne stocke qu'une référence (« Luc 2:4-7 ») :
+  // on va chercher le texte réel pour l'afficher à l'antenne à la révélation.
+  const [verseText, setVerseText] = useState<Record<string, string>>({});
+  const verseRef = curQ?.ref ?? "";
+  useEffect(() => {
+    if (!verseRef || verseText[verseRef] !== undefined) return;
+    fetch(`/api/bible/verse?ref=${encodeURIComponent(verseRef)}&lang=fr`)
+      .then((r) => r.json())
+      .then((d) => setVerseText((m) => ({ ...m, [verseRef]: d.text ?? "" })))
+      .catch(() => setVerseText((m) => ({ ...m, [verseRef]: "" })));
+  }, [verseRef, verseText]);
+
+
   // Scores EN DIRECT du match vedette (vrais joueurs + IA simulées, montent question par question).
   // Le match vedette tourne toutes les 12 s : sans ce controle, on affichait
   // pendant un instant les scores du match PRECEDENT sur le nouveau match —
@@ -583,7 +596,25 @@ export default function DiffusionPage() {
                     })}
                   </div>
                 )}
-                {qReveal && curQ.ref && <div style={{ marginTop: "clamp(14px,1.8vw,24px)", textAlign: "center", color: GOLD, fontWeight: 800, fontSize: "clamp(13px,1.3vw,19px)" }}>📖 {curQ.ref}</div>}
+                {/* LE VERSET, en grand, à chaque révélation de réponse */}
+                {qReveal && curQ.ref && (
+                  <div style={{
+                    marginTop: "clamp(12px,1.6vw,22px)",
+                    background: `linear-gradient(135deg,${GOLD}1f,rgba(255,255,255,0.03))`,
+                    border: `1px solid ${GOLD}55`, borderRadius: 14,
+                    padding: "clamp(10px,1.4vw,18px) clamp(14px,1.8vw,24px)",
+                    textAlign: "center", animation: "bfx-slide-up .6s ease both",
+                  }}>
+                    {verseText[curQ.ref] ? (
+                      <p style={{ margin: 0, color: "#fff", fontStyle: "italic", fontFamily: "'Playfair Display',Georgia,serif", fontSize: "clamp(14px,1.7vw,26px)", lineHeight: 1.5 }}>
+                        « {verseText[curQ.ref]} »
+                      </p>
+                    ) : null}
+                    <p style={{ margin: verseText[curQ.ref] ? "8px 0 0" : 0, color: GOLD, fontWeight: 900, fontSize: "clamp(12px,1.3vw,19px)", letterSpacing: "0.04em" }}>
+                      📖 {curQ.ref}
+                    </p>
+                  </div>
+                )}
               </div>
             ) : waitingNext ? (
               <div style={{ textAlign: "center", padding: "clamp(24px,5vw,70px) 20px", animation: "diff-in .5s ease both" }}>
