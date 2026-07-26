@@ -121,15 +121,20 @@ export function FitToScreen({ children, padding = 0 }: { children: React.ReactNo
     const o = outer.current, i = inner.current;
     if (!o || !i) return;
     const measure = () => {
-      const avail = o.clientHeight - padding;
+      // On mesure par rapport à la FENÊTRE (et non au parent) : c'est fiable
+      // quel que soit le calcul de hauteur des conteneurs flex au-dessus.
+      const top = o.getBoundingClientRect().top;
+      const avail = Math.min(o.clientHeight || Infinity, window.innerHeight - top) - padding;
       const h = i.scrollHeight;
       // Mesure pas encore fiable (layout non calculé) : on ne touche à rien.
       // Sans ce garde-fou, `avail` valait 0 au premier rendu et l'échelle
       // devenait négative — tout le contenu disparaissait de l'écran.
       if (avail <= 0 || h <= 0) return;
-      // On ne grossit jamais le contenu ; on le réduit au besoin, sans
-      // descendre sous 40 % (au-delà ce serait illisible à l'antenne).
-      const next = Math.max(0.4, Math.min(1, avail / h));
+      // On ne grossit jamais le contenu ; on le réduit au besoin, mais JAMAIS
+      // sous 68 % : en dessous les textes deviennent illisibles sur un
+      // téléviseur. Si ça ne tient toujours pas, c'est qu'il faut retirer un
+      // bloc de la page, pas rapetisser davantage.
+      const next = Math.max(0.68, Math.min(1, avail / h));
       setScale((prev) => (Math.abs(prev - next) > 0.004 ? next : prev));
     };
     measure();

@@ -126,9 +126,13 @@ export default function DiffusionPage() {
   const [elimQueue, setElimQueue] = useState<{ name: string; color: string; seed: string }[]>([]);
   const elimSeen = useRef<Set<string>>(new Set());
   const elimShown = elimQueue[0] ?? null;
+  // Durée d'affichage calée sur le temps restant avant le prochain coup d'envoi :
+  // toutes les équipes éliminées ont fini de défiler AVANT que le match suivant
+  // ne commence. Jamais moins de 2,5 s, jamais plus de 6,5 s.
+  const elimHoldRef = useRef(6500);
   useEffect(() => {
     if (!elimShown) return;
-    const t = setTimeout(() => setElimQueue((q) => q.slice(1)), 6500);
+    const t = setTimeout(() => setElimQueue((q) => q.slice(1)), elimHoldRef.current);
     return () => clearTimeout(t);
   }, [elimShown]);
 
@@ -173,6 +177,11 @@ export default function DiffusionPage() {
   const onDeck = (detail?.matches ?? []).filter(m => m.status === "scheduled" && m.started_at && new Date(m.started_at).getTime() > nowMs);
   const kickoffSecs = onDeck.length ? Math.max(0, Math.ceil((Math.min(...onDeck.map(m => new Date(m.started_at!).getTime())) - nowMs) / 1000)) : 0;
   const kickoffAtKey = onDeck.length ? String(Math.min(...onDeck.map(m => new Date(m.started_at!).getTime()))) : "";
+  // Répartit le temps disponible entre toutes les annonces en attente.
+  if (elimQueue.length > 0) {
+    const budget = kickoffSecs > 3 ? (kickoffSecs - 2) * 1000 : 6500;
+    elimHoldRef.current = Math.max(2500, Math.min(6500, Math.floor(budget / elimQueue.length)));
+  }
   const stageLabel = (m: Match) => m.stage === "group" ? `Journée ${m.round_number ?? ""} — Poules` : m.stage === "quarter" ? "Quarts de finale" : m.stage === "semi" ? "Demi-finales" : m.stage === "final" ? "🏆 FINALE" : "Petite finale";
 
   // Questions « jeu télé » = EXACTEMENT le sous-ensemble de la journée en cours (identique aux joueurs).
@@ -189,8 +198,13 @@ export default function DiffusionPage() {
   const curQ = sync.over || sync.phase === "pre" ? undefined : quiz[sync.index];
 
   // Scores EN DIRECT du match vedette (vrais joueurs + IA simulées, montent question par question).
-  const featScoreA = liveStats.live_score_a ?? Math.round(feat?.score_a ?? 0);
-  const featScoreB = liveStats.live_score_b ?? Math.round(feat?.score_b ?? 0);
+  // Le match vedette tourne toutes les 12 s : sans ce controle, on affichait
+  // pendant un instant les scores du match PRECEDENT sur le nouveau match —
+  // d'ou des points qui montaient puis redescendaient.
+  const statsMatch = (liveStats as { match_id?: string }).match_id;
+  const statsFresh = !!feat && statsMatch === feat.id;
+  const featScoreA = statsFresh ? (liveStats.live_score_a ?? 0) : Math.round(feat?.score_a ?? 0);
+  const featScoreB = statsFresh ? (liveStats.live_score_b ?? 0) : Math.round(feat?.score_b ?? 0);
   // 🎯 Probabilité de victoire en direct (évolue avec le score + les questions restantes).
   let probA = 50;
   if (feat) {
@@ -382,7 +396,9 @@ export default function DiffusionPage() {
           <div style={{ marginBottom: "clamp(14px,2vw,28px)" }}>
             <div style={{ textAlign: "center", fontSize: "clamp(14px,1.6vw,24px)", fontWeight: 800, color: "#fff", minHeight: "1.4em", textShadow: "0 2px 12px rgba(0,0,0,0.5)" }}>{commentary}</div>
             {live.length > 0 && <div key={analysis} style={{ textAlign: "center", marginTop: 6, fontSize: "clamp(11px,1.2vw,16px)", fontWeight: 700, color: "#93c5fd", animation: "diff-in .5s ease both" }}>{analysis}</div>}
-            <div style={{ display: "flex", gap: "clamp(8px,1.2vw,18px)", flexWrap: "wrap", justifyContent: "center", marginTop: "clamp(10px,1.4vw,18px)" }}>
+            {/* Compteurs masqués pendant une question : information statique,
+                elle vole la place du contenu qui compte vraiment. */}
+            {!inQuestion && <div style={{ display: "flex", gap: "clamp(8px,1.2vw,18px)", flexWrap: "wrap", justifyContent: "center", marginTop: "clamp(10px,1.4vw,18px)" }}>
               {[
                 { icon: "🛡️", label: "Équipes", value: allTeams.length, color: GOLD },
                 { icon: "🏆", label: "Matchs joués", value: doneMatches, color: "#4ade80" },
@@ -397,7 +413,7 @@ export default function DiffusionPage() {
                   </div>
                 </div>
               ))}
-            </div>
+            </div>}
           </div>
         )}
 
@@ -650,7 +666,10 @@ export default function DiffusionPage() {
         )}
 
         {/* BAS : mini-bracket éliminatoire (si présent) */}
-        {(["quarter", "semi", "final", "third"].some(st => stageMatches(st).length > 0)) && !finished && (
+        {/* Tableau final : masqué tant qu'un match est en cours — il occupait le
+            bas de l'écran et poussait la question hors du cadre. Il réapparaît
+            entre deux journées, quand il y a de la place. */}
+        {(["quarter", "semi", "final", "third"].some(st => stageMatches(st).length > 0)) && !finished && live.length === 0 && (
           <div style={{ marginTop: "clamp(20px,3vw,40px)", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 12 }}>
             {([["quarter", "🎯 Quarts"], ["semi", "⚡ Demies"], ["final", "🏆 Finale"], ["third", "🥉 3e place"]] as [string, string][]).filter(([st]) => stageMatches(st).length > 0).map(([st, label]) => (
               <div key={st} style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${st === "final" ? GOLD + "44" : "rgba(255,255,255,0.08)"}`, borderRadius: 14, padding: 12 }}>

@@ -5,7 +5,9 @@ import { advanceKnockout } from "@/lib/champ-knockout";
 // Structure de championnat par JOURNÉES (vagues) : à chaque journée, TOUTES les équipes
 // concernées jouent EN MÊME TEMPS. Une équipe ne joue qu'un match par journée.
 // Quand toute la journée est finie, la suivante démarre après ce délai.
-export const KICKOFF_DELAY_MS = 30_000; // 30 secondes entre deux journées
+// 45 s entre deux journées : il faut le temps d'annoncer les équipes éliminées
+// à l'antenne avant que le match suivant ne démarre.
+export const KICKOFF_DELAY_MS = 45_000;
 
 interface SeqMatch { id: string; stage: string; round_number: number | null; status: string; started_at: string | null }
 

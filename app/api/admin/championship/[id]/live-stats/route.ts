@@ -116,6 +116,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 
   return NextResponse.json({
+    match_id: matchId, // permet a la diffusion de verifier que les scores
+                       // correspondent bien au match affiche (le match vedette tourne)
     distribution, answered, mvp, rosters,
     live_score_a: Math.round(scoreByTeam[match.team_a as string] ?? 0),
     live_score_b: Math.round(scoreByTeam[match.team_b as string] ?? 0),
