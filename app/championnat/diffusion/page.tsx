@@ -613,8 +613,10 @@ export default function DiffusionPage() {
               <div style={{ textAlign: "center", color: "rgba(255,255,255,0.45)", fontSize: "clamp(14px,1.6vw,22px)", padding: "clamp(20px,4vw,60px)" }}>Les équipes jouent en direct… 🎮</div>
             )}
 
-            {/* Classement en direct */}
-            {topTeams.length > 0 && (
+            {/* Classement en direct — masqué pendant une question : la question
+                est ce que les spectateurs doivent voir en priorité, et ce bloc
+                est le plus haut de la page. */}
+            {!inQuestion && topTeams.length > 0 && (
               <div style={{ maxWidth: 1120, margin: "clamp(18px,2.4vw,32px) auto 0" }}>
                 <div style={{ fontSize: "clamp(10px,1vw,14px)", fontWeight: 900, letterSpacing: "0.2em", color: GOLD, textTransform: "uppercase", marginBottom: 12, textAlign: "center" }}>🏆 Classement en direct</div>
                 <div style={{ display: "flex", gap: "clamp(8px,1vw,12px)", flexWrap: "wrap", justifyContent: "center" }}>

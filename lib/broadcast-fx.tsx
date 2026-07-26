@@ -123,17 +123,30 @@ export function FitToScreen({ children, padding = 0 }: { children: React.ReactNo
     const measure = () => {
       const avail = o.clientHeight - padding;
       const h = i.scrollHeight;
-      if (!avail || !h) return;
-      // On ne grossit jamais le contenu : on le réduit seulement s'il déborde.
-      const next = Math.min(1, avail / h);
+      // Mesure pas encore fiable (layout non calculé) : on ne touche à rien.
+      // Sans ce garde-fou, `avail` valait 0 au premier rendu et l'échelle
+      // devenait négative — tout le contenu disparaissait de l'écran.
+      if (avail <= 0 || h <= 0) return;
+      // On ne grossit jamais le contenu ; on le réduit au besoin, sans
+      // descendre sous 40 % (au-delà ce serait illisible à l'antenne).
+      const next = Math.max(0.4, Math.min(1, avail / h));
       setScale((prev) => (Math.abs(prev - next) > 0.004 ? next : prev));
     };
     measure();
+    // Deux passes differees : les polices et les images arrivent apres le
+    // premier rendu et changent la hauteur reelle du contenu.
+    const t1 = setTimeout(measure, 120);
+    const t2 = setTimeout(measure, 600);
+    const raf = requestAnimationFrame(measure);
     const ro = new ResizeObserver(measure);
     ro.observe(i);
     ro.observe(o);
     window.addEventListener("resize", measure);
-    return () => { ro.disconnect(); window.removeEventListener("resize", measure); };
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      clearTimeout(t1); clearTimeout(t2); cancelAnimationFrame(raf);
+    };
   }, [padding]);
 
   return (
