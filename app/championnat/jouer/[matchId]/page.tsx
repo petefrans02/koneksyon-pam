@@ -63,8 +63,9 @@ export default function MatchRoomPage() {
   const waitingRoom = !!info && !info.can_play;
   useEffect(() => {
     if (!audioReady) return;
+    // Uniquement dans la salle : dès que le match démarre, c'est SyncPlay qui
+    // prend la main sur la musique (sinon les deux se coupent mutuellement).
     if (waitingRoom) startLobbyMusic();
-    else stopMusic(1.2);
   }, [audioReady, waitingRoom]);
   useEffect(() => () => { stopMusic(1); }, []);
 

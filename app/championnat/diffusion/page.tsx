@@ -9,6 +9,11 @@ import { subsetForSeed, waveKeyOf, flattenForBroadcast, type SubRound } from "@/
 import { clockState } from "@/lib/champ-sync";
 import { AnimatedNumber, LiveParticles, FloatingReactions, ConfettiBurst, StadiumBackground, PresenterAvatar, AdBreak, FitToScreen, ChampionPlaque, BROADCAST_CSS } from "@/lib/broadcast-fx";
 import { playChime } from "@/lib/sound";
+import {
+  startBroadcastMusic, startQuestionMusic, startPodiumMusic, startLobbyMusic,
+  stopMusic, playCountdownRiser, playChampionshipIntro, playRoundResults,
+  resumeAudio, preloadMatchAudio,
+} from "@/lib/championship-audio";
 
 const GOLD = "#e6b83c";
 const short = (n: string) => n.replace(/^Équipe\s+/i, "");
@@ -141,6 +146,17 @@ export default function DiffusionPage() {
     return () => clearInterval(iv);
   }, [finishedNow]);
 
+  // BANDE-SON DE LA DIFFUSION — elle suit ce qui se passe à l'antenne, pour
+  // donner envie de rester : groove de plateau à l'attente, boucle de questions
+  // pendant le jeu, hymne de couronnement pour le champion.
+  const audioArmed = useRef(false);
+  useEffect(() => {
+    // Les navigateurs bloquent le son tant que rien n'a été touché : on tente,
+    // et le bouton 🔊 sert de déblocage explicite si besoin.
+    resumeAudio(); preloadMatchAudio(); audioArmed.current = true;
+  }, []);
+  useEffect(() => () => { stopMusic(1); }, []);
+
   const LETTERS = ["A", "B", "C", "D", "E", "F"];
 
   const tmap: Record<string, Team> = {};
@@ -156,6 +172,7 @@ export default function DiffusionPage() {
   const feat = live[featIdx];
   const onDeck = (detail?.matches ?? []).filter(m => m.status === "scheduled" && m.started_at && new Date(m.started_at).getTime() > nowMs);
   const kickoffSecs = onDeck.length ? Math.max(0, Math.ceil((Math.min(...onDeck.map(m => new Date(m.started_at!).getTime())) - nowMs) / 1000)) : 0;
+  const kickoffAtKey = onDeck.length ? String(Math.min(...onDeck.map(m => new Date(m.started_at!).getTime()))) : "";
   const stageLabel = (m: Match) => m.stage === "group" ? `Journée ${m.round_number ?? ""} — Poules` : m.stage === "quarter" ? "Quarts de finale" : m.stage === "semi" ? "Demi-finales" : m.stage === "final" ? "🏆 FINALE" : "Petite finale";
 
   // Questions « jeu télé » = EXACTEMENT le sous-ensemble de la journée en cours (identique aux joueurs).
@@ -218,6 +235,35 @@ export default function DiffusionPage() {
   else if (onDeck.length > 0) presenterLine = `La prochaine journée commence dans ${kickoffSecs} secondes…`;
   const adOn = !!detail && Math.floor(nowMs / 1000) % 150 < 3;
 
+  // Choix de la piste selon la scène à l'antenne. `muted` coupe tout.
+  const scene = finished ? "podium" : inQuestion ? "question" : onDeck.length > 0 ? "countdown" : live.length > 0 ? "lobby" : "idle";
+  useEffect(() => {
+    if (muted) { stopMusic(1); return; }
+    if (scene === "podium") startPodiumMusic();
+    else if (scene === "question") startQuestionMusic(0);
+    else if (scene === "lobby") startLobbyMusic();
+    else startBroadcastMusic();   // attente / hors match : groove de plateau
+  }, [scene, muted]);
+
+  // Bruitages de plateau : montée du compte à rebours, fanfare d'ouverture,
+  // jingle de classement — une seule fois par événement.
+  const fxDone = useRef<Record<string, boolean>>({});
+  useEffect(() => {
+    if (muted) return;
+    if (onDeck.length > 0 && kickoffSecs <= 12 && kickoffSecs > 0 && !fxDone.current[`k${kickoffAtKey}`]) {
+      fxDone.current[`k${kickoffAtKey}`] = true;
+      playCountdownRiser();
+    }
+    if (live.length > 0 && !fxDone.current[`i${liveWaveKey}`]) {
+      fxDone.current[`i${liveWaveKey}`] = true;
+      playChampionshipIntro();
+    }
+    if (waitingNext && !fxDone.current[`r${liveWaveKey}`]) {
+      fxDone.current[`r${liveWaveKey}`] = true;
+      playRoundResults();
+    }
+  }, [muted, kickoffSecs, onDeck.length, live.length, liveWaveKey, waitingNext, kickoffAtKey]);
+
   // 🧠 Analyse IA du match — change toutes les 30 s.
   const aLines: string[] = [];
   if (live[0]) {
@@ -274,7 +320,7 @@ export default function DiffusionPage() {
       {detail && <PresenterAvatar line={presenterLine} urgent={urgent} />}
       {adOn && <AdBreak />}
       {/* Bouton son (muet / actif) */}
-      <button onClick={() => setMuted(m => !m)} style={{ position: "fixed", top: "clamp(14px,2vw,26px)", left: "clamp(14px,2vw,26px)", zIndex: 20, width: 44, height: 44, borderRadius: "50%", border: `1px solid ${GOLD}44`, background: "rgba(2,7,23,0.6)", color: "#fff", fontSize: 18, cursor: "pointer", backdropFilter: "blur(6px)" }} title={muted ? "Activer le son" : "Couper le son"}>{muted ? "🔇" : "🔊"}</button>
+      <button onClick={() => { resumeAudio(); setMuted(m => !m); }} style={{ position: "fixed", top: "clamp(14px,2vw,26px)", left: "clamp(14px,2vw,26px)", zIndex: 20, width: 44, height: 44, borderRadius: "50%", border: `1px solid ${GOLD}44`, background: "rgba(2,7,23,0.6)", color: "#fff", fontSize: 18, cursor: "pointer", backdropFilter: "blur(6px)" }} title={muted ? "Activer le son" : "Couper le son"}>{muted ? "🔇" : "🔊"}</button>
 
       {/* 🔥 MVP du match (côté droit) */}
       {liveStats.mvp && live.length > 0 && (
