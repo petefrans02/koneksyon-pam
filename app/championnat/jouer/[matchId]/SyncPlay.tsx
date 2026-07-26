@@ -105,7 +105,7 @@ export default function SyncPlay({ matchId, teamA, teamB, soundOn = false, onFin
 
   const bg = (c: React.ReactNode) => (
     <div style={{ position: "relative", minHeight: "100vh", overflow: "hidden", background: "radial-gradient(ellipse 100% 60% at 50% 0%, #16264d, #0a1330 55%, #05070f)", color: "#fff", display: "flex", flexDirection: "column" }}>
-      <style>{`@keyframes sp-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@keyframes sp-pulse{0%,100%{opacity:1}50%{opacity:.45}}@keyframes sp-ring{0%{transform:scale(.9);opacity:.6}50%{transform:scale(1.05);opacity:1}100%{transform:scale(.9);opacity:.6}}` + BROADCAST_CSS}</style>
+      <style>{`@keyframes sp-in{from{opacity:0}to{opacity:1}}@keyframes sp-pulse{0%,100%{opacity:1}50%{opacity:.45}}@keyframes sp-ring{0%{transform:scale(.9);opacity:.6}50%{transform:scale(1.05);opacity:1}100%{transform:scale(.9);opacity:.6}}` + BROADCAST_CSS}</style>
       <StadiumBackground accent={GOLD} />
       <LiveParticles accent={GOLD} />
       {c}
@@ -180,7 +180,10 @@ export default function SyncPlay({ matchId, teamA, teamB, soundOn = false, onFin
 
       {/* Corps : question + options */}
       <div style={{ position: "relative", zIndex: 2, flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "18px 22px 30px", maxWidth: 840, width: "100%", margin: "0 auto" }}>
-        <div key={st.index} style={{ background: reveal ? "rgba(34,197,94,0.06)" : "rgba(255,255,255,0.04)", border: `1px solid ${reveal ? "#22c55e55" : GOLD + "44"}`, borderRadius: 22, padding: "clamp(18px,2.6vw,34px)", boxShadow: "0 20px 60px rgba(0,0,0,0.45)", animation: "sp-in .4s ease both" }}>
+        {/* Pas de `key` par question : la carte reste en place et change de
+            contenu en fondu, au lieu d'etre demontee/remontee (ce qui faisait
+            sauter tout l'ecran a chaque question). */}
+        <div style={{ background: reveal ? "rgba(34,197,94,0.06)" : "rgba(255,255,255,0.04)", border: `1px solid ${reveal ? "#22c55e55" : GOLD + "44"}`, borderRadius: 22, padding: "clamp(18px,2.6vw,34px)", boxShadow: "0 20px 60px rgba(0,0,0,0.45)", transition: "background .35s ease, border-color .35s ease", minHeight: "clamp(300px,46vh,460px)", display: "flex", flexDirection: "column" }}>
           <h1 style={{ fontSize: "clamp(1.35rem,4vw,2.2rem)", fontWeight: 900, lineHeight: 1.3, marginBottom: "clamp(16px,2.2vw,26px)", fontFamily: "'Playfair Display',Georgia,serif" }}>{q?.prompt}</h1>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(10px,1.2vw,14px)" }}>
             {q?.options.map((opt, i) => {
@@ -192,7 +195,7 @@ export default function SyncPlay({ matchId, teamA, teamB, soundOn = false, onFin
               else if (!reveal && chosen) { bgc = `${GOLD}33`; bd = `2px solid ${GOLD}`; }
               return (
                 <button key={i} onClick={() => tap(i)} disabled={reveal || myChoice !== undefined}
-                  style={{ display: "flex", alignItems: "center", gap: 13, padding: "clamp(13px,1.5vw,18px)", borderRadius: 15, background: bgc, border: bd, color: "#fff", textAlign: "left", cursor: !reveal && myChoice === undefined ? "pointer" : "default", fontSize: "clamp(0.95rem,1.6vw,1.15rem)", fontWeight: 700, transition: "all .2s", animation: "sp-in .4s ease both" }}>
+                  style={{ display: "flex", alignItems: "center", gap: 13, padding: "clamp(13px,1.5vw,18px)", borderRadius: 15, background: bgc, border: bd, color: "#fff", textAlign: "left", cursor: !reveal && myChoice === undefined ? "pointer" : "default", fontSize: "clamp(0.95rem,1.6vw,1.15rem)", fontWeight: 700, transition: "background .25s ease, border-color .25s ease, transform .15s ease" }}>
                   <span style={{ width: 38, height: 38, borderRadius: "50%", background: reveal && isCorrect ? "#22c55e" : GOLD, color: "#1a1203", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 900, flexShrink: 0 }}>{LETTERS[i]}</span>
                   <span style={{ flex: 1 }}>{opt}</span>
                   {reveal && isCorrect && <span style={{ fontSize: 22 }}>✅</span>}
