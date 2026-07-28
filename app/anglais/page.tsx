@@ -137,7 +137,20 @@ export default function AnglaisPage() {
         {ready && !nextLesson && (
           <div style={{ marginBottom: 26 }}>
             <div style={{ textAlign: "center", padding: 20, background: "rgba(74,222,128,0.1)", border: "1px solid rgba(74,222,128,0.4)", borderRadius: 18, fontWeight: 800 }}>{t.allDone}</div>
-            {/* Parcours termine : le certificat se debloque. */}
+            {/* Parcours terminé : l'examen final, puis le certificat. */}
+            <Link href={`/anglais/examen/${path}`} style={{ textDecoration: "none" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, background: "linear-gradient(135deg,#e6b83c,#7a5c12)", borderRadius: 16, padding: "14px 18px", margin: "14px 0", color: "#1a1203" }}>
+                <span style={{ fontSize: 30 }}>🎓</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 900, fontSize: 15 }}>{l === "ht" ? "Egzamen final" : "Examen final"}</div>
+                  <div style={{ fontSize: 11, opacity: 0.8 }}>
+                    {l === "ht" ? "20 kesyon · 80% pou pase · obligatwa pou sètifika a" : "20 questions · 80% pour réussir · obligatoire pour le certificat"}
+                  </div>
+                </div>
+                <span style={{ fontSize: 20 }}>▶</span>
+              </div>
+            </Link>
+
             <CertificateCard
               program={PATHS.find((x) => x.key === path)?.title.fr ?? "Anglais"}
               lessons={pathDone}

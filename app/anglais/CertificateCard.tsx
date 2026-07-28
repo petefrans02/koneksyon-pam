@@ -94,6 +94,7 @@ export default function CertificateCard({
       // precisement ce qui manque, plutot qu'une erreur seche.
       else if (d.error === "Parcours incomplet") setErr(`Il te reste ${d.missing} lecon(s) a terminer (${d.done}/${d.total}).`);
       else if (d.error === "Score insuffisant") setErr(`Il te faut ${d.xpRequired} points pour le certificat. Tu en as ${d.xp}. Refais les lecons ou tu as perdu des coeurs.`);
+      else if (d.error === "Examen non réussi") setErr("Passe d\u2019abord l\u2019examen final pour obtenir ton certificat.");
       else setErr(d.error ?? "Erreur");
     } catch { setErr("Réseau"); }
     setBusy(false);

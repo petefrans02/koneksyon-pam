@@ -76,6 +76,10 @@ export async function POST(req: NextRequest) {
       done: required.length - missing.length,
     }, { status: 403 });
   }
+  // L'examen final atteste que le savoir est resté, pas seulement cliqué.
+  if (!done.includes(`exam:${pathKey}`)) {
+    return NextResponse.json({ error: "Examen non réussi", exam: pathKey }, { status: 403 });
+  }
   if (xpEarned < xpRequired) {
     return NextResponse.json({
       error: "Score insuffisant",
