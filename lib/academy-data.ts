@@ -58,6 +58,11 @@ export const courses: Course[] = [
     title: { fr: "Musique & Louange", ht: "Mizik & Lwanj", en: "Music & Worship", es: "Música & Alabanza" },
     description: { fr: "Servir Dieu par la musique et conduire l'adoration.", ht: "Sèvi Bondye ak mizik e mennen adorasyon.", en: "Serve God through music and lead worship.", es: "Servir a Dios con música y dirigir la adoración." }, level: beginner },
 
+  // ── Anglais biblique (parcours interactif, hors format "cours en texte") ──
+  { slug: "anglais-biblique", domain: "numerique", icon: "monde", color: "#16a34a", lessons: 28, status: "available", href: "/anglais",
+    title: { fr: "Anglais Biblique", ht: "Anglè Biblik", en: "Bible English", es: "Inglés Bíblico" },
+    description: { fr: "Apprends l'anglais avec la Parole de Dieu : 28 leçons interactives, exercices, prononciation et progression.", ht: "Aprann anglè ak Pawòl Bondye : 28 leson entèaktif, egzèsis, pwononsyasyon ak pwogrè.", en: "Learn English through God's Word: 28 interactive lessons with exercises and pronunciation.", es: "Aprende inglés con la Palabra de Dios: 28 lecciones interactivas." }, level: beginner },
+
   // ── Académie numérique ──
   { slug: "informatique", domain: "numerique", icon: "parametres", color: "#0891b2", lessons: 12, status: "coming",
     title: { fr: "Initiation à l'Informatique", ht: "Inisyasyon Enfòmatik", en: "Computer Basics", es: "Iniciación a la Informática" },

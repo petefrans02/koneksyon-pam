@@ -17,6 +17,7 @@ const NAV_LINKS = [
   { href: "/academie",    fr: "Académie",      ht: "Akademi",   en: "Academy",       es: "Academia"    },
   { href: "/prieres",     fr: "Prière",        ht: "Lapriyè",   en: "Prayer",        es: "Oración"     },
   { href: "/championnats",fr: "Championnats",  ht: "Chanpyona", en: "Championships", es: "Campeonatos" },
+  { href: "/anglais",     fr: "Anglais",       ht: "Anglè",     en: "English",       es: "Inglés"      },
   { href: "/quiz",        fr: "Quiz",          ht: "Kiz",       en: "Quiz",          es: "Quiz"        },
   { href: "/bible",       fr: "Bible",         ht: "Bib",       en: "Bible",         es: "Biblia"      },
 ];
@@ -40,6 +41,7 @@ const MOBILE_LINKS = [
   { href: "/projets",      fr: "Nos Projets",  en: "Projects"      },
   { href: "/fondation",    fr: "Le Mouvement", en: "The Movement"  },
   { href: "/championnats", fr: "Championnats", en: "Championships" },
+  { href: "/anglais",      fr: "Anglais Biblique", en: "Bible English" },
   { href: "/quiz",         fr: "Quiz Biblique", en: "Bible Quiz"   },
   { href: "/bible",        fr: "Bible",        en: "Bible"         },
   { href: "/etude",        fr: "Études",       en: "Studies"       },
