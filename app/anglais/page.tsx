@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useLang } from "@/lib/LangContext";
 import { UNITS, LEVELS, ALL_LESSONS, TOTAL_LESSONS, type Level } from "@/lib/english-course";
 import { loadLocal, syncDown, type Progress } from "@/lib/english-progress";
+import TutorBubble from "./TutorBubble";
 
 const CSS = `
 @keyframes ang-pop { 0% { transform: scale(.7); opacity: 0 } 60% { transform: scale(1.08) } 100% { transform: scale(1); opacity: 1 } }
@@ -154,6 +155,9 @@ export default function AnglaisPage() {
 
         <p style={{ textAlign: "center", color: "rgba(255,255,255,0.35)", fontSize: 13, marginTop: 30 }}>{t.encourage}</p>
       </div>
+
+      {/* La professeure, disponible partout */}
+      <TutorBubble />
     </div>
   );
 }

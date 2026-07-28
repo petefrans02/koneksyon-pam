@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/LangContext";
 import { HEARTS, XP_PER_EXERCISE, type Exercise, type Lesson } from "@/lib/english-course";
 import { completeLesson } from "@/lib/english-progress";
+import TutorBubble from "../TutorBubble";
 
 const CSS = `
 @keyframes lp-in { from { opacity:0; transform: translateY(12px) } to { opacity:1; transform:none } }
@@ -81,7 +82,7 @@ export default function LessonPlayer({ lesson }: { lesson: Lesson }) {
   // Fin par épuisement des cœurs.
   if (hearts <= 0 && !finished) {
     return (
-      <Shell>
+      <Shell lessonTitle={lesson.title.fr}>
         <div style={{ textAlign: "center", animation: "lp-in .5s ease both" }}>
           <div style={{ fontSize: 74 }}>💔</div>
           <h2 style={{ fontSize: 26, fontWeight: 900, margin: "10px 0 6px" }}>{t.noHearts}</h2>
@@ -118,7 +119,7 @@ export default function LessonPlayer({ lesson }: { lesson: Lesson }) {
   }
 
   return (
-    <Shell>
+    <Shell lessonTitle={lesson.title.fr}>
       {/* Barre du haut : sortie, progression, cœurs */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 22 }}>
         <Link href="/anglais" style={{ fontSize: 22, textDecoration: "none", color: "rgba(255,255,255,0.45)" }} title={t.quit}>✕</Link>
@@ -278,11 +279,13 @@ function MatchEx({ ex, l, title, onRight, onWrong, locked }: { ex: Extract<Exerc
 
 // ── Petits éléments ──────────────────────────────────────────────────────────
 
-function Shell({ children }: { children: React.ReactNode }) {
+function Shell({ children, lessonTitle }: { children: React.ReactNode; lessonTitle?: string }) {
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(180deg,#04080f,#061020 60%,#04080f)", color: "#fff", padding: "18px clamp(16px,4vw,40px) 130px" }}>
       <style>{CSS}</style>
       <div style={{ maxWidth: 620, margin: "0 auto" }}>{children}</div>
+      {/* Grace connaît la leçon en cours : ses explications restent dans le contexte. */}
+      <TutorBubble lessonTitle={lessonTitle} />
     </div>
   );
 }
