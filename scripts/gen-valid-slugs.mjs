@@ -16,6 +16,8 @@ const slugs = (src) => [...new Set([...src.matchAll(/slug:\s*"([^"]+)"/g)].map((
 const studies = slugs(read("lib/studies-data.ts"));
 const groups = slugs(read("lib/groups-data.ts"));
 const courses = slugs(read("lib/academy-data.ts"));
+// Lecons d'anglais : declarees par T("slug", ...) dans english-course.ts
+const english = [...new Set([...read("lib/english-course.ts").matchAll(/T\(\s*"([^"]+)"/g)].map((m) => m[1]))];
 
 // Pour la Bible il faut aussi le nombre de chapitres de chaque livre,
 // afin de refuser /bible/luc/999.
@@ -33,7 +35,7 @@ const out = `// FICHIER GÉNÉRÉ — ne pas modifier à la main.
 
 export const STUDY_SLUGS = new Set(${JSON.stringify(studies)});
 export const GROUP_SLUGS = new Set(${JSON.stringify(groups)});
-export const COURSE_SLUGS = new Set(${JSON.stringify(courses)});
+export const COURSE_SLUGS = new Set(${JSON.stringify(courses)});\nexport const ENGLISH_SLUGS = new Set(${JSON.stringify(english)});
 export const BIBLE_CHAPTERS: Record<string, number> = ${JSON.stringify(Object.fromEntries(books))};
 `;
 

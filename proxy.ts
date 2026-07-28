@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { STUDY_SLUGS, GROUP_SLUGS, COURSE_SLUGS, BIBLE_CHAPTERS } from "@/lib/valid-slugs";
+import { STUDY_SLUGS, GROUP_SLUGS, COURSE_SLUGS, ENGLISH_SLUGS, BIBLE_CHAPTERS } from "@/lib/valid-slugs";
 
 // Supports multiple admins via ADMIN_EMAILS env var (comma-separated)
 // Primary admin is always included as a failsafe
@@ -21,6 +21,7 @@ function isMissingPage(pathname: string): boolean {
   if (seg[0] === "etude" && seg.length === 2) return !STUDY_SLUGS.has(seg[1]);
   if (seg[0] === "communaute" && seg.length === 2) return !GROUP_SLUGS.has(seg[1]);
   if (seg[0] === "academie" && seg.length === 2) return !COURSE_SLUGS.has(seg[1]);
+  if (seg[0] === "anglais" && seg.length === 2) return !ENGLISH_SLUGS.has(seg[1]);
 
   if (seg[0] === "bible" && seg.length === 3) {
     const max = BIBLE_CHAPTERS[seg[1]];
@@ -83,6 +84,7 @@ export const config = {
     "/etude/:path*",
     "/communaute/:path*",
     "/academie/:path*",
+    "/anglais/:path*",
     "/bible/:path*",
     "/championnats/:path*",
   ],
