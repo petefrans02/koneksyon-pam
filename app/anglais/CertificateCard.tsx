@@ -1,16 +1,20 @@
 "use client";
 
-// LE CERTIFICAT — visible et imprimable dès qu'un parcours est terminé.
+// LE CERTIFICAT — délivré une fois le parcours terminé.
 //
-// Modèle assumé : l'apprentissage reste 100 % gratuit, le certificat aussi.
-// Ce qui se vend plus tard, c'est la version officielle signée — jamais le
-// savoir lui-même.
+// MODÈLE : l'apprentissage est 100 % gratuit. Seul le certificat officiel se
+// paie, et seulement APRÈS avoir tout terminé. Avant paiement, l'élève voit un
+// aperçu filigrané — il sait exactement ce qu'il obtiendra.
+//
+// Le déblocage est décidé PAR LE SERVEUR, qui interroge PayPal : le navigateur
+// ne peut pas se déclarer payé.
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Cert {
   code: string; holder_name: string; program: string;
   level?: string | null; lessons_done?: number; xp?: number; issued_at: string;
+  paid?: boolean;
 }
 
 export default function CertificateCard({
@@ -19,17 +23,59 @@ export default function CertificateCard({
   const [cert, setCert] = useState<Cert | null>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  const [price, setPrice] = useState("10.00");
+  const [paying, setPaying] = useState(false);
+
+  // Prix affiche : lu cote serveur pour rester la seule source de verite.
+  useEffect(() => {
+    fetch("/api/certificates/pay").then((r) => r.json()).then((d) => d.price && setPrice(d.price)).catch(() => {});
+  }, []);
+
+  // Paiement : on cree la commande, PayPal encaisse, puis le SERVEUR verifie
+  // aupres de PayPal avant de debloquer. Le navigateur ne decide de rien.
+  async function pay() {
+    if (!cert) return;
+    setPaying(true); setErr("");
+    try {
+      const o = await fetch("/api/paypal/create-order", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: price }),
+      }).then((r) => r.json());
+      if (!o.orderID) { setErr(o.error ?? "Paiement indisponible"); setPaying(false); return; }
+
+      // Redirection vers PayPal, puis retour sur cette page.
+      const back = `${window.location.origin}/anglais?cert=${cert.code}&order=${o.orderID}`;
+      window.location.href = `https://www.paypal.com/checkoutnow?token=${o.orderID}&redirect_uri=${encodeURIComponent(back)}`;
+    } catch {
+      setErr("Reseau"); setPaying(false);
+    }
+  }
+
+  // Retour de PayPal : on confirme cote serveur.
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    const code = p.get("cert"), order = p.get("order");
+    if (!code || !order) return;
+    fetch("/api/certificates/pay", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code, orderID: order }),
+    }).then((r) => r.json()).then((d) => {
+      if (d.ok) setCert((c) => (c ? { ...c, paid: true } : c));
+      else if (d.error) setErr(d.error);
+      window.history.replaceState({}, "", window.location.pathname);
+    }).catch(() => {});
+  }, []);
 
   const t = {
     fr: { get: "Obtenir mon certificat", loading: "Génération…", need: "Connecte-toi pour recevoir ton certificat.",
           title: "Certificat de participation", awarded: "décerné à", completed: "pour avoir terminé le programme",
           lessons: "leçons", pts: "points", code: "Code de vérification", verify: "Vérifiable sur",
-          print: "Imprimer / PDF",
+          print: "Imprimer / PDF", pay: "Obtenir le certificat officiel", price: "Cours gratuit. Le certificat officiel coute", paying: "Ouverture du paiement...", preview: "Apercu - non officiel", paidOk: "Certificat officiel debloque",
           legal: "Ce certificat atteste la réussite d'un cours en ligne dispensé par KONEKSYON PAM ACADEMY. Il ne constitue pas un diplôme accrédité et ne donne droit à aucun crédit académique." },
     ht: { get: "Jwenn sètifika mwen", loading: "Ap jenere…", need: "Konekte ou pou resevwa sètifika ou.",
           title: "Sètifika patisipasyon", awarded: "bay", completed: "paske li fini pwogram nan",
           lessons: "leson", pts: "pwen", code: "Kòd verifikasyon", verify: "Verifye sou",
-          print: "Enprime / PDF",
+          print: "Enprime / PDF", pay: "Jwenn sètifika ofisyèl la", price: "Kou a gratis. Sètifika ofisyèl la koute", paying: "Ap louvri peman an...", preview: "Apèsi - pa ofisyèl", paidOk: "Sètifika ofisyèl debloke",
           legal: "Sètifika sa a atèste ke moun nan fini yon kou anliy nan KONEKSYON PAM ACADEMY. Li pa yon diplòm akredite e li pa bay okenn kredi akademik." },
   }[lang];
 
@@ -69,7 +115,16 @@ export default function CertificateCard({
         background: "linear-gradient(160deg,#fffdf5,#f6efdc)", color: "#2a1e02",
         border: "10px double #c8960f", borderRadius: 8,
         padding: "clamp(20px,4vw,40px)", margin: "18px 0", textAlign: "center",
+        position: "relative", overflow: "hidden",
       }}>
+        {/* Apercu : filigrane tant que le certificat officiel n'est pas obtenu. */}
+        {!cert.paid && (
+          <span style={{
+            position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: "clamp(22px,5vw,44px)", fontWeight: 900, color: "rgba(169,125,24,0.16)",
+            transform: "rotate(-22deg)", letterSpacing: "0.1em", pointerEvents: "none", textTransform: "uppercase",
+          }}>{t.preview}</span>
+        )}
         <p style={{ letterSpacing: "0.3em", fontSize: 10, fontWeight: 900, color: "#a97d18", margin: 0 }}>KONEKSYON PAM ACADEMY</p>
         <p style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: "clamp(20px,3.6vw,30px)", fontWeight: 900, margin: "10px 0 4px" }}>
           {t.title}
@@ -103,12 +158,26 @@ export default function CertificateCard({
         </p>
       </div>
 
+      {!cert.paid ? (
+        <div style={{ textAlign: "center" }}>
+          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, margin: "0 0 10px" }}>
+            {t.price} <b style={{ color: "#e6b83c" }}>${price}</b>
+          </p>
+          <button onClick={pay} disabled={paying}
+            style={{ background: "linear-gradient(135deg,#e6b83c,#a97d18)", color: "#1a1203", border: "none", borderRadius: 14, padding: "14px 28px", fontWeight: 900, fontSize: 15, cursor: "pointer", opacity: paying ? 0.6 : 1 }}>
+            🎓 {paying ? t.paying : t.pay}
+          </button>
+          {err && <p style={{ color: "#f87171", fontSize: 13, marginTop: 10 }}>{err}</p>}
+        </div>
+      ) : (
       <div style={{ textAlign: "center" }}>
+        <p style={{ color: "#4ade80", fontWeight: 800, fontSize: 13, marginBottom: 10 }}>✅ {t.paidOk}</p>
         <button onClick={() => window.print()}
           style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", borderRadius: 12, padding: "11px 22px", fontWeight: 800, cursor: "pointer" }}>
           🖨️ {t.print}
         </button>
       </div>
+      )}
     </>
   );
 }
