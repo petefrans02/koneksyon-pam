@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
+import { PATHS, lessonsOfPath, type Path } from "@/lib/english-course";
 
 // CERTIFICATS DE PARTICIPATION.
 //
@@ -49,6 +50,40 @@ export async function POST(req: NextRequest) {
 
   const client = db();
 
+  // ── LE CERTIFICAT SE MÉRITE ────────────────────────────────────────────────
+  // On ne fait AUCUNE confiance à ce que le navigateur affirme : on relit la
+  // progression réellement enregistrée en base. Sans ce contrôle, il suffisait
+  // d'appeler cette API pour obtenir un certificat sans avoir rien fait.
+  const pathKey = (PATHS.find((x) => x.title.fr === program)?.key ?? null) as Path | null;
+  if (!pathKey) return NextResponse.json({ error: "Programme inconnu" }, { status: 400 });
+
+  const required = lessonsOfPath(pathKey).map((l) => l.slug);
+  const { data: prog } = await client
+    .from("english_progress").select("xp, done, streak").eq("user_id", user.id).maybeSingle();
+
+  const done: string[] = (prog?.done as string[] | null) ?? [];
+  const missing = required.filter((slug) => !done.includes(slug));
+  const xpEarned = Number(prog?.xp ?? 0);
+  // Chaque leçon vaut 70 points au maximum. On exige 80 % de ce total : on ne
+  // peut donc pas décrocher le certificat en se trompant sans arrêt.
+  const xpRequired = Math.round(required.length * 70 * 0.8);
+
+  if (missing.length > 0) {
+    return NextResponse.json({
+      error: "Parcours incomplet",
+      missing: missing.length,
+      total: required.length,
+      done: required.length - missing.length,
+    }, { status: 403 });
+  }
+  if (xpEarned < xpRequired) {
+    return NextResponse.json({
+      error: "Score insuffisant",
+      xp: xpEarned,
+      xpRequired,
+    }, { status: 403 });
+  }
+
   // Un seul certificat par personne et par programme : on renvoie l'existant.
   const { data: existing } = await client
     .from("certificates").select("*").eq("user_id", user.id).eq("program", program).maybeSingle();
@@ -69,8 +104,8 @@ export async function POST(req: NextRequest) {
       holder_name: holder,
       program,
       level: body.level ?? null,
-      lessons_done: Math.max(0, Math.round(body.lessons ?? 0)),
-      xp: Math.max(0, Math.round(body.xp ?? 0)),
+      lessons_done: required.length,
+      xp: xpEarned,
     }).select().single();
 
     if (!error && data) return NextResponse.json({ certificate: data });

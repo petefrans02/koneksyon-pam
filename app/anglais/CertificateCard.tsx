@@ -89,7 +89,12 @@ export default function CertificateCard({
       });
       const d = await res.json();
       if (d.certificate) setCert(d.certificate);
-      else setErr(res.status === 401 ? t.need : (d.error ?? "Erreur"));
+      else if (res.status === 401) setErr(t.need);
+      // Le serveur refuse tant que le travail n'est pas fait : on explique
+      // precisement ce qui manque, plutot qu'une erreur seche.
+      else if (d.error === "Parcours incomplet") setErr(`Il te reste ${d.missing} lecon(s) a terminer (${d.done}/${d.total}).`);
+      else if (d.error === "Score insuffisant") setErr(`Il te faut ${d.xpRequired} points pour le certificat. Tu en as ${d.xp}. Refais les lecons ou tu as perdu des coeurs.`);
+      else setErr(d.error ?? "Erreur");
     } catch { setErr("Réseau"); }
     setBusy(false);
   }

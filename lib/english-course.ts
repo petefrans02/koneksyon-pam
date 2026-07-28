@@ -142,7 +142,12 @@ function buildLesson(th: Theme): Lesson {
     ex.push({ t: "choose", ask: { fr, ht }, options, correct });
   }
 
-  // 3) Reconstituer deux phrases.
+  // 3) PRISE DE PAROLE, tôt dans la leçon : on ne progresse pas à l'oral sans
+  // parler, et placé à la fin presque personne ne l'atteignait.
+  const spoken = th.sentences[0];
+  ex.push({ t: "speak", en: spoken[0], ask: { fr: spoken[1], ht: spoken[2] } });
+
+  // 4) Reconstituer deux phrases.
   for (const [en, fr, ht] of th.sentences.slice(0, 2)) {
     ex.push({ t: "build", ask: { fr, ht }, en, extra: pickDecoys(en, wordPool, th.slug + en, 2) });
   }
@@ -164,10 +169,6 @@ function buildLesson(th: Theme): Lesson {
   const near = th.sentences.filter((s) => s[0] !== lEn).slice(0, 3).map((s) => s[0]);
   const { options: lo, correct: lc } = shuffleWithAnswer(lEn, near.length >= 3 ? near : [...near, ...pickDecoys(lEn, wordPool, th.slug + "l", 3 - near.length)], th.slug + "listen");
   ex.push({ t: "listen", en: lEn, options: lo, correct: lc });
-
-  // 6) PRISE DE PAROLE : on ne progresse pas à l'oral sans parler.
-  const spoken = th.sentences[1] ?? th.sentences[0];
-  ex.push({ t: "speak", en: spoken[0], ask: { fr: spoken[1], ht: spoken[2] } });
 
   // 7) Une dernière phrase à reconstituer, pour finir sur du concret.
   const last = th.sentences[4] ?? th.sentences[th.sentences.length - 1];
