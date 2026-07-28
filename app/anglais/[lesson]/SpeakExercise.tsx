@@ -62,19 +62,45 @@ export default function SpeakExercise({
   const [heard, setHeard] = useState("");
   const [score, setScore] = useState<number | null>(null);
   const [supported, setSupported] = useState<boolean | null>(null);
+  // Sans message, un micro qui ne demarre pas donne l'impression d'un bouton mort.
+  const [problem, setProblem] = useState("");
 
   useEffect(() => { setSupported(!!getRecognition()); }, []);
 
-  const listen = () => {
+  const listen = async () => {
     const Ctor = getRecognition();
     if (!Ctor) { setSupported(false); return; }
+    setProblem("");
+
+    // On demande le micro AVANT : c'est ce qui declenche la demande
+    // d'autorisation du navigateur. Sans cela, sur plusieurs telephones, le
+    // bouton semblait simplement ne rien faire.
+    try {
+      if (navigator.mediaDevices?.getUserMedia) {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach((tr) => tr.stop());
+      }
+    } catch {
+      setProblem("micro-refuse");
+      return;
+    }
+
     const rec = new Ctor();
     rec.lang = "en-US";
     rec.interimResults = false;
     rec.maxAlternatives = 3;
     setListening(true); setHeard(""); setScore(null);
 
+    // Filet de securite : si rien ne revient en 12 s, on ne laisse pas
+    // l'eleve devant un bouton fige.
+    const guard = setTimeout(() => {
+      try { rec.abort(); } catch { /* deja arrete */ }
+      setListening(false);
+      setProblem("rien-entendu");
+    }, 12000);
+
     rec.onresult = (e) => {
+      clearTimeout(guard);
       // Le navigateur propose plusieurs interprétations : on garde la meilleure.
       const alts = e.results[0];
       let best = "", bestScore = -1;
@@ -85,9 +111,9 @@ export default function SpeakExercise({
       setHeard(best); setScore(bestScore); setListening(false);
       setTimeout(() => (bestScore >= PASS_SCORE ? onRight() : onWrong()), 800);
     };
-    rec.onerror = () => setListening(false);
+    rec.onerror = () => { clearTimeout(guard); setListening(false); setProblem("echec"); };
     rec.onend = () => setListening(false);
-    try { rec.start(); } catch { setListening(false); }
+    try { rec.start(); } catch { clearTimeout(guard); setListening(false); setProblem("echec"); }
   };
 
   return (
@@ -123,6 +149,22 @@ export default function SpeakExercise({
           <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 14, marginTop: 14 }}>
             {listening ? labels.listening : labels.tapMic}
           </p>
+
+          {problem && (
+            <div style={{ marginTop: 14, background: "rgba(251,191,36,0.09)", border: "1px solid rgba(251,191,36,0.35)", borderRadius: 14, padding: "12px 16px" }}>
+              <p style={{ color: "#fbbf24", fontSize: 13, margin: 0, lineHeight: 1.5 }}>
+                {problem === "micro-refuse"
+                  ? "Le micro est bloque. Autorise-le dans les reglages du navigateur (icone a gauche de l'adresse), puis reessaie."
+                  : problem === "rien-entendu"
+                  ? "Je n'ai rien entendu. Parle plus fort, plus pres du micro."
+                  : "Le micro n'a pas demarre sur ce navigateur."}
+              </p>
+              <button onClick={onRight}
+                style={{ marginTop: 10, background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", borderRadius: 10, padding: "9px 16px", fontWeight: 800, cursor: "pointer", fontSize: 13 }}>
+                {labels.skip}
+              </button>
+            </div>
+          )}
 
           {heard && (
             <div style={{ marginTop: 14, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 14, padding: "12px 16px", animation: "lp-in .3s ease both", textAlign: "left" }}>
