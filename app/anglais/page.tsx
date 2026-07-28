@@ -7,7 +7,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/LangContext";
-import { UNITS, LEVELS, ALL_LESSONS, TOTAL_LESSONS, type Level } from "@/lib/english-course";
+import { PATHS, CEFR, ALL_LESSONS, unitsOf, lessonsOfPath, type Path } from "@/lib/english-course";
 import { loadLocal, syncDown, type Progress } from "@/lib/english-progress";
 import TutorBubble from "./TutorBubble";
 
@@ -24,6 +24,9 @@ export default function AnglaisPage() {
   const l: "fr" | "ht" = lang === "ht" ? "ht" : "fr";
   const [prog, setProg] = useState<Progress>({ xp: 0, streak: 0, lastDay: "", done: [] });
   const [ready, setReady] = useState(false);
+  // Deux parcours : anglais général et anglais chrétien. Chacun a sa
+  // progression propre, l'élève peut suivre les deux en parallèle.
+  const [path, setPath] = useState<Path>("general");
 
   useEffect(() => {
     setProg(loadLocal());
@@ -39,14 +42,16 @@ export default function AnglaisPage() {
     if (i <= 0) return true;
     return done.has(slug) || done.has(ALL_LESSONS[i - 1].slug);
   };
-  const nextLesson = ALL_LESSONS.find((x) => !done.has(x.slug));
+  const pathLessons = lessonsOfPath(path);
+  const nextLesson = pathLessons.find((x) => !done.has(x.slug));
 
   const t = {
     fr: { title: "Anglais Biblique", sub: "Apprends l'anglais avec la Parole de Dieu", xp: "points", streak: "jours de suite", done: "leçons terminées", start: "Commencer", cont: "Continuer", locked: "Termine la leçon précédente", encourage: "Chaque jour, un pas de plus 🕊️", allDone: "Tu as terminé tout le parcours. Gloire à Dieu ! 👑" },
     ht: { title: "Anglè Biblik", sub: "Aprann anglè ak Pawòl Bondye", xp: "pwen", streak: "jou youn dèyè lòt", done: "leson fini", start: "Kòmanse", cont: "Kontinye", locked: "Fini leson anvan an", encourage: "Chak jou, yon pa an plis 🕊️", allDone: "Ou fini tout pakou a. Glwa pou Bondye ! 👑" },
   }[l];
 
-  const pct = Math.round((done.size / TOTAL_LESSONS) * 100);
+  const pathDone = pathLessons.filter((x) => done.has(x.slug)).length;
+  const pct = pathLessons.length ? Math.round((pathDone / pathLessons.length) * 100) : 0;
 
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(180deg,#04080f,#061020 60%,#04080f)", color: "#fff" }}>
@@ -71,7 +76,31 @@ export default function AnglaisPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 760, margin: "0 auto", padding: "26px clamp(16px,4vw,40px) 80px" }}>
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "22px clamp(16px,4vw,40px) 80px" }}>
+        {/* Choix du parcours */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 22 }}>
+          {PATHS.map((pa) => {
+            const on = pa.key === path;
+            const n = lessonsOfPath(pa.key);
+            return (
+              <button key={pa.key} onClick={() => setPath(pa.key)}
+                style={{
+                  textAlign: "left", cursor: "pointer", borderRadius: 16, padding: "12px 14px",
+                  background: on ? `linear-gradient(135deg,${pa.color}33,rgba(255,255,255,0.03))` : "rgba(255,255,255,0.04)",
+                  border: `2px solid ${on ? pa.color : "rgba(255,255,255,0.1)"}`,
+                  color: "#fff", transition: "all .25s",
+                }}>
+                <div style={{ fontSize: 22 }}>{pa.icon}</div>
+                <div style={{ fontWeight: 900, fontSize: 14, marginTop: 3 }}>{pa.title[l]}</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", lineHeight: 1.4, marginTop: 2 }}>{pa.desc[l]}</div>
+                <div style={{ fontSize: 10, fontWeight: 800, color: pa.color, marginTop: 5 }}>
+                  {n.filter((x) => done.has(x.slug)).length}/{n.length} leçons
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
         {/* Bouton d'action principal */}
         {ready && nextLesson && (
           <Link href={`/anglais/${nextLesson.slug}`} style={{ textDecoration: "none" }}>
@@ -91,8 +120,8 @@ export default function AnglaisPage() {
         )}
 
         {/* Le parcours, niveau par niveau */}
-        {LEVELS.map((lv) => {
-          const units = UNITS.filter((u) => u.level === lv.key);
+        {CEFR.map((lv) => {
+          const units = unitsOf(path, lv.key);
           if (!units.length) return null;
           return (
             <div key={lv.key} style={{ marginBottom: 34 }}>

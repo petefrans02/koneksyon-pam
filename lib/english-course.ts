@@ -18,6 +18,11 @@ export type Exercise =
   | { t: "match"; pairs: { en: string; fr: string; ht: string }[] }
   | { t: "listen"; en: string; options: string[]; correct: number };
 
+import { GENERAL_UNITS } from "./english-general";
+
+export type Path = "general" | "chretien";
+export type Cefr = "a1" | "a2" | "b1" | "b2" | "c1" | "c2";
+/** Conservé pour compatibilité : les unités chrétiennes portaient ces niveaux. */
 export type Level = "debutant" | "intermediaire" | "avance";
 
 /** Un mot : anglais, français, créole. */
@@ -44,6 +49,8 @@ export interface Lesson {
 
 export interface Unit {
   slug: string;
+  path: Path;
+  cefr: Cefr;
   level: Level;
   title: Bi;
   subtitle: Bi;
@@ -55,11 +62,26 @@ export interface Unit {
 export const XP_PER_EXERCISE = 10;
 export const HEARTS = 5;
 
-export const LEVELS: { key: Level; title: Bi; color: string; icon: string }[] = [
-  { key: "debutant", title: { fr: "Débutant", ht: "Debitan" }, color: "#16a34a", icon: "🌱" },
-  { key: "intermediaire", title: { fr: "Intermédiaire", ht: "Entèmedyè" }, color: "#2563eb", icon: "🔥" },
-  { key: "avance", title: { fr: "Avancé", ht: "Avanse" }, color: "#7c3aed", icon: "👑" },
+export const PATHS: { key: Path; title: Bi; desc: Bi; color: string; icon: string }[] = [
+  { key: "general", icon: "🌍", color: "#2563eb",
+    title: { fr: "Anglais général", ht: "Anglè jeneral" },
+    desc: { fr: "La vie de tous les jours : travail, santé, voyage, achats.", ht: "Lavi chak jou : travay, sante, vwayaj, acha." } },
+  { key: "chretien", icon: "✝️", color: "#16a34a",
+    title: { fr: "Anglais chrétien", ht: "Anglè kretyen" },
+    desc: { fr: "La Bible, l'Église, la prière et le ministère.", ht: "Bib la, legliz, lapriyè ak ministè." } },
 ];
+
+/** Les six niveaux du cadre européen, de grand débutant à courant. */
+export const CEFR: { key: Cefr; title: Bi; color: string; icon: string }[] = [
+  { key: "a1", title: { fr: "A1 · Grand débutant", ht: "A1 · Gran debitan" }, color: "#16a34a", icon: "🌱" },
+  { key: "a2", title: { fr: "A2 · Élémentaire", ht: "A2 · Elemantè" }, color: "#0891b2", icon: "🌿" },
+  { key: "b1", title: { fr: "B1 · Intermédiaire", ht: "B1 · Entèmedyè" }, color: "#2563eb", icon: "🔥" },
+  { key: "b2", title: { fr: "B2 · Avancé", ht: "B2 · Avanse" }, color: "#7c3aed", icon: "⚡" },
+  { key: "c1", title: { fr: "C1 · Autonome", ht: "C1 · Otonòm" }, color: "#c026d3", icon: "👑" },
+  { key: "c2", title: { fr: "C2 · Courant", ht: "C2 · Kouran" }, color: "#e6b83c", icon: "🏆" },
+];
+
+export const LEVELS = CEFR; // ancien nom, gardé pour ne rien casser
 
 // ── Fabrique d'exercices ─────────────────────────────────────────────────────
 
@@ -156,7 +178,7 @@ const T = (
   words: W[], sentences: S[],
 ): Theme => ({ slug, title: { fr, ht }, icon, verse, words, sentences });
 
-interface UnitDef { slug: string; level: Level; fr: string; ht: string; sfr: string; sht: string; color: string; icon: string; themes: Theme[] }
+interface UnitDef { slug: string; level: Level; cefr?: Cefr; fr: string; ht: string; sfr: string; sht: string; color: string; icon: string; themes: Theme[] }
 
 const UNIT_DEFS: UnitDef[] = [
   // ═══════════ NIVEAU DÉBUTANT ═══════════
@@ -467,8 +489,13 @@ const UNIT_DEFS: UnitDef[] = [
   },
 ];
 
-export const UNITS: Unit[] = UNIT_DEFS.map((u) => ({
+// Correspondance entre l'ancien étiquetage et le cadre européen.
+const LEVEL_TO_CEFR: Record<Level, Cefr> = { debutant: "a1", intermediaire: "b1", avance: "b2" };
+
+const CHRISTIAN_UNITS: Unit[] = UNIT_DEFS.map((u) => ({
   slug: u.slug,
+  path: "chretien" as Path,
+  cefr: u.cefr ?? LEVEL_TO_CEFR[u.level],
   level: u.level,
   title: { fr: u.fr, ht: u.ht },
   subtitle: { fr: u.sfr, ht: u.sht },
@@ -476,6 +503,29 @@ export const UNITS: Unit[] = UNIT_DEFS.map((u) => ({
   icon: u.icon,
   lessons: u.themes.map(buildLesson),
 }));
+
+// ── Parcours ANGLAIS GÉNÉRAL (données dans lib/english-general.ts) ───────────
+
+const CEFR_TO_LEVEL: Record<Cefr, Level> = {
+  a1: "debutant", a2: "debutant", b1: "intermediaire", b2: "intermediaire", c1: "avance", c2: "avance",
+};
+
+const GENERAL: Unit[] = GENERAL_UNITS.map((u) => ({
+  slug: u.slug,
+  path: "general" as Path,
+  cefr: u.cefr,
+  level: CEFR_TO_LEVEL[u.cefr],
+  title: { fr: u.fr, ht: u.ht },
+  subtitle: { fr: u.sfr, ht: u.sht },
+  color: u.color,
+  icon: u.icon,
+  lessons: u.themes.map((th) => buildLesson({
+    slug: th.slug, title: { fr: th.fr, ht: th.ht }, icon: th.icon,
+    verse: th.verse, words: th.words, sentences: th.sentences,
+  })),
+}));
+
+export const UNITS: Unit[] = [...GENERAL, ...CHRISTIAN_UNITS];
 
 // ── Utilitaires ──────────────────────────────────────────────────────────────
 
@@ -491,6 +541,11 @@ export function lessonIndex(slug: string): number {
   return ALL_LESSONS.findIndex((l) => l.slug === slug);
 }
 
-export function unitsByLevel(level: Level): Unit[] {
-  return UNITS.filter((u) => u.level === level);
+export function unitsOf(path: Path, cefr: Cefr): Unit[] {
+  return UNITS.filter((u) => u.path === path && u.cefr === cefr);
+}
+
+/** Les leçons d'un parcours, dans l'ordre — sert au verrouillage progressif. */
+export function lessonsOfPath(path: Path) {
+  return ALL_LESSONS.filter((l) => l.unit.path === path);
 }
