@@ -17,7 +17,12 @@ const studies = slugs(read("lib/studies-data.ts"));
 const groups = slugs(read("lib/groups-data.ts"));
 const courses = slugs(read("lib/academy-data.ts"));
 // Lecons d'anglais : declarees par T("slug", ...) dans english-course.ts
-const english = [...new Set([...read("lib/english-course.ts").matchAll(/T\(\s*"([^"]+)"/g)].map((m) => m[1]))];
+const english = [...new Set([
+  // Parcours chrétien : déclaré par T("slug", ...) dans english-course.ts
+  ...[...read("lib/english-course.ts").matchAll(/T\(\s*"([^"]+)"/g)].map((m) => m[1]),
+  // Parcours général : slug: "g-..." dans english-general.ts
+  ...slugs(read("lib/english-general.ts")),
+])];
 
 // Pour la Bible il faut aussi le nombre de chapitres de chaque livre,
 // afin de refuser /bible/luc/999.
