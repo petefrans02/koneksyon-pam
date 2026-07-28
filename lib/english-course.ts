@@ -16,7 +16,9 @@ export type Exercise =
   | { t: "choose"; ask: Bi; options: string[]; correct: number }
   | { t: "fill"; before: string; after: string; options: string[]; correct: number; hint: Bi }
   | { t: "match"; pairs: { en: string; fr: string; ht: string }[] }
-  | { t: "listen"; en: string; options: string[]; correct: number };
+  | { t: "listen"; en: string; options: string[]; correct: number }
+  // L'élève prononce la phrase au micro ; on compare avec ce qui est attendu.
+  | { t: "speak"; en: string; ask: Bi };
 
 import { GENERAL_UNITS } from "./english-general";
 
@@ -163,7 +165,11 @@ function buildLesson(th: Theme): Lesson {
   const { options: lo, correct: lc } = shuffleWithAnswer(lEn, near.length >= 3 ? near : [...near, ...pickDecoys(lEn, wordPool, th.slug + "l", 3 - near.length)], th.slug + "listen");
   ex.push({ t: "listen", en: lEn, options: lo, correct: lc });
 
-  // 6) Une dernière phrase à reconstituer, pour finir sur du concret.
+  // 6) PRISE DE PAROLE : on ne progresse pas à l'oral sans parler.
+  const spoken = th.sentences[1] ?? th.sentences[0];
+  ex.push({ t: "speak", en: spoken[0], ask: { fr: spoken[1], ht: spoken[2] } });
+
+  // 7) Une dernière phrase à reconstituer, pour finir sur du concret.
   const last = th.sentences[4] ?? th.sentences[th.sentences.length - 1];
   ex.push({ t: "build", ask: { fr: last[1], ht: last[2] }, en: last[0], extra: pickDecoys(last[0], wordPool, th.slug + "z", 2) });
 

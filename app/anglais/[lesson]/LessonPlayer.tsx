@@ -11,6 +11,7 @@ import { useLang } from "@/lib/LangContext";
 import { HEARTS, XP_PER_EXERCISE, type Exercise, type Lesson } from "@/lib/english-course";
 import { completeLesson } from "@/lib/english-progress";
 import TutorBubble from "../TutorBubble";
+import SpeakExercise from "./SpeakExercise";
 
 const CSS = `
 @keyframes lp-in { from { opacity:0; transform: translateY(12px) } to { opacity:1; transform:none } }
@@ -56,8 +57,8 @@ export default function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const total = lesson.exercises.length;
 
   const t = {
-    fr: { check: "Vérifier", cont: "Continuer", right: "Bravo !", wrong: "Pas tout à fait", answer: "Réponse", quit: "Quitter", done: "Leçon terminée !", again: "Recommencer", back: "Retour au parcours", noHearts: "Plus de cœurs", noHeartsSub: "Reprends la leçon, tu vas y arriver.", listen: "Écoute et choisis", tapWords: "Touche les mots dans l'ordre", pick: "Choisis la bonne traduction", complete: "Complète la phrase", link: "Relie les mots" },
-    ht: { check: "Verifye", cont: "Kontinye", right: "Bravo !", wrong: "Pa tout afè", answer: "Repons", quit: "Kite", done: "Leson fini !", again: "Rekòmanse", back: "Tounen nan pakou a", noHearts: "Pa gen kè ankò", noHeartsSub: "Rekòmanse leson an, w ap rive.", listen: "Koute epi chwazi", tapWords: "Manyen mo yo nan lòd", pick: "Chwazi bon tradiksyon an", complete: "Konplete fraz la", link: "Konekte mo yo" },
+    fr: { check: "Vérifier", cont: "Continuer", right: "Bravo !", wrong: "Pas tout à fait", answer: "Réponse", quit: "Quitter", done: "Leçon terminée !", again: "Recommencer", back: "Retour au parcours", noHearts: "Plus de cœurs", noHeartsSub: "Reprends la leçon, tu vas y arriver.", listen: "Écoute et choisis", tapWords: "Touche les mots dans l'ordre", pick: "Choisis la bonne traduction", complete: "Complète la phrase", link: "Relie les mots", speak: "Prononce la phrase", tapMic: "Touche le micro et parle", listening: "Je ecoute...", heard: "Entendu", noMic: "Ton navigateur ne gere pas le micro. Passe cet exercice.", skip: "Passer", score: "Prononciation" },
+    ht: { check: "Verifye", cont: "Kontinye", right: "Bravo !", wrong: "Pa tout afè", answer: "Repons", quit: "Kite", done: "Leson fini !", again: "Rekòmanse", back: "Tounen nan pakou a", noHearts: "Pa gen kè ankò", noHeartsSub: "Rekòmanse leson an, w ap rive.", listen: "Koute epi chwazi", tapWords: "Manyen mo yo nan lòd", pick: "Chwazi bon tradiksyon an", complete: "Konplete fraz la", link: "Konekte mo yo", speak: "Pwononse fraz la", tapMic: "Manyen mikwo a epi pale", listening: "M ap koute...", heard: "Mwen tande", noMic: "Navigate ou pa gen mikwo. Sote egzesis sa a.", skip: "Sote", score: "Pwononsyasyon" },
   }[l];
 
   const onRight = () => {
@@ -169,6 +170,17 @@ function ExerciseView({ ex, l, t, state, onRight, onWrong }: {
 
   if (ex.t === "match") return <MatchEx ex={ex} l={l} title={t.link} onRight={onRight} onWrong={onWrong} locked={locked} />;
   if (ex.t === "build") return <BuildEx ex={ex} l={l} title={t.tapWords} onRight={onRight} onWrong={onWrong} locked={locked} />;
+  if (ex.t === "speak") return (
+    <SpeakExercise
+      target={ex.en}
+      hint={ex.ask[l]}
+      labels={{ speak: t.speak, tapMic: t.tapMic, listening: t.listening, heard: t.heard, noMic: t.noMic, skip: t.skip, score: t.score }}
+      locked={locked}
+      onRight={onRight}
+      onWrong={onWrong}
+      onSpeak={speak}
+    />
+  );
 
   // choose / fill / listen partagent la même grille de réponses.
   const title = ex.t === "listen" ? t.listen : ex.t === "fill" ? t.complete : t.pick;
@@ -324,6 +336,7 @@ function Confetti() {
 function answerOf(ex: Exercise): string {
   if (ex.t === "build") return ex.en;
   if (ex.t === "match") return ex.pairs.map((p) => p.en).join(", ");
+  if (ex.t === "speak") return ex.en;
   return ex.options[ex.correct];
 }
 
