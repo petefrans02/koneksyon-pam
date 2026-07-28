@@ -84,6 +84,8 @@ export default function AnglaisPage() {
             <div style={{ fontWeight: 900, fontSize: "clamp(17px,2.4vw,24px)", lineHeight: 1.1 }}>{t.title}</div>
             <div style={{ fontSize: 12, color: "rgba(255,255,255,0.45)" }}>{t.sub}</div>
           </div>
+          <Link href="/anglais/tableau-de-bord" title={l === "ht" ? "Tablo bòdmi" : "Mon tableau de bord"}
+            style={{ textDecoration: "none", fontSize: 20, padding: "6px 10px", borderRadius: 12, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)" }}>📊</Link>
           <div style={{ display: "flex", gap: 10 }}>
             <Stat icon="⚡" value={prog.xp} label={t.xp} color="#fbbf24" />
             <Stat icon="🔥" value={prog.streak} label={t.streak} color="#f87171" />

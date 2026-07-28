@@ -21,7 +21,7 @@ function isMissingPage(pathname: string): boolean {
   if (seg[0] === "etude" && seg.length === 2) return !STUDY_SLUGS.has(seg[1]);
   if (seg[0] === "communaute" && seg.length === 2) return !GROUP_SLUGS.has(seg[1]);
   if (seg[0] === "academie" && seg.length === 2) return !COURSE_SLUGS.has(seg[1]);
-  if (seg[0] === "anglais" && seg.length === 2) return !ENGLISH_SLUGS.has(seg[1]);
+  if (seg[0] === "anglais" && seg.length === 2) return seg[1] !== "tableau-de-bord" && !ENGLISH_SLUGS.has(seg[1]);
   // /anglais/examen/<parcours> : seuls deux parcours existent.
   if (seg[0] === "anglais" && seg[1] === "examen") {
     return seg.length !== 3 || !["general", "chretien"].includes(seg[2]);
