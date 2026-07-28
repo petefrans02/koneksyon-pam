@@ -10,6 +10,7 @@ import { useLang } from "@/lib/LangContext";
 import { PATHS, CEFR, ALL_LESSONS, unitsOf, lessonsOfPath, type Path } from "@/lib/english-course";
 import { loadLocal, syncDown, type Progress } from "@/lib/english-progress";
 import TutorBubble from "./TutorBubble";
+import CertificateCard from "./CertificateCard";
 
 const CSS = `
 /* LARGEUR ADAPTATIVE
@@ -134,7 +135,16 @@ export default function AnglaisPage() {
           </Link>
         )}
         {ready && !nextLesson && (
-          <div style={{ textAlign: "center", padding: 20, background: "rgba(74,222,128,0.1)", border: "1px solid rgba(74,222,128,0.4)", borderRadius: 18, marginBottom: 26, fontWeight: 800 }}>{t.allDone}</div>
+          <div style={{ marginBottom: 26 }}>
+            <div style={{ textAlign: "center", padding: 20, background: "rgba(74,222,128,0.1)", border: "1px solid rgba(74,222,128,0.4)", borderRadius: 18, fontWeight: 800 }}>{t.allDone}</div>
+            {/* Parcours termine : le certificat se debloque. */}
+            <CertificateCard
+              program={PATHS.find((x) => x.key === path)?.title.fr ?? "Anglais"}
+              lessons={pathDone}
+              xp={prog.xp}
+              lang={l}
+            />
+          </div>
         )}
 
         {/* Le parcours, niveau par niveau */}
