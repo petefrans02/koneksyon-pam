@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "KONEKSYON PAM",
-    short_name: "KP",
+    name: "KONEKSYON PAM ACADEMY",
+    short_name: "KP Academy",
     description:
-      "Plateforme chrétienne internationale — Bible, prières, études, concours, communauté.",
+      "Une ecole chretienne en ligne : anglais, formations, Bible, etudes bibliques et championnats. Instruire et eduquer, gratuitement, partout dans le monde.",
     start_url: "/",
     scope: "/",
     display: "standalone",
@@ -42,7 +42,7 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/png",
         // @ts-ignore — form_factor is valid in the spec but not yet in Next.js types
         form_factor: "wide",
-        label: "KONEKSYON PAM — Connectés par la foi",
+        label: "KONEKSYON PAM ACADEMY",
       },
     ],
   };

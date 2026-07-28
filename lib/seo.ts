@@ -1,5 +1,5 @@
 const BASE = "https://koneksyonpam.com";
-export const SITE_NAME = "KONEKSYON PAM";
+export const SITE_NAME = "KONEKSYON PAM ACADEMY";
 
 /**
  * Canonical URL + hreflang alternates for a given path.
@@ -26,7 +26,7 @@ export const websiteSchema = {
   name: SITE_NAME,
   url: BASE,
   description:
-    "Plateforme chrétienne internationale : Bible complète, prières, études bibliques, concours, communauté et groupes d'église.",
+    "Une ecole chretienne en ligne : anglais, formations, Bible, etudes bibliques et championnats. Instruire et eduquer, gratuitement, partout dans le monde.",
   inLanguage: ["fr", "ht", "en"],
   potentialAction: {
     "@type": "SearchAction",

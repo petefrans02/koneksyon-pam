@@ -20,7 +20,7 @@ function createTransport() {
   });
 }
 
-const FROM = `"KONEKSYON PAM" <${process.env.GMAIL_USER ?? "contact@koneksyonpam.com"}>`;
+const FROM = `"KONEKSYON PAM ACADEMY" <${process.env.GMAIL_USER ?? "contact@koneksyonpam.com"}>`;
 
 // ── Base HTML wrapper (shared branding) ───────────────────────────────────────
 function base(content: string, preheader = ""): string {
@@ -42,8 +42,8 @@ ${preheader ? `<div style="display:none;max-height:0;overflow:hidden;">${prehead
   <tr><td style="background:linear-gradient(135deg,#0a1628,#0f2044);border-radius:16px 16px 0 0;padding:36px 40px;text-align:center;">
     <img src="https://koneksyonpam.com/logo-kp.png" alt="" width="64" height="64"
       style="border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin-bottom:14px;display:block;margin-left:auto;margin-right:auto;" />
-    <p style="color:#fff;font-size:22px;font-weight:800;margin:0 0 4px;letter-spacing:-0.5px;">KONEKSYON PAM</p>
-    <p style="color:rgba(147,197,253,0.5);font-size:10px;margin:0;letter-spacing:3px;text-transform:uppercase;">Connectés par la foi</p>
+    <p style="color:#fff;font-size:22px;font-weight:800;margin:0 0 4px;letter-spacing:-0.5px;">KONEKSYON PAM ACADEMY</p>
+    <p style="color:rgba(147,197,253,0.5);font-size:10px;margin:0;letter-spacing:3px;text-transform:uppercase;">L&rsquo;ecole chretienne en ligne</p>
   </td></tr>
 
   <!-- Body -->

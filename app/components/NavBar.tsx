@@ -234,7 +234,7 @@ export default function NavBar() {
                 KONEKSYON PAM
               </div>
               <div style={{ fontWeight: 800, fontSize: "0.76rem", color: "#00aac8", letterSpacing: "0.14em" }}>
-                COMMUNAUTÉ
+                ACADEMY
               </div>
             </div>
           </Link>

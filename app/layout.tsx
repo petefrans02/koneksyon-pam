@@ -23,11 +23,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "KONEKSYON PAM — God's Word. For the whole world.",
-    template: "%s | KONEKSYON PAM",
+    default: "KONEKSYON PAM ACADEMY — L'ecole chretienne en ligne",
+    template: "%s | KONEKSYON PAM ACADEMY",
   },
   description:
-    "A global evangelical platform dedicated to God's Word — Bible, biblical championships, prayer, worship and discipleship. Join thousands of Christians from 60+ nations.",
+    "A Christian online school: English, courses, Bible study and biblical championships. Teaching and educating, free, everywhere in the world.",
   keywords: [
     "KONEKSYON PAM", "Koneksyon Pam", "plateforme évangélique",
     "Bible en ligne", "concours biblique", "quiz biblique", "verset du jour",
@@ -52,15 +52,15 @@ export const metadata: Metadata = {
     alternateLocale: ["fr_FR", "ht_HT", "es_ES"],
     url: BASE_URL,
     siteName: "KONEKSYON PAM",
-    title: "KONEKSYON PAM — God's Word. For the whole world.",
+    title: "KONEKSYON PAM ACADEMY — The Christian online school",
     description:
       "A global evangelical platform: Bible, prayer, worship, biblical championships and Christian community. 60+ nations · 100% free.",
     images: [{ url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, alt: "KONEKSYON PAM" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "KONEKSYON PAM — God's Word. For the whole world.",
-    description: "A global evangelical platform: Bible, prayer, worship and biblical championships. 60+ nations · 100% free.",
+    title: "KONEKSYON PAM ACADEMY — The Christian online school",
+    description: "A Christian online school: English, courses, Bible study and biblical championships. Teaching and educating, free, everywhere in the world.",
     creator: "@koneksyonpam",
     images: [`${BASE_URL}/opengraph-image`],
   },

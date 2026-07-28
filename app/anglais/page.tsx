@@ -12,6 +12,24 @@ import { loadLocal, syncDown, type Progress } from "@/lib/english-progress";
 import TutorBubble from "./TutorBubble";
 
 const CSS = `
+/* LARGEUR ADAPTATIVE
+   Telephone : pleine largeur. Tablette : confortable.
+   Ordinateur : on exploite l'ecran au lieu de laisser les cotes vides. */
+:root { --kp-w: 100%; }
+@media (min-width: 700px)  { :root { --kp-w: 680px; } }
+@media (min-width: 1024px) { :root { --kp-w: 960px; } }
+@media (min-width: 1400px) { :root { --kp-w: 1240px; } }
+
+/* Sur grand ecran, les unites se placent en deux colonnes : on voit tout le
+   parcours d'un coup d'oeil au lieu de derouler sans fin. */
+@media (min-width: 1024px) {
+  .kp-units { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; align-items: start; }
+}
+/* Cibles tactiles confortables sur telephone. */
+@media (max-width: 480px) {
+  .kp-academy button, .kp-academy a { min-height: 44px; }
+}
+
 @keyframes ang-pop { 0% { transform: scale(.7); opacity: 0 } 60% { transform: scale(1.08) } 100% { transform: scale(1); opacity: 1 } }
 @keyframes ang-float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-9px) } }
 @keyframes ang-ring { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,.55) } 100% { box-shadow: 0 0 0 18px rgba(74,222,128,0) } }
@@ -59,7 +77,7 @@ export default function AnglaisPage() {
 
       {/* En-tête : XP, série, progression */}
       <div style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(4,8,15,0.86)", backdropFilter: "blur(10px)", borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "14px clamp(16px,4vw,40px)" }}>
-        <div style={{ maxWidth: 760, margin: "0 auto", display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+        <div style={{ maxWidth: "var(--kp-w)", margin: "0 auto", display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
           <div style={{ fontSize: 30, animation: "ang-float 3s ease-in-out infinite" }}>🕊️</div>
           <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{ fontWeight: 900, fontSize: "clamp(17px,2.4vw,24px)", lineHeight: 1.1 }}>{t.title}</div>
@@ -71,12 +89,12 @@ export default function AnglaisPage() {
             <Stat icon="✅" value={done.size} label={t.done} color="#4ade80" />
           </div>
         </div>
-        <div style={{ maxWidth: 760, margin: "10px auto 0", height: 8, borderRadius: 999, background: "rgba(255,255,255,0.08)", overflow: "hidden" }}>
+        <div style={{ maxWidth: "var(--kp-w)", margin: "10px auto 0", height: 8, borderRadius: 999, background: "rgba(255,255,255,0.08)", overflow: "hidden" }}>
           <div style={{ height: "100%", width: `${pct}%`, background: "linear-gradient(90deg,#4ade80,#22c55e)", borderRadius: 999, transition: "width .8s cubic-bezier(0.22,1,0.36,1)" }} />
         </div>
       </div>
 
-      <div style={{ maxWidth: 760, margin: "0 auto", padding: "22px clamp(16px,4vw,40px) 80px" }}>
+      <div className="kp-academy" style={{ maxWidth: "var(--kp-w)", margin: "0 auto", padding: "22px clamp(16px,4vw,40px) 80px" }}>
         {/* Choix du parcours */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 22 }}>
           {PATHS.map((pa) => {
@@ -131,6 +149,7 @@ export default function AnglaisPage() {
                 <div style={{ flex: 1, height: 1, background: `linear-gradient(90deg,${lv.color}55,transparent)` }} />
               </div>
 
+              <div className="kp-units">
               {units.map((u) => (
                 <div key={u.slug} style={{ marginBottom: 22 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10, background: `${u.color}18`, border: `1px solid ${u.color}44`, borderRadius: 14, padding: "10px 14px", marginBottom: 14 }}>
@@ -178,6 +197,7 @@ export default function AnglaisPage() {
                   </div>
                 </div>
               ))}
+              </div>
             </div>
           );
         })}

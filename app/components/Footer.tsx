@@ -82,7 +82,7 @@ export default function Footer() {
           <div className="flex items-center gap-3">
             <Image src="/logo-kpf.png" alt="KPF" width={56} height={56} style={{ objectFit:"contain" }} />
             <div>
-              <p className="text-white font-black text-base leading-tight">KONEKSYON PAM <span style={{ color:"#c8960f" }}>Communauté</span></p>
+              <p className="text-white font-black text-base leading-tight">KONEKSYON PAM <span style={{ color:"#c8960f" }}>Academy</span></p>
               <p className="text-[10px] font-bold tracking-[0.18em] uppercase mt-0.5" style={{ color: "rgba(200,150,15,0.65)" }}>
                 Former • Équiper • Évangéliser • Servir
               </p>
@@ -143,7 +143,7 @@ export default function Footer() {
             ))}
           </div>
           <p className="text-white/20 text-xs text-center">
-            © {new Date().getFullYear()} KONEKSYON PAM — P. Francis
+            © {new Date().getFullYear()} KONEKSYON PAM ACADEMY — P. Francis
           </p>
         </div>
       </div>
