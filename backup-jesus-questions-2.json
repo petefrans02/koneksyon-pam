@@ -1,0 +1,2979 @@
+[
+  {
+    "round_number": 1,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "Who baptised Jesus in the Jordan?",
+          "es": "¿Quién bautizó a Jesús en el Jordán?",
+          "fr": "Qui a baptisé Jésus dans le Jourdain ?",
+          "ht": "Kilès ki batize Jezi nan Jouden an ?"
+        },
+        "ref": {
+          "en": "Matthew 3:13",
+          "es": "Mateo 3:13",
+          "fr": "Matthieu 3:13",
+          "ht": "Matye 3:13"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Peter",
+            "es": "Pedro",
+            "fr": "Pierre",
+            "ht": "Pyè"
+          },
+          {
+            "en": "John the Baptist",
+            "es": "Juan el Bautista",
+            "fr": "Jean-Baptiste",
+            "ht": "Jan Batis"
+          },
+          {
+            "en": "Elijah",
+            "es": "Elías",
+            "fr": "Élie",
+            "ht": "Eli"
+          },
+          {
+            "en": "Andrew",
+            "es": "Andrés",
+            "fr": "André",
+            "ht": "Andre"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How many days did Jesus fast in the wilderness?",
+          "es": "¿Cuántos días ayunó Jesús en el desierto?",
+          "fr": "Combien de jours Jésus a-t-il jeûné au désert ?",
+          "ht": "Konbyen jou Jezi te jene nan dezè a ?"
+        },
+        "ref": {
+          "en": "Matthew 4:2",
+          "es": "Mateo 4:2",
+          "fr": "Matthieu 4:2",
+          "ht": "Matye 4:2"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Seven days",
+            "es": "Siete días",
+            "fr": "Sept jours",
+            "ht": "Sèt jou"
+          },
+          {
+            "en": "Twenty days",
+            "es": "Veinte días",
+            "fr": "Vingt jours",
+            "ht": "Ven jou"
+          },
+          {
+            "en": "Forty days",
+            "es": "Cuarenta días",
+            "fr": "Quarante jours",
+            "ht": "Karant jou"
+          },
+          {
+            "en": "Three days",
+            "es": "Tres días",
+            "fr": "Trois jours",
+            "ht": "Twa jou"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What was Joseph's trade?",
+          "es": "¿Cuál era el oficio de José?",
+          "fr": "Quel était le métier de Joseph ?",
+          "ht": "Ki metye Jozèf te genyen ?"
+        },
+        "ref": {
+          "en": "Matthew 13:55",
+          "es": "Mateo 13:55",
+          "fr": "Matthieu 13:55",
+          "ht": "Matye 13:55"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Fisherman",
+            "es": "Pescador",
+            "fr": "Pêcheur",
+            "ht": "Pechè"
+          },
+          {
+            "en": "Shepherd",
+            "es": "Pastor",
+            "fr": "Berger",
+            "ht": "Gadò mouton"
+          },
+          {
+            "en": "Carpenter",
+            "es": "Carpintero",
+            "fr": "Charpentier",
+            "ht": "Chapant"
+          },
+          {
+            "en": "Scribe",
+            "es": "Escriba",
+            "fr": "Scribe",
+            "ht": "Eskrib"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Where did Jesus grow up?",
+          "es": "¿Dónde creció Jesús?",
+          "fr": "Où Jésus a-t-il grandi ?",
+          "ht": "Kote Jezi te grandi ?"
+        },
+        "ref": {
+          "en": "Luke 2:39-40",
+          "es": "Lucas 2:39-40",
+          "fr": "Luc 2:39-40",
+          "ht": "Lik 2:39-40"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "In Nazareth",
+            "es": "En Nazaret",
+            "fr": "À Nazareth",
+            "ht": "Nan Nazarèt"
+          },
+          {
+            "en": "In Bethlehem",
+            "es": "En Belén",
+            "fr": "À Bethléem",
+            "ht": "Nan Betleyèm"
+          },
+          {
+            "en": "In Capernaum",
+            "es": "En Capernaúm",
+            "fr": "À Capernaüm",
+            "ht": "Nan Kapènawòm"
+          },
+          {
+            "en": "In Jerusalem",
+            "es": "En Jerusalén",
+            "fr": "À Jérusalem",
+            "ht": "Nan Jerizalèm"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How old was Jesus in the temple among the teachers?",
+          "es": "¿Qué edad tenía Jesús en el templo entre los maestros?",
+          "fr": "Quel âge avait Jésus au temple parmi les docteurs ?",
+          "ht": "Ki laj Jezi te genyen nan tanp lan ak doktè yo ?"
+        },
+        "ref": {
+          "en": "Luke 2:42",
+          "es": "Lucas 2:42",
+          "fr": "Luc 2:42",
+          "ht": "Lik 2:42"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Seven",
+            "es": "Siete años",
+            "fr": "Sept ans",
+            "ht": "Sètan"
+          },
+          {
+            "en": "Twelve",
+            "es": "Doce años",
+            "fr": "Douze ans",
+            "ht": "Douzan"
+          },
+          {
+            "en": "Fifteen",
+            "es": "Quince años",
+            "fr": "Quinze ans",
+            "ht": "Kenzan"
+          },
+          {
+            "en": "Thirty",
+            "es": "Treinta años",
+            "fr": "Trente ans",
+            "ht": "Trantan"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 2,
+    "round_type": "tf",
+    "questions": [
+      {
+        "ref": {
+          "en": "Luke 1:36",
+          "es": "Lucas 1:36",
+          "fr": "Luc 1:36",
+          "ht": "Lik 1:36"
+        },
+        "type": "tf",
+        "is_true": true,
+        "statement": {
+          "en": "John the Baptist is the cousin of Jesus.",
+          "es": "Juan el Bautista es el primo de Jesús.",
+          "fr": "Jean-Baptiste est le cousin de Jésus.",
+          "ht": "Jan-Batis se kouzen Jèzi."
+        }
+      },
+      {
+        "ref": {
+          "en": "Matthew 3:13",
+          "es": "Mateo 3:13",
+          "fr": "Matthieu 3:13",
+          "ht": "Matye 3:13"
+        },
+        "type": "tf",
+        "is_true": true,
+        "statement": {
+          "en": "Jesus was baptized in the Jordan River.",
+          "es": "Jesús fue bautizado en el río Jordán.",
+          "fr": "Jésus a été baptisé dans le fleuve Jourdain.",
+          "ht": "Jèzi te batize nan flèv Jodan an."
+        }
+      },
+      {
+        "ref": {
+          "en": "The Bible does not specify the number — Matthew 2:1",
+          "es": "La Biblia no precisa el número — Mateo 2:1",
+          "fr": "La Bible ne précise pas le nombre — Matthieu 2:1",
+          "ht": "Biblya a pa presize nimewo — Matye 2:1"
+        },
+        "type": "tf",
+        "is_true": false,
+        "statement": {
+          "en": "The magi were 3 according to the Bible.",
+          "es": "Los magos eran 3 según la Biblia.",
+          "fr": "Les mages étaient au nombre de 3 selon la Bible.",
+          "ht": "Maj yo te 3 dapre Bibil la."
+        }
+      },
+      {
+        "ref": {
+          "en": "Matthew 4:2",
+          "es": "Mateo 4:2",
+          "fr": "Matthieu 4:2",
+          "ht": "Matye 4:2"
+        },
+        "type": "tf",
+        "is_true": true,
+        "statement": {
+          "en": "Jesus fasted for 40 days in the wilderness.",
+          "es": "Jesús ayunó durante 40 días en el desierto.",
+          "fr": "Jésus a jeûné pendant 40 jours dans le désert.",
+          "ht": "Jésus te jeûne pandan 40 jou nan dezè a."
+        }
+      },
+      {
+        "ref": {
+          "en": "Mark 3:14",
+          "es": "Marcos 3:14",
+          "fr": "Marc 3:14",
+          "ht": "Mak 3:14"
+        },
+        "type": "tf",
+        "is_true": true,
+        "statement": {
+          "en": "Jesus chose 12 apostles.",
+          "es": "Jesús eligió 12 apóstoles.",
+          "fr": "Jésus a choisi 12 apôtres.",
+          "ht": "Jésus te chwazi 12 apòt yo."
+        }
+      },
+      {
+        "ref": {
+          "en": "Matthew 17:1",
+          "es": "Mateo 17:1",
+          "fr": "Sur une haute montagne — probablement le mont Hermon — Matthieu 17:1",
+          "ht": "Matye 17:1"
+        },
+        "type": "tf",
+        "is_true": false,
+        "statement": {
+          "en": "The transfiguration of Jesus took place on the Mount of Olives.",
+          "es": "La transfiguración de Jesús ocurrió en el Monte de los Olivos.",
+          "fr": "La transfiguration de Jésus s'est passée au mont des Oliviers.",
+          "ht": "Transfiguration Jésus te fèt sou Mont Olivye a."
+        }
+      }
+    ]
+  },
+  {
+    "round_number": 3,
+    "round_type": "fill",
+    "questions": [
+      {
+        "ref": {
+          "en": "John 3:16",
+          "es": "Juan 3:16",
+          "fr": "Jean 3:16",
+          "ht": "Jan 3:16"
+        },
+        "type": "fill",
+        "verse": {
+          "en": "For God so loved the world that he gave his Son ___, so that whoever believes in him shall not perish.",
+          "es": "Porque tanto amó Dios al mundo que dio a su Hijo ___, para que todo el que crea en él no perezca.",
+          "fr": "Car Dieu a tant aimé le monde qu'il a donné son Fils ___, afin que quiconque croit en lui ne périsse point.",
+          "ht": "Paske Dieu te renmen mond lan anpil, li te bay Pitit li ___, pou nenpòt moun ki kwè nan li pa peyi."
+        },
+        "correct": 0,
+        "answer_word": {
+          "en": "only",
+          "es": "único",
+          "fr": "unique",
+          "ht": "inik"
+        },
+        "fill_options": [
+          {
+            "en": "only",
+            "es": "único",
+            "fr": "unique",
+            "ht": "inik"
+          },
+          {
+            "en": "beloved",
+            "es": "amado",
+            "fr": "bien-aimé",
+            "ht": "aimé"
+          },
+          {
+            "en": "first",
+            "es": "primero",
+            "fr": "premier",
+            "ht": "premye"
+          },
+          {
+            "en": "holy",
+            "es": "santo",
+            "fr": "saint",
+            "ht": "sen"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "John 14:6",
+          "es": "Juan 14:6",
+          "fr": "Jean 14:6",
+          "ht": "Jan 14:6"
+        },
+        "type": "fill",
+        "verse": {
+          "en": "I am the ___, the truth and the life. No one comes to the Father except through me.",
+          "es": "Yo soy el ___, la verdad y la vida. Nadie viene al Padre sino por mí.",
+          "fr": "Je suis le ___, la vérité et la vie. Nul ne vient au Père que par moi.",
+          "ht": "Mwen se ___, verite a ak lavi. Pesonn pa vini bay Papa a eksepte pa mwen."
+        },
+        "correct": 0,
+        "answer_word": {
+          "en": "way",
+          "es": "camino",
+          "fr": "chemin",
+          "ht": "chemen"
+        },
+        "fill_options": [
+          {
+            "en": "way",
+            "es": "camino",
+            "fr": "chemin",
+            "ht": "chemen"
+          },
+          {
+            "en": "guide",
+            "es": "guía",
+            "fr": "guide",
+            "ht": "guide"
+          },
+          {
+            "en": "shepherd",
+            "es": "pastor",
+            "fr": "berger",
+            "ht": "berger"
+          },
+          {
+            "en": "bread",
+            "es": "pan",
+            "fr": "pain",
+            "ht": "pen"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "John 8:12",
+          "es": "Juan 8:12",
+          "fr": "Jean 8:12",
+          "ht": "Jan 8:12"
+        },
+        "type": "fill",
+        "verse": {
+          "en": "I am the ___ of the world; whoever follows me will not walk in darkness.",
+          "es": "Yo soy la ___ del mundo; el que me sigue no andará en tinieblas.",
+          "fr": "Je suis la ___ du monde ; celui qui me suit ne marchera pas dans les ténèbres.",
+          "ht": "Mwen se ___ mond lan; men sila ki swiv mwen pa ap mache nan tenèb yo."
+        },
+        "correct": 0,
+        "answer_word": {
+          "en": "light",
+          "es": "luz",
+          "fr": "lumière",
+          "ht": "limyè"
+        },
+        "fill_options": [
+          {
+            "en": "light",
+            "es": "luz",
+            "fr": "lumière",
+            "ht": "limyè"
+          },
+          {
+            "en": "truth",
+            "es": "verdad",
+            "fr": "vérité",
+            "ht": "verite"
+          },
+          {
+            "en": "way",
+            "es": "camino",
+            "fr": "voie",
+            "ht": "chemen"
+          },
+          {
+            "en": "life",
+            "es": "vida",
+            "fr": "vie",
+            "ht": "lavi"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Matthew 11:28",
+          "es": "Mateo 11:28",
+          "fr": "Matthieu 11:28",
+          "ht": "Matye 11:28"
+        },
+        "type": "fill",
+        "verse": {
+          "en": "Come to me, all you who are weary and ___, and I will give you rest.",
+          "es": "Venid a mí, todos los que estáis fatigados y ___, y yo os daré descanso.",
+          "fr": "Venez à moi, vous tous qui êtes fatigués et ___, et je vous donnerai du repos.",
+          "ht": "Vini bay mwen, nou tout ki fatige ak ___, epi m ap bay nou repo."
+        },
+        "correct": 0,
+        "answer_word": {
+          "en": "burdened",
+          "es": "cargados",
+          "fr": "chargés",
+          "ht": "chaje"
+        },
+        "fill_options": [
+          {
+            "en": "burdened",
+            "es": "cargados",
+            "fr": "chargés",
+            "ht": "chaje"
+          },
+          {
+            "en": "oppressed",
+            "es": "oprimidos",
+            "fr": "opprimés",
+            "ht": "oprime"
+          },
+          {
+            "en": "lost",
+            "es": "perdidos",
+            "fr": "perdus",
+            "ht": "pèdi"
+          },
+          {
+            "en": "sad",
+            "es": "tristes",
+            "fr": "tristes",
+            "ht": "tristo"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 4,
+    "round_type": "character",
+    "questions": [
+      {
+        "ref": {
+          "en": "Matthew 3:13 / Matthew 14:10",
+          "es": "Mateo 3:13 / Mateo 14:10",
+          "fr": "Matthieu 3:13 / 14:10",
+          "ht": "Matye 3:13 / Matye 14:10"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am the forerunner of Jesus, born of elderly parents, Zacharias and Elisabeth.",
+            "es": "Yo soy el precursor de Jesús, nacido de padres ancianos, Zacarías e Isabel.",
+            "fr": "Je suis le précurseur de Jésus, né de parents âgés, Zacharie et Élisabeth.",
+            "ht": "Mwen se prekisè Jésus, fèt de paran aje, Zacharie ak Élisabeth."
+          },
+          {
+            "en": "I baptized Jesus in the Jordan.",
+            "es": "Yo bauticé a Jesús en el Jordán.",
+            "fr": "J'ai baptisé Jésus dans le Jourdain.",
+            "ht": "Mwen te batize Jésus nan Jourdain."
+          },
+          {
+            "en": "I was beheaded by order of Herod because of Herodias.",
+            "es": "Fui decapitado por orden de Herodes por causa de Herodías.",
+            "fr": "J'ai été décapité par ordre d'Hérode à cause de Hérodias.",
+            "ht": "Mwen te dekapite pa lòd Érode akoz Hérodias."
+          }
+        ],
+        "correct": 2,
+        "options": [
+          {
+            "en": "Elijah",
+            "es": "Elías",
+            "fr": "Élie",
+            "ht": "Eli"
+          },
+          {
+            "en": "Simeon",
+            "es": "Simeón",
+            "fr": "Siméon",
+            "ht": "Siméon"
+          },
+          {
+            "en": "John the Baptist",
+            "es": "Juan el Bautista",
+            "fr": "Jean-Baptiste",
+            "ht": "Jean-Baptiste"
+          },
+          {
+            "en": "Andrew",
+            "es": "Andrés",
+            "fr": "André",
+            "ht": "André"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Matthew 16:18 / Matthew 26:75",
+          "es": "Mateo 16:18 / Mateo 26:75",
+          "fr": "Matthieu 16:18 / 26:75",
+          "ht": "Matye 16:18 / Matye 26:75"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am the disciple who walked on water and denied Jesus three times.",
+            "es": "Yo soy el discípulo que caminó sobre el agua y negó a Jesús tres veces.",
+            "fr": "Je suis le disciple qui a marché sur l'eau et qui a renié Jésus trois fois.",
+            "ht": "Mwen se disip ki te mache sou dlo a e ki te renye Jésus twa fwa."
+          },
+          {
+            "en": "Jesus called me 'Peter' and said 'Upon this rock I will build my Church'.",
+            "es": "Jesús me llamó 'Pedro' y dijo 'Sobre esta roca edificaré mi Iglesia'.",
+            "fr": "Jésus m'a appelé 'Pierre' et dit 'Sur cette roche je bâtirai mon Église'.",
+            "ht": "Jésus te rele m 'Pyè' e te di 'Sou wòch sa a, m ap bati Legliz mwen'."
+          },
+          {
+            "en": "I am considered the first pope of Rome.",
+            "es": "Soy considerado el primer papa de Roma.",
+            "fr": "Je suis considéré comme le premier pape de Rome.",
+            "ht": "Mwen konsidere kòm premye pap Wòm."
+          }
+        ],
+        "correct": 3,
+        "options": [
+          {
+            "en": "James",
+            "es": "Santiago",
+            "fr": "Jacques",
+            "ht": "Jak"
+          },
+          {
+            "en": "Paul",
+            "es": "Pablo",
+            "fr": "Paul",
+            "ht": "Pol"
+          },
+          {
+            "en": "Andrew",
+            "es": "Andrés",
+            "fr": "André",
+            "ht": "André"
+          },
+          {
+            "en": "Peter",
+            "es": "Pedro",
+            "fr": "Pierre",
+            "ht": "Pyè"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Matthew 26:14-16 / Matthew 27:5",
+          "es": "Mateo 26:14-16 / Mateo 27:5",
+          "fr": "Matthieu 26:14-16 / 27:5",
+          "ht": "Matye 26:14-16 / Matye 27:5"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am the disciple who betrayed Jesus for 30 pieces of silver.",
+            "es": "Yo soy el discípulo que traicionó a Jesús por 30 monedas de plata.",
+            "fr": "Je suis le disciple qui a trahi Jésus pour 30 pièces d'argent.",
+            "ht": "Mwen se disip ki te trayi Jésus pou 30 pyès ajan."
+          },
+          {
+            "en": "I indicated Jesus to the guards by a kiss.",
+            "es": "Indiqué a Jesús a los guardias con un beso.",
+            "fr": "J'ai indiqué Jésus aux gardes par un baiser.",
+            "ht": "Mwen te endike Jésus bay gad yo ak yon bo."
+          },
+          {
+            "en": "After my betrayal, I was seized with remorse and I hanged myself.",
+            "es": "Después de mi traición, fui presa del remordimiento y me ahorcé.",
+            "fr": "Après ma trahison, j'ai été saisi de remords et je me suis pendu.",
+            "ht": "Apre trajizon mwen, mwen te senti remò e mwen te pann tèt mwen."
+          }
+        ],
+        "correct": 2,
+        "options": [
+          {
+            "en": "Thomas",
+            "es": "Tomás",
+            "fr": "Thomas",
+            "ht": "Toma"
+          },
+          {
+            "en": "Peter",
+            "es": "Pedro",
+            "fr": "Pierre",
+            "ht": "Pyè"
+          },
+          {
+            "en": "Judas Iscariot",
+            "es": "Judas Iscariote",
+            "fr": "Judas Iscariote",
+            "ht": "Judas Iscariote"
+          },
+          {
+            "en": "Barabbas",
+            "es": "Barrabás",
+            "fr": "Barabbas",
+            "ht": "Barabbas"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "John 20:25-28",
+          "es": "Juan 20:25-28",
+          "fr": "Jean 20:25-28",
+          "ht": "Jan 20:25-28"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am the disciple who doubted the resurrection until I saw the scars on Jesus.",
+            "es": "Soy el discípulo que dudó de la resurrección hasta que vi las cicatrices en Jesús.",
+            "fr": "Je suis le disciple qui a douté de la résurrection jusqu'à ce que je voie les cicatrices de Jésus.",
+            "ht": "Mwen se disip la ki te gen dout sou rezireksyon an jouk lè mwen wè sika yo sou Jezi."
+          },
+          {
+            "en": "Jesus told me 'Because you have seen me, you have believed'.",
+            "es": "Jesús me dijo 'Porque me has visto, has creído'.",
+            "fr": "Jésus m'a dit 'Parce que tu m'as vu, tu as cru'.",
+            "ht": "Jezi te di mwen 'Paske ou wè m', ou kwè'."
+          },
+          {
+            "en": "My name became synonymous with 'the one who doubts'.",
+            "es": "Mi nombre se convirtió en sinónimo de 'el que duda'.",
+            "fr": "Mon nom est devenu synonyme de 'celui qui doute'.",
+            "ht": "Non mwen vin sinonim de 'sila ki gen dout'."
+          }
+        ],
+        "correct": 3,
+        "options": [
+          {
+            "en": "John",
+            "es": "Juan",
+            "fr": "Jean",
+            "ht": "Jean"
+          },
+          {
+            "en": "Andrew",
+            "es": "Andrés",
+            "fr": "André",
+            "ht": "André"
+          },
+          {
+            "en": "Simon",
+            "es": "Simón",
+            "fr": "Simon",
+            "ht": "Simon"
+          },
+          {
+            "en": "Thomas",
+            "es": "Tomás",
+            "fr": "Thomas",
+            "ht": "Toma"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 5,
+    "round_type": "location",
+    "questions": [
+      {
+        "ref": {
+          "en": "Luke 4:14",
+          "es": "Lucas 4:14",
+          "fr": "Luc 4:14",
+          "ht": "Lik 4:14"
+        },
+        "type": "location",
+        "clues": [
+          {
+            "en": "It is in this region that Jesus grew up and began his ministry.",
+            "es": "Es en esta región donde Jesús creció y comenzó su ministerio.",
+            "fr": "C'est dans cette région que Jésus a grandi et a commencé son ministère.",
+            "ht": "Se nan rejyon sa a Jésus te gran ak te koumanse ministè li."
+          },
+          {
+            "en": "The city of Nazareth is in this region.",
+            "es": "La ciudad de Nazaret está en esta región.",
+            "fr": "La ville de Nazareth est dans cette région.",
+            "ht": "Vil Nazareth la nan rejyon sa a."
+          },
+          {
+            "en": "The Sea of Galilee is also in this region.",
+            "es": "El Mar de Galilea también está en esta región.",
+            "fr": "La mer de Galilée est aussi dans cette région.",
+            "ht": "Lanmè Galilée a tou nan rejyon sa a."
+          }
+        ],
+        "correct": 2,
+        "options": [
+          {
+            "en": "Judea",
+            "es": "Judea",
+            "fr": "Judée",
+            "ht": "Judée"
+          },
+          {
+            "en": "Samaria",
+            "es": "Samaria",
+            "fr": "Samarie",
+            "ht": "Samarie"
+          },
+          {
+            "en": "Galilee",
+            "es": "Galilea",
+            "fr": "Galilée",
+            "ht": "Galilée"
+          },
+          {
+            "en": "Perea",
+            "es": "Perea",
+            "fr": "Pérée",
+            "ht": "Pérée"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Luke 22:39-44",
+          "es": "Lucas 22:39-44",
+          "fr": "Luc 22:39-44",
+          "ht": "Lik 22:39-44"
+        },
+        "type": "location",
+        "clues": [
+          {
+            "en": "It is in this garden that Jesus prayed and was arrested by soldiers.",
+            "es": "Es en este jardín donde Jesús oró y fue arrestado por soldados.",
+            "fr": "C'est dans ce jardin que Jésus a prié et a été arrêté par des soldats.",
+            "ht": "Se nan jaden sa a Jésus te priye ak te fè arestayon pa solda yo."
+          },
+          {
+            "en": "It is at the foot of the Mount of Olives in Jerusalem.",
+            "es": "Está al pie del Monte de los Olivos en Jerusalén.",
+            "fr": "Il est au pied du mont des Oliviers à Jérusalem.",
+            "ht": "Li nan pye mòn Oliv yo a Jérusalem."
+          },
+          {
+            "en": "Jesus sweated as drops of blood.",
+            "es": "Jesús sudó como gotas de sangre.",
+            "fr": "Jésus y a sué comme des gouttes de sang.",
+            "ht": "Jésus te swe tankou gout san."
+          }
+        ],
+        "correct": 3,
+        "options": [
+          {
+            "en": "Eden",
+            "es": "Edén",
+            "fr": "Éden",
+            "ht": "Éden"
+          },
+          {
+            "en": "Bethany",
+            "es": "Betania",
+            "fr": "Bethanie",
+            "ht": "Betani"
+          },
+          {
+            "en": "Siloam",
+            "es": "Siloé",
+            "fr": "Siloé",
+            "ht": "Siloe"
+          },
+          {
+            "en": "Gethsemane",
+            "es": "Getsemaní",
+            "fr": "Gethsémané",
+            "ht": "Getsemani"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Matthew 5:1",
+          "es": "Mateo 5:1",
+          "fr": "Matthieu 5:1",
+          "ht": "Matye 5:1"
+        },
+        "type": "location",
+        "clues": [
+          {
+            "en": "It is on this mountain that Jesus gave the Sermon on the Mount.",
+            "es": "Es en esta montaña que Jesús predicó el Sermón de la Montaña.",
+            "fr": "C'est sur cette montagne que Jésus a donné le Sermon sur la Montagne.",
+            "ht": "Se sou mòn sa a Jezi te bay Prèdi sou Mòn nan."
+          },
+          {
+            "en": "The Beatitudes were proclaimed there.",
+            "es": "Las Bienaventuranzas fueron proclamadas allí.",
+            "fr": "Les Béatitudes y ont été proclamées.",
+            "ht": "Bèatitid yo te pwoklamè la."
+          },
+          {
+            "en": "It is in Galilee, on the shore of the Sea of Tiberias.",
+            "es": "Está en Galilea, a la orilla del Mar de Tiberias.",
+            "fr": "Elle est en Galilée, au bord du lac de Tibériade.",
+            "ht": "Li ye nan Galile, bò lanmè Tibeyad la."
+          }
+        ],
+        "correct": 2,
+        "options": [
+          {
+            "en": "Mount Sinai",
+            "es": "Monte Sinaí",
+            "fr": "Le mont Sinaï",
+            "ht": "Mòn Sinay"
+          },
+          {
+            "en": "Mount of Olives",
+            "es": "Monte de los Olivos",
+            "fr": "Le mont des Oliviers",
+            "ht": "Mòn Olivye"
+          },
+          {
+            "en": "Mount of the Beatitudes",
+            "es": "Monte de las Bienaventuranzas",
+            "fr": "La montagne des Béatitudes",
+            "ht": "Mòn Bèatitid"
+          },
+          {
+            "en": "Mount Carmel",
+            "es": "Monte Carmelo",
+            "fr": "Le mont Carmel",
+            "ht": "Mòn Kamel"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "John 2:1",
+          "es": "Juan 2:1",
+          "fr": "Jean 2:1",
+          "ht": "Jan 2:1"
+        },
+        "type": "location",
+        "clues": [
+          {
+            "en": "It is in this city that Jesus turned water into wine at a wedding.",
+            "es": "Es en esta ciudad que Jesús convirtió agua en vino en una boda.",
+            "fr": "C'est dans cette ville que Jésus a transformé l'eau en vin lors d'un mariage.",
+            "ht": "Se nan vil sa a Jezi te chanje dlo an diven pandan yon maryaj."
+          },
+          {
+            "en": "It is the first miracle of Jesus.",
+            "es": "Es el primer milagro de Jesús.",
+            "fr": "C'est le premier miracle de Jésus.",
+            "ht": "Se premye mirak Jezi a."
+          },
+          {
+            "en": "This city is in Galilee.",
+            "es": "Esta ciudad está en Galilea.",
+            "fr": "Cette ville est en Galilée.",
+            "ht": "Vil sa a ye nan Galile."
+          }
+        ],
+        "correct": 2,
+        "options": [
+          {
+            "en": "Capernaum",
+            "es": "Cafarnaúm",
+            "fr": "Capharnaüm",
+            "ht": "Kafarnaom"
+          },
+          {
+            "en": "Nain",
+            "es": "Naín",
+            "fr": "Naïn",
+            "ht": "Nayin"
+          },
+          {
+            "en": "Cana",
+            "es": "Caná",
+            "fr": "Cana",
+            "ht": "Kana"
+          },
+          {
+            "en": "Bethsaida",
+            "es": "Betsaida",
+            "fr": "Bethsaïde",
+            "ht": "Betsayid"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 6,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "What was Jesus' first miracle?",
+          "es": "¿Cuál fue el primer milagro de Jesús?",
+          "fr": "Quel fut le premier miracle de Jésus ?",
+          "ht": "Ki premye mirak Jezi te fè ?"
+        },
+        "ref": {
+          "en": "John 2:1-11",
+          "es": "Juan 2:1-11",
+          "fr": "Jean 2:1-11",
+          "ht": "Jan 2:1-11"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Walking on water",
+            "es": "Caminar sobre el agua",
+            "fr": "Marcher sur l'eau",
+            "ht": "Mache sou dlo"
+          },
+          {
+            "en": "Turning water into wine",
+            "es": "Convertir agua en vino",
+            "fr": "Changer l'eau en vin",
+            "ht": "Chanje dlo an diven"
+          },
+          {
+            "en": "Healing a leper",
+            "es": "Sanar a un leproso",
+            "fr": "Guérir un lépreux",
+            "ht": "Geri yon moun ak lèp"
+          },
+          {
+            "en": "Calming the storm",
+            "es": "Calmar la tormenta",
+            "fr": "Calmer la tempête",
+            "ht": "Kalme tanpèt la"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How many did Jesus feed with five loaves?",
+          "es": "¿A cuántos alimentó Jesús con cinco panes?",
+          "fr": "Combien de personnes Jésus a-t-il nourries avec cinq pains ?",
+          "ht": "Konbyen moun Jezi te bay manje ak senk pen ?"
+        },
+        "ref": {
+          "en": "Matthew 14:21",
+          "es": "Mateo 14:21",
+          "fr": "Matthieu 14:21",
+          "ht": "Matye 14:21"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "One thousand men",
+            "es": "Mil hombres",
+            "fr": "Mille hommes",
+            "ht": "Mil gason"
+          },
+          {
+            "en": "Three thousand men",
+            "es": "Tres mil hombres",
+            "fr": "Trois mille hommes",
+            "ht": "Twa mil gason"
+          },
+          {
+            "en": "Five thousand men",
+            "es": "Cinco mil hombres",
+            "fr": "Cinq mille hommes",
+            "ht": "Senk mil gason"
+          },
+          {
+            "en": "Ten thousand men",
+            "es": "Diez mil hombres",
+            "fr": "Dix mille hommes",
+            "ht": "Dis mil gason"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Whom did Jesus raise after four days in the tomb?",
+          "es": "¿A quién resucitó Jesús tras cuatro días en la tumba?",
+          "fr": "Qui Jésus a-t-il ressuscité après quatre jours au tombeau ?",
+          "ht": "Kilès Jezi te resisite apre kat jou nan tonbo a ?"
+        },
+        "ref": {
+          "en": "John 11:39-44",
+          "es": "Juan 11:39-44",
+          "fr": "Jean 11:39-44",
+          "ht": "Jan 11:39-44"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "Lazarus",
+            "es": "Lázaro",
+            "fr": "Lazare",
+            "ht": "Laza"
+          },
+          {
+            "en": "Jairus",
+            "es": "Jairo",
+            "fr": "Jaïrus",
+            "ht": "Jayiris"
+          },
+          {
+            "en": "The widow's son",
+            "es": "El hijo de la viuda",
+            "fr": "Le fils de la veuve",
+            "ht": "Pitit vèv la"
+          },
+          {
+            "en": "Nicodemus",
+            "es": "Nicodemo",
+            "fr": "Nicodème",
+            "ht": "Nikodèm"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "On which sea did Jesus walk?",
+          "es": "¿Sobre qué mar caminó Jesús?",
+          "fr": "Sur quelle mer Jésus a-t-il marché ?",
+          "ht": "Sou ki lanmè Jezi te mache ?"
+        },
+        "ref": {
+          "en": "Matthew 14:25",
+          "es": "Mateo 14:25",
+          "fr": "Matthieu 14:25",
+          "ht": "Matye 14:25"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "The Red Sea",
+            "es": "El mar Rojo",
+            "fr": "La mer Rouge",
+            "ht": "Lanmè Wouj"
+          },
+          {
+            "en": "The Dead Sea",
+            "es": "El mar Muerto",
+            "fr": "La mer Morte",
+            "ht": "Lanmè Mouri"
+          },
+          {
+            "en": "The Sea of Galilee",
+            "es": "El mar de Galilea",
+            "fr": "La mer de Galilée",
+            "ht": "Lanmè Galile"
+          },
+          {
+            "en": "The Mediterranean",
+            "es": "El Mediterráneo",
+            "fr": "La Méditerranée",
+            "ht": "Meditèrane"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 7,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "On which mount did Jesus give the Beatitudes?",
+          "es": "¿En qué monte dio Jesús las Bienaventuranzas?",
+          "fr": "Sur quelle montagne Jésus a-t-il prononcé les Béatitudes ?",
+          "ht": "Sou ki mòn Jezi te bay Beyatitid yo ?"
+        },
+        "ref": {
+          "en": "Matthew 5:1",
+          "es": "Mateo 5:1",
+          "fr": "Matthieu 5:1",
+          "ht": "Matye 5:1"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Mount Sinai",
+            "es": "El monte Sinaí",
+            "fr": "Le mont Sinaï",
+            "ht": "Mòn Sinayi"
+          },
+          {
+            "en": "The mountain, in Galilee",
+            "es": "El monte, en Galilea",
+            "fr": "La montagne, en Galilée",
+            "ht": "Mòn nan, nan Galile"
+          },
+          {
+            "en": "Mount Carmel",
+            "es": "El monte Carmelo",
+            "fr": "Le mont Carmel",
+            "ht": "Mòn Kamèl"
+          },
+          {
+            "en": "The Mount of Olives",
+            "es": "El monte de los Olivos",
+            "fr": "Le mont des Oliviers",
+            "ht": "Mòn Oliv"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What did Jesus call the greatest commandment?",
+          "es": "¿Cuál dijo Jesús que era el mayor mandamiento?",
+          "fr": "Que dit Jésus être le plus grand commandement ?",
+          "ht": "Kisa Jezi di ki pi gwo kòmandman an ?"
+        },
+        "ref": {
+          "en": "Matthew 22:37",
+          "es": "Mateo 22:37",
+          "fr": "Matthieu 22:37",
+          "ht": "Matye 22:37"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Do not steal",
+            "es": "No robar",
+            "fr": "Ne pas voler",
+            "ht": "Pa vòlè"
+          },
+          {
+            "en": "Honour your parents",
+            "es": "Honrar a los padres",
+            "fr": "Honorer ses parents",
+            "ht": "Respekte paran ou"
+          },
+          {
+            "en": "Love God with all your heart",
+            "es": "Amar a Dios con todo el corazón",
+            "fr": "Aimer Dieu de tout son cœur",
+            "ht": "Renmen Bondye ak tout kè ou"
+          },
+          {
+            "en": "Keep the Sabbath",
+            "es": "Guardar el sábado",
+            "fr": "Observer le sabbat",
+            "ht": "Respekte saba a"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "In the parable, who helps the wounded man?",
+          "es": "En la parábola, ¿quién ayuda al herido?",
+          "fr": "Dans la parabole, qui secourt l'homme blessé ?",
+          "ht": "Nan parabòl la, kilès ki ede nonm blese a ?"
+        },
+        "ref": {
+          "en": "Luke 10:33",
+          "es": "Lucas 10:33",
+          "fr": "Luc 10:33",
+          "ht": "Lik 10:33"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "A priest",
+            "es": "Un sacerdote",
+            "fr": "Un prêtre",
+            "ht": "Yon prèt"
+          },
+          {
+            "en": "A Levite",
+            "es": "Un levita",
+            "fr": "Un lévite",
+            "ht": "Yon levit"
+          },
+          {
+            "en": "A Samaritan",
+            "es": "Un samaritano",
+            "fr": "Un Samaritain",
+            "ht": "Yon Samariten"
+          },
+          {
+            "en": "A Pharisee",
+            "es": "Un fariseo",
+            "fr": "Un pharisien",
+            "ht": "Yon farizyen"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What does Jesus call his disciples in relation to the world?",
+          "es": "¿Cómo llama Jesús a sus discípulos respecto al mundo?",
+          "fr": "Comment Jésus appelle-t-il ses disciples au sujet du monde ?",
+          "ht": "Kijan Jezi rele disip li yo parapò ak lemonn ?"
+        },
+        "ref": {
+          "en": "Matthew 5:13-14",
+          "es": "Mateo 5:13-14",
+          "fr": "Matthieu 5:13-14",
+          "ht": "Matye 5:13-14"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "The salt and the light",
+            "es": "La sal y la luz",
+            "fr": "Le sel et la lumière",
+            "ht": "Sèl ak limyè"
+          },
+          {
+            "en": "The bread and the wine",
+            "es": "El pan y el vino",
+            "fr": "Le pain et le vin",
+            "ht": "Pen ak diven"
+          },
+          {
+            "en": "The living stones",
+            "es": "Las piedras vivas",
+            "fr": "Les pierres vivantes",
+            "ht": "Wòch vivan"
+          },
+          {
+            "en": "The faithful servants",
+            "es": "Los siervos fieles",
+            "fr": "Les serviteurs fidèles",
+            "ht": "Sèvitè fidèl"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How many times must we forgive, according to Jesus?",
+          "es": "¿Cuántas veces hay que perdonar, según Jesús?",
+          "fr": "Combien de fois faut-il pardonner, selon Jésus ?",
+          "ht": "Konbyen fwa pou nou padone, dapre Jezi ?"
+        },
+        "ref": {
+          "en": "Matthew 18:22",
+          "es": "Mateo 18:22",
+          "fr": "Matthieu 18:22",
+          "ht": "Matye 18:22"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Seven times",
+            "es": "Siete veces",
+            "fr": "Sept fois",
+            "ht": "Sèt fwa"
+          },
+          {
+            "en": "Ten times",
+            "es": "Diez veces",
+            "fr": "Dix fois",
+            "ht": "Dis fwa"
+          },
+          {
+            "en": "Seventy times seven",
+            "es": "Setenta veces siete",
+            "fr": "Soixante-dix fois sept fois",
+            "ht": "Swasanndis fwa sèt fwa"
+          },
+          {
+            "en": "Three times",
+            "es": "Tres veces",
+            "fr": "Trois fois",
+            "ht": "Twa fwa"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 8,
+    "round_type": "chrono",
+    "questions": [
+      {
+        "q": {
+          "en": "Put these events of Jesus’s life in chronological order.",
+          "es": "Ordena estos acontecimientos de la vida de Jesús en orden cronológico.",
+          "fr": "Remettez ces événements de la vie de Jésus dans l’ordre chronologique.",
+          "ht": "Mete evènman sa yo nan lavi Jezi nan bon lòd kwonolojik."
+        },
+        "ref": {
+          "en": "Matthew 1-2 ; Luke 1-2",
+          "es": "Mateo 1-2 ; Lucas 1-2",
+          "fr": "Matthieu 1-2 ; Luc 1-2",
+          "ht": "Matye 1-2 ; Lik 1-2"
+        },
+        "type": "chrono",
+        "items": [
+          {
+            "en": "The angel’s announcement to Mary",
+            "es": "El anuncio del ángel a María",
+            "fr": "L’annonce de l’ange à Marie",
+            "ht": "Anons zanj lan bay Mari"
+          },
+          {
+            "en": "The birth of Jesus in Bethlehem",
+            "es": "El nacimiento de Jesús en Belén",
+            "fr": "La naissance de Jésus à Bethléem",
+            "ht": "Nesans Jezi nan Betleyèm"
+          },
+          {
+            "en": "The visit of the magi",
+            "es": "La visita de los magos",
+            "fr": "La visite des mages",
+            "ht": "Vizit maj yo"
+          },
+          {
+            "en": "The flight into Egypt",
+            "es": "La huida a Egipto",
+            "fr": "La fuite en Égypte",
+            "ht": "Sove ale nan peyi Lejip"
+          }
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "q": {
+          "en": "Put these events of Jesus’s life in chronological order.",
+          "es": "Ordena estos acontecimientos de la vida de Jesús en orden cronológico.",
+          "fr": "Remettez ces événements de la vie de Jésus dans l’ordre chronologique.",
+          "ht": "Mete evènman sa yo nan lavi Jezi nan bon lòd kwonolojik."
+        },
+        "ref": {
+          "en": "Matthew 3-4 ; John 2",
+          "es": "Mateo 3-4 ; Juan 2",
+          "fr": "Matthieu 3-4 ; Jean 2",
+          "ht": "Matye 3-4 ; Jan 2"
+        },
+        "type": "chrono",
+        "items": [
+          {
+            "en": "The baptism of Jesus in the Jordan",
+            "es": "El bautismo de Jesús en el Jordán",
+            "fr": "Le baptême de Jésus dans le Jourdain",
+            "ht": "Batèm Jezi nan larivyè Jouden"
+          },
+          {
+            "en": "The temptation in the wilderness",
+            "es": "La tentación en el desierto",
+            "fr": "La tentation au désert",
+            "ht": "Tantasyon an nan dezè a"
+          },
+          {
+            "en": "The calling of the first disciples",
+            "es": "El llamado de los primeros discípulos",
+            "fr": "L’appel des premiers disciples",
+            "ht": "Apèl premye disip yo"
+          },
+          {
+            "en": "The first miracle at the wedding in Cana",
+            "es": "El primer milagro en las bodas de Caná",
+            "fr": "Le premier miracle aux noces de Cana",
+            "ht": "Premye mirak la nan nòs Kana"
+          }
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "q": {
+          "en": "Put these events of Jesus’s life in chronological order.",
+          "es": "Ordena estos acontecimientos de la vida de Jesús en orden cronológico.",
+          "fr": "Remettez ces événements de la vie de Jésus dans l’ordre chronologique.",
+          "ht": "Mete evènman sa yo nan lavi Jezi nan bon lòd kwonolojik."
+        },
+        "ref": {
+          "en": "Matthew 21-28",
+          "es": "Mateo 21-28",
+          "fr": "Matthieu 21-28",
+          "ht": "Matye 21-28"
+        },
+        "type": "chrono",
+        "items": [
+          {
+            "en": "The triumphal entry into Jerusalem",
+            "es": "La entrada triunfal en Jerusalén",
+            "fr": "L’entrée triomphale à Jérusalem",
+            "ht": "Antre triyonfal la nan Jerizalèm"
+          },
+          {
+            "en": "The Last Supper",
+            "es": "La Última Cena",
+            "fr": "Le dernier repas (la Cène)",
+            "ht": "Dènye repa a (Sèn nan)"
+          },
+          {
+            "en": "The crucifixion",
+            "es": "La crucifixión",
+            "fr": "La crucifixion",
+            "ht": "Krisifiksyon an"
+          },
+          {
+            "en": "The resurrection on the third day",
+            "es": "La resurrección al tercer día",
+            "fr": "La résurrection au troisième jour",
+            "ht": "Rezirèksyon an nan twazyèm jou a"
+          }
+        ],
+        "correct_order": [
+          0,
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 9,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "In which garden did Jesus pray before his arrest?",
+          "es": "¿En qué huerto oró Jesús antes de su arresto?",
+          "fr": "Dans quel jardin Jésus a-t-il prié avant son arrestation ?",
+          "ht": "Nan ki jaden Jezi te priye anvan yo arete l ?"
+        },
+        "ref": {
+          "en": "Matthew 26:36",
+          "es": "Mateo 26:36",
+          "fr": "Matthieu 26:36",
+          "ht": "Matye 26:36"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "The garden of Eden",
+            "es": "El huerto del Edén",
+            "fr": "Le jardin d'Éden",
+            "ht": "Jaden Edenn"
+          },
+          {
+            "en": "Gethsemane",
+            "es": "Getsemaní",
+            "fr": "Gethsémané",
+            "ht": "Jetsemane"
+          },
+          {
+            "en": "The king's garden",
+            "es": "El huerto del rey",
+            "fr": "Le jardin du roi",
+            "ht": "Jaden wa a"
+          },
+          {
+            "en": "Mount Zion",
+            "es": "El monte Sion",
+            "fr": "Le mont Sion",
+            "ht": "Mòn Siyon"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Who denied Jesus three times?",
+          "es": "¿Quién negó a Jesús tres veces?",
+          "fr": "Qui a renié Jésus trois fois ?",
+          "ht": "Kilès ki te di li pa konnen Jezi twa fwa ?"
+        },
+        "ref": {
+          "en": "Luke 22:61",
+          "es": "Lucas 22:61",
+          "fr": "Luc 22:61",
+          "ht": "Lik 22:61"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Judas",
+            "es": "Judas",
+            "fr": "Judas",
+            "ht": "Jida"
+          },
+          {
+            "en": "Thomas",
+            "es": "Tomás",
+            "fr": "Thomas",
+            "ht": "Toma"
+          },
+          {
+            "en": "Peter",
+            "es": "Pedro",
+            "fr": "Pierre",
+            "ht": "Pyè"
+          },
+          {
+            "en": "James",
+            "es": "Santiago",
+            "fr": "Jacques",
+            "ht": "Jak"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Which Roman governor tried Jesus?",
+          "es": "¿Qué gobernador romano juzgó a Jesús?",
+          "fr": "Quel gouverneur romain a jugé Jésus ?",
+          "ht": "Ki gouvènè women ki te jije Jezi ?"
+        },
+        "ref": {
+          "en": "John 18:33",
+          "es": "Juan 18:33",
+          "fr": "Jean 18:33",
+          "ht": "Jan 18:33"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Herod",
+            "es": "Herodes",
+            "fr": "Hérode",
+            "ht": "Ewòd"
+          },
+          {
+            "en": "Pontius Pilate",
+            "es": "Poncio Pilato",
+            "fr": "Ponce Pilate",
+            "ht": "Pons Pilat"
+          },
+          {
+            "en": "Caesar",
+            "es": "César",
+            "fr": "César",
+            "ht": "Seza"
+          },
+          {
+            "en": "Felix",
+            "es": "Félix",
+            "fr": "Félix",
+            "ht": "Feliks"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Who carried Jesus' cross along the way?",
+          "es": "¿Quién llevó la cruz de Jesús en el camino?",
+          "fr": "Qui a porté la croix de Jésus sur le chemin ?",
+          "ht": "Kilès ki te pote kwa Jezi a sou wout la ?"
+        },
+        "ref": {
+          "en": "Mark 15:21",
+          "es": "Marcos 15:21",
+          "fr": "Marc 15:21",
+          "ht": "Mak 15:21"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "Simon of Cyrene",
+            "es": "Simón de Cirene",
+            "fr": "Simon de Cyrène",
+            "ht": "Simon moun Sirèn"
+          },
+          {
+            "en": "Joseph of Arimathea",
+            "es": "José de Arimatea",
+            "fr": "Joseph d'Arimathée",
+            "ht": "Jozèf moun Arimate"
+          },
+          {
+            "en": "Nicodemus",
+            "es": "Nicodemo",
+            "fr": "Nicodème",
+            "ht": "Nikodèm"
+          },
+          {
+            "en": "John",
+            "es": "Juan",
+            "fr": "Jean",
+            "ht": "Jan"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Who saw Jesus first after his resurrection?",
+          "es": "¿Quién vio primero a Jesús tras su resurrección?",
+          "fr": "Qui a vu Jésus en premier après sa résurrection ?",
+          "ht": "Kilès ki te wè Jezi an premye apre rezirèksyon l ?"
+        },
+        "ref": {
+          "en": "John 20:14-16",
+          "es": "Juan 20:14-16",
+          "fr": "Jean 20:14-16",
+          "ht": "Jan 20:14-16"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Peter",
+            "es": "Pedro",
+            "fr": "Pierre",
+            "ht": "Pyè"
+          },
+          {
+            "en": "Mary Magdalene",
+            "es": "María Magdalena",
+            "fr": "Marie de Magdala",
+            "ht": "Mari, moun Magdala"
+          },
+          {
+            "en": "Thomas",
+            "es": "Tomás",
+            "fr": "Thomas",
+            "ht": "Toma"
+          },
+          {
+            "en": "The eleven disciples",
+            "es": "Los once discípulos",
+            "fr": "Les onze disciples",
+            "ht": "Onz disip yo"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 10,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "Who was the first person to see the risen Jesus according to John 20?",
+          "es": "¿Quién fue la primera persona en ver a Jesús resucitado según Juan 20?",
+          "fr": "Qui a été la première personne à voir Jésus ressuscité selon Jean 20 ?",
+          "ht": "Ki moun ki te premye wè Jezi ressisiye dapre Jean 20?"
+        },
+        "ref": {
+          "en": "John 20:14",
+          "es": "Juan 20:14",
+          "fr": "Jean 20:14",
+          "ht": "Jan 20:14"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Peter",
+            "es": "Pedro",
+            "fr": "Pierre",
+            "ht": "Pyè"
+          },
+          {
+            "en": "John",
+            "es": "Juan",
+            "fr": "Jean",
+            "ht": "Jean"
+          },
+          {
+            "en": "Mary Magdalene",
+            "es": "María Magdalena",
+            "fr": "Marie-Madeleine",
+            "ht": "Mani-Madelèn"
+          },
+          {
+            "en": "Mary the mother of Jesus",
+            "es": "María la madre de Jesús",
+            "fr": "Marie la mère de Jésus",
+            "ht": "Mani manman Jezi"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "After the resurrection, Jesus appeared to two disciples on the road to?",
+          "es": "Después de la resurrección, ¿Jesús se apareció a dos discípulos en el camino a?",
+          "fr": "Après la résurrection, Jésus est apparu à deux disciples sur le chemin de ?",
+          "ht": "Apre rezireksyon, Jezi parèt a de disip yo sou chemen?"
+        },
+        "ref": {
+          "en": "Luke 24:13",
+          "es": "Lucas 24:13",
+          "fr": "Luc 24:13",
+          "ht": "Lik 24:13"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Bethlehem",
+            "es": "Belén",
+            "fr": "Bethléhem",
+            "ht": "Bethléhem"
+          },
+          {
+            "en": "Emmaus",
+            "es": "Emaús",
+            "fr": "Emmaüs",
+            "ht": "Emmaüs"
+          },
+          {
+            "en": "Capernaum",
+            "es": "Cafarnaúm",
+            "fr": "Capharnaüm",
+            "ht": "Kafarnaom"
+          },
+          {
+            "en": "Jericho",
+            "es": "Jericó",
+            "fr": "Jéricho",
+            "ht": "Jéricho"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How long after the resurrection did Jesus ascend to heaven?",
+          "es": "¿Cuánto tiempo después de la resurrección Jesús subió al cielo?",
+          "fr": "Combien de temps après la résurrection Jésus est-il monté au ciel ?",
+          "ht": "Konbyen tan apre rezireksyon Jezi sote nan syèl la?"
+        },
+        "ref": {
+          "en": "Acts 1:3",
+          "es": "Hechos 1:3",
+          "fr": "Actes 1:3",
+          "ht": "Travay 1:3"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "3 days",
+            "es": "3 días",
+            "fr": "3 jours",
+            "ht": "3 jou"
+          },
+          {
+            "en": "7 days",
+            "es": "7 días",
+            "fr": "7 jours",
+            "ht": "7 jou"
+          },
+          {
+            "en": "40 days",
+            "es": "40 días",
+            "fr": "40 jours",
+            "ht": "40 jou"
+          },
+          {
+            "en": "50 days",
+            "es": "50 días",
+            "fr": "50 jours",
+            "ht": "50 jou"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What was Jesus's last commandment before his ascension (the Great Commission)?",
+          "es": "¿Cuál fue el último mandamiento de Jesús antes de su ascensión (la Gran Comisión)?",
+          "fr": "Quel était le dernier commandement de Jésus avant son ascension (la Grande Commission) ?",
+          "ht": "Ki te dènye kòmandman Jezi a anvan asansyon li (Gwo Komisyon an)?"
+        },
+        "ref": {
+          "en": "Matthew 28:19",
+          "es": "Mateo 28:19",
+          "fr": "Matthieu 28:19",
+          "ht": "Matye 28:19"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Love one another",
+            "es": "Amense los unos a los otros",
+            "fr": "Aimez-vous les uns les autres",
+            "ht": "Renmen yonn ak lòt"
+          },
+          {
+            "en": "Go, make disciples of all nations",
+            "es": "Vayan, hagan discípulos de todas las naciones",
+            "fr": "Allez, faites de toutes les nations des disciples",
+            "ht": "Ale, fè disip nan tout nasyon yo"
+          },
+          {
+            "en": "Pray without ceasing",
+            "es": "Oren sin cesar",
+            "fr": "Priez sans cesse",
+            "ht": "Lapriyè san rete"
+          },
+          {
+            "en": "Fast and pray",
+            "es": "Ayunen y oren",
+            "fr": "Jeûnez et priez",
+            "ht": "Jennen ak lapriyè"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 11,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "How many temptations did Satan present to Jesus in the wilderness?",
+          "es": "¿Cuántas tentaciones Satanás presentó a Jesús en el desierto?",
+          "fr": "Combien de tentations Satan a-t-il présenté à Jésus dans le désert ?",
+          "ht": "Konbyen tantasyon Satan te prezante a Jezi nan dezè a?"
+        },
+        "ref": {
+          "en": "Matthew 4:1-11",
+          "es": "Mateo 4:1-11",
+          "fr": "Matthieu 4:1-11",
+          "ht": "Matye 4:1-11"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "1",
+            "es": "1",
+            "fr": "1",
+            "ht": "1"
+          },
+          {
+            "en": "2",
+            "es": "2",
+            "fr": "2",
+            "ht": "2"
+          },
+          {
+            "en": "3",
+            "es": "3",
+            "fr": "3",
+            "ht": "3"
+          },
+          {
+            "en": "4",
+            "es": "4",
+            "fr": "4",
+            "ht": "4"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What is Satan's first temptation in the wilderness?",
+          "es": "¿Cuál es la primera tentación de Satanás en el desierto?",
+          "fr": "Quelle est la première tentation de Satan dans le désert ?",
+          "ht": "Ki premye tantasyon Satan nan dezè a?"
+        },
+        "ref": {
+          "en": "Matthew 4:3",
+          "es": "Mateo 4:3",
+          "fr": "Matthieu 4:3",
+          "ht": "Matye 4:3"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Throw yourself down from the temple",
+            "es": "Lanzarse desde el templo",
+            "fr": "Se jeter du temple",
+            "ht": "Jete tèt anba soti nan tanp la"
+          },
+          {
+            "en": "Turn stones into bread",
+            "es": "Convertir las piedras en pan",
+            "fr": "Transformer les pierres en pain",
+            "ht": "Chanje wòch yo an pen"
+          },
+          {
+            "en": "Worship Satan",
+            "es": "Adorar a Satanás",
+            "fr": "Adorer Satan",
+            "ht": "Adore Satán"
+          },
+          {
+            "en": "Defy God",
+            "es": "Desafiar a Dios",
+            "fr": "Défier Dieu",
+            "ht": "Defye Dyé"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What did Jesus use to answer each of Satan's temptations?",
+          "es": "¿Con qué respondió Jesús a cada tentación de Satanás?",
+          "fr": "Avec quoi Jésus a-t-il répondu à chaque tentation de Satan ?",
+          "ht": "Avèk ki bagay Jésus te reponn chak tantasyon Satán ?"
+        },
+        "ref": {
+          "en": "Matthew 4:4-10",
+          "es": "Mateo 4:4-10",
+          "fr": "Matthieu 4:4-10",
+          "ht": "Matye 4:4-10"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Prayer",
+            "es": "La oración",
+            "fr": "La prière",
+            "ht": "Priyè"
+          },
+          {
+            "en": "Love",
+            "es": "El amor",
+            "fr": "L'amour",
+            "ht": "Lanmou"
+          },
+          {
+            "en": "The Word of God",
+            "es": "La Palabra de Dios",
+            "fr": "La Parole de Dieu",
+            "ht": "Pawòl Dyé a"
+          },
+          {
+            "en": "Faith",
+            "es": "La fe",
+            "fr": "La foi",
+            "ht": "Konfyans"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What happened after Jesus resisted the 3 temptations?",
+          "es": "¿Qué sucedió después de que Jesús resistió las 3 tentaciones?",
+          "fr": "Qu'est-il arrivé après que Jésus ait résisté aux 3 tentations ?",
+          "ht": "Ki sa ki rive apre Jésus reziste 3 tantasyon yo ?"
+        },
+        "ref": {
+          "en": "Matthew 4:11",
+          "es": "Mateo 4:11",
+          "fr": "Matthieu 4:11",
+          "ht": "Matye 4:11"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "God spoke to him",
+            "es": "Dios le habló",
+            "fr": "Dieu lui a parlé",
+            "ht": "Dyé te pale avèk li"
+          },
+          {
+            "en": "Angels came to serve him",
+            "es": "Los ángeles vinieron a servirle",
+            "fr": "Des anges sont venus le servir",
+            "ht": "Zanj yo vin sèvi li"
+          },
+          {
+            "en": "John the Baptist arrived",
+            "es": "Llegó Juan el Bautista",
+            "fr": "Jean-Baptiste est arrivé",
+            "ht": "Jean-Baptiste rive"
+          },
+          {
+            "en": "He returned to Galilee immediately",
+            "es": "Regresó a Galilea inmediatamente",
+            "fr": "Il est retourné en Galilée immédiatement",
+            "ht": "Li retounen nan Galilée imedyatman"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "In the Gospel according to John, how many times does Jesus say 'I am'?",
+          "es": "En el Evangelio según Juan, ¿cuántas veces dice Jesús 'Yo soy'?",
+          "fr": "Dans l'Évangile selon Jean, Jésus dit 'Je suis' combien de fois ?",
+          "ht": "Nan Evanjil selon Jean, Jésus di 'Mwen se' konbyen fwa ?"
+        },
+        "ref": {
+          "en": "John (7 declarations 'I am')",
+          "es": "Juan (7 declaraciones 'Yo soy')",
+          "fr": "Jean (7 déclarations 'Je suis')",
+          "ht": "Jan (7 deklarasyon 'Mwen se')"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "5",
+            "es": "5",
+            "fr": "5",
+            "ht": "5"
+          },
+          {
+            "en": "7",
+            "es": "7",
+            "fr": "7",
+            "ht": "7"
+          },
+          {
+            "en": "10",
+            "es": "10",
+            "fr": "10",
+            "ht": "10"
+          },
+          {
+            "en": "120",
+            "es": "120",
+            "fr": "12",
+            "ht": "12"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 12,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "Which Gospel begins with 'In the beginning was the Word'?",
+          "es": "¿Qué Evangelio comienza con 'En el principio era la Palabra'?",
+          "fr": "Quel Évangile commence par 'Au commencement était la Parole' ?",
+          "ht": "Ki Evanjil ki kòmanse pa 'Nan konmansman se te Pawòl la'?"
+        },
+        "ref": {
+          "en": "John 1:1",
+          "es": "Juan 1:1",
+          "fr": "Jean 1:1",
+          "ht": "Jan 1:1"
+        },
+        "type": "mcq",
+        "correct": 3,
+        "options": [
+          {
+            "en": "Matthew",
+            "es": "Mateo",
+            "fr": "Matthieu",
+            "ht": "Matye"
+          },
+          {
+            "en": "Mark",
+            "es": "Marcos",
+            "fr": "Marc",
+            "ht": "Mak"
+          },
+          {
+            "en": "Luke",
+            "es": "Lucas",
+            "fr": "Luc",
+            "ht": "Lik"
+          },
+          {
+            "en": "John",
+            "es": "Juan",
+            "fr": "Jean",
+            "ht": "Jean"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Which Gospel is the shortest?",
+          "es": "¿Qué Evangelio es el más corto?",
+          "fr": "Quel Évangile est le plus court ?",
+          "ht": "Ki Evanjil ki pi kout?"
+        },
+        "ref": {
+          "en": "Mark (16 chapters)",
+          "es": "Marcos (16 capítulos)",
+          "fr": "Marc (16 chapitres)",
+          "ht": "Mak (16 chapitres)"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Matthew",
+            "es": "Mateo",
+            "fr": "Matthieu",
+            "ht": "Matye"
+          },
+          {
+            "en": "Mark",
+            "es": "Marcos",
+            "fr": "Marc",
+            "ht": "Mak"
+          },
+          {
+            "en": "Luke",
+            "es": "Lucas",
+            "fr": "Luc",
+            "ht": "Lik"
+          },
+          {
+            "en": "John",
+            "es": "Juan",
+            "fr": "Jean",
+            "ht": "Jean"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Which Gospel was written by a physician?",
+          "es": "¿Qué Evangelio fue escrito por un médico?",
+          "fr": "Quel Évangile a été écrit par un médecin ?",
+          "ht": "Ki Evanjil ki te ekri pa yon doktè?"
+        },
+        "ref": {
+          "en": "Luke — Colossians 4:14",
+          "es": "Lucas — Colosenses 4:14",
+          "fr": "Luc — Colossiens 4:14",
+          "ht": "Lik — Kolosyen 4:14"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Matthew",
+            "es": "Mateo",
+            "fr": "Matthieu",
+            "ht": "Matye"
+          },
+          {
+            "en": "Mark",
+            "es": "Marcos",
+            "fr": "Marc",
+            "ht": "Mak"
+          },
+          {
+            "en": "Luke",
+            "es": "Lucas",
+            "fr": "Luc",
+            "ht": "Lik"
+          },
+          {
+            "en": "John",
+            "es": "Juan",
+            "fr": "Jean",
+            "ht": "Jean"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Which Gospel begins with the genealogy of Jesus tracing back to Abraham?",
+          "es": "¿Qué Evangelio comienza con la genealogía de Jesús que se remonta a Abraham?",
+          "fr": "Quel Évangile commence par la généalogie de Jésus remontant à Abraham ?",
+          "ht": "Ki Evanjil ki kòmanse pa jeneoloji Jezi ki remonte a Abraam?"
+        },
+        "ref": {
+          "en": "Matthew 1:1",
+          "es": "Mateo 1:1",
+          "fr": "Matthieu 1:1",
+          "ht": "Matye 1:1"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "Matthew",
+            "es": "Mateo",
+            "fr": "Matthieu",
+            "ht": "Matye"
+          },
+          {
+            "en": "Mark",
+            "es": "Marcos",
+            "fr": "Marc",
+            "ht": "Mak"
+          },
+          {
+            "en": "Luke",
+            "es": "Lucas",
+            "fr": "Luc",
+            "ht": "Lik"
+          },
+          {
+            "en": "John",
+            "es": "Juan",
+            "fr": "Jean",
+            "ht": "Jean"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Which Gospel begins with the genealogy tracing back to Adam and God?",
+          "es": "¿Qué Evangelio comienza con la genealogía que se remonta hasta Adán y Dios?",
+          "fr": "Quel Évangile commence par la généalogie remontant jusqu'à Adam et Dieu ?",
+          "ht": "Ki Evanjil ki kòmanse pa jeneoloji ki remonte rive Adan ak Dye?"
+        },
+        "ref": {
+          "en": "Luke 3:23-38",
+          "es": "Lucas 3:23-38",
+          "fr": "Luc 3:23-38",
+          "ht": "Lik 3:23-38"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Matthew",
+            "es": "Mateo",
+            "fr": "Matthieu",
+            "ht": "Matye"
+          },
+          {
+            "en": "Mark",
+            "es": "Marcos",
+            "fr": "Marc",
+            "ht": "Mak"
+          },
+          {
+            "en": "Luke",
+            "es": "Lucas",
+            "fr": "Luc",
+            "ht": "Lik"
+          },
+          {
+            "en": "John",
+            "es": "Juan",
+            "fr": "Jean",
+            "ht": "Jean"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 13,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "What is the main subject of Jean 17 — Jesus' priestly prayer?",
+          "es": "¿Cuál es el tema principal de Juan 17 — la oración sacerdotal de Jesús?",
+          "fr": "Quel est le sujet principal de Jean 17 — la prière sacerdotale de Jésus ?",
+          "ht": "Kil sijè prensipal Jean 17 — lapriyè sakèdotal Jésus?"
+        },
+        "ref": {
+          "en": "John 17:21",
+          "es": "Juan 17:21",
+          "fr": "Jean 17:21",
+          "ht": "Jan 17:21"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Resurrection",
+            "es": "Resurrección",
+            "fr": "La résurrection",
+            "ht": "Rezireksyon"
+          },
+          {
+            "en": "The unity of believers",
+            "es": "La unidad de los creyentes",
+            "fr": "L'unité des croyants",
+            "ht": "Inite kwayan yo"
+          },
+          {
+            "en": "The return of Jesus",
+            "es": "El retorno de Jesús",
+            "fr": "Le retour de Jésus",
+            "ht": "Retou Jésus"
+          },
+          {
+            "en": "Pentecost",
+            "es": "Pentecostés",
+            "fr": "La Pentecôte",
+            "ht": "Pantekòt"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "In which chapter of Jean does Jesus say 'I am the bread of life'?",
+          "es": "¿En qué capítulo de Juan dice Jesús 'Yo soy el pan de vida'?",
+          "fr": "Dans quel chapitre de Jean Jésus dit-il 'Je suis le pain de vie' ?",
+          "ht": "Nan ki chapit Jean Jésus di 'Mwen se pen lavi a'?"
+        },
+        "ref": {
+          "en": "John 6:35",
+          "es": "Juan 6:35",
+          "fr": "Jean 6:35",
+          "ht": "Jan 6:35"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Jean 3",
+            "es": "Juan 3",
+            "fr": "Jean 3",
+            "ht": "Jean 3"
+          },
+          {
+            "en": "Jean 6",
+            "es": "Juan 6",
+            "fr": "Jean 6",
+            "ht": "Jean 6"
+          },
+          {
+            "en": "Jean 10",
+            "es": "Juan 10",
+            "fr": "Jean 10",
+            "ht": "Jean 10"
+          },
+          {
+            "en": "Jean 14",
+            "es": "Juan 14",
+            "fr": "Jean 14",
+            "ht": "Jean 14"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "In which chapter of Jean does Jesus describe himself as 'the door of the sheep'?",
+          "es": "¿En qué capítulo de Juan se describe Jesús como 'la puerta de las ovejas'?",
+          "fr": "Dans quel chapitre de Jean Jésus se décrit-il comme 'la porte des brebis' ?",
+          "ht": "Nan ki chapit Jean Jésus dekri li tankou 'pòt ti mouton yo'?"
+        },
+        "ref": {
+          "en": "John 10:7",
+          "es": "Juan 10:7",
+          "fr": "Jean 10:7",
+          "ht": "Jan 10:7"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "Jean 10",
+            "es": "Juan 10",
+            "fr": "Jean 10",
+            "ht": "Jean 10"
+          },
+          {
+            "en": "Jean 14",
+            "es": "Juan 14",
+            "fr": "Jean 14",
+            "ht": "Jean 14"
+          },
+          {
+            "en": "Jean 15",
+            "es": "Juan 15",
+            "fr": "Jean 15",
+            "ht": "Jean 15"
+          },
+          {
+            "en": "Jean 17",
+            "es": "Juan 17",
+            "fr": "Jean 17",
+            "ht": "Jean 17"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What is the last word of Jesus on the cross in Jean 19?",
+          "es": "¿Cuál es la última palabra de Jesús en la cruz en Juan 19?",
+          "fr": "Quelle est la dernière parole de Jésus sur la croix dans Jean 19 ?",
+          "ht": "Kil dènye pawòl Jésus sou kwa a nan Jean 19?"
+        },
+        "ref": {
+          "en": "John 19:30",
+          "es": "Juan 19:30",
+          "fr": "Jean 19:30",
+          "ht": "Jan 19:30"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "\"My God, why have you forsaken me?\"",
+            "es": "\"Dios mío, ¿por qué me has abandonado?\"",
+            "fr": "'Mon Dieu, pourquoi m'as-tu abandonné'",
+            "ht": "\"Dye m, poukisa ou abandone m?\""
+          },
+          {
+            "en": "\"Father, forgive them\"",
+            "es": "\"Padre, perdónalos\"",
+            "fr": "'Père, pardonne-leur'",
+            "ht": "\"Pè, padone yo\""
+          },
+          {
+            "en": "\"It is finished\"",
+            "es": "\"Todo está consumado\"",
+            "fr": "'Tout est accompli'",
+            "ht": "\"Tout bagay fini\""
+          },
+          {
+            "en": "\"Father, into your hands I commit my spirit\"",
+            "es": "\"Padre, en tus manos encomiendo mi espíritu\"",
+            "fr": "'Père, entre tes mains je remets mon esprit'",
+            "ht": "\"Pè, mwen mete lespri m nan men ou\""
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How many beatitudes are there in the Sermon on the Mount?",
+          "es": "¿Cuántas bienaventuranzas hay en el Sermón del Monte?",
+          "fr": "Combien de béatitudes y a-t-il dans le Sermon sur la Montagne ?",
+          "ht": "Konbyen bènisyon yo genyen nan Sèmon sou Mòn lan?"
+        },
+        "ref": {
+          "en": "Matthew 5:3-10",
+          "es": "Mateo 5:3-10",
+          "fr": "Matthieu 5:3-10",
+          "ht": "Matye 5:3-10"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "6",
+            "es": "6",
+            "fr": "6",
+            "ht": "6"
+          },
+          {
+            "en": "7",
+            "es": "7",
+            "fr": "7",
+            "ht": "7"
+          },
+          {
+            "en": "8",
+            "es": "8",
+            "fr": "8",
+            "ht": "8"
+          },
+          {
+            "en": "9",
+            "es": "9",
+            "fr": "9",
+            "ht": "9"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 14,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "What is the only healing Jesus performed at a distance without traveling?",
+          "es": "¿Cuál es la única sanación que Jesús realizó a distancia sin desplazarse?",
+          "fr": "Quelle est la seule guérison que Jésus ait accomplie à distance sans se déplacer ?",
+          "ht": "Ki sèl gerizon Jésus te fè a distans san li pa deplase ?"
+        },
+        "ref": {
+          "en": "Matthew 8:5-13",
+          "es": "Mateo 8:5-13",
+          "fr": "Matthieu 8:5-13",
+          "ht": "Matye 8:5-13"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "The son of Jairus",
+            "es": "El hijo de Jairo",
+            "fr": "Le fils de Jaïrus",
+            "ht": "Fis Jaïrus"
+          },
+          {
+            "en": "The servant of the centurion",
+            "es": "El siervo del centurión",
+            "fr": "Le serviteur du centurion",
+            "ht": "Sèvitè sòlda Roumen an"
+          },
+          {
+            "en": "The blind man of Jericho",
+            "es": "El ciego de Jericó",
+            "fr": "L'aveugle de Jéricho",
+            "ht": "Avèg Jericho a"
+          },
+          {
+            "en": "Peter's mother-in-law",
+            "es": "La suegra de Pedro",
+            "fr": "La belle-mère de Pierre",
+            "ht": "Bèl-manman Pyè a"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Which disciple first said 'You are the Christ, the Son of the living God'?",
+          "es": "¿Cuál discípulo dijo primero 'Tú eres el Cristo, el Hijo del Dios viviente'?",
+          "fr": "Quel disciple a dit le premier 'Tu es le Christ, le Fils du Dieu vivant' ?",
+          "ht": "Ki disip te di premye 'Ou se Kris la, Fis Dyé vivan an' ?"
+        },
+        "ref": {
+          "en": "Matthew 16:16",
+          "es": "Mateo 16:16",
+          "fr": "Matthieu 16:16",
+          "ht": "Matye 16:16"
+        },
+        "type": "mcq",
+        "correct": 3,
+        "options": [
+          {
+            "en": "John",
+            "es": "Juan",
+            "fr": "Jean",
+            "ht": "Jean"
+          },
+          {
+            "en": "Thomas",
+            "es": "Tomás",
+            "fr": "Thomas",
+            "ht": "Toma"
+          },
+          {
+            "en": "Andrew",
+            "es": "Andrés",
+            "fr": "André",
+            "ht": "André"
+          },
+          {
+            "en": "Peter",
+            "es": "Pedro",
+            "fr": "Pierre",
+            "ht": "Pyè"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "At the last supper, what new symbol did Jesus institute?",
+          "es": "En la última cena, ¿qué nuevo símbolo instituyó Jesús?",
+          "fr": "Lors de la dernière cène, quel nouveau symbole Jésus a-t-il institué ?",
+          "ht": "Pandan dènye soupe a, ki nouvo senbòl Jésus te enstite ?"
+        },
+        "ref": {
+          "en": "Matthew 26:26-28",
+          "es": "Mateo 26:26-28",
+          "fr": "Matthieu 26:26-28",
+          "ht": "Matye 26:26-28"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Baptism",
+            "es": "El bautismo",
+            "fr": "Le baptême",
+            "ht": "Batèm"
+          },
+          {
+            "en": "The Lord's Supper / communion",
+            "es": "La Cena / la comunión",
+            "fr": "La Cène / la communion",
+            "ht": "Sèn / Komin"
+          },
+          {
+            "en": "Fasting",
+            "es": "El ayuno",
+            "fr": "Le jeûne",
+            "ht": "Jen"
+          },
+          {
+            "en": "The Lord's Prayer",
+            "es": "La oración del Padre Nuestro",
+            "fr": "La prière du Notre Père",
+            "ht": "Priyè Pè Nou a"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Which Roman governor condemned Jesus to death?",
+          "es": "¿Qué gobernador romano condenó a Jesús a muerte?",
+          "fr": "Quel gouverneur romain a condamné Jésus à mort ?",
+          "ht": "Ki govenè Roumen te kondane Jésus a lanmò ?"
+        },
+        "ref": {
+          "en": "Matthew 27:24-26",
+          "es": "Mateo 27:24-26",
+          "fr": "Matthieu 27:24-26",
+          "ht": "Matye 27:24-26"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Herod",
+            "es": "Herodes",
+            "fr": "Hérode",
+            "ht": "Eròd"
+          },
+          {
+            "en": "Caiaphas",
+            "es": "Caifás",
+            "fr": "Caïphe",
+            "ht": "Kayif"
+          },
+          {
+            "en": "Pontius Pilate",
+            "es": "Poncio Pilato",
+            "fr": "Ponce Pilate",
+            "ht": "Pons Pilat"
+          },
+          {
+            "en": "Lysias",
+            "es": "Lisias",
+            "fr": "Lysias",
+            "ht": "Lisyas"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "In how many appearances did Jesus manifest himself after his resurrection according to Paul in 1 Cor 15?",
+          "es": "¿En cuántas apariciones se manifestó Jesús después de su resurrección según Pablo en 1 Cor 15?",
+          "fr": "Dans combien d'apparitions Jésus s'est-il manifesté après sa résurrection selon Paul en 1 Cor 15 ?",
+          "ht": "Nan konbyen aparisyon Jezi te manifeste li aprè rezireksyon li dapre Pol nan 1 Kor 15?"
+        },
+        "ref": {
+          "en": "1 Corinthians 15:6",
+          "es": "1 Corintios 15:6",
+          "fr": "1 Corinthiens 15:6",
+          "ht": "1 Korintyen 15:6"
+        },
+        "type": "mcq",
+        "correct": 3,
+        "options": [
+          {
+            "en": "3",
+            "es": "3",
+            "fr": "3",
+            "ht": "3"
+          },
+          {
+            "en": "5",
+            "es": "5",
+            "fr": "5",
+            "ht": "5"
+          },
+          {
+            "en": "7",
+            "es": "7",
+            "fr": "7",
+            "ht": "7"
+          },
+          {
+            "en": "more than 500 people at once",
+            "es": "más de 500 personas a la vez",
+            "fr": "plus de 500 personnes à la fois",
+            "ht": "Plis de 500 moun a la fois"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "round_number": 15,
+    "round_type": "finale",
+    "questions": [
+      {
+        "q": {
+          "en": "What is Jesus' promise in John 14:2?",
+          "es": "¿Cuál es la promesa de Jesús en Juan 14:2?",
+          "fr": "Quelle est la promesse de Jésus dans Jean 14:2 ?",
+          "ht": "Ki pwomès Jezi fè nan Jan 14:2?"
+        },
+        "ref": {
+          "en": "John 14:2-3",
+          "es": "Juan 14:2-3",
+          "fr": "Jean 14:2-3",
+          "ht": "Jan 14:2-3"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "I will return soon",
+            "es": "Volveré pronto",
+            "fr": "Je reviendrai bientôt",
+            "ht": "Mwen pral tounen byento"
+          },
+          {
+            "en": "I am preparing a place for you and I will return to take you",
+            "es": "Les estoy preparando un lugar y volveré para llevarlos",
+            "fr": "Je vous prépare une place et je reviendrai vous prendre",
+            "ht": "Mwen t ap prepare yon plas pou nou e mwen pral tounen chache nou"
+          },
+          {
+            "en": "You will be resurrected",
+            "es": "Serán resucitados",
+            "fr": "Vous serez ressuscités",
+            "ht": "Nou pral ressisiye"
+          },
+          {
+            "en": "The Holy Spirit will guide you",
+            "es": "El Espíritu Santo te guiará",
+            "fr": "Le Saint-Esprit vous guidera",
+            "ht": "Sentespri a va gide ou"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "John 11:35",
+          "es": "Juan 11:35",
+          "fr": "Jean 11:35",
+          "ht": "Jan 11:35"
+        },
+        "type": "tf",
+        "is_true": true,
+        "statement": {
+          "en": "Jesus wept at the tomb of Lazarus before raising him.",
+          "es": "Jesús lloró en la tumba de Lázaro antes de resucitarlo.",
+          "fr": "Jésus a pleuré à la tombe de Lazare avant de le ressusciter.",
+          "ht": "Jésus te plore nan tomb Lazare anvan li fè l viv ankò."
+        }
+      },
+      {
+        "ref": {
+          "en": "John 11:25",
+          "es": "Juan 11:25",
+          "fr": "Jean 11:25",
+          "ht": "Jan 11:25"
+        },
+        "type": "fill",
+        "verse": {
+          "en": "I am the resurrection and the ___. Whoever believes in me will live, even though they may have died.",
+          "es": "Yo soy la resurrección y la ___. El que cree en mí vivirá, aunque haya muerto.",
+          "fr": "Je suis la résurrection et la ___. Celui qui croit en moi vivra, quand même il serait mort.",
+          "ht": "Mwen se rezireksyon an ak ___. Sila ki kwè an mwen ap viv, menm si li ta mouri."
+        },
+        "correct": 0,
+        "answer_word": {
+          "en": "life",
+          "es": "vida",
+          "fr": "vie",
+          "ht": "lavi"
+        },
+        "fill_options": [
+          {
+            "en": "life",
+            "es": "vida",
+            "fr": "vie",
+            "ht": "lavi"
+          },
+          {
+            "en": "light",
+            "es": "luz",
+            "fr": "lumière",
+            "ht": "limyè"
+          },
+          {
+            "en": "way",
+            "es": "camino",
+            "fr": "voie",
+            "ht": "chemen"
+          },
+          {
+            "en": "truth",
+            "es": "verdad",
+            "fr": "vérité",
+            "ht": "verite"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "John 20:14-16",
+          "es": "Juan 20:14-16",
+          "fr": "Jean 20:14-16",
+          "ht": "Jan 20:14-16"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am the woman from whom Jesus cast out 7 demons.",
+            "es": "Yo soy la mujer de la que Jesús expulsó 7 demonios.",
+            "fr": "Je suis la femme dont Jésus a chassé 7 démons.",
+            "ht": "Mwen se fanm nan Jésus te chase 7 dèmon."
+          },
+          {
+            "en": "I am the first to see Jesus risen from the dead.",
+            "es": "Yo soy la primera en ver a Jesús resucitado.",
+            "fr": "Je suis la première à avoir vu Jésus ressuscité.",
+            "ht": "Mwen se premye a wè Jésus leve soti nan mò."
+          },
+          {
+            "en": "I am often present at the foot of the cross and at the tomb.",
+            "es": "Con frecuencia estoy presente al pie de la cruz y en la tumba.",
+            "fr": "Je suis souvent présente au pied de la croix et au tombeau.",
+            "ht": "Mwen souvan prezan nan pye nan kwa a ak nan tomb."
+          }
+        ],
+        "correct": 3,
+        "options": [
+          {
+            "en": "Mary of Bethany",
+            "es": "María de Betania",
+            "fr": "Marie de Béthanie",
+            "ht": "Mari Betani"
+          },
+          {
+            "en": "Mary mother of Jesus",
+            "es": "María madre de Jesús",
+            "fr": "Marie mère de Jésus",
+            "ht": "Marie manman Jésus"
+          },
+          {
+            "en": "Martha",
+            "es": "Marta",
+            "fr": "Marthe",
+            "ht": "Marthe"
+          },
+          {
+            "en": "Mary Magdalene",
+            "es": "María Magdalena",
+            "fr": "Marie-Madeleine",
+            "ht": "Mani-Madelèn"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What is the new commandment Jesus gives in Jean 13:34?",
+          "es": "¿Cuál es el nuevo mandamiento que Jesús da en Juan 13:34?",
+          "fr": "Quel est le commandement nouveau que Jésus donne dans Jean 13:34 ?",
+          "ht": "Kil nouve kòmandman Jésus bay nan Jean 13:34?"
+        },
+        "ref": {
+          "en": "John 13:34",
+          "es": "Juan 13:34",
+          "fr": "Jean 13:34",
+          "ht": "Jan 13:34"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Love your enemies",
+            "es": "Amen a sus enemigos",
+            "fr": "Aimez vos ennemis",
+            "ht": "Renmen lènmi ou yo"
+          },
+          {
+            "en": "Love one another as I have loved you",
+            "es": "Ámense los unos a los otros como yo los he amado",
+            "fr": "Aimez-vous les uns les autres comme je vous ai aimés",
+            "ht": "Renmen youn lot tankou mwen te renmen nou"
+          },
+          {
+            "en": "Pray for those who persecute you",
+            "es": "Oren por los que los persiguen",
+            "fr": "Priez pour ceux qui vous persécutent",
+            "ht": "Lapriyè pou sa ki pèsekite ou"
+          },
+          {
+            "en": "Do to others what you would have them do to you",
+            "es": "Haz a otros lo que quieras que te hagan a ti",
+            "fr": "Faites aux autres ce que vous voudriez qu'ils vous fassent",
+            "ht": "Fè lòt yo sa ou ta vle yo fè ou"
+          }
+        ]
+      }
+    ]
+  }
+]
