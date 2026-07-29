@@ -1,0 +1,3077 @@
+[
+  {
+    "id": "8d8c5ce6-f788-47bf-aa02-a5fdb0d95e4d",
+    "round_number": 1,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "In what city was Daniel taken into captivity?",
+          "es": "¿A qué ciudad fue llevado Daniel en cautividad?",
+          "fr": "Dans quelle ville Daniel a-t-il été emmené en captivité ?",
+          "ht": "Nan ki vil Daniel te mennen an kaptivite?"
+        },
+        "ref": {
+          "en": "Daniel 1:1",
+          "es": "Daniel 1:1",
+          "fr": "Daniel 1:1",
+          "ht": "Danyèl 1:1"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Jerusalem",
+            "es": "Jerusalén",
+            "fr": "Jérusalem",
+            "ht": "Jérusalem"
+          },
+          {
+            "en": "Babylon",
+            "es": "Babilonia",
+            "fr": "Babylone",
+            "ht": "Babylone"
+          },
+          {
+            "en": "Nineveh",
+            "es": "Nínive",
+            "fr": "Ninive",
+            "ht": "Ninive"
+          },
+          {
+            "en": "Susa",
+            "es": "Susa",
+            "fr": "Suse",
+            "ht": "Susa"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Which Babylonian king took Daniel into captivity?",
+          "es": "¿Qué rey babilónico llevó a Daniel en cautividad?",
+          "fr": "Quel roi babylonien a emmené Daniel en captivité ?",
+          "ht": "Ki wa Babilòn te mennen Daniel an kaptivite?"
+        },
+        "ref": {
+          "en": "Daniel 1:1",
+          "es": "Daniel 1:1",
+          "fr": "Daniel 1:1",
+          "ht": "Danyèl 1:1"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Cyrus",
+            "es": "Ciro",
+            "fr": "Cyrus",
+            "ht": "Sirus"
+          },
+          {
+            "en": "Darius",
+            "es": "Darío",
+            "fr": "Darius",
+            "ht": "Darius"
+          },
+          {
+            "en": "Nebuchadnezzar",
+            "es": "Nabucodonosor",
+            "fr": "Nabuchodonosor",
+            "ht": "Nabukodonosor"
+          },
+          {
+            "en": "Belshazzar",
+            "es": "Belsasar",
+            "fr": "Belschatsar",
+            "ht": "Belschatsar"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How many close friends did Daniel have in Babylon?",
+          "es": "¿Cuántos amigos cercanos tenía Daniel en Babilonia?",
+          "fr": "Combien d'amis proches Daniel avait-il à Babylone ?",
+          "ht": "Konbyen zanmi pwòch Daniel te genyen nan Babilòn?"
+        },
+        "ref": {
+          "en": "Daniel 1:6",
+          "es": "Daniel 1:6",
+          "fr": "Daniel 1:6",
+          "ht": "Danjèl 1:6"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "2",
+            "es": "2",
+            "fr": "2",
+            "ht": "2"
+          },
+          {
+            "en": "3",
+            "es": "3",
+            "fr": "3",
+            "ht": "3"
+          },
+          {
+            "en": "4",
+            "es": "4",
+            "fr": "4",
+            "ht": "4"
+          },
+          {
+            "en": "5",
+            "es": "5",
+            "fr": "5",
+            "ht": "5"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What was the Hebrew name of Shadrach?",
+          "es": "¿Cuál era el nombre hebreo de Sadrac?",
+          "fr": "Quel était le nom hébreu de Shadrak ?",
+          "ht": "Kèl te non ebre Shadrak la?"
+        },
+        "ref": {
+          "en": "Daniel 1:7",
+          "es": "Daniel 1:7",
+          "fr": "Daniel 1:7",
+          "ht": "Danjèl 1:7"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Daniel",
+            "es": "Daniel",
+            "fr": "Daniel",
+            "ht": "Daniel"
+          },
+          {
+            "en": "Hananiah",
+            "es": "Ananías",
+            "fr": "Hanania",
+            "ht": "Hanania"
+          },
+          {
+            "en": "Michael",
+            "es": "Miguel",
+            "fr": "Michaël",
+            "ht": "Mikael"
+          },
+          {
+            "en": "Azariah",
+            "es": "Azarías",
+            "fr": "Azaria",
+            "ht": "Azaria"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How many days did Daniel ask to test a vegetarian diet?",
+          "es": "¿Cuántos días pidió Daniel para probar una dieta vegetariana?",
+          "fr": "Combien de jours Daniel a-t-il demandé pour tester un régime végétarien ?",
+          "ht": "Konbyen jou Daniel te mande pou tèste yon rejim legim?"
+        },
+        "ref": {
+          "en": "Daniel 1:12",
+          "es": "Daniel 1:12",
+          "fr": "Daniel 1:12",
+          "ht": "Danjèl 1:12"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "7",
+            "es": "7",
+            "fr": "7",
+            "ht": "7"
+          },
+          {
+            "en": "10",
+            "es": "10",
+            "fr": "10",
+            "ht": "10"
+          },
+          {
+            "en": "14",
+            "es": "14",
+            "fr": "14",
+            "ht": "14"
+          },
+          {
+            "en": "30",
+            "es": "30",
+            "fr": "30",
+            "ht": "30"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "e4543b07-2db6-4049-9813-1897a1d8e007",
+    "round_number": 2,
+    "round_type": "tf",
+    "questions": [
+      {
+        "ref": {
+          "en": "Daniel 1:8",
+          "es": "Daniel 1:8",
+          "fr": "Daniel 1:8",
+          "ht": "Danjèl 1:8"
+        },
+        "type": "tf",
+        "is_true": true,
+        "statement": {
+          "en": "Daniel refused to eat the king's food so as not to defile himself.",
+          "es": "Daniel se negó a comer la comida del rey para no contaminarse.",
+          "fr": "Daniel a refusé de manger la nourriture du roi pour ne pas se souiller.",
+          "ht": "Daniel refize manje manje wa a pou li pa soiye."
+        }
+      },
+      {
+        "ref": {
+          "en": "Gold, silver, bronze, iron, clay — Daniel 2:32-33",
+          "es": "Oro, plata, bronce, hierro, arcilla — Daniel 2:32-33",
+          "fr": "Or, argent, airain, fer, argile — Daniel 2:32-33",
+          "ht": "Lò, ajan, bwonz, fè, ajil — Danjèl 2:32-33"
+        },
+        "type": "tf",
+        "is_true": false,
+        "statement": {
+          "en": "Nebuchadnezzar dreamed of a great statue made entirely of gold.",
+          "es": "Nabucodonosor soñó con una gran estatua hecha enteramente de oro.",
+          "fr": "Nabuchodonosor a rêvé d'une grande statue faite entièrement d'or.",
+          "ht": "Nabuchodonosor te reve de yon gwo estatil fè antièman nan lò."
+        }
+      },
+      {
+        "ref": {
+          "en": "Daniel 3:20",
+          "es": "Daniel 3:20",
+          "fr": "Daniel 3:20",
+          "ht": "Danjèl 3:20"
+        },
+        "type": "tf",
+        "is_true": true,
+        "statement": {
+          "en": "The three friends of Daniel (Shadrach, Meshach, and Abednego) were thrown into a burning furnace.",
+          "es": "Los tres amigos de Daniel (Sadrac, Mesac y Abed-nego) fueron arrojados a un horno ardiente.",
+          "fr": "Les trois amis de Daniel (Shadrak, Méschak, Abed-Nego) ont été jetés dans une fournaise ardente.",
+          "ht": "Twa zanmi Daniel yo (Shadrak, Méchak, Abed-Nego) te jete nan yon founes ki te boule."
+        }
+      },
+      {
+        "ref": {
+          "en": "Daniel 6:16",
+          "es": "Daniel 6:16",
+          "fr": "Daniel 6:16",
+          "ht": "Danjèl 6:16"
+        },
+        "type": "tf",
+        "is_true": true,
+        "statement": {
+          "en": "Daniel was thrown into the lion's den under king Darius the Mede.",
+          "es": "Daniel fue arrojado al foso de los leones bajo el rey Darío el Medo.",
+          "fr": "Daniel a été jeté dans la fosse aux lions sous le roi Darius le Mède.",
+          "ht": "Daniel te jete nan fos lyon yo anba wa Darius Mèd."
+        }
+      },
+      {
+        "ref": {
+          "en": "Daniel 5:25-28",
+          "es": "Daniel 5:25-28",
+          "fr": "Daniel 5:25-28",
+          "ht": "Danjèl 5:25-28"
+        },
+        "type": "tf",
+        "is_true": true,
+        "statement": {
+          "en": "Daniel interpreted the mysterious writing: 'Mene, Mene, Tekel, Upharsin'.",
+          "es": "Daniel interpretó la escritura misteriosa: 'Mené, Téqel, Uparsin'.",
+          "fr": "Daniel a interprété l'écriture mystérieuse : 'Mané, Téqel, Ouparsin'.",
+          "ht": "Daniel eksplike ekri misterye a: 'Mané, Téqel, Ouparsin'."
+        }
+      },
+      {
+        "ref": {
+          "en": "He went mad for 7 years — Daniel 4:16",
+          "es": "Se volvió loco durante 7 años — Daniel 4:16",
+          "fr": "Il est devenu fou pendant 7 ans — Daniel 4:16",
+          "ht": "Li te fòl pandan 7 zan — Danjèl 4:16"
+        },
+        "type": "tf",
+        "is_true": false,
+        "statement": {
+          "en": "Nebuchadnezzar became mad for 7 days.",
+          "es": "Nabucodonosor se volvió loco durante 7 días.",
+          "fr": "Nabuchodonosor est devenu fou pendant 7 jours.",
+          "ht": "Nabuchodonosor te vin fòl pandan 7 jou."
+        }
+      }
+    ]
+  },
+  {
+    "id": "0f2093b5-8ff9-48c3-a649-49e98b3de130",
+    "round_number": 3,
+    "round_type": "fill",
+    "questions": [
+      {
+        "ref": {
+          "en": "Daniel 1:12",
+          "es": "Daniel 1:12",
+          "fr": "Daniel 1:12",
+          "ht": "Danjèl 1:12"
+        },
+        "type": "fill",
+        "verse": {
+          "en": "Daniel proposed to the overseer to submit him and his companions to a ___ of ten days.",
+          "es": "Daniel propuso al mayordomo someterlos a él y a sus compañeros a una ___ de diez días.",
+          "fr": "Daniel proposa à l'intendant de les soumettre, lui et ses compagnons, à une ___ de dix jours.",
+          "ht": "Daniel pwopoze intandan an pou yo fè yon ___ di dis jou avèk li ak konpanyon l yo."
+        },
+        "correct": 0,
+        "answer_word": {
+          "en": "test",
+          "es": "prueba",
+          "fr": "épreuve",
+          "ht": "tès"
+        },
+        "fill_options": [
+          {
+            "en": "test",
+            "es": "prueba",
+            "fr": "épreuve",
+            "ht": "tès"
+          },
+          {
+            "en": "period",
+            "es": "período",
+            "fr": "période",
+            "ht": "peryòd"
+          },
+          {
+            "en": "week",
+            "es": "semana",
+            "fr": "semaine",
+            "ht": "semèn"
+          },
+          {
+            "en": "year",
+            "es": "año",
+            "fr": "année",
+            "ht": "ane"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 2:22",
+          "es": "Daniel 2:22",
+          "fr": "Daniel 2:22",
+          "ht": "Danyèl 2:22"
+        },
+        "type": "fill",
+        "verse": {
+          "en": "He reveals what is deep and secret; he knows what is in the ___, and light remains with him.",
+          "es": "Él revela lo profundo y lo secreto; conoce lo que está en el ___, y la luz permanece con él.",
+          "fr": "Il révèle ce qui est profond et secret ; il connaît ce qui est dans les ___, et la lumière demeure avec lui.",
+          "ht": "Li revèle sa ki pwofon ak sekrè; li konnen sa ki nan ___, ak limyè a rete avèk li."
+        },
+        "correct": 0,
+        "answer_word": {
+          "en": "darkness",
+          "es": "tinieblas",
+          "fr": "ténèbres",
+          "ht": "tèn"
+        },
+        "fill_options": [
+          {
+            "en": "darkness",
+            "es": "tinieblas",
+            "fr": "ténèbres",
+            "ht": "tèn"
+          },
+          {
+            "en": "abysses",
+            "es": "abismos",
+            "fr": "abîmes",
+            "ht": "abim"
+          },
+          {
+            "en": "heavens",
+            "es": "cielos",
+            "fr": "cieux",
+            "ht": "syèl"
+          },
+          {
+            "en": "waters",
+            "es": "aguas",
+            "fr": "eaux",
+            "ht": "dlo"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 6:22",
+          "es": "Daniel 6:22",
+          "fr": "Daniel 6:22",
+          "ht": "Danyèl 6:22"
+        },
+        "type": "fill",
+        "verse": {
+          "en": "My God sent his ___ and shut the lions' mouths.",
+          "es": "Mi Dios envió su ___ y cerró la boca de los leones.",
+          "fr": "Mon Dieu a envoyé son ___ et a fermé la gueule des lions.",
+          "ht": "Bondye m yo te voye ___ li a epi li te fèmen bouch lyon yo."
+        },
+        "correct": 0,
+        "answer_word": {
+          "en": "angel",
+          "es": "ángel",
+          "fr": "ange",
+          "ht": "anj"
+        },
+        "fill_options": [
+          {
+            "en": "angel",
+            "es": "ángel",
+            "fr": "ange",
+            "ht": "anj"
+          },
+          {
+            "en": "Spirit",
+            "es": "Espíritu",
+            "fr": "Esprit",
+            "ht": "Espri"
+          },
+          {
+            "en": "servant",
+            "es": "siervo",
+            "fr": "serviteur",
+            "ht": "sèvitè"
+          },
+          {
+            "en": "prophet",
+            "es": "profeta",
+            "fr": "prophète",
+            "ht": "pwofèt"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 12:3",
+          "es": "Daniel 12:3",
+          "fr": "Daniel 12:3",
+          "ht": "Danyèl 12:3"
+        },
+        "type": "fill",
+        "verse": {
+          "en": "Those who instruct the peoples ___ like the stars forever and ever.",
+          "es": "Los que instruyen a los pueblos ___ como las estrellas por siempre y para siempre.",
+          "fr": "Ceux qui instruisent les peuples ___ comme les étoiles pour toujours et à perpétuité.",
+          "ht": "Sa yo ki moutre pèp yo ___ tankou zetwal pou tout tan epi pou jòn."
+        },
+        "correct": 0,
+        "answer_word": {
+          "en": "will shine",
+          "es": "brillarán",
+          "fr": "brilleront",
+          "ht": "ap briye"
+        },
+        "fill_options": [
+          {
+            "en": "will shine",
+            "es": "brillarán",
+            "fr": "brilleront",
+            "ht": "ap briye"
+          },
+          {
+            "en": "will dance",
+            "es": "danzarán",
+            "fr": "danseront",
+            "ht": "ap danse"
+          },
+          {
+            "en": "will reign",
+            "es": "reinarán",
+            "fr": "régneront",
+            "ht": "ap renye"
+          },
+          {
+            "en": "will live",
+            "es": "vivirán",
+            "fr": "vivront",
+            "ht": "ap viv"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "4cba90f0-cdff-4615-8950-6451a337891d",
+    "round_number": 4,
+    "round_type": "character",
+    "questions": [
+      {
+        "ref": {
+          "en": "Daniel 1-6",
+          "es": "Daniel 1-6",
+          "fr": "Daniel 1-6",
+          "ht": "Danyèl 1-6"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am a young Hebrew taken into captivity in Babylon.",
+            "es": "Soy un joven hebreo llevado al cautiverio en Babilonia.",
+            "fr": "Je suis un jeune Hébreu emmené en captivité à Babylone.",
+            "ht": "Mwen se yon jenn Ebre ki te pote an depòte nan Babylone."
+          },
+          {
+            "en": "I interpreted the dreams and mysterious visions of the king.",
+            "es": "Interpreté los sueños y las visiones misteriosas del rey.",
+            "fr": "J'ai interprété les rêves et les visions mystérieuses du roi.",
+            "ht": "Mwen te entèprete rèv ak vizyon mistiryø wa yo."
+          },
+          {
+            "en": "I survived the lion's den by God's protection.",
+            "es": "Sobreviví al foso de los leones por la protección de Dios.",
+            "fr": "J'ai survécu à la fosse aux lions grâce à la protection de Dieu.",
+            "ht": "Mwen te siviv nan fos a lyon grasa proteksyon Dieu."
+          }
+        ],
+        "correct": 3,
+        "options": [
+          {
+            "en": "Ezekiel",
+            "es": "Ezequiel",
+            "fr": "Ézéchiel",
+            "ht": "Ezekièl"
+          },
+          {
+            "en": "Nehemiah",
+            "es": "Nehemías",
+            "fr": "Néhémie",
+            "ht": "Nehemya"
+          },
+          {
+            "en": "Jeremiah",
+            "es": "Jeremías",
+            "fr": "Jérémie",
+            "ht": "Jeremi"
+          },
+          {
+            "en": "Daniel",
+            "es": "Daniel",
+            "fr": "Daniel",
+            "ht": "Daniel"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 2-4",
+          "es": "Daniel 2-4",
+          "fr": "Daniel 2-4",
+          "ht": "Danyèl 2-4"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am the Babylonian king who dreamed of a great statue.",
+            "es": "Soy el rey babilónico que soñó con una gran estatua.",
+            "fr": "Je suis le roi babylonien qui a rêvé d'une grande statue.",
+            "ht": "Mwen se wa Babylonyen ki te reve yon gwo estatn."
+          },
+          {
+            "en": "I was driven mad for 7 years because I became proud.",
+            "es": "Fui enloquecido durante 7 años porque me enorgullecí.",
+            "fr": "J'ai été rendu fou pendant 7 ans car je m'étais enorgueilli.",
+            "ht": "Mwen te vire fou pandan 7 an paske mwen te enflèchi."
+          },
+          {
+            "en": "After my madness, I acknowledged that the God of heaven is the true King.",
+            "es": "Después de mi locura, reconocí que el Dios del cielo es el verdadero Rey.",
+            "fr": "Après ma folie, j'ai reconnu que le Dieu du ciel est le vrai Roi.",
+            "ht": "Apre dèlir mwen, mwen rekone ke Dieu nan syèl la se Vré Wa a."
+          }
+        ],
+        "correct": 3,
+        "options": [
+          {
+            "en": "Belshazzar",
+            "es": "Belsasar",
+            "fr": "Belschatsar",
+            "ht": "Belschatsar"
+          },
+          {
+            "en": "Darius",
+            "es": "Darío",
+            "fr": "Darius",
+            "ht": "Darius"
+          },
+          {
+            "en": "Cyrus",
+            "es": "Ciro",
+            "fr": "Cyrus",
+            "ht": "Sirus"
+          },
+          {
+            "en": "Nebuchadnezzar",
+            "es": "Nabucodonosor",
+            "fr": "Nabuchodonosor",
+            "ht": "Nabukodonosor"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 3",
+          "es": "Daniel 3",
+          "fr": "Daniel 3",
+          "ht": "Danyèl 3"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am one of Daniel's three friends who refused to worship the golden statue.",
+            "es": "Soy uno de los tres amigos de Daniel que se negó a adorar la estatua de oro.",
+            "fr": "Je suis l'un des trois amis de Daniel qui a refusé d'adorer la statue d'or.",
+            "ht": "Mwen se youn nan twa zanmi Daniel ki refize adore estatn lò a."
+          },
+          {
+            "en": "With my friends Meshach and Abednego, I was thrown into a burning furnace.",
+            "es": "Con mis amigos Mesac y Abednego, fui arrojado a un horno ardiente.",
+            "fr": "Avec mes amis Méschak et Abed-Nego, j'ai été jeté dans une fournaise ardente.",
+            "ht": "Avèk zanmi mwen Méschak ak Abed-Nego, mwen te jete nan yon founes adonnen."
+          },
+          {
+            "en": "A fourth man resembling a 'son of the gods' walked with us in the fire.",
+            "es": "Un cuarto hombre que parecía un 'hijo de los dioses' caminaba con nosotros en el fuego.",
+            "fr": "Un quatrième homme ressemblant à un 'fils des dieux' marchait avec nous dans le feu.",
+            "ht": "Yon katyèm moun ki te sanble ak yon 'fis dieu' te mache avèk nou nan dife a."
+          }
+        ],
+        "correct": 2,
+        "options": [
+          {
+            "en": "Daniel",
+            "es": "Daniel",
+            "fr": "Daniel",
+            "ht": "Daniel"
+          },
+          {
+            "en": "Elijah",
+            "es": "Elías",
+            "fr": "Élie",
+            "ht": "Eli"
+          },
+          {
+            "en": "Shadrach",
+            "es": "Sadrac",
+            "fr": "Shadrak",
+            "ht": "Shadrak"
+          },
+          {
+            "en": "Ezekiel",
+            "es": "Ezequiel",
+            "fr": "Ézéchiel",
+            "ht": "Ezekièl"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 6",
+          "es": "Daniel 6",
+          "fr": "Daniel 6",
+          "ht": "Danyèl 6"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am the Mede king who reigned over Babylon after its fall.",
+            "es": "Soy el rey medo que reinó sobre Babilonia después de su caída.",
+            "fr": "Je suis le roi mède qui a régné sur Babylone après sa chute.",
+            "ht": "Mwen se wa Mèd ki te regni sou Babylone apre chit li."
+          },
+          {
+            "en": "I signed a decree forbidding all prayer except to me for 30 days.",
+            "es": "Firmé un decreto prohibiendo toda oración excepto hacia mí durante 30 días.",
+            "fr": "J'ai signé un décret interdisant toute prière sauf à moi pendant 30 jours.",
+            "ht": "Mwen te siyen yon dekre ki entèdi tout priyè eksepte bay mwen pandan 30 jou."
+          },
+          {
+            "en": "It was I who had Daniel thrown into the lion's den against my will.",
+            "es": "Fui yo quien hizo arrojar a Daniel al foso de los leones a mi pesar.",
+            "fr": "C'est moi qui ai fait jeter Daniel dans la fosse aux lions malgré moi.",
+            "ht": "Se mwen ki te fè jete Daniel nan fos a lyon malgre mwen."
+          }
+        ],
+        "correct": 2,
+        "options": [
+          {
+            "en": "Cyrus",
+            "es": "Ciro",
+            "fr": "Cyrus",
+            "ht": "Sirus"
+          },
+          {
+            "en": "Nebuchadnezzar",
+            "es": "Nabucodonosor",
+            "fr": "Nabuchodonosor",
+            "ht": "Nabukodonosor"
+          },
+          {
+            "en": "Darius",
+            "es": "Darío",
+            "fr": "Darius",
+            "ht": "Darius"
+          },
+          {
+            "en": "Artaxerxes",
+            "es": "Artajerjes",
+            "fr": "Artaxerxès",
+            "ht": "Ataksèks"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "4118f757-06f0-4fd0-bf35-5164487b8208",
+    "round_number": 5,
+    "round_type": "location",
+    "questions": [
+      {
+        "ref": {
+          "en": "Daniel 1:1",
+          "es": "Daniel 1:1",
+          "fr": "Daniel 1:1",
+          "ht": "Danyèl 1:1"
+        },
+        "type": "location",
+        "clues": [
+          {
+            "en": "It was in this great city that Daniel and his friends were taken into captivity.",
+            "es": "Fue en esta gran ciudad que Daniel y sus amigos fueron llevados al cautiverio.",
+            "fr": "C'est dans cette grande ville que Daniel et ses amis ont été emmenés en captivité.",
+            "ht": "Se nan gwo vil sa a ke Daniel ak zanmi li yo te mennen an kaptyite."
+          },
+          {
+            "en": "King Nebuchadnezzar reigned over this capital of his empire.",
+            "es": "El rey Nabucodonosor reinaba sobre esta capital de su imperio.",
+            "fr": "Le roi Nabuchodonosor régnait sur cette capitale de son empire.",
+            "ht": "Wa Nabuchodonosor te rèn sou kapital empi sa a."
+          },
+          {
+            "en": "The hanging gardens were one of the seven wonders of the world.",
+            "es": "Los jardines colgantes eran una de las siete maravillas del mundo.",
+            "fr": "Les jardins suspendus y étaient l'une des sept merveilles du monde.",
+            "ht": "Jaden sispandi yo te ye youn nan sèt mèvèy mond lan."
+          }
+        ],
+        "correct": 3,
+        "options": [
+          {
+            "en": "Nineveh",
+            "es": "Nínive",
+            "fr": "Ninive",
+            "ht": "Ninive"
+          },
+          {
+            "en": "Susa",
+            "es": "Susa",
+            "fr": "Suse",
+            "ht": "Susa"
+          },
+          {
+            "en": "Ur",
+            "es": "Ur",
+            "fr": "Ur",
+            "ht": "Ur"
+          },
+          {
+            "en": "Babylon",
+            "es": "Babilonia",
+            "fr": "Babylone",
+            "ht": "Babylone"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 3:1",
+          "es": "Daniel 3:1",
+          "fr": "Daniel 3:1",
+          "ht": "Danyèl 3:1"
+        },
+        "type": "location",
+        "clues": [
+          {
+            "en": "In the book of Daniel, this great plain is the place where the golden statue was erected.",
+            "es": "En el libro de Daniel, esta gran llanura es el lugar donde se erigió la estatua de oro.",
+            "fr": "Dans le livre de Daniel, cette grande plaine est le lieu où la statue d'or a été érigée.",
+            "ht": "Nan liv Daniel la, gwo plèn sa a se kote estatil dò a te leve kanpe."
+          },
+          {
+            "en": "It is in the province of Babylon.",
+            "es": "Está en la provincia de Babilonia.",
+            "fr": "Elle est dans la province de Babylone.",
+            "ht": "Li nan pwovins Babilòn."
+          },
+          {
+            "en": "People from all nations had to bow down at the trumpet in this place.",
+            "es": "La gente de todas las naciones debía postrarse ante la trompeta en este lugar.",
+            "fr": "Des gens de toutes nations devaient se prosterner à la trompette dans cet endroit.",
+            "ht": "Moun ki soti nan tout nasyon yo ta dwe bese jnou lè trompèt la te sone nan kote sa."
+          }
+        ],
+        "correct": 0,
+        "options": [
+          {
+            "en": "Plain of Dura",
+            "es": "Llanura de Dura",
+            "fr": "La plaine de Dura",
+            "ht": "Plèn Dura"
+          },
+          {
+            "en": "Valley of Jehoshaphat",
+            "es": "Valle de Josafat",
+            "fr": "La vallée de Josaphat",
+            "ht": "Vale Josafat"
+          },
+          {
+            "en": "Mount Sinai",
+            "es": "Monte Sinaí",
+            "fr": "Le mont Sinaï",
+            "ht": "Mòn Sinay"
+          },
+          {
+            "en": "Plain of Mamre",
+            "es": "Llanura de Mamre",
+            "fr": "La plaine de Mamré",
+            "ht": "Plèn Mamré"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 8:2",
+          "es": "Daniel 8:2",
+          "fr": "Daniel 8:2",
+          "ht": "Danyèl 8:2"
+        },
+        "type": "location",
+        "clues": [
+          {
+            "en": "It is in this Persian city that king Cyrus signed the decree for the return of the Jews.",
+            "es": "Es en esta ciudad persa donde el rey Ciro firmó el decreto para el regreso de los judíos.",
+            "fr": "C'est dans cette ville perse que le roi Cyrus a signé le décret de retour des Juifs.",
+            "ht": "Se nan vil Pès sa a ki wa Cyrus te siyen dekreto pou Jwif yo tounen."
+          },
+          {
+            "en": "Daniel had important visions there.",
+            "es": "Daniel tuvo visiones importantes allí.",
+            "fr": "Daniel y a eu des visions importantes.",
+            "ht": "Daniel te gen vizyon enpòtan la."
+          },
+          {
+            "en": "It was the winter capital of the Persian Empire.",
+            "es": "Fue la capital de invierno del Imperio persa.",
+            "fr": "Elle était la capitale d'hiver de l'Empire perse.",
+            "ht": "Li te kapital ivè Anpi Pès."
+          }
+        ],
+        "correct": 1,
+        "options": [
+          {
+            "en": "Babylon",
+            "es": "Babilonia",
+            "fr": "Babylone",
+            "ht": "Babylone"
+          },
+          {
+            "en": "Susa",
+            "es": "Susa",
+            "fr": "Suse",
+            "ht": "Susa"
+          },
+          {
+            "en": "Persepolis",
+            "es": "Persépolis",
+            "fr": "Persépolis",
+            "ht": "Persépolis"
+          },
+          {
+            "en": "Ecbatana",
+            "es": "Ecbatana",
+            "fr": "Ecbatane",
+            "ht": "Ecbatane"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 10:4",
+          "es": "Daniel 10:4",
+          "fr": "Daniel 10:4",
+          "ht": "Danyèl 10:4"
+        },
+        "type": "location",
+        "clues": [
+          {
+            "en": "It is in this river of Babylon that Daniel had a vision in Daniel 10.",
+            "es": "Es en este río de Babilonia donde Daniel tuvo una visión en Daniel 10.",
+            "fr": "C'est dans ce fleuve de Babylone que Daniel a eu une vision de Daniel 10.",
+            "ht": "Se nan flèv Babilòn sa a ki Daniel te gen vizyon nan Danyèl 10."
+          },
+          {
+            "en": "This great river passes through present-day Iraq.",
+            "es": "Este gran río pasa por el Irak actual.",
+            "fr": "Ce grand fleuve passe par l'actuel Irak.",
+            "ht": "Gran flèv sa a pase pa Irak tou."
+          },
+          {
+            "en": "Its name means 'great river' or 'Hiddeqel' in Hebrew.",
+            "es": "Su nombre significa 'gran río' o 'Hiddeqel' en hebreo.",
+            "fr": "Son nom signifie 'grand fleuve' ou 'Hiddeqel' en hébreu.",
+            "ht": "Non li vle di 'gran flèv' oswa 'Hiddeqel' nan ebre."
+          }
+        ],
+        "correct": 1,
+        "options": [
+          {
+            "en": "The Euphrates",
+            "es": "El Éufrates",
+            "fr": "L'Euphrate",
+            "ht": "Eifrat"
+          },
+          {
+            "en": "The Tigris",
+            "es": "El Tigris",
+            "fr": "Le Tigre",
+            "ht": "Tigr"
+          },
+          {
+            "en": "The Nile",
+            "es": "El Nilo",
+            "fr": "Le Nil",
+            "ht": "Nil"
+          },
+          {
+            "en": "The Gihon",
+            "es": "El Gihón",
+            "fr": "Le Gihon",
+            "ht": "Gihon"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "9186f441-1bc7-4205-ae51-c75f2b1725f2",
+    "round_number": 6,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "In how many parts was the great statue of Nebuchadnezzar's dream divided?",
+          "es": "¿En cuántas partes estaba dividida la gran estatua del sueño de Nabucodonosor?",
+          "fr": "En combien de parties la grande statue du rêve de Nabuchodonosor était-elle divisée ?",
+          "ht": "En konbyen pati estatid gwo a nan rèv Nabukodonozo te divize ?"
+        },
+        "ref": {
+          "en": "Daniel 2:32-33",
+          "es": "Daniel 2:32-33",
+          "fr": "Daniel 2:32-33",
+          "ht": "Danyèl 2:32-33"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "3",
+            "es": "3",
+            "fr": "3",
+            "ht": "3"
+          },
+          {
+            "en": "4",
+            "es": "4",
+            "fr": "4",
+            "ht": "4"
+          },
+          {
+            "en": "5",
+            "es": "5",
+            "fr": "5",
+            "ht": "5"
+          },
+          {
+            "en": "6",
+            "es": "6",
+            "fr": "6",
+            "ht": "6"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What did the head of gold represent in Nebuchadnezzar's dream?",
+          "es": "¿Qué representaba la cabeza de oro en el sueño de Nabucodonosor?",
+          "fr": "Que représentait la tête d'or dans le rêve de Nabuchodonosor ?",
+          "ht": "Kisa tèt òr la te reprezante nan rèv Nabukodonozo ?"
+        },
+        "ref": {
+          "en": "Daniel 2:38",
+          "es": "Daniel 2:38",
+          "fr": "Daniel 2:38",
+          "ht": "Danyèl 2:38"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Greece",
+            "es": "Grecia",
+            "fr": "La Grèce",
+            "ht": "Grès"
+          },
+          {
+            "en": "Persia",
+            "es": "Persia",
+            "fr": "La Perse",
+            "ht": "Pèsi"
+          },
+          {
+            "en": "Nebuchadnezzar himself",
+            "es": "El mismo Nabucodonosor",
+            "fr": "Nabuchodonosor lui-même",
+            "ht": "Nabukodonozo li menm"
+          },
+          {
+            "en": "Babylon",
+            "es": "Babilonia",
+            "fr": "Babylone",
+            "ht": "Babylone"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Which part of the statue represented the divided kingdom?",
+          "es": "¿Qué parte de la estatua representaba el reino dividido?",
+          "fr": "Quelle partie de la statue représentait le royaume divisé ?",
+          "ht": "Kilès pati estatid la te reprezante wayòm divize a ?"
+        },
+        "ref": {
+          "en": "Daniel 2:41-43",
+          "es": "Daniel 2:41-43",
+          "fr": "Daniel 2:41-43",
+          "ht": "Danyèl 2:41-43"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "The feet of iron and clay",
+            "es": "Los pies de hierro y arcilla",
+            "fr": "Les pieds en fer et argile",
+            "ht": "Pye yo an fè ak ajil"
+          },
+          {
+            "en": "The legs of iron",
+            "es": "Las piernas de hierro",
+            "fr": "Les jambes de fer",
+            "ht": "Janm yo an fè"
+          },
+          {
+            "en": "The belly of bronze",
+            "es": "El vientre de bronce",
+            "fr": "Le ventre d'airain",
+            "ht": "Vant la an kwiv"
+          },
+          {
+            "en": "The arms of silver",
+            "es": "Los brazos de plata",
+            "fr": "Les bras d'argent",
+            "ht": "Bra yo an ajan"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What did the stone destroy in Nebuchadnezzar's dream?",
+          "es": "¿Qué destruyó la piedra en el sueño de Nabucodonosor?",
+          "fr": "Qu'a détruit la pierre dans le rêve de Nabuchodonosor ?",
+          "ht": "Kisa wòch la te detwi nan rèv Nabuchodonosor la?"
+        },
+        "ref": {
+          "en": "Daniel 2:34-35",
+          "es": "Daniel 2:34-35",
+          "fr": "Daniel 2:34-35",
+          "ht": "Danyèl 2:34-35"
+        },
+        "type": "mcq",
+        "correct": 3,
+        "options": [
+          {
+            "en": "The head of gold",
+            "es": "La cabeza de oro",
+            "fr": "La tête d'or",
+            "ht": "Tèt la an lò"
+          },
+          {
+            "en": "The feet of the statue",
+            "es": "Los pies de la estatua",
+            "fr": "Les pieds de la statue",
+            "ht": "Pye yo nan estati a"
+          },
+          {
+            "en": "The legs of iron",
+            "es": "Las piernas de hierro",
+            "fr": "Les jambes de fer",
+            "ht": "Janm yo an fè"
+          },
+          {
+            "en": "The entire statue",
+            "es": "La estatua completa",
+            "fr": "L'ensemble de la statue",
+            "ht": "Antirèt estati a"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "3443eeb2-e774-4c94-8d3e-0ffcb47cd468",
+    "round_number": 7,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "How many strange animals did Daniel see in his vision of the four beasts (Daniel 7)?",
+          "es": "¿Cuántos animales extraños vio Daniel en su visión de las cuatro bestias (Daniel 7)?",
+          "fr": "Combien d'animaux bizarres Daniel a-t-il vu dans sa vision des quatre bêtes (Daniel 7) ?",
+          "ht": "Konbyen bèt etranj Daniel wè nan vizyon kat bèt li a (Daniel 7)?"
+        },
+        "ref": {
+          "en": "Daniel 7:3-7",
+          "es": "Daniel 7:3-7",
+          "fr": "Daniel 7:3-7",
+          "ht": "Danyèl 7:3-7"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "3",
+            "es": "3",
+            "fr": "3",
+            "ht": "3"
+          },
+          {
+            "en": "4",
+            "es": "4",
+            "fr": "4",
+            "ht": "4"
+          },
+          {
+            "en": "5",
+            "es": "5",
+            "fr": "5",
+            "ht": "5"
+          },
+          {
+            "en": "7",
+            "es": "7",
+            "fr": "7",
+            "ht": "7"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What does 'the Ancient of Days' represent in Daniel 7?",
+          "es": "¿Qué representa 'el Anciano de Días' en Daniel 7?",
+          "fr": "Que représente 'l'Ancien des jours' dans Daniel 7 ?",
+          "ht": "Ki sa 'Ansyen jou yo' reprezante nan Daniel 7?"
+        },
+        "ref": {
+          "en": "Daniel 7:9",
+          "es": "Daniel 7:9",
+          "fr": "Daniel 7:9",
+          "ht": "Danyèl 7:9"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "An angel",
+            "es": "Un ángel",
+            "fr": "Un ange",
+            "ht": "Yon anj"
+          },
+          {
+            "en": "The prophet Daniel",
+            "es": "El profeta Daniel",
+            "fr": "Le prophète Daniel",
+            "ht": "Pwofèt Daniel"
+          },
+          {
+            "en": "God himself",
+            "es": "El mismo Dios",
+            "fr": "Dieu lui-même",
+            "ht": "Dieu li menm"
+          },
+          {
+            "en": "King Cyrus",
+            "es": "El rey Ciro",
+            "fr": "Le roi Cyrus",
+            "ht": "Wa Siris"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "In Daniel 9, what important prophetic period is announced?",
+          "es": "En Daniel 9, ¿qué período profético importante se anuncia?",
+          "fr": "Dans Daniel 9, quelle période prophétique importante est annoncée ?",
+          "ht": "Nan Daniel 9, ki peryòd pwofetik enpòtan ki te anonse?"
+        },
+        "ref": {
+          "en": "Daniel 9:24",
+          "es": "Daniel 9:24",
+          "fr": "Daniel 9:24",
+          "ht": "Danyèl 9:24"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "400 years",
+            "es": "400 años",
+            "fr": "400 ans",
+            "ht": "400 zan"
+          },
+          {
+            "en": "70 weeks",
+            "es": "70 semanas",
+            "fr": "70 semaines",
+            "ht": "70 semèn"
+          },
+          {
+            "en": "7 years",
+            "es": "7 años",
+            "fr": "7 ans",
+            "ht": "7 zan"
+          },
+          {
+            "en": "1000 years",
+            "es": "1000 años",
+            "fr": "1000 ans",
+            "ht": "1000 zan"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Which angel explained the visions to Daniel?",
+          "es": "¿Qué ángel explicó las visiones a Daniel?",
+          "fr": "Quel ange a expliqué les visions à Daniel ?",
+          "ht": "Ki anj ki te eksplike vizyon yo a Daniel?"
+        },
+        "ref": {
+          "en": "Daniel 8:16 / 9:21",
+          "es": "Daniel 8:16 / 9:21",
+          "fr": "Daniel 8:16 / 9:21",
+          "ht": "Danyèl 8:16 / 9:21"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Michael",
+            "es": "Miguel",
+            "fr": "Michel",
+            "ht": "Michel"
+          },
+          {
+            "en": "Gabriel",
+            "es": "Gabriel",
+            "fr": "Gabriel",
+            "ht": "Gabriel"
+          },
+          {
+            "en": "Raphael",
+            "es": "Rafael",
+            "fr": "Raphaël",
+            "ht": "Raphaël"
+          },
+          {
+            "en": "Uriel",
+            "es": "Uriel",
+            "fr": "Uriel",
+            "ht": "Uriel"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "In Daniel's vision of chapter 8, what animal represented Greece?",
+          "es": "En la visión de Daniel 8, ¿qué animal representaba a Grecia?",
+          "fr": "Dans la vision de Daniel 8, quel animal représentait la Grèce ?",
+          "ht": "Nan vizyon Daniel 8, ki bèt ki te reprezante Grès la?"
+        },
+        "ref": {
+          "en": "Daniel 8:21",
+          "es": "Daniel 8:21",
+          "fr": "Daniel 8:21",
+          "ht": "Danyèl 8:21"
+        },
+        "type": "mcq",
+        "correct": 3,
+        "options": [
+          {
+            "en": "A lion",
+            "es": "Un león",
+            "fr": "Un lion",
+            "ht": "Yon lyon"
+          },
+          {
+            "en": "A bear",
+            "es": "Un oso",
+            "fr": "Un ours",
+            "ht": "Yon lous"
+          },
+          {
+            "en": "A ram",
+            "es": "Un carnero",
+            "fr": "Un bélier",
+            "ht": "Yon belye"
+          },
+          {
+            "en": "A goat",
+            "es": "Un macho cabrío",
+            "fr": "Un bouc",
+            "ht": "Yon bouk"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b646c4e5-5ed4-4f00-9b2d-73152ddb5bc2",
+    "round_number": 8,
+    "round_type": "character",
+    "questions": [
+      {
+        "ref": {
+          "en": "Daniel 5",
+          "es": "Daniel 5",
+          "fr": "Daniel 5",
+          "ht": "Danyèl 5"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am the son of Nebuchadnezzar who profaned the sacred vessels of the temple.",
+            "es": "Soy el hijo de Nabucodonosor que profanó los vasos sagrados del templo.",
+            "fr": "Je suis le fils de Nabuchodonosor qui a profané les vases sacrés du temple.",
+            "ht": "Mwen se fis Nabuchodonosor ki te profane veso yo sakre nan tanp lan."
+          },
+          {
+            "en": "During my feast, a mysterious hand wrote on the wall.",
+            "es": "Durante mi banquete, una mano misteriosa escribió en la pared.",
+            "fr": "Pendant mon festin, une main mystérieuse a écrit sur le mur.",
+            "ht": "Pandan banke mwen an, yon men misterye te ekri sou miray la."
+          },
+          {
+            "en": "That same night, I was killed and Darius took the kingdom.",
+            "es": "Esa misma noche, fui asesinado y Darius tomó el reino.",
+            "fr": "Dans la même nuit, j'ai été tué et Darius a pris le règne.",
+            "ht": "Nan menm nwit la, yo te touye m epi Darius te pran rejn nan."
+          }
+        ],
+        "correct": 3,
+        "options": [
+          {
+            "en": "Nebuchadnezzar",
+            "es": "Nabucodonosor",
+            "fr": "Nabuchodonosor",
+            "ht": "Nabukodonosor"
+          },
+          {
+            "en": "Darius",
+            "es": "Darío",
+            "fr": "Darius",
+            "ht": "Darius"
+          },
+          {
+            "en": "Cyrus",
+            "es": "Ciro",
+            "fr": "Cyrus",
+            "ht": "Sirus"
+          },
+          {
+            "en": "Belshazzar",
+            "es": "Belsasar",
+            "fr": "Belschatsar",
+            "ht": "Belschatsar"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 12:1",
+          "es": "Daniel 12:1",
+          "fr": "Daniel 12:1",
+          "ht": "Danjèl 12:1"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am an archangel mentioned in Daniel who defends Israel.",
+            "es": "Soy un arcángel mencionado en Daniel que defiende a Israel.",
+            "fr": "Je suis un archange mentionné dans Daniel qui défend Israël.",
+            "ht": "Mwen se yon archangel mansyone nan Daniel ki defann Izrael."
+          },
+          {
+            "en": "In Daniel 12, I will rise up at the time of great tribulation.",
+            "es": "En Daniel 12, me levantaré en tiempo de gran tribulación.",
+            "fr": "Dans Daniel 12, je me lèverai en temps de grande tribulation.",
+            "ht": "Nan Daniel 12, mwen pral leve nan tan gwo tribulasyon an."
+          },
+          {
+            "en": "My name means 'Who is like God?'",
+            "es": "Mi nombre significa '¿Quién es como Dios?'",
+            "fr": "Mon nom signifie 'Qui est comme Dieu ?'",
+            "ht": "Non mwen vle di 'Ki sa ki tankou Dye?'"
+          }
+        ],
+        "correct": 1,
+        "options": [
+          {
+            "en": "Gabriel",
+            "es": "Gabriel",
+            "fr": "Gabriel",
+            "ht": "Gabriel"
+          },
+          {
+            "en": "Michael",
+            "es": "Miguel",
+            "fr": "Michel",
+            "ht": "Michel"
+          },
+          {
+            "en": "Raphael",
+            "es": "Rafael",
+            "fr": "Raphaël",
+            "ht": "Raphaël"
+          },
+          {
+            "en": "The Angel of the Lord",
+            "es": "El Ángel del Señor",
+            "fr": "L'Ange de l'Éternel",
+            "ht": "Zanj Senyè a"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 5:10-12",
+          "es": "Daniel 5:10-12",
+          "fr": "Daniel 5:10-12",
+          "ht": "Danyèl 5:10-12"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am the queen of Belshazzar's feast who advised to summon Daniel.",
+            "es": "Soy la reina del banquete de Belsasar que aconsejó llamar a Daniel.",
+            "fr": "Je suis la reine du festin de Belschatsar qui a conseillé de faire appeler Daniel.",
+            "ht": "Mwen se rèn banke Belschatsar ki te konseye rele Daniel."
+          },
+          {
+            "en": "I said to the king: 'Be calm, do not be troubled.'",
+            "es": "Dije al rey: 'Mantén la calma, no te aflijas.'",
+            "fr": "J'ai dit au roi : 'Reste calme, ne te trouble pas.'",
+            "ht": "Mwen te di wa a: 'Reste kalm, pa gen pwoblèm.'"
+          },
+          {
+            "en": "I reminded him of Daniel's extraordinary wisdom.",
+            "es": "Le recordé la sabiduría extraordinaria de Daniel.",
+            "fr": "Je lui ai rappelé la sagesse extraordinaire de Daniel.",
+            "ht": "Mwen te rappele li sajès estraòdinè Daniel."
+          }
+        ],
+        "correct": 1,
+        "options": [
+          {
+            "en": "Belshazzar's wife",
+            "es": "La esposa de Belsasar",
+            "fr": "La femme de Belschatsar",
+            "ht": "Madanm Belschatsar"
+          },
+          {
+            "en": "The queen mother",
+            "es": "La reina madre",
+            "fr": "La reine mère",
+            "ht": "Rèn manman"
+          },
+          {
+            "en": "Esther",
+            "es": "Ester",
+            "fr": "Esther",
+            "ht": "Este"
+          },
+          {
+            "en": "Vashti",
+            "es": "Vashti",
+            "fr": "Vashti",
+            "ht": "Vashti"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 1:11",
+          "es": "Daniel 1:11",
+          "fr": "Daniel 1:11",
+          "ht": "Danyèl 1:11"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am the chief of the eunuchs who agreed to try Daniel's vegetarian diet.",
+            "es": "Soy el jefe de los eunucos que aceptó probar la dieta vegetariana de Daniel.",
+            "fr": "Je suis le chef des eunuques qui a accepté de faire l'essai végétarien de Daniel.",
+            "ht": "Mwen se chef eunyk yo ki te aksepte eseyi rejim vejetaryen Daniel."
+          },
+          {
+            "en": "I was afraid of the king if Daniel and his friends were worse off than the others.",
+            "es": "Tenía miedo del rey si Daniel y sus amigos estaban en peor condición que los otros.",
+            "fr": "J'avais peur du roi si Daniel et ses amis étaient moins en forme que les autres.",
+            "ht": "Mwen te gen pè wa a si Daniel ak zanmi li yo te pi mal pase lòt yo."
+          },
+          {
+            "en": "After 10 days, Daniel and his friends looked better than the others.",
+            "es": "Después de 10 días, Daniel y sus amigos se veían mejor que los otros.",
+            "fr": "Après 10 jours, Daniel et ses amis avaient meilleure mine que les autres.",
+            "ht": "Apre 10 jou, Daniel ak zanmi li yo te gen pi bon aparans pase lòt yo."
+          }
+        ],
+        "correct": 1,
+        "options": [
+          {
+            "en": "Ashpenaz",
+            "es": "Aspenaz",
+            "fr": "Aspenaz",
+            "ht": "Aspenaz"
+          },
+          {
+            "en": "Melzar",
+            "es": "Melzar",
+            "fr": "Melzar",
+            "ht": "Melzar"
+          },
+          {
+            "en": "Cyrus",
+            "es": "Ciro",
+            "fr": "Cyrus",
+            "ht": "Sirus"
+          },
+          {
+            "en": "Darius",
+            "es": "Darío",
+            "fr": "Darius",
+            "ht": "Darius"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "532c8e46-3f22-4b46-8d9a-4e173da511a0",
+    "round_number": 9,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "How many times per day were Daniel's three friends supposed to bow down before the statue?",
+          "es": "¿Cuántas veces al día los tres amigos de Daniel debían postrarse ante la estatua?",
+          "fr": "Combien de fois par jour les trois amis de Daniel devaient-ils se prosterner devant la statue ?",
+          "ht": "Konbyen fwa pa jou twa zanmi Daniel yo te dwe bese devan estatì a?"
+        },
+        "ref": {
+          "en": "Daniel 3:5",
+          "es": "Daniel 3:5",
+          "fr": "Daniel 3:5",
+          "ht": "Danyèl 3:5"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "At every sound of the trumpet",
+            "es": "A cada sonido de la trompeta",
+            "fr": "A chaque son de trompette",
+            "ht": "Chak fwa yo sone bouchèt la"
+          },
+          {
+            "en": "Once per day",
+            "es": "Una vez al día",
+            "fr": "Une fois par jour",
+            "ht": "Yon fwa pa jou"
+          },
+          {
+            "en": "Three times per day",
+            "es": "Tres veces al día",
+            "fr": "Trois fois par jour",
+            "ht": "Twa fwa pa jou"
+          },
+          {
+            "en": "Seven times per day",
+            "es": "Siete veces al día",
+            "fr": "Sept fois par jour",
+            "ht": "Sèt fwa pa jou"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What was the response of the three friends when they were threatened with the furnace?",
+          "es": "¿Cuál fue la respuesta de los tres amigos cuando los amenazaban con el horno?",
+          "fr": "Quelle est la réponse des trois amis quand on les menaçait de la fournaise ?",
+          "ht": "Ki sa twa zanmi yo te reponn lè yo te fè yo pè dife a?"
+        },
+        "ref": {
+          "en": "Daniel 3:17-18",
+          "es": "Daniel 3:17-18",
+          "fr": "Daniel 3:17-18",
+          "ht": "Danyèl 3:17-18"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "We will obey you",
+            "es": "Te obedeceremos",
+            "fr": "Nous vous obéirons",
+            "ht": "Nou pral obeyi ou"
+          },
+          {
+            "en": "We will bow down",
+            "es": "Nos inclinaremos",
+            "fr": "Nous nous inclinerons",
+            "ht": "Nou pral bese"
+          },
+          {
+            "en": "Our God can deliver us—and even if he does not, we will not bow down",
+            "es": "Nuestro Dios puede librarnos—y aunque no lo hiciera, no nos inclinaremos",
+            "fr": "Notre Dieu peut nous délivrer — et même s'il ne le fait pas, nous ne nous inclinerons pas",
+            "ht": "Bondye nou a kapab delivre nou — epi menm si li pa fè l, nou p ap bese"
+          },
+          {
+            "en": "May God be with us",
+            "es": "Que Dios esté con nosotros",
+            "fr": "Que Dieu soit avec nous",
+            "ht": "Ke Bondye avèk nou"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How many times hotter than usual was the furnace heated?",
+          "es": "¿Cuántas veces más caliente que de costumbre fue calentado el horno?",
+          "fr": "À combien de fois de plus que d'habitude la fournaise a-t-elle été chauffée ?",
+          "ht": "A konbyen fwa plis pase nòmal yo te chofe dife a?"
+        },
+        "ref": {
+          "en": "Daniel 3:19",
+          "es": "Daniel 3:19",
+          "fr": "Daniel 3:19",
+          "ht": "Danyèl 3:19"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "3",
+            "es": "3",
+            "fr": "3",
+            "ht": "3"
+          },
+          {
+            "en": "4",
+            "es": "4",
+            "fr": "4",
+            "ht": "4"
+          },
+          {
+            "en": "7",
+            "es": "7",
+            "fr": "7",
+            "ht": "7"
+          },
+          {
+            "en": "10",
+            "es": "10",
+            "fr": "10",
+            "ht": "10"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Who accompanied the three men in the furnace?",
+          "es": "¿Quién acompañó a los tres hombres en el horno?",
+          "fr": "Qui accompagnait les trois hommes dans la fournaise ?",
+          "ht": "Ki moun te akonpaye twa gason yo nan dife a?"
+        },
+        "ref": {
+          "en": "Daniel 3:25",
+          "es": "Daniel 3:25",
+          "fr": "Daniel 3:25",
+          "ht": "Danyèl 3:25"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "An angel",
+            "es": "Un ángel",
+            "fr": "Un ange",
+            "ht": "Yon anj"
+          },
+          {
+            "en": "A fourth man resembling a son of the gods",
+            "es": "Un cuarto hombre que se parecía a un hijo de los dioses",
+            "fr": "Un quatrième homme ressemblant à un fils des dieux",
+            "ht": "Yon katriyèm moun ki sanble ak yon fis nan dyo yo"
+          },
+          {
+            "en": "The Lord himself",
+            "es": "El Señor mismo",
+            "fr": "L'Éternel lui-même",
+            "ht": "Eternèl la tèt li"
+          },
+          {
+            "en": "The prophet Elijah",
+            "es": "El profeta Elías",
+            "fr": "Le prophète Élie",
+            "ht": "Pwofèt Eli a"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "After the furnace, what smell did the three men have on them?",
+          "es": "Después del horno, ¿qué olor tenían los tres hombres?",
+          "fr": "Après la fournaise, quelle odeur les trois hommes avaient-ils sur eux ?",
+          "ht": "Apre dife a, ki sant twa gason yo te genyen sou yo?"
+        },
+        "ref": {
+          "en": "Daniel 3:27",
+          "es": "Daniel 3:27",
+          "fr": "Daniel 3:27",
+          "ht": "Danyèl 3:27"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "The smoke",
+            "es": "El humo",
+            "fr": "La fumée",
+            "ht": "Lafimen"
+          },
+          {
+            "en": "Burnt wood",
+            "es": "Madera quemada",
+            "fr": "Le bois brûlé",
+            "ht": "Bwa ki te boule"
+          },
+          {
+            "en": "None—not even the smell of fire",
+            "es": "Ninguno—ni siquiera olor a fuego",
+            "fr": "Aucune — pas même l'odeur du feu",
+            "ht": "Okenn — pa menm sant dife a"
+          },
+          {
+            "en": "Incense",
+            "es": "Incienso",
+            "fr": "L'encens",
+            "ht": "Lans (lamès)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "9c2940f4-fd87-45ec-b021-ba1ac622a65c",
+    "round_number": 10,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "How many days did Daniel fast before the vision of Daniel 10?",
+          "es": "¿Cuántos días ayunó Daniel antes de la visión de Daniel 10?",
+          "fr": "Combien de jours Daniel a-t-il jeûné avant la vision de Daniel 10 ?",
+          "ht": "Konbyen jou Daniel te fè jèn anvan vizyon Daniel 10 la?"
+        },
+        "ref": {
+          "en": "Daniel 10:2",
+          "es": "Daniel 10:2",
+          "fr": "Daniel 10:2",
+          "ht": "Danyèl 10:2"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "7",
+            "es": "7",
+            "fr": "7",
+            "ht": "7"
+          },
+          {
+            "en": "14",
+            "es": "14",
+            "fr": "14",
+            "ht": "14"
+          },
+          {
+            "en": "21",
+            "es": "21",
+            "fr": "21",
+            "ht": "21"
+          },
+          {
+            "en": "40",
+            "es": "40",
+            "fr": "40",
+            "ht": "40"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Who wrestled against the angel for 21 days to delay his mission?",
+          "es": "¿Quién luchó contra el ángel durante 21 días para retrasar su misión?",
+          "fr": "Qui a lutté contre l'ange pendant 21 jours pour retarder sa mission ?",
+          "ht": "Ki moun ki te lite kont zanj lan pandan 21 jou pou retade misyon li?"
+        },
+        "ref": {
+          "en": "Daniel 10:13",
+          "es": "Daniel 10:13",
+          "fr": "Daniel 10:13",
+          "ht": "Danyèl 10:13"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Satan",
+            "es": "Satán",
+            "fr": "Satan",
+            "ht": "Satan"
+          },
+          {
+            "en": "The prince of Persia",
+            "es": "El príncipe de Persia",
+            "fr": "Le prince de Perse",
+            "ht": "Prens Pèsi a"
+          },
+          {
+            "en": "The prince of Greece",
+            "es": "El príncipe de Grecia",
+            "fr": "Le prince de Grèce",
+            "ht": "Prens Grès la"
+          },
+          {
+            "en": "Belshazzar",
+            "es": "Belsasar",
+            "fr": "Belschatsar",
+            "ht": "Belschatsar"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What does the angel say to Daniel after his vision in Daniel 10:11?",
+          "es": "¿Qué dice el ángel a Daniel después de su visión en Daniel 10:11?",
+          "fr": "Que dit l'ange à Daniel après sa vision en Daniel 10:11 ?",
+          "ht": "Kisa zanj lan di Daniel apre vizyon li nan Daniel 10:11?"
+        },
+        "ref": {
+          "en": "Daniel 10:11",
+          "es": "Daniel 10:11",
+          "fr": "Daniel 10:11",
+          "ht": "Danyèl 10:11"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "You are greatly valued",
+            "es": "Eres muy estimado",
+            "fr": "Tu es très estimé",
+            "ht": "Ou trè estimé"
+          },
+          {
+            "en": "You are holy",
+            "es": "Eres santo",
+            "fr": "Tu es saint",
+            "ht": "Ou sen"
+          },
+          {
+            "en": "You are courageous",
+            "es": "Eres valiente",
+            "fr": "Tu es courageux",
+            "ht": "Ou kourajö"
+          },
+          {
+            "en": "You are chosen",
+            "es": "Eres elegido",
+            "fr": "Tu es choisi",
+            "ht": "Ou chwazi"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What difficult period does Daniel 12 announce for Israel?",
+          "es": "¿Qué período difícil anuncia Daniel 12 para Israel?",
+          "fr": "Quelle période difficile Daniel 12 annonce-t-il pour Israël ?",
+          "ht": "Ki peryòd difisil Daniel 12 anons pou Israël?"
+        },
+        "ref": {
+          "en": "Daniel 12:1",
+          "es": "Daniel 12:1",
+          "fr": "Daniel 12:1",
+          "ht": "Danjèl 12:1"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "200 years",
+            "es": "200 años",
+            "fr": "200 ans",
+            "ht": "200 zan"
+          },
+          {
+            "en": "Time of trouble unlike any other",
+            "es": "Tiempo de angustia sin igual",
+            "fr": "Temps de détresse sans pareil",
+            "ht": "Tan detrès san pè"
+          },
+          {
+            "en": "7 years of tribulation",
+            "es": "7 años de tribulación",
+            "fr": "7 ans de tribulation",
+            "ht": "7 zan tribulasyon"
+          },
+          {
+            "en": "1000 years of peace",
+            "es": "1000 años de paz",
+            "fr": "1000 ans de paix",
+            "ht": "1000 zan lapè"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b04738ce-3067-41f9-8a58-722d1ec745e5",
+    "round_number": 11,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "What did the beast resembling a lion with eagle's wings in Daniel 7 represent?",
+          "es": "¿Qué representaba la bestia que se parecía a un león con alas de águila en Daniel 7?",
+          "fr": "Que représentait la bête ressemblant à un lion avec des ailes d'aigle dans Daniel 7 ?",
+          "ht": "Ki sa bèt lan ki te sanble yon lyon ak zèl aigl yo nan Daniel 7 te reprezante?"
+        },
+        "ref": {
+          "en": "Daniel 7:4",
+          "es": "Daniel 7:4",
+          "fr": "Daniel 7:4",
+          "ht": "Danyèl 7:4"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "Babylon",
+            "es": "Babilonia",
+            "fr": "Babylone",
+            "ht": "Babylone"
+          },
+          {
+            "en": "Medo-Persia",
+            "es": "Medo-Persia",
+            "fr": "Médo-Perse",
+            "ht": "Medo-Pèz"
+          },
+          {
+            "en": "Greece",
+            "es": "Grecia",
+            "fr": "Grèce",
+            "ht": "Grès"
+          },
+          {
+            "en": "Rome",
+            "es": "Roma",
+            "fr": "Rome",
+            "ht": "Rom"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What power did the ram with two horns in Daniel 8 represent?",
+          "es": "¿Qué poder representaba el carnero con dos cuernos en Daniel 8?",
+          "fr": "Quelle puissance représentait le bélier à deux cornes dans Daniel 8 ?",
+          "ht": "Ki pouvwa ki te reprezante belye a ak de kòn nan Daniel 8?"
+        },
+        "ref": {
+          "en": "Daniel 8:20",
+          "es": "Daniel 8:20",
+          "fr": "Daniel 8:20",
+          "ht": "Danyèl 8:20"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Babylon",
+            "es": "Babilonia",
+            "fr": "Babylone",
+            "ht": "Babylone"
+          },
+          {
+            "en": "Medo-Persia",
+            "es": "Medo-Persia",
+            "fr": "Médo-Perse",
+            "ht": "Medo-Pèz"
+          },
+          {
+            "en": "Greece",
+            "es": "Grecia",
+            "fr": "Grèce",
+            "ht": "Grès"
+          },
+          {
+            "en": "Rome",
+            "es": "Roma",
+            "fr": "Rome",
+            "ht": "Rom"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "The goat with bounding feet coming from the West in Daniel 8 represents?",
+          "es": "¿La cabra con pies saltarines que viene del Oeste en Daniel 8 representa?",
+          "fr": "Le bouc aux pieds bondissants venant de l'Ouest dans Daniel 8 représente ?",
+          "ht": "Chèv la ki te gen pye k ap vole vini nan Lwès nan Daniel 8 reprezante?"
+        },
+        "ref": {
+          "en": "Daniel 8:21",
+          "es": "Daniel 8:21",
+          "fr": "Daniel 8:21",
+          "ht": "Danyèl 8:21"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Babylon",
+            "es": "Babilonia",
+            "fr": "Babylone",
+            "ht": "Babylone"
+          },
+          {
+            "en": "Persia",
+            "es": "Persia",
+            "fr": "La Perse",
+            "ht": "Pèsi"
+          },
+          {
+            "en": "Greece of Alexander the Great",
+            "es": "Grecia de Alejandro Magno",
+            "fr": "La Grèce d'Alexandre le Grand",
+            "ht": "Grès Aleksand la Gwo"
+          },
+          {
+            "en": "Rome",
+            "es": "Roma",
+            "fr": "Rome",
+            "ht": "Rom"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "In Daniel 2, what does the stone not hewn by hands represent?",
+          "es": "En Daniel 2, ¿qué representa la piedra no cortada con manos?",
+          "fr": "Dans Daniel 2, la pierre non taillée représente quoi ?",
+          "ht": "Nan Daniel 2, wòch la ki pa te tale represante ki sa?"
+        },
+        "ref": {
+          "en": "Daniel 2:44-45",
+          "es": "Daniel 2:44-45",
+          "fr": "Daniel 2:44-45",
+          "ht": "Danyèl 2:44-45"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "The Roman Empire",
+            "es": "El Imperio romano",
+            "fr": "L'Empire romain",
+            "ht": "AnpiR women an"
+          },
+          {
+            "en": "The kingdom of God",
+            "es": "El reino de Dios",
+            "fr": "Le royaume de Dieu",
+            "ht": "Wayòm Dye"
+          },
+          {
+            "en": "Greece",
+            "es": "Grecia",
+            "fr": "La Grèce",
+            "ht": "Grès"
+          },
+          {
+            "en": "The Messiah only",
+            "es": "El Mesías solamente",
+            "fr": "Le Messie seulement",
+            "ht": "Mesye a sèlman"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How many years of captivity did Jeremiah prophesy, that Daniel was meditating on?",
+          "es": "¿Cuántos años de cautiverio profetizó Jeremías, que Daniel estaba meditando?",
+          "fr": "Combien d'années de captivité Jérémie avait-il prophétisées, que Daniel méditait ?",
+          "ht": "Konbyen ane kaptivite Jeremi te profetize, ke Daniel te medite?"
+        },
+        "ref": {
+          "en": "Daniel 9:2 / Jeremiah 25:11",
+          "es": "Daniel 9:2 / Jeremías 25:11",
+          "fr": "Daniel 9:2 / Jérémie 25:11",
+          "ht": "Danyèl 9:2 / Jeremi 25:11"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "40",
+            "es": "40",
+            "fr": "40",
+            "ht": "40"
+          },
+          {
+            "en": "70",
+            "es": "70",
+            "fr": "70",
+            "ht": "70"
+          },
+          {
+            "en": "100",
+            "es": "100",
+            "fr": "100",
+            "ht": "100"
+          },
+          {
+            "en": "7",
+            "es": "7",
+            "fr": "7",
+            "ht": "7"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "3732edb7-cbc3-4ed4-a47a-2524212c9915",
+    "round_number": 12,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "What prayer did Daniel make in Daniel 9 for the people?",
+          "es": "¿Qué oración hizo Daniel en Daniel 9 por el pueblo?",
+          "fr": "Quelle prière Daniel a-t-il faite en Daniel 9 pour le peuple ?",
+          "ht": "Kilès priyè Daniel te fè nan Daniel 9 pou pèp la?"
+        },
+        "ref": {
+          "en": "Daniel 9:3-19",
+          "es": "Daniel 9:3-19",
+          "fr": "Daniel 9:3-19",
+          "ht": "Danyèl 9:3-19"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "A prayer of victory",
+            "es": "Una oración de victoria",
+            "fr": "Une prière de victoire",
+            "ht": "Yon priyè viktwa"
+          },
+          {
+            "en": "A prayer of confession and intercession",
+            "es": "Una oración de confesión e intercesión",
+            "fr": "Une prière de confession et d'intercession",
+            "ht": "Yon priyè konfesyon ak entesyon"
+          },
+          {
+            "en": "A prayer of healing",
+            "es": "Una oración de sanación",
+            "fr": "Une prière de guérison",
+            "ht": "Yon priyè gerizon"
+          },
+          {
+            "en": "A prayer of praise",
+            "es": "Una oración de alabanza",
+            "fr": "Une prière de louange",
+            "ht": "Yon priyè lwanj"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Daniel says 'to you, Lord, is the ___, and to us shame'",
+          "es": "Daniel dice 'a ti, Señor, es la ___, y a nosotros la vergüenza'",
+          "fr": "Daniel dit 'à toi, Seigneur, est la ___, et à nous la honte'",
+          "ht": "Daniel di 'a ou, Senyè, se ___, e a nou se vè'"
+        },
+        "ref": {
+          "en": "Daniel 9:7",
+          "es": "Daniel 9:7",
+          "fr": "Daniel 9:7",
+          "ht": "Danyèl 9:7"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "glory",
+            "es": "gloria",
+            "fr": "gloire",
+            "ht": "glwa"
+          },
+          {
+            "en": "justice",
+            "es": "justicia",
+            "fr": "justice",
+            "ht": "jistis"
+          },
+          {
+            "en": "wisdom",
+            "es": "sabiduría",
+            "fr": "sagesse",
+            "ht": "sajès"
+          },
+          {
+            "en": "strength",
+            "es": "fuerza",
+            "fr": "force",
+            "ht": "fòs"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How many prophetic weeks are announced in Daniel 9?",
+          "es": "¿Cuántas semanas proféticas se anuncian en Daniel 9?",
+          "fr": "Combien de semaines prophétiques sont annoncées dans Daniel 9 ?",
+          "ht": "Konbyen semèn profetik yo annonse nan Daniel 9 ?"
+        },
+        "ref": {
+          "en": "Daniel 9:24",
+          "es": "Daniel 9:24",
+          "fr": "Daniel 9:24",
+          "ht": "Danyèl 9:24"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "7",
+            "es": "7",
+            "fr": "7",
+            "ht": "7"
+          },
+          {
+            "en": "49",
+            "es": "49",
+            "fr": "49",
+            "ht": "49"
+          },
+          {
+            "en": "70",
+            "es": "70",
+            "fr": "70",
+            "ht": "70"
+          },
+          {
+            "en": "490",
+            "es": "490",
+            "fr": "490",
+            "ht": "490"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Daniel 9 announces that the Messiah will be 'cut off' (put to death) after how many weeks?",
+          "es": "¿Daniel 9 anuncia que el Mesías será 'cortado' (muerto) después de cuántas semanas?",
+          "fr": "Daniel 9 annonce que le Messie sera 'retranché' (mis à mort) après combien de semaines ?",
+          "ht": "Daniel 9 annonse ke Mesye a pral 'koupe' (touye) apre konbyen semèn ?"
+        },
+        "ref": {
+          "en": "Daniel 9:26",
+          "es": "Daniel 9:26",
+          "fr": "Daniel 9:26",
+          "ht": "Danyèl 9:26"
+        },
+        "type": "mcq",
+        "correct": 3,
+        "options": [
+          {
+            "en": "62",
+            "es": "62",
+            "fr": "62",
+            "ht": "62"
+          },
+          {
+            "en": "7",
+            "es": "7",
+            "fr": "7",
+            "ht": "7"
+          },
+          {
+            "en": "70",
+            "es": "70",
+            "fr": "70",
+            "ht": "70"
+          },
+          {
+            "en": "69",
+            "es": "69",
+            "fr": "69",
+            "ht": "69"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "The expression 'the abomination of desolation' comes from which book?",
+          "es": "¿La expresión 'la abominación de la desolación' viene de cuál libro?",
+          "fr": "L'expression 'l'abomination de la désolation' vient de quel livre ?",
+          "ht": "Ekspresyon 'abominasyon desolasyon' a vini nan ki liv ?"
+        },
+        "ref": {
+          "en": "Daniel 9:27 / 11:31",
+          "es": "Daniel 9:27 / 11:31",
+          "fr": "Daniel 9:27 / 11:31",
+          "ht": "Danyèl 9:27 / 11:31"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Ezekiel",
+            "es": "Ezequiel",
+            "fr": "Ézéchiel",
+            "ht": "Ezekièl"
+          },
+          {
+            "en": "Jeremiah",
+            "es": "Jeremías",
+            "fr": "Jérémie",
+            "ht": "Jeremi"
+          },
+          {
+            "en": "Daniel",
+            "es": "Daniel",
+            "fr": "Daniel",
+            "ht": "Daniel"
+          },
+          {
+            "en": "Isaiah",
+            "es": "Isaías",
+            "fr": "Ésaïe",
+            "ht": "Esay"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2a2e800e-20c5-4508-a53c-e2ce2c04b0f1",
+    "round_number": 13,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "What does Daniel 12:2 promise to those who sleep in the dust?",
+          "es": "¿Qué promete Daniel 12:2 a los que duermen en el polvo?",
+          "fr": "Que promet Daniel 12:2 à ceux qui dorment dans la poussière ?",
+          "ht": "Kisa Daniel 12:2 pwomèt a sila ki dòmi nan pousyè a?"
+        },
+        "ref": {
+          "en": "Daniel 12:2",
+          "es": "Daniel 12:2",
+          "fr": "Daniel 12:2",
+          "ht": "Danyèl 12:2"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Forgiveness",
+            "es": "Perdón",
+            "fr": "Le pardon",
+            "ht": "Padon"
+          },
+          {
+            "en": "Resurrection",
+            "es": "Resurrección",
+            "fr": "La résurrection",
+            "ht": "Rezireksyon"
+          },
+          {
+            "en": "Eternal life directly",
+            "es": "Vida eterna directamente",
+            "fr": "La vie éternelle directement",
+            "ht": "Lavi etwèl dirèkteman"
+          },
+          {
+            "en": "Peace",
+            "es": "Paz",
+            "fr": "La paix",
+            "ht": "Lapè"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Daniel 12:3 says those who instruct the people will shine like?",
+          "es": "Daniel 12:3 dice que los que instruyen al pueblo brillarán como?",
+          "fr": "Daniel 12:3 dit que ceux qui instruisent les peuples briller comme ?",
+          "ht": "Daniel 12:3 di sila ki enstriui pèp yo ap briye tankou?"
+        },
+        "ref": {
+          "en": "Daniel 12:3",
+          "es": "Daniel 12:3",
+          "fr": "Daniel 12:3",
+          "ht": "Danyèl 12:3"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "The sun",
+            "es": "El sol",
+            "fr": "Le soleil",
+            "ht": "Solèy"
+          },
+          {
+            "en": "The moon",
+            "es": "La luna",
+            "fr": "La lune",
+            "ht": "Lalin"
+          },
+          {
+            "en": "The stars",
+            "es": "Las estrellas",
+            "fr": "Les étoiles",
+            "ht": "Zetwal yo"
+          },
+          {
+            "en": "Light",
+            "es": "La luz",
+            "fr": "La lumière",
+            "ht": "Limyè a"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What was Daniel to do with the prophecy at the end: 'Go, Daniel, for these words will be ___ and sealed'",
+          "es": "¿Qué debía hacer Daniel con la profecía al final: 'Ve, Daniel, porque estas palabras serán ___ y selladas'",
+          "fr": "Que Daniel devait-il faire avec la prophétie à la fin : 'Va, Daniel, car ces paroles seront ___ et scellées'",
+          "ht": "Kisa Daniel te dwe fè ak pwofesi a nan fin la: 'Ale, Daniel, paske pawol sa yo pral ___ e sele'"
+        },
+        "ref": {
+          "en": "Daniel 12:9",
+          "es": "Daniel 12:9",
+          "fr": "Daniel 12:9",
+          "ht": "Danyèl 12:9"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "forgotten",
+            "es": "olvidadas",
+            "fr": "oubliées",
+            "ht": "bliye"
+          },
+          {
+            "en": "hidden",
+            "es": "ocultas",
+            "fr": "cachées",
+            "ht": "kache"
+          },
+          {
+            "en": "fulfilled",
+            "es": "cumplidas",
+            "fr": "accomplies",
+            "ht": "akompli"
+          },
+          {
+            "en": "understood",
+            "es": "comprendidas",
+            "fr": "comprises",
+            "ht": "konprann"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How long after Daniel 12 is the abomination of desolation announced?",
+          "es": "¿Cuánto tiempo después de Daniel 12 se anuncia la abominación de la desolación?",
+          "fr": "Combien de temps après Daniel 12 l'abomination de la désolation est-elle annoncée ?",
+          "ht": "Konbyen tan apre Daniel 12 abominasyon desolasyon an te anons?"
+        },
+        "ref": {
+          "en": "Daniel 12:11",
+          "es": "Daniel 12:11",
+          "fr": "Daniel 12:11",
+          "ht": "Danyèl 12:11"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "1260 days",
+            "es": "1260 días",
+            "fr": "1260 jours",
+            "ht": "1260 jou"
+          },
+          {
+            "en": "1290 days",
+            "es": "1290 días",
+            "fr": "1290 jours",
+            "ht": "1290 jou"
+          },
+          {
+            "en": "1335 days",
+            "es": "1335 días",
+            "fr": "1335 jours",
+            "ht": "1335 jou"
+          },
+          {
+            "en": "2300 days",
+            "es": "2300 días",
+            "fr": "2300 jours",
+            "ht": "2300 jou"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What does the angel say to Daniel at the end of the book (12:13)?",
+          "es": "¿Qué dice el ángel a Daniel al final del libro (12:13)?",
+          "fr": "Que dit l'ange à Daniel à la fin du livre (12:13) ?",
+          "ht": "Kisa anj lan di Daniel a nan fen liv la (12:13)?"
+        },
+        "ref": {
+          "en": "Daniel 12:13",
+          "es": "Daniel 12:13",
+          "fr": "Daniel 12:13",
+          "ht": "Danyèl 12:13"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Stay here in Babylon",
+            "es": "Quédate aquí en Babilonia",
+            "fr": "Reste ici à Babylone",
+            "ht": "Rete isit nan Babilòn"
+          },
+          {
+            "en": "Go and rest, you will rise for your destiny at the end of days",
+            "es": "Ve y descansa, te levantarás para tu destino al final de los días",
+            "fr": "Va et repose-toi, tu te lèveras pour ta destinée à la fin des jours",
+            "ht": "Va ak repoze tou, ou pral leve pou destin ou a nan fen jou yo"
+          },
+          {
+            "en": "Continue to prophesy",
+            "es": "Continúa profetizando",
+            "fr": "Continue à prophétiser",
+            "ht": "Kontinye pwofetize"
+          },
+          {
+            "en": "Return to Jerusalem",
+            "es": "Regresa a Jerusalén",
+            "fr": "Retourne à Jérusalem",
+            "ht": "Retounen nan Jeruzalem"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "72a54972-11cb-4fb5-8e96-17c104f19aa6",
+    "round_number": 14,
+    "round_type": "mcq",
+    "questions": [
+      {
+        "q": {
+          "en": "What is the meaning of Mene in the writing on the wall (Daniel 5)?",
+          "es": "¿Cuál es el significado de Mene en la escritura en la pared (Daniel 5)?",
+          "fr": "Quelle est la signification de 'Mané' dans l'écriture sur le mur (Daniel 5) ?",
+          "ht": "Kisa siyifikasyon Mané a nan eskriti sou miray la (Daniel 5)?"
+        },
+        "ref": {
+          "en": "Daniel 5:26",
+          "es": "Daniel 5:26",
+          "fr": "Daniel 5:26",
+          "ht": "Danyèl 5:26"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Weighed",
+            "es": "Pesado",
+            "fr": "Pesé",
+            "ht": "Peze"
+          },
+          {
+            "en": "Numbered",
+            "es": "Contado",
+            "fr": "Compté",
+            "ht": "Konte"
+          },
+          {
+            "en": "Divided",
+            "es": "Dividido",
+            "fr": "Divisé",
+            "ht": "Divize"
+          },
+          {
+            "en": "Finished",
+            "es": "Terminado",
+            "fr": "Terminé",
+            "ht": "Fini"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What is the meaning of Tekel in the writing on the wall?",
+          "es": "¿Cuál es el significado de Tekel en la escritura en la pared?",
+          "fr": "Quelle est la signification de 'Téqel' dans l'écriture sur le mur ?",
+          "ht": "Kisa siyifikasyon Tèkèl la nan eskriti sou miray la?"
+        },
+        "ref": {
+          "en": "Daniel 5:27",
+          "es": "Daniel 5:27",
+          "fr": "Daniel 5:27",
+          "ht": "Danyèl 5:27"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "Numbered",
+            "es": "Contado",
+            "fr": "Compté",
+            "ht": "Konte"
+          },
+          {
+            "en": "Weighed and found wanting",
+            "es": "Pesado y hallado falto",
+            "fr": "Pesé et trouvé léger",
+            "ht": "Peze epi jwenn lejè"
+          },
+          {
+            "en": "Divided",
+            "es": "Dividido",
+            "fr": "Divisé",
+            "ht": "Divize"
+          },
+          {
+            "en": "Finished",
+            "es": "Terminado",
+            "fr": "Terminé",
+            "ht": "Fini"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What is the significance of 'Upharsin' (Peres) in the writing on the wall?",
+          "es": "¿Cuál es el significado de 'Upharsin' (Peres) en la escritura en la pared?",
+          "fr": "Quelle est la signification de 'Ouparsin' (Péres) dans l'écriture sur le mur ?",
+          "ht": "Ki siyifikasyon 'Ouparsin' (Péres) genyen nan eskriti sou mi a?"
+        },
+        "ref": {
+          "en": "Daniel 5:28",
+          "es": "Daniel 5:28",
+          "fr": "Daniel 5:28",
+          "ht": "Danyèl 5:28"
+        },
+        "type": "mcq",
+        "correct": 0,
+        "options": [
+          {
+            "en": "Divided and given",
+            "es": "Dividido y dado",
+            "fr": "Divisé et donné",
+            "ht": "Divize ak bay"
+          },
+          {
+            "en": "Weighed",
+            "es": "Pesado",
+            "fr": "Pesé",
+            "ht": "Peze"
+          },
+          {
+            "en": "Numbered",
+            "es": "Contado",
+            "fr": "Compté",
+            "ht": "Konte"
+          },
+          {
+            "en": "Finished",
+            "es": "Terminado",
+            "fr": "Terminé",
+            "ht": "Fini"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "Which empire took Babylon on the night of Belshazzar's feast?",
+          "es": "¿Qué imperio tomó Babilonia en la noche del banquete de Belsasar?",
+          "fr": "Quel empire a pris Babylone dans la nuit du festin de Belschatsar ?",
+          "ht": "Ki anpiR ki te pran Babilòn nan nwit festen Belschatsar la?"
+        },
+        "ref": {
+          "en": "Daniel 5:30-31",
+          "es": "Daniel 5:30-31",
+          "fr": "Daniel 5:30-31",
+          "ht": "Danyèl 5:30-31"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "The Greek Empire",
+            "es": "El Imperio griego",
+            "fr": "L'Empire grec",
+            "ht": "AnpiR grèk la"
+          },
+          {
+            "en": "The Assyrian Empire",
+            "es": "El Imperio asirio",
+            "fr": "L'Empire assyrien",
+            "ht": "AnpiR asirien an"
+          },
+          {
+            "en": "The Medo-Persian Empire",
+            "es": "El Imperio medopersa",
+            "fr": "L'Empire médo-perse",
+            "ht": "AnpiR medo-pès la"
+          },
+          {
+            "en": "The Roman Empire",
+            "es": "El Imperio romano",
+            "fr": "L'Empire romain",
+            "ht": "AnpiR women an"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "How many satraps did Darius place over his kingdom?",
+          "es": "¿Cuántos sátrapas colocó Darío sobre su reino?",
+          "fr": "Combien de satrapes Darius a-t-il placés sur son royaume ?",
+          "ht": "Konbyen satrap Darius te mete sou wayòm li a?"
+        },
+        "ref": {
+          "en": "Daniel 6:1",
+          "es": "Daniel 6:1",
+          "fr": "Daniel 6:1",
+          "ht": "Danyèl 6:1"
+        },
+        "type": "mcq",
+        "correct": 3,
+        "options": [
+          {
+            "en": "7",
+            "es": "7",
+            "fr": "7",
+            "ht": "7"
+          },
+          {
+            "en": "120",
+            "es": "120",
+            "fr": "12",
+            "ht": "12"
+          },
+          {
+            "en": "100",
+            "es": "100",
+            "fr": "100",
+            "ht": "100"
+          },
+          {
+            "en": "120",
+            "es": "120",
+            "fr": "120",
+            "ht": "120"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "9b48cfed-3215-46d4-bdda-d998b29e1fc8",
+    "round_number": 15,
+    "round_type": "finale",
+    "questions": [
+      {
+        "q": {
+          "en": "What was the Babylonian name given to Daniel?",
+          "es": "¿Cuál era el nombre babilónico que le dieron a Daniel?",
+          "fr": "Quel était le nom babylonien donné à Daniel ?",
+          "ht": "Ki te non Babilòn yo te bay Daniel?"
+        },
+        "ref": {
+          "en": "Daniel 1:7",
+          "es": "Daniel 1:7",
+          "fr": "Daniel 1:7",
+          "ht": "Danjèl 1:7"
+        },
+        "type": "mcq",
+        "correct": 2,
+        "options": [
+          {
+            "en": "Shadrach",
+            "es": "Sadrac",
+            "fr": "Shadrak",
+            "ht": "Shadrak"
+          },
+          {
+            "en": "Meshach",
+            "es": "Mesac",
+            "fr": "Méschak",
+            "ht": "Méshak"
+          },
+          {
+            "en": "Belshazzar",
+            "es": "Belsasar",
+            "fr": "Beltshatsar",
+            "ht": "Beltshatsar"
+          },
+          {
+            "en": "Abed-Nego",
+            "es": "Abed-Nego",
+            "fr": "Abed-Nego",
+            "ht": "Abed-Nego"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 6:10",
+          "es": "Daniel 6:10",
+          "fr": "Daniel 6:10",
+          "ht": "Danyèl 6:10"
+        },
+        "type": "tf",
+        "is_true": true,
+        "statement": {
+          "en": "Daniel prayed facing Jerusalem 3 times per day during his captivity in Babylonia.",
+          "es": "Daniel oraba frente a Jerusalén 3 veces al día durante su cautiverio en Babilonia.",
+          "fr": "Daniel a prié face à Jérusalem 3 fois par jour pendant sa captivité à Babylone.",
+          "ht": "Daniel te fè priyè fas Jérusalem 3 fwa pa jou pandan li te prizonye nan Babylone."
+        }
+      },
+      {
+        "ref": {
+          "en": "Daniel 3:17",
+          "es": "Daniel 3:17",
+          "fr": "Daniel 3:17",
+          "ht": "Danyèl 3:17"
+        },
+        "type": "fill",
+        "verse": {
+          "en": "Our God whom we serve is able to ___ us from the fiery furnace.",
+          "es": "Nuestro Dios a quien servimos puede ___ nos del horno ardiente.",
+          "fr": "Notre Dieu que nous servons peut nous ___ de la fournaise ardente.",
+          "ht": "Bondye nou a ki nou sèvi a ka ___ nou soti nan fou dife a."
+        },
+        "correct": 0,
+        "answer_word": {
+          "en": "deliver",
+          "es": "librar",
+          "fr": "délivrer",
+          "ht": "delivre"
+        },
+        "fill_options": [
+          {
+            "en": "deliver",
+            "es": "librar",
+            "fr": "délivrer",
+            "ht": "delivre"
+          },
+          {
+            "en": "save",
+            "es": "salvar",
+            "fr": "sauver",
+            "ht": "sove"
+          },
+          {
+            "en": "protect",
+            "es": "proteger",
+            "fr": "protéger",
+            "ht": "pwoteje"
+          },
+          {
+            "en": "keep",
+            "es": "guardar",
+            "fr": "garder",
+            "ht": "gade"
+          }
+        ]
+      },
+      {
+        "ref": {
+          "en": "Daniel 9:21",
+          "es": "Daniel 9:21",
+          "fr": "Daniel 9:21",
+          "ht": "Danyèl 9:21"
+        },
+        "type": "character",
+        "clues": [
+          {
+            "en": "I am the angel who brought the message to Daniel in Daniel 9 and 10.",
+            "es": "Soy el ángel que llevé el mensaje a Daniel en Daniel 9 y 10.",
+            "fr": "Je suis l'ange qui a apporté le message à Daniel en Daniel 9 et 10.",
+            "ht": "Mwen se zanj ki te pote mesaj la bay Daniel nan Daniel 9 ak 10."
+          },
+          {
+            "en": "My name means 'Man of God' or 'Strength of God'.",
+            "es": "Mi nombre significa 'Hombre de Dios' o 'Fortaleza de Dios'.",
+            "fr": "Mon nom signifie 'Homme de Dieu' ou 'Force de Dieu'.",
+            "ht": "Nonm mwen an vle di 'Moun Bondye' oswa 'Fòs Bondye'."
+          },
+          {
+            "en": "It is also I who announced the birth of Jean-Baptiste and Jésus in Luc 1.",
+            "es": "También fui yo quien anunció el nacimiento de Jean-Baptiste y Jésus en Lucas 1.",
+            "fr": "C'est moi aussi qui ai annoncé la naissance de Jean-Baptiste et de Jésus dans Luc 1.",
+            "ht": "Se mwen tou ki te annonse nesans Jean-Baptiste ak Jésus nan Luc 1."
+          }
+        ],
+        "correct": 1,
+        "options": [
+          {
+            "en": "Michael",
+            "es": "Miguel",
+            "fr": "Michel",
+            "ht": "Michel"
+          },
+          {
+            "en": "Gabriel",
+            "es": "Gabriel",
+            "fr": "Gabriel",
+            "ht": "Gabriel"
+          },
+          {
+            "en": "Raphael",
+            "es": "Rafael",
+            "fr": "Raphaël",
+            "ht": "Raphaël"
+          },
+          {
+            "en": "The Angel of the Lord",
+            "es": "El Ángel del Señor",
+            "fr": "L'Ange de l'Éternel",
+            "ht": "Zanj Senyè a"
+          }
+        ]
+      },
+      {
+        "q": {
+          "en": "What is the central theme of the book of Daniel?",
+          "es": "¿Cuál es el tema central del libro de Daniel?",
+          "fr": "Quel est le thème central du livre de Daniel ?",
+          "ht": "Ki tema santral liv Daniel la?"
+        },
+        "ref": {
+          "en": "Daniel 1-12",
+          "es": "Daniel 1-12",
+          "fr": "Daniel 1-12",
+          "ht": "Danyèl 1-12"
+        },
+        "type": "mcq",
+        "correct": 1,
+        "options": [
+          {
+            "en": "The repentance of Israel",
+            "es": "El arrepentimiento de Israel",
+            "fr": "La repentance d'Israël",
+            "ht": "Repantans Izrayèl"
+          },
+          {
+            "en": "Faithfulness to God under pressure and God's sovereignty over the nations",
+            "es": "La fidelidad a Dios bajo presión y la soberanía de Dios sobre las naciones",
+            "fr": "La fidélité à Dieu sous la pression et la souveraineté de Dieu sur les nations",
+            "ht": "Fidèlite bay Bondye anba presyon ak souverenete Bondye sou nasyon yo"
+          },
+          {
+            "en": "The reconstruction of the Temple",
+            "es": "La reconstrucción del Templo",
+            "fr": "La reconstruction du Temple",
+            "ht": "Rekonstwiksyon Tanp la"
+          },
+          {
+            "en": "The law of Moses",
+            "es": "La ley de Moisés",
+            "fr": "La loi de Moïse",
+            "ht": "Lwa Moyiz"
+          }
+        ]
+      }
+    ]
+  }
+]
