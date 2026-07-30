@@ -18,6 +18,7 @@
 
 import { Candle, PATTERN_BY_KEY, detectAt } from "./candles";
 import { Reading, TrendState, read } from "./structure";
+import { MomentumReading, MomentumState, isExpansionSansProgression, readMomentum } from "./momentum";
 
 // ------------------------------------------------------------------ hasard ---
 
@@ -508,6 +509,136 @@ export function buildBreakoutDrill(seed: number): BreakoutDrill {
   // Aucune graine exploitable : on remonte l'échec plutôt que d'inventer un
   // exercice bancal. L'appelant affiche un message et propose de réessayer.
   throw new Error("aucun exercice de cassure exploitable à partir de la graine " + seed);
+}
+
+// ------------------------------------------ drill de momentum (Niveau 5) ---
+
+/**
+ * Exercice du Niveau 5 : ce marché accélère-t-il ou s'essouffle-t-il ?
+ *
+ * Quatre régimes générés, dont un piège :
+ *
+ * - accélération : la dérive et la volatilité montent ensemble ;
+ * - ralentissement : les deux retombent ;
+ * - stable : rien ne change ;
+ * - **agitation** : les bougies grossissent mais alternent, donc le prix
+ *   n'avance pas. C'est le piège de la leçon 5. Le moteur le classe en perte
+ *   de momentum, parce que la vitesse s'effondre — et c'est la lecture juste.
+ *
+ * Comme partout ailleurs, la réponse vient de `readMomentum()`, pas de
+ * l'intention : la graine est rejetée si le moteur ne confirme pas.
+ */
+/**
+ * Quatre réponses possibles, pas trois. L'agitation sans progression a la
+ * sienne : la confondre avec un simple ralentissement effacerait justement la
+ * distinction que le niveau enseigne. Et sans réponse distincte, deux des
+ * quatre régimes générés donneraient la même réponse, qui deviendrait
+ * statistiquement devinable.
+ */
+export type MomentumAnswer = MomentumState | "agitation";
+
+export interface MomentumDrill {
+  seed: number;
+  candles: Candle[];
+  reading: MomentumReading;
+  answer: MomentumAnswer;
+}
+
+/** La réponse se DÉDUIT de la lecture, jamais de l'intention du générateur. */
+export function momentumAnswer(reading: MomentumReading): MomentumAnswer {
+  if (isExpansionSansProgression(reading)) return "agitation";
+  return reading.state;
+}
+
+/** Fenêtre de mesure. Doit rester alignée avec l'appel à `readMomentum`. */
+const FENETRE_MOMENTUM = 8;
+
+type MomentumPlan = "acceleration" | "ralentissement" | "stable" | "agitation";
+const PLANS: MomentumPlan[] = ["acceleration", "ralentissement", "stable", "agitation"];
+
+export function tryMomentumDrill(seed: number, planVoulu?: MomentumPlan): MomentumDrill | null {
+  const r = rng(seed);
+  const plan = planVoulu ?? PLANS[Math.floor(r() * PLANS.length)];
+  const sens: Regime = r() < 0.5 ? "hausse" : "baisse";
+  const signe = sens === "hausse" ? 1 : -1;
+
+  const ctx: Ctx = { r, price: 90 + r() * 300, vol: 0 };
+  const volBase = ctx.price * 0.008;
+  const candles: Candle[] = [];
+
+  // IMPORTANT — les longueurs de phase doivent coïncider avec les fenêtres du
+  // moteur. `readMomentum(candles, 8)` compare les 8 dernières bougies aux 8
+  // qui les précèdent. La phase cible fait donc exactement 8 bougies, et la
+  // phase de référence au moins 8 juste avant, sinon le moteur comparerait le
+  // régime cible à lui-même — et ne mesurerait plus rien.
+  const CONTEXTE = 24; // dont les 8 dernières servent de référence au moteur
+  const CIBLE = FENETRE_MOMENTUM;
+
+  ctx.vol = volBase;
+  for (let i = 0; i < CONTEXTE; i++) candles.push(ordinary(ctx, sens, i, 1.2));
+
+  if (plan === "acceleration") {
+    ctx.vol = volBase * 2.6;
+    for (let i = 0; i < CIBLE; i++) candles.push(ordinary(ctx, sens, CONTEXTE + i, 2.4));
+  } else if (plan === "ralentissement") {
+    ctx.vol = volBase * 0.35;
+    for (let i = 0; i < CIBLE; i++) candles.push(ordinary(ctx, sens, CONTEXTE + i, 0.4));
+  } else if (plan === "stable") {
+    for (let i = 0; i < CIBLE; i++) candles.push(ordinary(ctx, sens, CONTEXTE + i, 1.2));
+  } else {
+    // Agitation : grands corps alternés, construits à la main pour que
+    // l'annulation soit franche. Le prix revient près de son point de départ.
+    const u = volBase * 3.2;
+    let p = ctx.price;
+    for (let i = 0; i < CIBLE; i++) {
+      const alt = i % 2 === 0 ? 1 : -1;
+      const corps = u * (0.85 + r() * 0.3) * alt * signe;
+      const o = p;
+      const c = Math.max(0.01, o + corps);
+      candles.push({
+        t: CONTEXTE + i,
+        o,
+        h: Math.max(o, c) + u * 0.15,
+        l: Math.max(0.01, Math.min(o, c) - u * 0.15),
+        c,
+      });
+      p = c;
+    }
+    ctx.price = p;
+  }
+
+  const reading = readMomentum(candles, FENETRE_MOMENTUM);
+  const answer = momentumAnswer(reading);
+
+  // Le moteur doit confirmer l'intention, sans quoi la graine est rejetée.
+  // Notamment : un plan « ralentissement » ne doit PAS être lu comme une
+  // agitation, et inversement — sinon l'énoncé et le graphique divergeraient.
+  const attendu: MomentumAnswer =
+    plan === "acceleration" ? "acceleration"
+    : plan === "stable" ? "stable"
+    : plan === "agitation" ? "agitation"
+    : "ralentissement";
+  if (answer !== attendu) return null;
+
+  return { seed, candles, reading, answer };
+}
+
+export function buildMomentumDrill(seed: number): MomentumDrill {
+  // Rotation des quatre plans sur la graine : chaque type revient à intervalle
+  // régulier, y compris le piège.
+  const plan = PLANS[seed % PLANS.length];
+  let s = seed;
+  for (let i = 0; i < 500; i++) {
+    const d = tryMomentumDrill(s, plan);
+    if (d) return d;
+    s += PLANS.length; // on garde le même plan
+  }
+  // Repli : n'importe quel exercice valide plutôt qu'aucun.
+  for (let i = 0; i < 500; i++) {
+    const d = tryMomentumDrill(seed + i);
+    if (d) return d;
+  }
+  throw new Error("aucun exercice de momentum exploitable à partir de " + seed);
 }
 
 /** Premier exercice de structure exploitable à partir de `seed`. */

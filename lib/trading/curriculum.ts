@@ -911,18 +911,199 @@ const N5: Level = {
   slug: "momentum",
   title: { fr: "Le Momentum" },
   tagline: { fr: "Sentir quand un marché accélère, et quand il s'essouffle." },
-  why: { fr: "La direction ne suffit pas. La vitesse et l'essoufflement décident du moment d'agir." },
+  why: {
+    fr: "La direction ne suffit pas. Un marché peut monter en s'essoufflant — le prix dit où il va, le momentum dit avec quelle conviction. C'est cette conviction qui décide du moment d'agir, et du moment de s'abstenir.",
+  },
   icon: "eclair",
   color: "#ea580c",
   passingScore: 80,
-  status: "bientot",
+  status: "pret",
   skills: [
     s("force_marche", "Reconnaître un marché fort"),
     s("faiblesse_marche", "Reconnaître un marché qui faiblit"),
     s("acceleration", "Détecter une accélération"),
     s("ralentissement", "Détecter un ralentissement"),
   ],
-  lessons: [],
+  lessons: [
+    {
+      slug: "momentum-n-est-pas-direction",
+      title: { fr: "Le momentum n'est pas la direction" },
+      outcome: { fr: "Séparer deux questions que tu confondais probablement." },
+      content: {
+        fr: `Jusqu'ici tu as appris à répondre à « où va le marché ». Ce niveau ajoute une question distincte : **avec quelle conviction y va-t-il ?**
+
+Ce sont deux axes indépendants. Un marché peut monter avec force, monter en s'essoufflant, baisser avec force, baisser en s'essoufflant. Quatre situations, deux directions seulement.
+
+Et l'essentiel : **le momentum change souvent avant le prix**. Une hausse qui ralentit monte encore. Rien n'a cassé, la structure est intacte, les sommets sont toujours plus hauts — mais les bougies rétrécissent, les clôtures s'éloignent des sommets, chaque poussée gagne moins de terrain que la précédente. C'est une information que tu obtiens *avant* le retournement, et avant même le premier LH du Niveau 3.
+
+Comment le mesurer sans indicateur ? En comparant le proche au moins proche. Trois questions :
+
+**Les corps grandissent-ils ou rétrécissent-ils ?** Un corps est une décision. Des corps qui grossissent signalent des décisions plus tranchées.
+
+**L'amplitude s'élargit-elle ?** Le marché prend-il plus de place ?
+
+**Le prix avance-t-il plus vite ?** Combien de terrain net par période ?
+
+Cette troisième question est la plus importante, et la leçon 5 t'expliquera pourquoi elle peut contredire les deux premières.`,
+      },
+      keyPoints: {
+        fr: [
+          "Direction et momentum sont deux axes indépendants.",
+          "Le momentum change souvent AVANT le prix.",
+          "On le mesure en comparant une fenêtre récente à celle qui la précède.",
+          "Corps, amplitude, vitesse — et la vitesse primera.",
+        ],
+      },
+    },
+    {
+      slug: "marche-fort",
+      title: { fr: "Reconnaître un marché fort" },
+      outcome: { fr: "Décrire à voix haute ce qui rend un mouvement crédible." },
+      content: {
+        fr: `Trois signes se cumulent dans un marché réellement fort. Tu les connais déjà tous les trois — ils viennent du Niveau 2, appliqués à une série au lieu d'une bougie.
+
+**Les bougies vont dans le même sens.** Dans une hausse forte, la grande majorité des bougies sont vertes. Pas toutes — un marché sans aucune respiration est rare, et souvent le signe d'une phase terminale. Mais l'alignement domine.
+
+**Les corps occupent une grande part de l'amplitude.** Peu de mèches signifie peu de contestation. Le camp gagnant tient la période de bout en bout.
+
+**Les clôtures se font près de l'extrême du mouvement.** C'est le signe le plus fiable, et c'est exactement la troisième question du Niveau 2 : finir en force ou non. Dans une hausse forte, les bougies clôturent près de leur haut. Ce n'est pas un détail esthétique — ça veut dire que personne n'a réussi à faire refluer le prix avant la cloche.
+
+**Ce que la force ne dit pas.** Elle ne dit pas que le mouvement va continuer. Un marché très fort peut être en train de terminer son mouvement — l'euphorie finale ressemble beaucoup à de la force. La force te dit dans quel sens le déséquilibre penche *maintenant*, pas combien de temps il durera.`,
+      },
+      keyPoints: {
+        fr: [
+          "Bougies alignées, corps larges, clôtures près des extrêmes.",
+          "La position de la clôture est le signe le plus fiable.",
+          "Un marché sans aucune respiration est souvent en phase terminale.",
+          "La force décrit le présent, elle ne prédit pas la durée.",
+        ],
+      },
+    },
+    {
+      slug: "marche-qui-faiblit",
+      title: { fr: "Reconnaître un marché qui faiblit" },
+      outcome: { fr: "Repérer l'essoufflement pendant que le prix monte encore." },
+      content: {
+        fr: `L'essoufflement est plus difficile à voir que la force, parce qu'il se produit **pendant que le prix va encore dans le bon sens**. C'est ce qui le rend précieux.
+
+Les signes, dans l'ordre où ils apparaissent généralement :
+
+**Les corps rétrécissent.** Même direction, moins de conviction. Chaque période tranche moins que la précédente.
+
+**Les mèches s'allongent du côté opposé.** Dans une hausse, des mèches hautes de plus en plus longues : le prix monte, se fait repousser, remonte, se fait repousser. L'offre se réveille.
+
+**Les clôtures s'éloignent des sommets.** Un marché fort clôture près du haut. Un marché qui faiblit gagne encore du terrain mais le rend en partie avant la cloche.
+
+**Chaque poussée gagne moins que la précédente.** Trois vagues de hausse de 8 %, puis 5 %, puis 2 % : la structure est toujours haussière, chaque sommet est plus haut. Mais la mécanique s'épuise.
+
+**Ce que ce n'est pas.** L'essoufflement n'est pas un signal de vente. C'est une raison de réduire ses attentes, de serrer sa gestion, de ne pas ajouter à une position. Beaucoup de traders perdent de l'argent en vendant à découvert un marché qui « faiblit » et qui continue de monter trois mois.
+
+Le lien avec le Niveau 3 est direct : l'essoufflement précède souvent le premier LH, qui précède le CHoCH, qui précède le retournement. Tu es en train d'apprendre à lire de plus en plus tôt.`,
+      },
+      keyPoints: {
+        fr: [
+          "L'essoufflement se voit pendant que le prix monte encore.",
+          "Corps qui rétrécissent, mèches opposées qui s'allongent, clôtures qui décrochent.",
+          "Chaque poussée gagne moins que la précédente.",
+          "Ce n'est PAS un signal de vente — c'est une raison de réduire ses attentes.",
+        ],
+      },
+    },
+    {
+      slug: "acceleration",
+      title: { fr: "L'accélération" },
+      outcome: { fr: "Distinguer une accélération saine d'une fuite en avant." },
+      content: {
+        fr: `Une accélération, c'est quand tout s'amplifie en même temps : corps plus grands, amplitudes plus larges, et surtout **plus de terrain parcouru par période**.
+
+Ce qui la provoque, tu le sais déjà. Une cassure de structure qui déclenche une vague d'ordres (Niveau 3). Une zone de liquidité consommée (Niveau 4). Une nouvelle qui contredit ce qui était anticipé (Niveau 1). Dans tous les cas : un déséquilibre soudain entre gens pressés et gens patients.
+
+**Le piège de l'accélération.** Elle est le moment le plus tentant d'entrer, et souvent le plus mauvais. Quand tout le monde voit le mouvement, le prix a déjà parcouru l'essentiel du chemin. Entrer dans une accélération, c'est acheter au moment où ceux qui étaient positionnés avant commencent à prendre leurs bénéfices — c'est-à-dire te vendre leur position.
+
+Comment distinguer une accélération exploitable d'une fuite en avant ?
+
+**Le point de départ.** Une accélération qui démarre depuis une zone identifiée, après une structure claire, est autre chose qu'une accélération au milieu de nulle part, après que le prix a déjà triplé.
+
+**La durée.** Une accélération dure rarement longtemps. Par nature, elle épuise ce qui l'alimente : les gens pressés finissent par être servis.
+
+**Ce qui suit.** Après une accélération, un marché consolide ou se retourne. Il ne continue pas à accélérer indéfiniment — la fin de l'accélération est presque plus informative que son début.`,
+      },
+      keyPoints: {
+        fr: [
+          "Accélération = corps, amplitude ET vitesse qui augmentent ensemble.",
+          "C'est le moment le plus tentant d'entrer, et souvent le plus mauvais.",
+          "Une accélération épuise ce qui l'alimente : elle dure peu.",
+          "Sa fin informe presque plus que son début.",
+        ],
+      },
+    },
+    {
+      slug: "ralentissement",
+      title: { fr: "Le ralentissement, et un piège" },
+      outcome: { fr: "Ne plus confondre agitation et progression." },
+      content: {
+        fr: `Un ralentissement, c'est l'inverse : les corps rétrécissent, les amplitudes se resserrent, le prix avance moins par période. Le marché reprend son souffle — soit avant de repartir, soit avant de se retourner. Le ralentissement seul ne dit pas lequel.
+
+Maintenant le piège de ce niveau, et il est important.
+
+**De grosses bougies ne signifient pas du momentum.**
+
+Imagine huit bougies énormes qui alternent : +5, −5, +5, −5… Les corps sont massifs, les amplitudes énormes. Un œil non entraîné voit un marché « très actif », donc « fort ».
+
+Mais où est allé le prix ? Nulle part. Il est revenu à son point de départ.
+
+C'est de l'**expansion de volatilité**, pas du momentum. Le marché s'agite, il n'avance pas. Et c'est souvent bien plus dangereux qu'un marché calme : les mouvements sont larges, donc les stops sautent dans les deux sens, alors que rien ne progresse.
+
+C'est pour cette raison que la **vitesse** — la distance nette parcourue par période — compte plus que la taille des bougies. Deux marchés peuvent avoir les mêmes corps et des momentums opposés.
+
+Retiens la formule : **sans avancée, pas d'accélération**, quelle que soit la taille des bougies. C'est d'ailleurs comme ça que le système d'exercices est calibré : une série qui s'agite sans progresser est classée en *perte* de momentum, jamais en accélération.`,
+      },
+      keyPoints: {
+        fr: [
+          "Ralentissement : corps, amplitudes et vitesse qui diminuent.",
+          "De grosses bougies alternées = expansion de volatilité, pas momentum.",
+          "La distance NETTE parcourue compte plus que la taille des bougies.",
+          "Sans avancée, pas d'accélération.",
+        ],
+      },
+      activities: [
+        {
+          slug: "accelere-ou-essouffle",
+          kind: "drill_bougie",
+          title: { fr: "Accélère ou s'essouffle ?" },
+          xp: 40,
+          skills: ["ralentissement", "acceleration", "faiblesse_marche"],
+          config: { mode: "momentum" },
+        },
+      ],
+    },
+    {
+      slug: "utiliser-le-momentum",
+      title: { fr: "Ce que le momentum change dans ta façon de faire" },
+      outcome: { fr: "Traduire ce niveau en décisions, pas en opinions." },
+      content: {
+        fr: `Le momentum ne te donne pas de signal d'entrée. Il modifie **la façon dont tu traites les signaux que tu as déjà**.
+
+**Il filtre.** Une figure de continuation dans un marché qui s'essouffle vaut moins que la même figure dans un marché qui accélère. Même figure, contexte différent — tu connais ce principe depuis le Niveau 2, le momentum en est une nouvelle couche.
+
+**Il tempère les attentes.** Dans un marché qui ralentit, viser un grand mouvement est peu réaliste. Ce n'est pas une raison de ne rien faire : c'est une raison de prendre ses bénéfices plus tôt.
+
+**Il avertit tôt.** L'essoufflement apparaît avant le premier LH, qui apparaît avant le CHoCH, qui apparaît avant le retournement. Chaque niveau de ce cours t'a fait lire un peu plus tôt. C'est cumulatif.
+
+**Il dit quand s'abstenir.** Un marché en expansion de volatilité sans progression est le pire terrain pour la plupart des approches : les mouvements sont larges, les stops sautent dans les deux sens, rien n'aboutit. Reconnaître ce régime pour ne pas y trader est une compétence à part entière — et probablement la plus rentable de ce niveau.
+
+Un avertissement pour finir. Le momentum est la notion la plus subjective vue jusqu'ici. « Ça ralentit » est une impression facile à se raconter après coup. C'est pourquoi les exercices le mesurent explicitement : pour que tu confrontes ton impression à un calcul, et que tu ajustes ton œil.`,
+      },
+      keyPoints: {
+        fr: [
+          "Le momentum filtre les signaux, il n'en produit pas.",
+          "Marché qui ralentit : viser moins loin, pas s'interdire d'agir.",
+          "Il avertit avant le LH, qui avertit avant le CHoCH.",
+          "Savoir s'abstenir en expansion sans progression est la compétence la plus rentable ici.",
+        ],
+      },
+    },
+  ],
 };
 
 const N6: Level = {

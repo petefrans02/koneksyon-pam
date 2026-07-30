@@ -296,6 +296,15 @@ export default function NiveauClient({ slug }: { slug: string }) {
                       disponible
                     />
                   )}
+                  {niveau.slug === "momentum" && (
+                    <Action
+                      href="/trading/tempo"
+                      titre="Où va le momentum ?"
+                      detail="Accélération, essoufflement, ou agitation sans progression ? La correction montre les trois mesures brutes."
+                      ton="#ea580c"
+                      disponible
+                    />
+                  )}
                   {niveau.slug === "institutions" && (
                     <Action
                       href="/trading/cassures"
