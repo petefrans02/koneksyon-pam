@@ -712,11 +712,13 @@ const N4: Level = {
   slug: "institutions",
   title: { fr: "Comprendre les institutions" },
   tagline: { fr: "Pourquoi le marché va souvent chercher tes stops avant de partir." },
-  why: { fr: "Tant que tu ignores qui déplace réellement le prix, tu interprètes ses mouvements à l'envers." },
+  why: {
+    fr: "Tant que tu ignores qui déplace réellement le prix, tu interprètes ses mouvements à l'envers : tu vois une cassure là où quelqu'un se sert, et tu places ton stop exactement là où on viendra le chercher.",
+  },
   icon: "batiment",
   color: "#1d4ed8",
   passingScore: 80,
-  status: "bientot",
+  status: "pret",
   skills: [
     s("acteurs", "Identifier qui déplace le marché"),
     s("liquidite_inst", "Expliquer le besoin institutionnel de liquidité"),
@@ -724,7 +726,184 @@ const N4: Level = {
     s("fausses_cassures", "Repérer une fausse cassure"),
     s("manipulation", "Distinguer manipulation et hasard"),
   ],
-  lessons: [],
+  lessons: [
+    {
+      slug: "qui-deplace-le-marche",
+      title: { fr: "Qui déplace réellement le marché" },
+      outcome: { fr: "Cesser de te croire seul face à un graphique neutre." },
+      content: {
+        fr: `Les participants d'un marché n'ont ni la même taille, ni les mêmes contraintes, ni le même objectif. Les mettre tous dans le même sac est la première erreur.
+
+**Les particuliers.** Positions petites, entrées et sorties libres, aucune obligation. Ils ne déplacent pas le prix — sauf tous ensemble, dans le même sens, ce qui arrive et qui est précisément exploitable.
+
+**Les institutions.** Fonds, banques, assureurs, teneurs de marché. Positions énormes. Et surtout : des **contraintes**. Un fonds qui doit investir une collecte n'a pas le choix d'attendre. Un assureur doit couvrir une échéance à date fixe. Un tenede marché est obligé d'afficher un prix des deux côtés, même quand ça l'arrange mal.
+
+Cette différence de contrainte est le cœur du niveau. Un particulier peut ne rien faire. Une institution doit souvent agir, à un moment donné, pour une taille donnée.
+
+Et quand tu dois acheter très gros, tu as un problème que le particulier n'a jamais : **si tu achètes en une fois, tu fais monter le prix contre toi**. Ton propre ordre dégrade ton propre prix d'entrée.
+
+C'est de ce problème que découle tout le reste du niveau. Pas d'un complot : d'une contrainte arithmétique.`,
+      },
+      keyPoints: {
+        fr: [
+          "Les acteurs diffèrent par leur taille ET par leurs contraintes.",
+          "Un particulier peut attendre ; une institution doit souvent agir.",
+          "Un gros ordre exécuté d'un coup dégrade son propre prix d'entrée.",
+          "Tout ce niveau découle de cette contrainte, pas d'un complot.",
+        ],
+      },
+    },
+    {
+      slug: "le-besoin-de-liquidite",
+      title: { fr: "Le besoin de liquidité" },
+      outcome: { fr: "Expliquer pourquoi un gros acteur cherche des zones précises." },
+      content: {
+        fr: `Reprends le problème. Tu dois acheter l'équivalent de 500 fois le volume affiché au meilleur prix. Que fais-tu ?
+
+Si tu envoies tout au marché, tu consommes toute l'offre disponible et tu montes de niveau en niveau. Ton prix moyen finit très au-dessus de ce que tu voulais payer. Personne ne travaille comme ça.
+
+Ce qu'il te faut, c'est **des vendeurs**. Beaucoup, au même endroit, prêts à te livrer sans que tu aies à courir après le prix.
+
+Alors où trouve-t-on une concentration de vendeurs ? À un endroit très simple : là où beaucoup de gens ont décidé d'avance de vendre. C'est-à-dire **là où sont les ordres stop**.
+
+Reprends ce que tu sais du Niveau 3. Un support évident, touché trois fois. Où les acheteurs placent-ils leur stop ? Juste en dessous. Tous au même endroit. Et un stop de vente, quand il se déclenche, est un ordre de vente au marché.
+
+Sous ce support dort donc un réservoir de vendeurs involontaires. Pour qui veut acheter gros, c'est exactement la contrepartie nécessaire.
+
+Tu peux maintenant relire un graphique autrement : les zones les plus évidentes ne sont pas seulement des niveaux où réagir. Ce sont des **réserves de liquidité**, et quelqu'un a une bonne raison d'aller les chercher.`,
+      },
+      keyPoints: {
+        fr: [
+          "Un gros acheteur a besoin de vendeurs concentrés au même endroit.",
+          "Les stops groupés forment exactement cette concentration.",
+          "Un stop de vente déclenché EST un ordre de vente au marché.",
+          "Les niveaux les plus évidents sont les réserves les plus visibles.",
+        ],
+      },
+    },
+    {
+      slug: "le-stop-hunt",
+      title: { fr: "Le stop hunt" },
+      outcome: { fr: "Reconnaître la signature d'un balayage de stops." },
+      content: {
+        fr: `Le scénario, maintenant que tu as les deux morceaux.
+
+Un support net à 100, touché trois fois. Des centaines de particuliers sont acheteurs au-dessus, stops placés vers 99. Un gros acteur veut acheter, et il a besoin de contrepartie.
+
+Le prix descend sous 100. Les stops se déclenchent en cascade : chacun devient un ordre de vente. Pendant quelques minutes, le marché déborde de vendeurs. C'est exactement le moment où un gros acheteur peut se remplir sans faire monter le prix.
+
+Puis le prix remonte. Vite. Souvent au-dessus de 100.
+
+Résultat vu du particulier : « je me suis fait sortir au plus bas et ça est reparti sans moi ». Résultat vu du gros acteur : position construite à bon prix.
+
+**La signature à reconnaître :**
+
+Une mèche marquée qui passe sous un niveau évident, une **clôture qui revient au-dessus**, et un retour rapide. Tu sais déjà lire ça : c'est un rejet (Niveau 2) qui ne produit pas de cassure (Niveau 3). Le vocabulaire change, la lecture est la même.
+
+**Ce que ça change pour toi**, concrètement : ne place pas ton stop juste sous un niveau que tout le monde voit. Non pas parce qu'« ils » te visent personnellement — personne ne connaît ton stop. Mais parce que ton stop est au milieu d'une foule, et que la foule est la cible.`,
+      },
+      keyPoints: {
+        fr: [
+          "Un stop de vente déclenché fournit la contrepartie d'un gros achat.",
+          "Signature : mèche sous le niveau, clôture au-dessus, retour rapide.",
+          "C'est un rejet qui ne produit pas de cassure — vocabulaire des niveaux 2 et 3.",
+          "Évite de placer ton stop dans la foule, juste sous un niveau évident.",
+        ],
+      },
+    },
+    {
+      slug: "fausses-cassures",
+      title: { fr: "Les fausses cassures" },
+      outcome: { fr: "Distinguer une cassure qui tient d'un balayage." },
+      content: {
+        fr: `Une fausse cassure, c'est un niveau franchi qui ne tient pas. Le prix passe au-delà, attire ceux qui traitent la cassure, puis revient et repart dans l'autre sens.
+
+Le critère de distinction, tu l'as depuis le Niveau 3 : **la clôture**.
+
+**Cassure qui tient** — clôture nette au-delà du niveau, puis le prix reste de ce côté. Un BOS s'inscrit dans la structure.
+
+**Fausse cassure** — mèche au-delà, clôture en deçà. Aucun BOS. La structure n'a pas bougé, et pourtant beaucoup ont acheté la cassure.
+
+Pourquoi ça piège autant de monde ? Parce qu'en séance, la mèche est *vraie*. Le prix est vraiment allé au-delà. Ceux qui entrent sur dépassement de niveau — sans attendre la clôture — sont servis. Ils ne découvrent le problème qu'à la clôture, quand le prix est déjà revenu.
+
+Un signe supplémentaire, utile : **la vitesse du retour**. Une vraie cassure a tendance à consolider au-delà du niveau. Une fausse revient vite, souvent violemment — parce que le mouvement de retour est alimenté par la sortie de ceux qui viennent d'entrer.
+
+Et méfie-toi du miroir de cette leçon : toutes les mèches ne sont pas des pièges. Une mèche en marché illiquide ne raconte parfois rien du tout (Niveau 1). Le contexte reste roi.`,
+      },
+      keyPoints: {
+        fr: [
+          "Cassure qui tient = clôture au-delà. Fausse cassure = mèche seule.",
+          "Une fausse cassure ne produit aucun BOS : la structure est intacte.",
+          "Elle piège ceux qui entrent au dépassement, sans attendre la clôture.",
+          "Un retour rapide et violent est un indice supplémentaire.",
+        ],
+      },
+      activities: [
+        {
+          slug: "vraie-ou-fausse-cassure",
+          kind: "drill_bougie",
+          title: { fr: "Vraie ou fausse cassure ?" },
+          xp: 45,
+          skills: ["fausses_cassures", "stop_hunt", "manipulation"],
+          config: { mode: "cassure" },
+        },
+      ],
+    },
+    {
+      slug: "manipulation-ou-hasard",
+      title: { fr: "Manipulation ou hasard ?" },
+      outcome: { fr: "Résister à l'explication complotiste, qui coûte cher." },
+      content: {
+        fr: `Cette leçon est la plus importante du niveau, et elle va dans le sens inverse des précédentes.
+
+Tu viens d'apprendre que de gros acteurs vont chercher la liquidité là où elle se trouve. C'est vrai, c'est documenté, et ça découle d'une contrainte arithmétique. Mais un piège s'ouvre juste derrière : expliquer **chacune** de tes pertes par une manipulation dirigée contre toi.
+
+C'est confortable — ce n'est jamais ton analyse qui était fausse. Et c'est exactement pour ça que c'est dangereux : une explication qui te déresponsabilise t'empêche d'apprendre.
+
+**Trois vérités à tenir ensemble.**
+
+**Personne ne connaît ton stop.** Ton courtier voit ton ordre, pas le marché. Un balayage de stops ne vise pas *toi* : il vise une zone où beaucoup de stops se ressemblent. Tu n'es pas ciblé, tu es dans la foule.
+
+**Beaucoup de mouvements n'ont aucune intention derrière.** Un prix qui dépasse un niveau puis revient, ça arrive aussi par simple hasard. Un marché est bruyant. Voir une intention dans chaque mèche, c'est le même biais que voir une figure dans chaque nuage.
+
+**La différence pratique : rien.** Que ta perte vienne d'un balayage organisé ou du hasard, ta réponse est identique — attendre la clôture, ne pas mettre son stop dans la foule, dimensionner sa position. La question « était-ce une manipulation ? » n'a aucune conséquence sur ce que tu dois faire.
+
+C'est le vrai test du niveau. Un trader mûr utilise ces notions pour **placer ses ordres différemment**, pas pour se raconter qu'on lui en veut.`,
+      },
+      keyPoints: {
+        fr: [
+          "Personne ne connaît ton stop : tu n'es pas ciblé, tu es dans la foule.",
+          "Beaucoup de dépassements suivis d'un retour sont du simple bruit.",
+          "Manipulation ou hasard, ta réponse pratique est la même.",
+          "Utilise ces notions pour placer tes ordres, pas pour te déresponsabiliser.",
+        ],
+      },
+    },
+    {
+      slug: "ce-que-ca-change",
+      title: { fr: "Ce que ça change dans ta façon de faire" },
+      outcome: { fr: "Traduire ce niveau en trois décisions concrètes." },
+      content: {
+        fr: `Un niveau qui ne change pas ta façon d'agir n'a servi à rien. Voici ce qui devrait changer.
+
+**1. Attendre la clôture.** C'est la conclusion la plus rentable de tout le cours jusqu'ici, et la plus simple. Elle t'écarte des fausses cassures sans aucune analyse supplémentaire. Elle coûte un peu de prix d'entrée — tu connais cet arbitrage depuis le Niveau 2.
+
+**2. Décaler ses stops de la foule.** Pas de stop à un centime sous un support que tout le monde voit. Soit plus loin, sous la zone entière plutôt que sous le trait, soit ailleurs selon ton plan. Ce qui implique une position plus petite pour un risque égal — et ce n'est pas un défaut, c'est le Niveau 7 qui commence.
+
+**3. Voir les niveaux évidents comme des zones à double sens.** Un support très visible n'est plus seulement « un endroit où acheter ». C'est aussi un réservoir de liquidité que quelqu'un peut venir chercher. Les deux lectures sont vraies en même temps.
+
+Et une chose qui ne change pas : tu ne sauras jamais avec certitude ce qui s'est passé. Tu n'as pas accès aux intentions, seulement aux traces. Ce niveau ne te donne pas de vision — il te donne de meilleures habitudes.`,
+      },
+      keyPoints: {
+        fr: [
+          "Attendre la clôture : la règle la plus rentable, et la plus simple.",
+          "Ne pas placer son stop dans la foule — donc position plus petite.",
+          "Un niveau évident est à la fois un appui et un réservoir de liquidité.",
+          "Tu lis des traces, jamais des intentions.",
+        ],
+      },
+    },
+  ],
 };
 
 const N5: Level = {

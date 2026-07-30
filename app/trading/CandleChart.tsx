@@ -39,6 +39,8 @@ export interface CandleChartProps {
   legs?: Leg[];
   events?: StructureEvent[];
   showStructure?: boolean;
+  /** Niveaux horizontaux à tracer (Niveau 4 : le niveau mis en jeu). */
+  levels?: { price: number; label?: string; teinte?: string }[];
 }
 
 const UP = "#16a34a";
@@ -58,6 +60,7 @@ export default function CandleChart({
   legs,
   events,
   showStructure = false,
+  levels,
 }: CandleChartProps) {
   const uid = useId().replace(/:/g, "");
   const axisW = showAxis ? 52 : 6;
@@ -199,6 +202,34 @@ export default function CandleChart({
             </g>
           );
         })}
+
+        {/* Niveaux explicites */}
+        {levels?.map((n, k) => (
+          <g key={`lv${k}`}>
+            <line
+              x1={0}
+              x2={width}
+              y1={y(n.price)}
+              y2={y(n.price)}
+              stroke={n.teinte ?? color.goldLight}
+              strokeOpacity={0.9}
+              strokeWidth={1.4}
+              strokeDasharray="6 3"
+            />
+            {n.label && (
+              <text
+                x={4}
+                y={y(n.price) - 4}
+                fill={n.teinte ?? color.goldLight}
+                fontSize={7.5}
+                fontWeight={700}
+                fontFamily="ui-monospace, monospace"
+              >
+                {n.label}
+              </text>
+            )}
+          </g>
+        ))}
 
         {/* Superposition de structure : zigzag, étiquettes, cassures */}
         {showStructure && pivots && pivots.length > 1 && (

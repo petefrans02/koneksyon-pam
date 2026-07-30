@@ -296,6 +296,15 @@ export default function NiveauClient({ slug }: { slug: string }) {
                       disponible
                     />
                   )}
+                  {niveau.slug === "institutions" && (
+                    <Action
+                      href="/trading/cassures"
+                      titre="Vraie ou fausse cassure ?"
+                      detail="Le niveau est franchi — mais la clôture le confirme-t-elle ? Le niveau n'est révélé qu'après ta réponse."
+                      ton={color.navy}
+                      disponible
+                    />
+                  )}
                   {niveau.slug === "price-action" && (
                     <Action
                       href="/trading/structure"

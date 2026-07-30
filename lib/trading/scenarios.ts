@@ -399,6 +399,117 @@ export function tryStructureDrill(seed: number, longueur = 78): StructureDrill |
   return { seed, candles, reading, answer: reading.state };
 }
 
+// ----------------------------------------- drill « vraie ou fausse cassure » ---
+
+/**
+ * Exercice du Niveau 4 : la cassure tient-elle ?
+ *
+ * On construit une tendance haussière lisible, on repère son dernier sommet,
+ * puis on fabrique une bougie décisive qui soit :
+ *
+ * - **franchit vraiment** le niveau (clôture au-delà), soit
+ * - **le balaye seulement** (mèche au-delà, clôture en deçà) — le stop hunt.
+ *
+ * La vérification est faite par `structure.events()` : une vraie cassure doit
+ * produire un BOS à ce niveau, une fausse ne doit produire aucun. Si le moteur
+ * n'est pas d'accord avec l'intention, la graine est rejetée. L'énoncé ne peut
+ * donc pas mentir sur ce que le graphique contient.
+ *
+ * Le niveau n'est pas tracé avant la réponse : l'élève doit identifier
+ * lui-même le sommet pertinent, puis comparer la clôture à ce niveau. C'est
+ * exactement la compétence visée.
+ */
+export interface BreakoutDrill {
+  seed: number;
+  candles: Candle[];
+  /** Bougies postérieures, masquées jusqu'à la réponse. */
+  future: Candle[];
+  /** Niveau mis en jeu (dernier sommet structurel). */
+  level: number;
+  /** Index de la bougie décisive dans `candles`. */
+  at: number;
+  /** `true` = la cassure tient (clôture au-delà et BOS enregistré). */
+  answer: boolean;
+  reading: Reading;
+}
+
+export function tryBreakoutDrill(seed: number, vraieVoulue?: boolean): BreakoutDrill | null {
+  const r = rng(seed);
+  // Le type peut être imposé. C'est nécessaire pour équilibrer : les fausses
+  // cassures sont rejetées plus souvent que les vraies (le moteur détecte
+  // parfois un BOS au même niveau ailleurs dans la série), donc un tirage à
+  // pile ou face produit environ deux tiers de vraies — partiellement
+  // devinable. `buildBreakoutDrill` alterne donc explicitement.
+  const vraie = vraieVoulue ?? r() < 0.5;
+  const ctx: Ctx = { r, price: 90 + r() * 300, vol: 0 };
+  ctx.vol = ctx.price * (0.007 + r() * 0.009);
+
+  // 1. Une tendance haussière lisible, validée par le moteur.
+  const candles: Candle[] = [];
+  for (let i = 0; i < 58; i++) candles.push(ordinary(ctx, "hausse", i, 1.1));
+  const base = read(candles, 3);
+  if (base.state !== "haussiere" || base.pivots.length < 4) return null;
+
+  const sommets = base.pivots.filter((p) => p.kind === "sommet");
+  const sommet = sommets[sommets.length - 1];
+  if (!sommet) return null;
+  const level = sommet.price;
+
+  // 2. Ramener le prix sous le niveau, pour qu'il y ait quelque chose à casser.
+  let garde = 0;
+  while (ctx.price > level * 0.988 && garde < 40) {
+    candles.push(ordinary(ctx, "baisse", candles.length, 1.5));
+    garde++;
+  }
+  if (ctx.price >= level) return null;
+
+  // 3. La bougie décisive.
+  const u = ctx.vol;
+  const o = ctx.price;
+  const depasse = level * (1 + 0.004 + r() * 0.008);
+  let decisive: Candle;
+  if (vraie) {
+    // Clôture franchement au-dessus du niveau.
+    decisive = { t: candles.length, o, h: depasse + u * 0.3, l: o - u * 0.4, c: depasse };
+  } else {
+    // Mèche au-dessus, clôture en dessous : le niveau n'est pas cassé.
+    const c = level * (1 - 0.004 - r() * 0.005);
+    decisive = { t: candles.length, o, h: depasse, l: Math.min(o, c) - u * 0.3, c };
+  }
+  candles.push(decisive);
+  ctx.price = decisive.c;
+  const at = candles.length - 1;
+
+  // 4. La suite, masquée : elle confirme visuellement le verdict.
+  const future: Candle[] = [];
+  for (let i = 0; i < 6; i++)
+    future.push(ordinary(ctx, vraie ? "hausse" : "baisse", candles.length + i, 1.6));
+
+  // 5. Le moteur doit confirmer l'intention.
+  const reading = read(candles, 3);
+  const bos = reading.events.some(
+    (e) => e.kind === "BOS" && e.direction === "haussier" && Math.abs(e.level - level) < level * 0.002,
+  );
+  if (bos !== vraie) return null;
+
+  return { seed, candles, future, level, at, answer: vraie, reading };
+}
+
+export function buildBreakoutDrill(seed: number): BreakoutDrill {
+  // Alternance imposée par la parité de la graine : sur une série d'exercices,
+  // vraies et fausses cassures s'équilibrent exactement.
+  const cible = seed % 2 === 0;
+  let s = seed;
+  for (let i = 0; i < 900; i++) {
+    const d = tryBreakoutDrill(s, cible);
+    if (d) return d;
+    s += 2; // on reste sur la même parité pour ne pas dériver
+  }
+  // Aucune graine exploitable : on remonte l'échec plutôt que d'inventer un
+  // exercice bancal. L'appelant affiche un message et propose de réessayer.
+  throw new Error("aucun exercice de cassure exploitable à partir de la graine " + seed);
+}
+
 /** Premier exercice de structure exploitable à partir de `seed`. */
 export function buildStructureDrill(seed: number): StructureDrill {
   let s = seed;
