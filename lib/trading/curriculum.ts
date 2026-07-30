@@ -53,6 +53,12 @@ export interface Lesson {
   keyPoints?: LocList;
   /** Ce que l'élève doit savoir FAIRE après la leçon, pas seulement savoir. */
   outcome?: Loc;
+  /**
+   * Clé du schéma à afficher dans la leçon — voir `LessonFigure` dans
+   * app/trading/Diagrams.tsx. On stocke une chaîne et non un composant : ce
+   * fichier est importé côté serveur, il doit rester des données pures.
+   */
+  figure?: "anatomie" | "force" | "figures_simples" | "figures_combinees";
   activities?: Activity[];
 }
 
@@ -295,6 +301,7 @@ const N2: Level = {
       slug: "anatomie-d-une-bougie",
       title: { fr: "Anatomie d'une bougie" },
       outcome: { fr: "Retrouver open, high, low, close sur n'importe quelle bougie." },
+      figure: "anatomie",
       content: {
         fr: `Une bougie résume une période — une minute, une heure, un jour — avec quatre nombres seulement.
 
@@ -353,6 +360,7 @@ C'est tout. Il n'y a rien de plus mystique dans les chandeliers.`,
       slug: "psychologie-de-la-bougie",
       title: { fr: "La psychologie derrière chaque bougie" },
       outcome: { fr: "Dire qui contrôle, et si le contrôle est ferme ou fragile." },
+      figure: "force",
       content: {
         fr: `Trois questions suffisent à lire n'importe quelle bougie.
 
@@ -379,6 +387,7 @@ Force et faiblesse ne sont pas des synonymes de vert et rouge. Une bougie rouge 
       slug: "figures-a-une-bougie",
       title: { fr: "Les figures à une bougie" },
       outcome: { fr: "Nommer et surtout justifier les figures à une bougie." },
+      figure: "figures_simples",
       content: {
         fr: `Maintenant que tu sais lire, les noms deviennent de simples raccourcis. Ne mémorise pas les formes — vérifie que tu peux justifier chacune par le rapport de force.
 
@@ -418,6 +427,7 @@ Note bien : marteau et pendu sont **identiques**. Étoile filante et marteau inv
       slug: "combinaisons-et-sequences",
       title: { fr: "Combinaisons et séquences" },
       outcome: { fr: "Lire un groupe de bougies comme un récit continu." },
+      figure: "figures_combinees",
       content: {
         fr: `Une bougie seule est une phrase. Plusieurs bougies forment un paragraphe — et c'est là que le sens apparaît.
 

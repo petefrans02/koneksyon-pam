@@ -16,6 +16,7 @@ import { isLevelAccessible, isMastered, levelMastery, levelState, markLessonRead
 import { questionsForLevel } from "@/lib/trading/questions";
 import { saveStudent, useStudent } from "@/lib/trading/store";
 import { useAdminAccess } from "@/lib/trading/access";
+import { LessonFigure } from "../Diagrams";
 import { color, gradient } from "@/lib/design";
 
 export default function NiveauClient({ slug }: { slug: string }) {
@@ -219,6 +220,23 @@ export default function NiveauClient({ slug }: { slug: string }) {
                                 dangerouslySetInnerHTML={{ __html: gras(par) }}
                               />
                             ))}
+
+                            {/* Schéma de la leçon : placé après le texte, pour
+                                que l'élève lise d'abord, puis vérifie sur
+                                l'image. */}
+                            {lec.figure && (
+                              <div
+                                style={{
+                                  background: color.bgLight,
+                                  border: `1px solid ${color.border}`,
+                                  borderRadius: 10,
+                                  padding: "16px 14px",
+                                  margin: "4px 0 16px",
+                                }}
+                              >
+                                <LessonFigure kind={lec.figure} />
+                              </div>
+                            )}
 
                             {lec.keyPoints?.fr && (
                               <div
