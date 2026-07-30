@@ -12,7 +12,8 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { getLevel } from "@/lib/trading/curriculum";
-import { isLevelUnlocked, isMastered, levelMastery, markLessonRead } from "@/lib/trading/progress";
+import { isLevelUnlocked, isMastered, levelMastery, levelState, markLessonRead } from "@/lib/trading/progress";
+import { questionsForLevel } from "@/lib/trading/questions";
 import { saveStudent, useStudent } from "@/lib/trading/store";
 import { color, gradient } from "@/lib/design";
 
@@ -23,6 +24,8 @@ export default function NiveauClient({ slug }: { slug: string }) {
 
   const debloque = isLevelUnlocked(student, niveau);
   const maitrise = levelMastery(student, niveau);
+  const etat = levelState(student, slug);
+  const nbQuestions = useMemo(() => questionsForLevel(slug).length, [slug]);
 
   const precedent = useMemo(
     () => (niveau.n > 1 ? getLevel(getSlugParNumero(niveau.n - 1)) : undefined),
@@ -266,15 +269,52 @@ export default function NiveauClient({ slug }: { slug: string }) {
                   })}
                 </div>
 
-                {/* Pratique */}
-                {niveau.slug === "bougies" && (
-                  <Bloc
-                    titre="L'entraînement est le cœur de ce niveau"
-                    ton={color.gold}
-                    texte="Lire les leçons ne suffit pas à valider les compétences : il faut les démontrer. L'entraînement génère des graphiques illimités et corrige chaque réponse."
-                    lien={{ href: "/trading/entrainement", label: "Lancer l'entraînement" }}
+                {/* Valider le niveau : pratique, entraînement, examen */}
+                <h2 style={{ fontSize: 19, color: color.textDark, margin: "26px 0 6px", fontWeight: 800 }}>
+                  Valider le niveau
+                </h2>
+                <p style={{ fontSize: 14.5, lineHeight: 1.65, color: color.textMuted, margin: "0 0 14px" }}>
+                  Lire les leçons ne valide rien. Il faut <strong>maîtriser les {niveau.skills.length}{" "}
+                  compétences</strong> en pratique <strong>et</strong> réussir l’examen à{" "}
+                  {niveau.passingScore}%. Les deux sont exigés.
+                </p>
+
+                <div style={{ display: "grid", gap: 10, marginBottom: 20 }}>
+                  <Action
+                    href={`/trading/${niveau.slug}/pratique`}
+                    titre="Pratique corrigée"
+                    detail={`${nbQuestions} questions, correction et raisonnement après chaque réponse. C’est ici que la maîtrise se construit.`}
+                    ton={niveau.color}
+                    disponible={nbQuestions > 0}
                   />
-                )}
+                  {niveau.slug === "bougies" && (
+                    <Action
+                      href="/trading/entrainement"
+                      titre="Entraînement sur graphiques"
+                      detail="« Que va faire le marché ensuite ? » — graphiques illimités, correction expliquée."
+                      ton={color.gold}
+                      disponible
+                    />
+                  )}
+                  <Action
+                    href={`/trading/${niveau.slug}/examen`}
+                    titre="Examen du niveau"
+                    detail={
+                      etat.examScore === null
+                        ? `${Math.min(12, nbQuestions)} questions, au moins une par compétence. Aucune correction avant la fin.`
+                        : `Meilleur score : ${etat.examScore}% (seuil ${niveau.passingScore}%) sur ${etat.examAttempts} tentative${etat.examAttempts > 1 ? "s" : ""}. Repasser tire de nouvelles questions.`
+                    }
+                    ton={etat.examScore !== null && etat.examScore >= niveau.passingScore ? color.success : color.info}
+                    disponible={nbQuestions > 0}
+                    badge={
+                      etat.examScore === null
+                        ? undefined
+                        : etat.examScore >= niveau.passingScore
+                          ? "Réussi"
+                          : "À repasser"
+                    }
+                  />
+                </div>
               </>
             ) : (
               <Bloc
@@ -307,6 +347,75 @@ function getSlugParNumero(n: number): string {
     "probabilites", "gestion-du-risque", "psychologie", "strategie", "autonomie",
   ];
   return slugs[n - 1] ?? "fondations";
+}
+
+/** Carte d'action cliquable — pratique, entraînement, examen. */
+function Action({
+  href,
+  titre,
+  detail,
+  ton,
+  disponible,
+  badge,
+}: {
+  href: string;
+  titre: string;
+  detail: string;
+  ton: string;
+  disponible: boolean;
+  badge?: string;
+}) {
+  const corps = (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "flex-start",
+        gap: 13,
+        padding: "15px 18px",
+        borderRadius: 11,
+        background: color.white,
+        border: `1px solid ${color.border}`,
+        borderLeft: `4px solid ${ton}`,
+        opacity: disponible ? 1 : 0.55,
+      }}
+    >
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 9, flexWrap: "wrap" }}>
+          <strong style={{ fontSize: 15.5, color: color.textDark }}>{titre}</strong>
+          {badge && (
+            <span
+              style={{
+                fontSize: 10.5,
+                fontWeight: 700,
+                color: ton,
+                border: `1px solid ${ton}`,
+                borderRadius: 99,
+                padding: "2px 8px",
+                textTransform: "uppercase",
+                letterSpacing: 0.4,
+              }}
+            >
+              {badge}
+            </span>
+          )}
+          {!disponible && (
+            <span style={{ fontSize: 11.5, color: color.textFaint }}>questions à venir</span>
+          )}
+        </div>
+        <p style={{ margin: "5px 0 0", fontSize: 14, lineHeight: 1.6, color: color.textMuted }}>
+          {detail}
+        </p>
+      </div>
+      {disponible && <span style={{ color: ton, fontSize: 18, flexShrink: 0 }}>→</span>}
+    </div>
+  );
+  return disponible ? (
+    <Link href={href} style={{ textDecoration: "none" }}>
+      {corps}
+    </Link>
+  ) : (
+    corps
+  );
 }
 
 function Bloc({

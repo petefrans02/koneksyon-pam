@@ -28,6 +28,11 @@ export interface LevelState {
   lessonsRead: string[];
   /** Meilleur score obtenu à l'examen, en %. Null = jamais passé. */
   examScore: number | null;
+  /**
+   * Nombre de passages de l'examen. Sert de graine : chaque nouvelle tentative
+   * tire un jeu de questions différent, tout en restant reproductible.
+   */
+  examAttempts: number;
 }
 
 export interface Student {
@@ -121,8 +126,7 @@ export function weakSkills(student: Student, level: Level) {
  */
 export function isLevelPassed(student: Student, level: Level): boolean {
   if (level.status !== "pret") return false;
-  const st = student.levels[level.slug];
-  const exam = st?.examScore ?? null;
+  const exam = levelState(student, level.slug).examScore;
   if (exam === null || exam < level.passingScore) return false;
   return levelMastery(student, level) >= 1;
 }
@@ -222,19 +226,29 @@ export function applyResult(student: Student, res: AttemptResult, today: string)
   return touchStreak(next, today);
 }
 
-/** Enregistre un score d'examen (on ne garde que le meilleur). */
+const EMPTY_LEVEL: LevelState = { lessonsRead: [], examScore: null, examAttempts: 0 };
+
+/** État d'un niveau, complété des champs absents d'une sauvegarde ancienne. */
+export function levelState(student: Student, levelSlug: string): LevelState {
+  return { ...EMPTY_LEVEL, ...(student.levels[levelSlug] ?? {}) };
+}
+
+/** Enregistre un score d'examen (on ne garde que le meilleur) et compte la tentative. */
 export function applyExam(student: Student, levelSlug: string, score: number): Student {
-  const cur = student.levels[levelSlug] ?? { lessonsRead: [], examScore: null };
+  const cur = levelState(student, levelSlug);
   const best = cur.examScore === null ? score : Math.max(cur.examScore, score);
   return {
     ...student,
-    levels: { ...student.levels, [levelSlug]: { ...cur, examScore: best } },
+    levels: {
+      ...student.levels,
+      [levelSlug]: { ...cur, examScore: best, examAttempts: cur.examAttempts + 1 },
+    },
   };
 }
 
 /** Marque une leçon comme lue. */
 export function markLessonRead(student: Student, levelSlug: string, lessonSlug: string): Student {
-  const cur = student.levels[levelSlug] ?? { lessonsRead: [], examScore: null };
+  const cur = levelState(student, levelSlug);
   if (cur.lessonsRead.includes(lessonSlug)) return student;
   return {
     ...student,
