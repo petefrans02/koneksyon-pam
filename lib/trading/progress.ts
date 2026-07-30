@@ -145,6 +145,23 @@ export function isLevelUnlocked(student: Student, level: Level): boolean {
   return isLevelPassed(student, previous);
 }
 
+/**
+ * Accès effectif à un niveau, verrou éventuellement contourné.
+ *
+ * `bypass` sert au compte administrateur (voir `access.ts`) : il doit pouvoir
+ * relire n'importe quel niveau sans le valider. Le contournement est ici, à
+ * l'extérieur du verrou — `isLevelUnlocked` n'est pas modifié et continue de
+ * répondre la vérité sur la progression réelle de l'élève. On choisit
+ * simplement de ne pas la consulter.
+ *
+ * Cette séparation compte : elle garantit qu'un bug d'accès admin ne peut pas
+ * fausser la maîtrise, les examens ni le déblocage des autres élèves.
+ */
+export function isLevelAccessible(student: Student, level: Level, bypass = false): boolean {
+  if (bypass) return true;
+  return isLevelUnlocked(student, level);
+}
+
 /** Le niveau où l'élève doit travailler maintenant. */
 export function currentLevel(student: Student): Level {
   const open = LEVELS.filter((l) => isLevelUnlocked(student, l) && l.status === "pret");

@@ -12,17 +12,19 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { getLevel } from "@/lib/trading/curriculum";
-import { isLevelUnlocked, isMastered, levelMastery, levelState, markLessonRead } from "@/lib/trading/progress";
+import { isLevelAccessible, isMastered, levelMastery, levelState, markLessonRead } from "@/lib/trading/progress";
 import { questionsForLevel } from "@/lib/trading/questions";
 import { saveStudent, useStudent } from "@/lib/trading/store";
+import { useAdminAccess } from "@/lib/trading/access";
 import { color, gradient } from "@/lib/design";
 
 export default function NiveauClient({ slug }: { slug: string }) {
   const niveau = getLevel(slug)!;
   const student = useStudent();
+  const admin = useAdminAccess();
   const [ouverte, setOuverte] = useState<string | null>(null);
 
-  const debloque = isLevelUnlocked(student, niveau);
+  const debloque = isLevelAccessible(student, niveau, admin);
   const maitrise = levelMastery(student, niveau);
   const etat = levelState(student, slug);
   const nbQuestions = useMemo(() => questionsForLevel(slug).length, [slug]);

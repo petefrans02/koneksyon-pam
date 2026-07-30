@@ -16,8 +16,9 @@
 import Link from "next/link";
 import { Level } from "@/lib/trading/curriculum";
 import { Question, examSelection, shuffle } from "@/lib/trading/questions";
-import { isLevelUnlocked, levelState } from "@/lib/trading/progress";
+import { isLevelAccessible, levelState } from "@/lib/trading/progress";
 import { useStudent } from "@/lib/trading/store";
+import { useAdminAccess } from "@/lib/trading/access";
 import { color } from "@/lib/design";
 import QuizRunner from "./QuizRunner";
 
@@ -34,7 +35,8 @@ export default function QuizGate({
   mode: "pratique" | "examen";
 }) {
   const student = useStudent();
-  const ouvert = isLevelUnlocked(student, niveau);
+  const admin = useAdminAccess();
+  const ouvert = isLevelAccessible(student, niveau, admin);
   const etat = levelState(student, niveau.slug);
 
   if (!ouvert) {

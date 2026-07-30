@@ -13,19 +13,22 @@
 import Link from "next/link";
 import { LEVELS, TOTAL_SKILLS } from "@/lib/trading/curriculum";
 import {
+  isLevelAccessible,
   isLevelPassed,
-  isLevelUnlocked,
   isMastered,
   levelMastery,
   overview,
 } from "@/lib/trading/progress";
 import { useStudent } from "@/lib/trading/store";
+import { useAdminAccess } from "@/lib/trading/access";
 import { color, gradient } from "@/lib/design";
 
 export default function AcademieTradingClient() {
   // La progression vient du store externe : rendu serveur avec l'état vide,
   // puis reprise automatique de la valeur enregistrée dans le navigateur.
   const student = useStudent();
+  // Un admin ouvre tous les niveaux sans les valider (voir access.ts).
+  const admin = useAdminAccess();
   const vue = overview(student);
 
   return (
@@ -129,12 +132,36 @@ export default function AcademieTradingClient() {
         <h2 style={{ fontSize: 21, color: color.textDark, margin: "0 0 16px", fontWeight: 800 }}>
           Le parcours
         </h2>
+        {admin && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 9,
+              padding: "10px 14px",
+              borderRadius: 10,
+              background: color.goldPale,
+              border: `1px solid ${color.goldLight}`,
+              marginBottom: 14,
+              fontSize: 13.5,
+              color: color.textBody,
+            }}
+          >
+            <strong style={{ color: color.gold }}>Accès administrateur</strong>
+            <span>
+              tous les niveaux sont ouverts, sans validation. Le verrou reste actif pour les élèves.
+            </span>
+          </div>
+        )}
         <div style={{ display: "grid", gap: 12 }}>
           {LEVELS.map((niv) => {
-            const ouvert = isLevelUnlocked(student, niv);
+            const ouvert = isLevelAccessible(student, niv, admin);
             const valide = isLevelPassed(student, niv);
             const maitrise = levelMastery(student, niv);
-            const accessible = ouvert && niv.status === "pret";
+            // Les niveaux 6 à 10 ne sont pas verrouillés, ils sont vides. Un
+            // admin doit pouvoir les ouvrir quand même pour relire leur
+            // structure et leurs compétences ; un élève n'y trouverait rien.
+            const accessible = ouvert && (niv.status === "pret" || admin);
 
             const contenu = (
               <div
