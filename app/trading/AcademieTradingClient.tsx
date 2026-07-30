@@ -127,6 +127,48 @@ export default function AcademieTradingClient() {
         </div>
       </div>
 
+      {/* Outil IA — indépendant du parcours à niveaux, donc mis à part visuellement. */}
+      <div style={{ maxWidth: 1080, margin: "0 auto", padding: "26px 18px 0" }}>
+        <Link
+          href="/trading/analyseur"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+            padding: "18px 20px",
+            borderRadius: 13,
+            background: color.navyDark,
+            border: `1px solid ${color.cyan}`,
+            textDecoration: "none",
+          }}
+        >
+          <div
+            style={{
+              flexShrink: 0,
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              display: "grid",
+              placeItems: "center",
+              background: gradient.cyan,
+              fontSize: 20,
+            }}
+          >
+            📈
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <strong style={{ fontSize: 16, color: color.white }}>
+              Analyseur de graphique (IA)
+            </strong>
+            <p style={{ margin: "4px 0 0", fontSize: 13.5, color: "#c8daf0", lineHeight: 1.5 }}>
+              Envoie une capture d’écran d’un graphique en bougies : l’IA explique chaque bougie
+              récente et dit quelle décision elle en tirerait.
+            </p>
+          </div>
+          <span style={{ color: color.cyanLight, fontSize: 20, flexShrink: 0 }}>→</span>
+        </Link>
+      </div>
+
       {/* Les niveaux */}
       <div style={{ maxWidth: 1080, margin: "0 auto", padding: "30px 18px 70px" }}>
         <h2 style={{ fontSize: 21, color: color.textDark, margin: "0 0 16px", fontWeight: 800 }}>
