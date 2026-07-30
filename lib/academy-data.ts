@@ -105,6 +105,11 @@ export const courses: Course[] = [
   { slug: "developpement-personnel", domain: "developpement", icon: "progression", color: "#16a34a", lessons: 9, status: "coming",
     title: { fr: "Développement Personnel", ht: "Devlopman Pèsonèl", en: "Personal Growth", es: "Desarrollo Personal" },
     description: { fr: "Discipline, gestion du temps et vision de vie.", ht: "Disiplin, jesyon tan ak vizyon lavi.", en: "Discipline, time management and life vision.", es: "Disciplina, gestión del tiempo y visión de vida." }, level: allLevels },
+  // Académie Trading : parcours à part entière (10 niveaux, exercices interactifs),
+  // d'où un `href` vers /trading plutôt que la page de cours générique.
+  { slug: "trading", domain: "developpement", icon: "portefeuille", color: "#c8960f", lessons: 13, status: "available", href: "/trading",
+    title: { fr: "Académie Trading", ht: "Akademi Trading", en: "Trading Academy", es: "Academia de Trading" },
+    description: { fr: "Comprendre comment fonctionne réellement le marché, des fondations à l'analyse autonome. Contenu éducatif, pas un conseil financier.", ht: "Konprann kijan mache a fonksyone reyèlman, depi baz yo jiska analiz otonòm. Kontni edikatif, se pa konsèy finansye.", en: "Understand how the market actually works, from foundations to independent analysis. Educational content, not financial advice.", es: "Comprender cómo funciona realmente el mercado, desde los fundamentos hasta el análisis autónomo. Contenido educativo, no asesoramiento financiero." }, level: allLevels },
 ];
 
 export function coursesByDomain(key: AcademyDomain): Course[] {
