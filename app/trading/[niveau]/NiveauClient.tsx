@@ -296,6 +296,15 @@ export default function NiveauClient({ slug }: { slug: string }) {
                       disponible
                     />
                   )}
+                  {niveau.slug === "price-action" && (
+                    <Action
+                      href="/trading/structure"
+                      titre="Lire la structure"
+                      detail="« Haussière, baissière ou range ? » — la correction révèle les pivots et les étiquettes HH/HL/LH/LL."
+                      ton={color.cyan}
+                      disponible
+                    />
+                  )}
                   <Action
                     href={`/trading/${niveau.slug}/examen`}
                     titre="Examen du niveau"

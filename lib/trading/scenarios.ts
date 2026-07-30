@@ -17,6 +17,7 @@
  */
 
 import { Candle, PATTERN_BY_KEY, detectAt } from "./candles";
+import { Reading, TrendState, read } from "./structure";
 
 // ------------------------------------------------------------------ hasard ---
 
@@ -348,4 +349,69 @@ export function drillSeries(seedStart: number, count: number, opts: DrillOptions
     gardeFou++;
   }
   return out;
+}
+
+// ------------------------------------------------- drill de structure (N3) ---
+
+/**
+ * Exercice du Niveau 3 : lire la structure d'un graphique.
+ *
+ * Point de méthode important : on ne fabrique pas la réponse à la main. On
+ * génère un marché, on le fait lire par `structure.read()` — qui est couvert
+ * par ses propres tests — et **c'est sa lecture qui fait foi**. On ne retient
+ * la série que si cette lecture correspond au régime demandé.
+ *
+ * Deux bénéfices : l'énoncé ne peut pas contredire ce que le graphique montre
+ * réellement, et la correction peut afficher les pivots exacts qui ont servi à
+ * conclure.
+ */
+export interface StructureDrill {
+  seed: number;
+  candles: Candle[];
+  reading: Reading;
+  /** Réponse attendue : l'état lu par le moteur. */
+  answer: TrendState;
+}
+
+const REGIMES: Regime[] = ["hausse", "baisse", "range"];
+
+/** Un exercice de structure, ou `null` si cette graine ne donne rien de net. */
+export function tryStructureDrill(seed: number, longueur = 78): StructureDrill | null {
+  const r = rng(seed);
+  const regime = REGIMES[Math.floor(r() * REGIMES.length)];
+  const ctx: Ctx = { r, price: 80 + r() * 340, vol: 0 };
+  ctx.vol = ctx.price * (0.007 + r() * 0.01);
+
+  const candles: Candle[] = [];
+  // Dérive modérée : trop forte, la structure devient une droite sans pivots ;
+  // trop faible, aucune tendance ne se dessine.
+  for (let i = 0; i < longueur; i++) candles.push(ordinary(ctx, regime, i, 1.1));
+
+  const reading = read(candles, 3);
+  // Il faut assez de pivots pour que la question ait un sens visuellement.
+  if (reading.pivots.length < 4) return null;
+  // Et la lecture du moteur doit correspondre au régime voulu : sinon le
+  // graphique raconterait autre chose que ce qu'on a demandé.
+  const attendu: TrendState =
+    regime === "hausse" ? "haussiere" : regime === "baisse" ? "baissiere" : "range";
+  if (reading.state !== attendu) return null;
+
+  return { seed, candles, reading, answer: reading.state };
+}
+
+/** Premier exercice de structure exploitable à partir de `seed`. */
+export function buildStructureDrill(seed: number): StructureDrill {
+  let s = seed;
+  for (let i = 0; i < 600; i++) {
+    const d = tryStructureDrill(s);
+    if (d) return d;
+    s++;
+  }
+  // Repli : on renvoie la meilleure série possible même si elle est en range.
+  const r = rng(s);
+  const ctx: Ctx = { r, price: 200, vol: 2 };
+  const candles: Candle[] = [];
+  for (let i = 0; i < 78; i++) candles.push(ordinary(ctx, "range", i, 1.1));
+  const reading = read(candles, 3);
+  return { seed: s, candles, reading, answer: reading.state };
 }

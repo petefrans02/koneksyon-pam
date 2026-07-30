@@ -14,6 +14,7 @@
 
 import { useId, useMemo } from "react";
 import { Candle } from "@/lib/trading/candles";
+import { Leg, Pivot, StructureEvent } from "@/lib/trading/structure";
 import { color } from "@/lib/design";
 
 export interface CandleChartProps {
@@ -29,6 +30,15 @@ export interface CandleChartProps {
   height?: number;
   /** Affiche l'axe des prix à droite. */
   showAxis?: boolean;
+  /**
+   * Superposition de structure (Niveau 3). Affichée seulement si
+   * `showStructure` — l'élève doit d'abord lire le graphique nu, sinon les
+   * étiquettes lui donnent la réponse.
+   */
+  pivots?: Pivot[];
+  legs?: Leg[];
+  events?: StructureEvent[];
+  showStructure?: boolean;
 }
 
 const UP = "#16a34a";
@@ -44,6 +54,10 @@ export default function CandleChart({
   highlightSpan = 1,
   height = 340,
   showAxis = true,
+  pivots,
+  legs,
+  events,
+  showStructure = false,
 }: CandleChartProps) {
   const uid = useId().replace(/:/g, "");
   const axisW = showAxis ? 52 : 6;
@@ -185,6 +199,76 @@ export default function CandleChart({
             </g>
           );
         })}
+
+        {/* Superposition de structure : zigzag, étiquettes, cassures */}
+        {showStructure && pivots && pivots.length > 1 && (
+          <g>
+            {/* Le zigzag qui relie les pivots : c'est lui qui rend la
+                structure évidente d'un coup d'œil. */}
+            <polyline
+              points={pivots.map((p) => `${p.i * step + step / 2},${y(p.price)}`).join(" ")}
+              fill="none"
+              stroke={color.cyanGlow}
+              strokeOpacity={0.75}
+              strokeWidth={1.3}
+              strokeDasharray="5 3"
+            />
+            {pivots.map((p) => (
+              <circle
+                key={`pv${p.i}`}
+                cx={p.i * step + step / 2}
+                cy={y(p.price)}
+                r={2.4}
+                fill={color.cyanGlow}
+              />
+            ))}
+            {/* Étiquettes HH / HL / LH / LL */}
+            {legs?.map((l) => {
+              const haut = l.pivot.kind === "sommet";
+              const monte = l.label === "HH" || l.label === "HL";
+              return (
+                <text
+                  key={`lg${l.pivot.i}`}
+                  x={l.pivot.i * step + step / 2}
+                  y={y(l.pivot.price) + (haut ? -6 : 11)}
+                  fill={monte ? "#4ade80" : "#f87171"}
+                  fontSize={7.5}
+                  fontWeight={700}
+                  textAnchor="middle"
+                  fontFamily="ui-monospace, monospace"
+                >
+                  {l.label}
+                </text>
+              );
+            })}
+            {/* Niveaux cassés */}
+            {events?.map((e, k) => (
+              <g key={`ev${k}`}>
+                <line
+                  x1={0}
+                  x2={width}
+                  y1={y(e.level)}
+                  y2={y(e.level)}
+                  stroke={e.kind === "BOS" ? color.goldLight : "#f472b6"}
+                  strokeOpacity={0.65}
+                  strokeWidth={1}
+                  strokeDasharray="2 3"
+                />
+                <text
+                  x={e.i * step + step / 2}
+                  y={y(e.level) - 3}
+                  fill={e.kind === "BOS" ? color.goldLight : "#f472b6"}
+                  fontSize={7}
+                  fontWeight={700}
+                  textAnchor="middle"
+                  fontFamily="ui-monospace, monospace"
+                >
+                  {e.kind}
+                </text>
+              </g>
+            ))}
+          </g>
+        )}
 
         {/* Axe des prix */}
         {showAxis && (

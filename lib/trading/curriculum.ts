@@ -507,11 +507,13 @@ const N3: Level = {
   slug: "price-action",
   title: { fr: "Price Action" },
   tagline: { fr: "Lire la structure du marché sans un seul indicateur." },
-  why: { fr: "Les bougies te disent ce qui vient de se passer. La structure te dit où tu es." },
+  why: {
+    fr: "Les bougies te disent ce qui vient de se passer. La structure te dit où tu es. Sans elle, tu lis des figures dans le vide — un marteau superbe au milieu de nulle part ne vaut rien, et tu as appris pourquoi au niveau précédent.",
+  },
   icon: "progression",
   color: "#7c3aed",
   passingScore: 80,
-  status: "bientot",
+  status: "pret",
   skills: [
     s("structure", "Identifier la structure du marché"),
     s("hh_hl", "Repérer Higher High et Higher Low"),
@@ -521,7 +523,188 @@ const N3: Level = {
     s("supports", "Tracer supports et résistances"),
     s("zones", "Délimiter les zones importantes"),
   ],
-  lessons: [],
+  lessons: [
+    {
+      slug: "qu-est-ce-que-la-structure",
+      title: { fr: "Qu'est-ce que la structure du marché" },
+      outcome: { fr: "Dire en une phrase où en est un marché, sans aucun indicateur." },
+      content: {
+        fr: `Un graphique n'avance pas en ligne droite. Il progresse par vagues : une poussée, une pause, une nouvelle poussée. La structure, c'est simplement la façon dont ces vagues s'enchaînent.
+
+Pour la lire, tu n'as besoin que de deux choses : les **sommets** (les points hauts où le prix a fait demi-tour) et les **creux** (les points bas). Rien d'autre. Pas de moyenne mobile, pas d'oscillateur.
+
+Une fois ces points repérés, tu poses une seule question : est-ce que les sommets montent ? est-ce que les creux montent ? Selon les réponses, tu obtiens l'un des trois états possibles du marché.
+
+**Tendance haussière** — les sommets montent ET les creux montent. Chaque recul est acheté plus haut que le précédent : il y a une demande qui n'attend pas.
+
+**Tendance baissière** — les sommets descendent ET les creux descendent.
+
+**Range** — tout le reste. Et ce « tout le reste » est plus large qu'on ne croit : des sommets plus hauts *avec* des creux plus bas, ce n'est pas une tendance, c'est une expansion. Le marché s'agite dans les deux sens. Beaucoup de débutants y voient une hausse parce qu'ils ne regardent que les sommets.
+
+Retiens la règle : **il faut les deux**. Sommets et creux dans le même sens, sinon ce n'est pas une tendance.`,
+      },
+      keyPoints: {
+        fr: [
+          "La structure se lit avec deux choses : les sommets et les creux.",
+          "Tendance haussière = sommets ET creux qui montent.",
+          "Sommets plus hauts avec creux plus bas = expansion, pas tendance.",
+          "Trois états seulement : haussier, baissier, range.",
+        ],
+      },
+    },
+    {
+      slug: "hh-hl-lh-ll",
+      title: { fr: "HH, HL, LH, LL : le vocabulaire" },
+      outcome: { fr: "Étiqueter chaque sommet et chaque creux d'un graphique." },
+      content: {
+        fr: `Quatre étiquettes suffisent à décrire n'importe quelle structure. Elles se lisent en comparant chaque point au point **de même nature** qui le précède — un sommet à un sommet, un creux à un creux. Jamais un sommet à un creux.
+
+**HH** — *Higher High*, sommet plus haut que le sommet précédent.
+**HL** — *Higher Low*, creux plus haut que le creux précédent.
+**LH** — *Lower High*, sommet plus bas que le sommet précédent.
+**LL** — *Lower Low*, creux plus bas que le creux précédent.
+
+Une tendance haussière s'écrit donc : HH, HL, HH, HL… Une baissière : LH, LL, LH, LL…
+
+Le plus utile n'est pas de nommer, c'est de **repérer le moment où la série se casse**. Une suite HH, HL, HH, HL, puis soudain un **LH** — un sommet qui n'arrive plus à dépasser le précédent. Rien n'est encore cassé, le prix peut monter encore. Mais les acheteurs viennent d'échouer pour la première fois. C'est une information que tu obtiens *avant* la cassure.
+
+Un détail qui compte : le premier sommet et le premier creux d'un graphique n'ont pas d'étiquette. Plus haut que quoi ? Il n'y a pas de référence. Il faut toujours deux points de même nature pour commencer à lire.`,
+      },
+      keyPoints: {
+        fr: [
+          "On compare toujours un sommet à un sommet, un creux à un creux.",
+          "Haussier : HH, HL, HH, HL… · Baissier : LH, LL, LH, LL…",
+          "Le premier point n'a pas d'étiquette : pas de référence.",
+          "Le premier LH d'une hausse est un avertissement, pas une cassure.",
+        ],
+      },
+    },
+    {
+      slug: "bos-break-of-structure",
+      title: { fr: "Break of Structure (BOS)" },
+      outcome: { fr: "Distinguer une continuation confirmée d'un simple mouvement." },
+      content: {
+        fr: `Un **BOS** est une cassure dans le sens de la tendance en cours. Le marché monte, et il franchit son dernier sommet : la structure haussière se prolonge, confirmée. C'est une continuation.
+
+Ça paraît trivial. Le point qui ne l'est pas, c'est **comment** on juge la cassure.
+
+Une cassure se juge sur la **clôture**, pas sur la mèche.
+
+Le prix peut dépasser un sommet en pleine séance puis retomber, et clôturer en dessous. Visuellement la mèche a franchi le niveau. Mais qu'est-ce que ça raconte ? Que le prix est allé là-haut et qu'il a été rejeté — tu sais lire ça depuis le niveau 2. Ce n'est pas une cassure, c'est un rejet. Traiter ces dépassements de mèche comme des BOS est l'une des façons les plus rapides d'accumuler des pertes.
+
+Alors pourquoi la clôture ? Parce que c'est le seul prix sur lequel les deux camps se sont accordés pour terminer la période. Une mèche est une tentative ; une clôture est un résultat.
+
+Et un BOS ne te dit pas d'entrer. Il te dit que la structure tient toujours. C'est un constat sur l'état du marché, pas un signal.`,
+      },
+      keyPoints: {
+        fr: [
+          "BOS = cassure dans le sens de la tendance = continuation confirmée.",
+          "Une cassure se juge à la CLÔTURE, jamais à la mèche.",
+          "Une mèche qui dépasse puis retombe est un rejet, pas une cassure.",
+          "Un BOS constate un état, il ne donne pas d'ordre d'entrée.",
+        ],
+      },
+    },
+    {
+      slug: "choch-change-of-character",
+      title: { fr: "Change of Character (CHoCH)" },
+      outcome: { fr: "Repérer le premier signe qu'une tendance change de nature." },
+      content: {
+        fr: `Le **CHoCH** est l'inverse du BOS : une cassure dans le sens **opposé** à la tendance en cours.
+
+Le marché monte en HH et HL. Puis il clôture **sous le dernier HL** — sous le dernier creux plus haut. Pour la première fois depuis le début de la hausse, les vendeurs obtiennent quelque chose qu'ils n'avaient jamais obtenu : ils ont cassé un plancher que les acheteurs défendaient.
+
+Le nom est bien choisi. Ce n'est pas encore un retournement — le prix peut remonter et reprendre sa hausse. C'est un changement de *caractère* : le marché ne se comporte plus comme avant.
+
+La différence entre les deux se résume à une question : **la cassure va-t-elle dans le sens de la tendance ou contre elle ?**
+
+| | Sens | Signification |
+|---|---|---|
+| BOS | avec la tendance | la structure tient |
+| CHoCH | contre la tendance | la structure se fissure |
+
+La confusion classique consiste à appeler CHoCH n'importe quelle bougie rouge dans une hausse. Non : il faut une **clôture sous un creux structurel identifié**. Sans ce niveau précis, il n'y a rien à casser.
+
+Et il faut une tendance pour commencer. Dans un range, ni BOS ni CHoCH n'ont de sens — il n'y a pas de structure à confirmer ou à briser.`,
+      },
+      keyPoints: {
+        fr: [
+          "CHoCH = cassure contre le sens de la tendance.",
+          "En hausse : clôture sous le dernier HL.",
+          "Ce n'est pas un retournement, c'est un changement de caractère.",
+          "Sans tendance établie, ni BOS ni CHoCH n'existent.",
+        ],
+      },
+    },
+    {
+      slug: "supports-et-resistances",
+      title: { fr: "Supports et résistances" },
+      outcome: { fr: "Tracer un niveau utile et rejeter les niveaux inventés." },
+      content: {
+        fr: `Un **support** est un niveau où le prix a déjà cessé de baisser. Une **résistance**, un niveau où il a déjà cessé de monter. C'est tout — et c'est du passé, pas une prédiction.
+
+Pourquoi ces niveaux fonctionnent-ils parfois ? Pas par magie. Parce que des acteurs y ont pris des décisions, et qu'ils s'en souviennent. Quelqu'un qui a acheté à ce prix et vu le marché monter rachètera volontiers au même endroit. Quelqu'un qui est resté coincé au-dessus vendra pour sortir à l'équilibre. Le niveau existe parce que des gens ont une raison d'y agir.
+
+Trois règles pour ne pas se raconter d'histoires.
+
+**Un niveau se mérite.** Un point touché une fois n'est pas un support, c'est un point. Deux touches donnent une hypothèse, trois une zone sérieuse.
+
+**Un niveau est une zone, pas un trait.** Le prix ne s'arrête pas au centime. Si tu as besoin d'une précision au centime pour que ton niveau tienne, ton niveau est faux.
+
+**Le plus important : plus un niveau est visible, plus il attire d'ordres — donc de stops au même endroit.** Cette concentration est exactement ce que tu étudieras au Niveau 4. Un support évident n'est pas seulement un endroit où acheter : c'est aussi un endroit où beaucoup de monde placera son stop juste en dessous.
+
+Le piège de ce niveau, c'est de tracer trop de traits. Avec assez de lignes, on trouve toujours une explication après coup. Garde ce que tu peux justifier : un niveau touché plusieurs fois, où il s'est visiblement passé quelque chose.`,
+      },
+      keyPoints: {
+        fr: [
+          "Un support/résistance est un fait passé, pas une prédiction.",
+          "Une touche = un point. Deux = une hypothèse. Trois = une zone.",
+          "C'est une zone, jamais un trait au centime.",
+          "Un niveau évident concentre les stops — retiens-le pour le Niveau 4.",
+        ],
+      },
+    },
+    {
+      slug: "zones-importantes",
+      title: { fr: "Les zones qui comptent vraiment" },
+      outcome: { fr: "Hiérarchiser les niveaux au lieu de les empiler." },
+      content: {
+        fr: `Tu sais tracer des niveaux. Le vrai travail est maintenant de savoir **lesquels ignorer**.
+
+Ce qui donne du poids à une zone :
+
+**Le nombre de réactions.** Trois pivots au même prix valent mieux qu'un. Chaque réaction est la preuve qu'il s'y passe quelque chose de répété.
+
+**La violence de la réaction.** Un prix qui quitte une zone lentement raconte moins qu'un prix qui en part d'un coup. Le second signale qu'un déséquilibre attendait là.
+
+**L'échelle de temps.** Un niveau visible sur le graphique journalier pèse plus qu'un niveau de cinq minutes. Plus d'acteurs le voient, donc plus de monde y réagit.
+
+**Le rôle inversé.** Une résistance cassée devient souvent un support, et inversement. Les acheteurs qui n'ont pas osé au-dessus reviennent au retest.
+
+Et un point de méthode qui change tout : **change d'échelle**. La même série de bougies observée avec un pas plus large montre moins de sommets, mais des sommets plus importants. Les zigzags qui semblaient décisifs disparaissent. Faire varier cette sensibilité et voir la structure se simplifier est le meilleur exercice de ce niveau — c'est ce qui t'apprend à distinguer le bruit du mouvement.
+
+Si un graphique te donne quinze niveaux, tu n'en as aucun. Trois ou quatre que tu peux défendre suffisent.`,
+      },
+      keyPoints: {
+        fr: [
+          "Nombre de réactions, violence du départ, échelle de temps : voilà le poids d'une zone.",
+          "Une résistance cassée devient souvent un support.",
+          "Change d'échelle : la structure se simplifie, le bruit disparaît.",
+          "Quinze niveaux = aucun niveau. Trois que tu peux défendre suffisent.",
+        ],
+      },
+      activities: [
+        {
+          slug: "lire-la-structure",
+          kind: "drill_bougie",
+          title: { fr: "Lire la structure" },
+          xp: 40,
+          skills: ["structure", "hh_hl", "lh_ll"],
+          config: { mode: "structure" },
+        },
+      ],
+    },
+  ],
 };
 
 const N4: Level = {
