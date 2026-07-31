@@ -88,15 +88,23 @@ LE PLAN — tous les marchés, pas seulement les options binaires
 La même lecture se joue différemment selon l'instrument. Tu remplis les trois lignes du plan, quel que soit le graphique envoyé (forex, actions, indices, crypto, matières premières).
 
 1) OPTIONS BINAIRES À DURÉE FIXE (Pocket Option et équivalents) — c'est ce que pratiquent la plupart des élèves.
-Tu dois donner une DURÉE EXACTE, choisie dans la liste réellement sélectionnable sur la plateforme :
-30 s · 1 min · 2 min · 3 min · 5 min · 10 min · 15 min · 30 min · 1 h · 2 h · 4 h.
-Ne réponds jamais "7 minutes" ni "entre 3 et 5 minutes" : une seule valeur de la liste, celle que l'élève va cliquer.
-La règle de calcul : l'expiration doit couvrir 3 à 5 bougies de l'unité de temps AFFICHÉE sur le graphique, parce qu'un mouvement structurel met ce temps-là à se développer. Correspondances :
-— graphique M1 → 5 min · graphique M5 → 15 min ou 30 min · graphique M15 → 1 h · graphique M30 → 2 h · graphique H1 → 4 h.
-— unité de temps H4, journalière, hebdomadaire ou mensuelle → binaire_duree = null, SANS EXCEPTION. À cette échelle le mouvement se joue sur des jours : aucune durée de la liste n'a de sens. Explique-le dans binaire_pourquoi, et ne remplis surtout pas une durée qui contredirait ton explication.
-Ajuste dans la liste quand le graphique le justifie : momentum qui accélère fort → le bas de la fourchette (le mouvement va vite) ; range ou momentum mou → le haut, voire "attendre".
-Compte le départ à la CLÔTURE de la bougie en cours, pas à l'instant du clic : entrer en plein milieu d'une bougie ampute l'expiration d'une fraction du temps prévu. Rappelle-le dans binaire_pourquoi quand c'est déterminant.
-Si le verdict est "attendre", binaire_duree = null — on ne choisit pas une durée pour un trade qu'on ne prend pas.
+L'élève va saisir une durée dans un champ "Time" au format 00:03:00, puis presser BUY ou SELL. Il a besoin du chiffre exact, pas d'une fourchette.
+
+Tu ne choisis PAS la durée toi-même : tu fournis quatre mesures, et le programme calcule.
+— prix_actuel : le prix de clôture de la dernière bougie, tout à droite. Lis-le sur l'axe.
+— objectif_prix : le prix que le mouvement doit atteindre pour que ta lecture se réalise — le prochain obstacle réel (sommet, creux, bord de range), pas un chiffre rond arbitraire.
+— amplitude_bougie : de combien le prix avance EN MOYENNE par bougie dans le sens du mouvement, sur les dix dernières bougies. Autrement dit la taille moyenne d'un corps, pas la mèche. C'est cette mesure qui donne la vitesse.
+— minutes_par_bougie : la durée d'une bougie en minutes, d'après l'unité de temps affichée. M1 = 1, M5 = 5, M15 = 15, M30 = 30, H1 = 60, H4 = 240, journalier = 1440.
+Le programme fera : bougies nécessaires = distance à parcourir ÷ amplitude par bougie, puis durée = bougies × minutes_par_bougie, arrondie à la valeur sélectionnable au-dessus.
+Ces quatre nombres doivent être cohérents entre eux et avec l'échelle de prix que tu as lue. Si tu ne peux pas en mesurer un honnêtement, mets-le à null — le programme retombera alors sur ta durée estimée.
+
+Remplis quand même binaire_duree avec ton estimation, choisie dans la liste sélectionnable : 30 s · 1 min · 2 min · 3 min · 5 min · 10 min · 15 min · 30 min · 1 h · 2 h · 4 h. Elle sert de secours quand les mesures ne sont pas exploitables. Repère utile pour cette estimation : une expiration couvre en général 3 à 5 bougies de l'unité affichée.
+
+— unité de temps H4, journalière, hebdomadaire ou mensuelle → binaire_duree = null et les quatre mesures à null, SANS EXCEPTION. À cette échelle le mouvement se joue sur des jours : aucune durée de la liste n'a de sens. Explique-le dans binaire_pourquoi.
+— Si le verdict est "attendre", tout à null — on ne choisit pas une durée pour un trade qu'on ne prend pas.
+
+Dans binaire_pourquoi (UNE phrase) : dis ce que le prix doit parcourir — le niveau visé — et rappelle de lancer le chrono à la CLÔTURE de la bougie en cours, car entrer en plein milieu d'une bougie ampute l'expiration d'une fraction du temps prévu. N'annonce AUCUN nombre de bougies ni aucune durée dans cette phrase : c'est le programme qui les calcule et les affiche, et un chiffre écrit à la main finit toujours par contredire le chiffre calculé.
+Ne promets jamais que l'expiration sera gagnante. Elle est cohérente avec la lecture, ce qui n'est pas la même chose.
 
 2) OPTIONS SUR ACTIONS ET INDICES (calls/puts classiques). Donne en une ligne : le sens (call ou put), l'échéance en semaines, et le strike relatif au prix (ATM au monnaie, ou légèrement OTM). Règle : l'échéance doit valoir 2 à 3 fois le temps que tu estimes nécessaire au mouvement, parce que la valeur temps s'érode et qu'une option juste-à-temps perd même quand la direction est bonne. Une option achetée trop courte est le piège classique du débutant.
 
@@ -179,9 +187,24 @@ const SCHEMA = {
       description:
         "Option binaire : LA durée exacte à sélectionner sur la plateforme, une seule valeur de la liste. null si verdict 'attendre', si l'unité de temps est illisible, ou si l'échelle est trop grande pour une binaire.",
     },
-    binaire_bougies: {
+    prix_actuel: {
+      type: ["number", "null"],
+      description: "Prix de clôture de la dernière bougie, lu sur l'axe. null si illisible.",
+    },
+    objectif_prix: {
+      type: ["number", "null"],
+      description:
+        "Prix que le mouvement doit atteindre pour que la lecture se réalise — le prochain obstacle réel. null si indéterminable.",
+    },
+    amplitude_bougie: {
+      type: ["number", "null"],
+      description:
+        "Progression moyenne du prix par bougie dans le sens du mouvement, sur les 10 dernières bougies (taille de corps moyenne, pas la mèche). Toujours positif. null si non mesurable.",
+    },
+    minutes_par_bougie: {
       type: ["integer", "null"],
-      description: "Nombre de bougies de l'unité de temps affichée que cette durée couvre.",
+      description:
+        "Durée d'une bougie en minutes d'après l'unité de temps affichée : M1=1, M5=5, M15=15, M30=30, H1=60. null au-delà de H1.",
     },
     binaire_pourquoi: {
       type: ["string", "null"],
@@ -399,6 +422,119 @@ function annotationsValides(v: unknown, echelle: unknown): unknown[] {
     .slice(0, 6);
 }
 
+/**
+ * Les durées réellement sélectionnables dans le champ "Time" de Pocket Option,
+ * en secondes. On arrondit toujours VERS LE HAUT : une expiration trop courte
+ * fait perdre un trade dont la lecture était pourtant juste, une expiration un
+ * peu longue ne coûte que de l'attente.
+ */
+const DUREES = [30, 60, 120, 180, 300, 600, 900, 1800, 3600, 7200, 14400];
+
+/** 185 s → "00:03:05". C'est le format exact du champ de la plateforme. */
+function enHorloge(secondes: number): string {
+  const h = Math.floor(secondes / 3600);
+  const m = Math.floor((secondes % 3600) / 60);
+  const s = secondes % 60;
+  return [h, m, s].map((n) => String(n).padStart(2, "0")).join(":");
+}
+
+/** "5 min", "30 s", "1 h" → secondes. Sert à récupérer l'estimation du modèle. */
+function enSecondes(texte: unknown): number | null {
+  if (typeof texte !== "string") return null;
+  const m = texte.match(/([\d.]+)\s*(s|min|h)\b/i);
+  if (!m) return null;
+  const n = parseFloat(m[1]);
+  if (!isFinite(n)) return null;
+  const unite = m[2].toLowerCase();
+  const sec = unite === "s" ? n : unite === "min" ? n * 60 : n * 3600;
+  return DUREES.includes(sec) ? sec : null;
+}
+
+interface Binaire {
+  bouton: "BUY" | "SELL" | null;
+  temps: string | null;
+  secondes: number | null;
+  bougies: number | null;
+  minutes_par_bougie: number | null;
+  /** "calcul" quand la durée sort des mesures, "estimation" quand elle vient du modèle. */
+  source: "calcul" | "estimation" | null;
+}
+
+/**
+ * La durée à saisir dans le champ "Time", déduite du graphique.
+ *
+ * Le raisonnement est celui d'un trader, pas une règle empirique : le prix doit
+ * parcourir une certaine distance pour que la lecture se réalise, il avance en
+ * moyenne d'une certaine quantité par bougie, donc il lui faut tant de bougies —
+ * et une bougie dure tant de minutes. La règle des « 3 à 5 bougies » ne sert
+ * plus que de secours quand une mesure manque.
+ *
+ * Rien ici ne prédit un gain : c'est le temps que le mouvement demande s'il se
+ * produit, pas une promesse qu'il se produira.
+ */
+function calculerBinaire(a: Record<string, unknown>): Binaire {
+  const vide: Binaire = {
+    bouton: null,
+    temps: null,
+    secondes: null,
+    bougies: null,
+    minutes_par_bougie: null,
+    source: null,
+  };
+
+  if (a.verdict !== "achat" && a.verdict !== "vente") return vide;
+  const bouton = a.verdict === "achat" ? "BUY" : "SELL";
+
+  const nombre = (v: unknown): number | null =>
+    typeof v === "number" && isFinite(v) ? v : null;
+
+  const actuel = nombre(a.prix_actuel);
+  const objectif = nombre(a.objectif_prix);
+  const amplitude = nombre(a.amplitude_bougie);
+  const parBougie = nombre(a.minutes_par_bougie);
+
+  // Voie principale : le calcul, quand les quatre mesures tiennent debout.
+  if (actuel !== null && objectif !== null && amplitude !== null && parBougie !== null) {
+    const distance = Math.abs(objectif - actuel);
+    // Une amplitude nulle ou supérieure à la distance signale une mesure ratée,
+    // pas un marché immobile : on refuse le calcul plutôt que d'inventer.
+    const coherent = amplitude > 0 && distance > 0 && parBougie > 0 && parBougie <= 60;
+    if (coherent) {
+      // Plafonné à 20 bougies : au-delà, la lecture qui justifie l'entrée a
+      // toutes les chances d'être périmée avant l'échéance.
+      const bougies = Math.min(20, Math.max(1, Math.ceil(distance / amplitude)));
+      const secondesBrutes = bougies * parBougie * 60;
+      const secondes = DUREES.find((d) => d >= secondesBrutes);
+      if (secondes) {
+        return {
+          bouton,
+          temps: enHorloge(secondes),
+          secondes,
+          bougies,
+          minutes_par_bougie: parBougie,
+          source: "calcul",
+        };
+      }
+    }
+  }
+
+  // Secours : l'estimation du modèle, si elle correspond à une durée réelle.
+  const secours = enSecondes(a.binaire_duree);
+  if (secours) {
+    return {
+      bouton,
+      temps: enHorloge(secours),
+      secondes: secours,
+      bougies: parBougie ? Math.round(secours / 60 / parBougie) : null,
+      minutes_par_bougie: parBougie,
+      source: "estimation",
+    };
+  }
+
+  // Ni calcul ni estimation : le bouton reste utile, la durée non.
+  return { ...vide, bouton };
+}
+
 interface Tracee {
   type: unknown;
   role: unknown;
@@ -529,6 +665,7 @@ Rappel : court. Une phrase de résumé, trois ou quatre puces maximum.${insistan
       const brut = propre(bloc.input) as Record<string, unknown>;
       return {
         ...brut,
+        binaire: calculerBinaire(brut),
         points: enPuces(brut.points),
         annotations: sansContradiction(
           annotationsValides(brut.annotations, brut.echelle),

@@ -62,8 +62,14 @@ interface Analyse {
   points: string[];
   invalidation: string;
   contre: string;
-  binaire_duree?: string | null;
-  binaire_bougies?: number | null;
+  binaire?: {
+    bouton: "BUY" | "SELL" | null;
+    temps: string | null;
+    secondes: number | null;
+    bougies: number | null;
+    minutes_par_bougie: number | null;
+    source: "calcul" | "estimation" | null;
+  };
   binaire_pourquoi?: string | null;
   option_classique?: string | null;
   comptant?: string | null;
@@ -916,8 +922,12 @@ function Resultat({ analyse: a, avis }: { analyse: Analyse; avis: Verdict | null
  * durée gagnante. Le mot « gain » n'apparaît nulle part ici, volontairement.
  */
 function Plan({ analyse: a }: { analyse: Analyse }) {
-  const rien = !a.binaire_duree && !a.option_classique && !a.comptant && !a.binaire_pourquoi;
+  const b = a.binaire;
+  const rien = !b?.temps && !b?.bouton && !a.option_classique && !a.comptant && !a.binaire_pourquoi;
   if (rien) return null;
+
+  const boutonAchat = b?.bouton === "BUY";
+  const tonBouton = boutonAchat ? "#26a69a" : "#ef5350";
 
   return (
     <div style={{ marginTop: 12 }}>
@@ -925,36 +935,100 @@ function Plan({ analyse: a }: { analyse: Analyse }) {
         Comment ça se joue
       </h2>
 
-      {/* Options binaires — Pocket Option et équivalents */}
-      <div
-        style={{
-          background: gradient.navy,
-          borderRadius: 12,
-          padding: "16px 19px",
-          color: color.white,
-        }}
-      >
-        <div style={{ fontSize: 12, color: "#c8daf0", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}>
+      {/* Le panneau de la plateforme, reproduit : le bouton à presser et la
+          valeur à saisir dans le champ Time. Rien à traduire, rien à convertir. */}
+      <div style={{ background: gradient.navy, borderRadius: 12, padding: "16px 19px" }}>
+        <div
+          style={{
+            fontSize: 12,
+            color: "#c8daf0",
+            fontWeight: 700,
+            textTransform: "uppercase",
+            letterSpacing: 0.5,
+          }}
+        >
           Option binaire · Pocket Option
         </div>
-        {a.binaire_duree ? (
+
+        {b?.temps && b.bouton ? (
           <>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 11, flexWrap: "wrap", marginTop: 7 }}>
-              <span style={{ fontSize: 30, fontWeight: 900, color: color.goldLight, lineHeight: 1.1 }}>
-                {a.binaire_duree}
-              </span>
-              <span style={{ fontSize: 13.5, color: "#c8daf0" }}>
-                expiration à sélectionner
-                {typeof a.binaire_bougies === "number" && a.binaire_bougies > 0
-                  ? ` — ${a.binaire_bougies} bougie${a.binaire_bougies > 1 ? "s" : ""}`
-                  : ""}
-              </span>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "stretch",
+                gap: 12,
+                flexWrap: "wrap",
+                marginTop: 11,
+              }}
+            >
+              {/* Champ « Time » */}
+              <div style={{ flex: "1 1 190px" }}>
+                <div style={{ fontSize: 12.5, color: "#8fa6c4", marginBottom: 5 }}>Time</div>
+                <div
+                  style={{
+                    background: "#0b1526",
+                    border: `1px solid #24344f`,
+                    borderRadius: 9,
+                    padding: "12px 16px",
+                    fontSize: 30,
+                    fontWeight: 800,
+                    color: color.white,
+                    fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+                    letterSpacing: 1,
+                    textAlign: "center",
+                  }}
+                >
+                  {b.temps}
+                </div>
+              </div>
+
+              {/* Bouton à presser */}
+              <div style={{ flex: "1 1 150px", display: "flex", flexDirection: "column" }}>
+                <div style={{ fontSize: 12.5, color: "#8fa6c4", marginBottom: 5 }}>Sens</div>
+                <div
+                  style={{
+                    flex: 1,
+                    background: tonBouton,
+                    borderRadius: 9,
+                    display: "grid",
+                    placeItems: "center",
+                    color: color.white,
+                    fontSize: 21,
+                    fontWeight: 900,
+                    letterSpacing: 1.5,
+                    minHeight: 58,
+                  }}
+                >
+                  {boutonAchat ? "↗ BUY" : "↘ SELL"}
+                </div>
+              </div>
             </div>
+
+            {/* D'où sort le chiffre : l'élève doit pouvoir le refaire. */}
+            <p style={{ fontSize: 13.5, lineHeight: 1.6, color: "#c8daf0", margin: "11px 0 0" }}>
+              {b.source === "calcul" && b.bougies && b.minutes_par_bougie ? (
+                <>
+                  Calculé&nbsp;: le prix doit parcourir sa distance à l&apos;objectif au rythme
+                  moyen des dernières bougies, soit environ <strong>{b.bougies} bougie
+                  {b.bougies > 1 ? "s" : ""}</strong> de {b.minutes_par_bougie} minute
+                  {b.minutes_par_bougie > 1 ? "s" : ""} — arrondi à la durée sélectionnable
+                  au-dessus.
+                </>
+              ) : (
+                <>Durée estimée à partir de l&apos;unité de temps affichée.</>
+              )}
+            </p>
+
             {a.binaire_pourquoi && (
-              <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#dbe7f7", margin: "9px 0 0" }}>
+              <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#dbe7f7", margin: "8px 0 0" }}>
                 {a.binaire_pourquoi}
               </p>
             )}
+
+            <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "#8fa6c4", margin: "10px 0 0" }}>
+              Cette durée est celle que le mouvement demande s&apos;il se produit. Ce n&apos;est
+              pas une expiration gagnante — ça n&apos;existe pas.
+            </p>
           </>
         ) : (
           <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#dbe7f7", margin: "7px 0 0" }}>

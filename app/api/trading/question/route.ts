@@ -52,7 +52,9 @@ COMMENT TU RÉPONDS
 — En français, direct, technique. Pas de formules de politesse, pas de "il semblerait que". L'élève a suivi les niveaux 1 à 5 : bougies, structure, institutions, momentum. Applique ce vocabulaire au lieu de réexpliquer les bases.
 — Court : 2 à 5 paragraphes, ou une liste brève. Une question précise mérite une réponse précise, pas un cours.
 — Quand on te demande un sens, donne-le, avec ce qui l'invaliderait. Un avis sans invalidation ne vaut rien.
-— Quand on te demande une expiration, donne UNE valeur, pas une fourchette. L'élève doit cliquer un bouton, et "3 à 5 minutes" ne correspond à aucun bouton. Choisis dans la liste réellement sélectionnable — 30 s · 1 min · 2 min · 3 min · 5 min · 10 min · 15 min · 30 min · 1 h · 2 h · 4 h — puis explique le choix. Si une analyse a déjà été rendue sur ce graphique et qu'elle donne une durée, reprends la même : deux chiffres différents dans la même page ne servent personne.
+— Quand on te demande une expiration, donne UNE valeur au format du champ "Time" de la plateforme : 00:03:00, pas "3 à 5 minutes". Les durées réellement sélectionnables sont 00:00:30 · 00:01:00 · 00:02:00 · 00:03:00 · 00:05:00 · 00:10:00 · 00:15:00 · 00:30:00 · 01:00:00 · 02:00:00 · 04:00:00. Précise aussi le bouton : BUY ou SELL.
+La façon de la calculer, si on te demande de la justifier : la distance qui sépare le prix actuel de son objectif, divisée par la progression moyenne par bougie, donne le nombre de bougies nécessaires ; multiplié par la durée d'une bougie, puis arrondi à la valeur sélectionnable au-dessus. On arrondit vers le haut parce qu'une expiration trop courte fait perdre un trade dont la lecture était juste.
+Si une analyse a déjà été rendue sur ce graphique et qu'elle donne une durée, reprends exactement la même : deux chiffres différents dans la même page ne servent personne.
 — Tu peux dire "n'entre pas" ou "attends la clôture de cette bougie" — c'est souvent la bonne réponse.
 
 HONNÊTETÉ
@@ -209,6 +211,12 @@ function resumeAnalyse(a: unknown): string {
   if (typeof o.confiance === "number") bouts.push(`Confiance : ${o.confiance}%`);
   ajoute("Résumé", o.resume);
   ajoute("Invalidation", o.invalidation);
+  // La durée calculée fait partie du contexte : sans elle, l'assistant en
+  // propose une autre et l'élève se retrouve avec deux chiffres.
+  const b = o.binaire as Record<string, unknown> | undefined;
+  if (b && typeof b.temps === "string" && typeof b.bouton === "string") {
+    bouts.push(`Plan binaire déjà donné : bouton ${b.bouton}, expiration ${b.temps}`);
+  }
   if (!bouts.length) return "";
   return `Analyse déjà rendue sur ce graphique (garde-la cohérente, ne la contredis pas sans raison explicite) :\n${bouts.join("\n")}\n\n`;
 }
