@@ -68,6 +68,7 @@ interface AnalyseEntrante {
   resume?: string;
   invalidation?: string;
   binaire?: Binaire;
+  niveaux_action?: unknown[];
 }
 
 interface Unite extends AnalyseEntrante {
@@ -97,6 +98,8 @@ interface Decision {
   accord_pourcent: number;
   entree: Unite | null;
   binaire: Binaire | null;
+  /** Ceux de l'unité d'entrée : c'est sur elle qu'on se place. */
+  niveaux_action: unknown[];
   unites: {
     unite: string;
     minutes: number;
@@ -154,6 +157,7 @@ function decider(unites: Unite[]): Decision {
     accord_pourcent: Math.round(part * 100),
     entree,
     binaire: entree?.binaire ?? null,
+    niveaux_action: entree?.niveaux_action ?? [],
     unites: unites.map((u) => ({
       unite: u.unite_temps || `${u.minutes} min`,
       minutes: u.minutes,

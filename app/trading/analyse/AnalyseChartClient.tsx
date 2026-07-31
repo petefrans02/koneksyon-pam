@@ -64,6 +64,7 @@ interface Analyse {
   invalidation: string;
   contre: string;
   binaire?: Binaire;
+  niveaux_action?: NiveauAction[];
   binaire_pourquoi?: string | null;
   option_classique?: string | null;
   comptant?: string | null;
@@ -77,6 +78,21 @@ interface Duree {
   bougies: number;
   /** Le niveau que le prix irait toucher d'abord — seulement sur la durée couverte. */
   niveau?: number | null;
+}
+
+/** Un plan d'attente : « si le prix touche X, alors BUY/SELL ». */
+interface NiveauAction {
+  prix: number;
+  nom: string;
+  declencheur: "rejet" | "cassure";
+  sens: Verdict;
+  bouton: "BUY" | "SELL";
+  objectif: number | null;
+  pourquoi: string;
+  invalide_si: string;
+  distance_pourcent: number | null;
+  temps: string | null;
+  bougies: number | null;
 }
 
 /** La seconde entrée, si le prix part d'abord contre la lecture. */
@@ -121,6 +137,7 @@ interface Synthese {
   lecture: string;
   a_surveiller: string;
   binaire: Binaire | null;
+  niveaux_action: NiveauAction[];
   entree: { unite_temps?: string | null } | null;
   unites: {
     unite: string;
@@ -997,6 +1014,8 @@ function PanneauSynthese({ synthese: s, avis }: { synthese: Synthese; avis: Verd
         ))}
       </div>
 
+      <BlocNiveaux niveaux={s.niveaux_action ?? []} />
+
       {s.binaire?.repli && <BlocRepli repli={s.binaire.repli} />}
 
       {s.a_surveiller && (
@@ -1482,6 +1501,8 @@ function Resultat({ analyse: a, avis }: { analyse: Analyse; avis: Verdict | null
       )}
 
       {/* Les deux lignes qui empêchent de prendre ça pour une certitude. */}
+      <BlocNiveaux niveaux={a.niveaux_action ?? []} />
+
       {a.binaire?.repli && <BlocRepli repli={a.binaire.repli} />}
 
       <div style={{ display: "grid", gap: 8, marginTop: 10 }}>
@@ -1635,6 +1656,127 @@ function CalculDurees({ binaire: b }: { binaire: Binaire }) {
         </>
       )}
     </p>
+  );
+}
+
+/**
+ * Les niveaux d'action — le plan le plus sûr de la page.
+ *
+ * Entrer maintenant, c'est entrer là où le prix se trouve, sans autre raison
+ * que « ça a l'air de monter ». Attendre un niveau, c'est entrer là où le
+ * marché a déjà réagi, avec une raison connue d'avance et une réponse déjà
+ * décidée. Le second est plus lent et beaucoup plus solide — d'où sa place en
+ * tête, avant l'entrée immédiate.
+ *
+ * Chaque niveau porte sa propre expiration, calculée depuis lui : un ordre
+ * déclenché plus haut n'a pas la même distance à parcourir qu'une entrée prise
+ * ici et maintenant.
+ */
+function BlocNiveaux({ niveaux }: { niveaux: NiveauAction[] }) {
+  if (!niveaux.length) return null;
+
+  return (
+    <div style={{ marginTop: 12 }}>
+      <h2 style={{ fontSize: 17, color: color.textDark, margin: "0 0 4px", fontWeight: 800 }}>
+        Si le prix touche…
+      </h2>
+      <p style={{ fontSize: 13.5, lineHeight: 1.6, color: color.textMuted, margin: "0 0 10px" }}>
+        Le plan le plus sûr&nbsp;: tu n&apos;entres pas maintenant, tu attends que le prix vienne à
+        un endroit où il a déjà réagi — et tu sais déjà quoi faire quand il y arrive.
+      </p>
+
+      <div style={{ display: "grid", gap: 9 }}>
+        {niveaux.map((n, i) => {
+          const achat = n.sens === "achat";
+          const ton = achat ? "#26a69a" : "#ef5350";
+          return (
+            <div
+              key={`${n.prix}-${i}`}
+              style={{
+                background: color.white,
+                border: `1px solid ${color.border}`,
+                borderLeft: `4px solid ${ton}`,
+                borderRadius: 11,
+                padding: "14px 17px",
+              }}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}
+              >
+                <span style={{ fontSize: 13.5, color: color.textMuted }}>
+                  {n.declencheur === "rejet" ? "Si le prix touche et refuse" : "Si le prix clôture au-delà de"}
+                </span>
+                <span
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 800,
+                    color: color.textDark,
+                    fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+                  }}
+                >
+                  {n.prix}
+                </span>
+                <span style={{ fontSize: 16, color: color.textFaint }}>→</span>
+                <span
+                  style={{
+                    fontSize: 13.5,
+                    fontWeight: 900,
+                    letterSpacing: 1,
+                    padding: "5px 13px",
+                    borderRadius: 7,
+                    background: ton,
+                    color: color.white,
+                  }}
+                >
+                  {achat ? "↗ BUY" : "↘ SELL"}
+                </span>
+                {n.temps && (
+                  <span
+                    style={{
+                      fontSize: 14.5,
+                      fontWeight: 800,
+                      color: color.textDark,
+                      fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+                      background: color.grayLight,
+                      padding: "4px 10px",
+                      borderRadius: 7,
+                    }}
+                  >
+                    {n.temps}
+                  </span>
+                )}
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: 9,
+                  flexWrap: "wrap",
+                  fontSize: 12.5,
+                  color: color.textFaint,
+                  margin: "8px 0 0",
+                }}
+              >
+                <span>{n.nom}</span>
+                {n.distance_pourcent != null && <span>· à {n.distance_pourcent}% du prix actuel</span>}
+                {n.declencheur === "cassure" && <span>· clôture exigée, une mèche ne suffit pas</span>}
+              </div>
+
+              {n.pourquoi && (
+                <p style={{ fontSize: 14.5, lineHeight: 1.6, color: color.textBody, margin: "7px 0 0" }}>
+                  {n.pourquoi}
+                </p>
+              )}
+              {n.invalide_si && (
+                <p style={{ fontSize: 13, lineHeight: 1.55, color: color.textMuted, margin: "5px 0 0" }}>
+                  Annulé si&nbsp;: {n.invalide_si}
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

@@ -92,7 +92,7 @@ L'élève va saisir une durée dans un champ "Time" au format 00:03:00, puis pre
 
 Tu ne choisis PAS la durée toi-même : tu fournis quatre mesures, et le programme calcule.
 — prix_actuel : le prix de clôture de la dernière bougie, tout à droite. Lis-le sur l'axe.
-— objectif_prix : le prix que le mouvement doit atteindre pour que ta lecture se réalise — le prochain obstacle réel (sommet, creux, bord de range), pas un chiffre rond arbitraire.
+— objectif_prix : le prix que le mouvement doit atteindre pour que ta lecture se réalise — le PROCHAIN obstacle réel (sommet, creux, bord de range), pas un chiffre rond arbitraire, et surtout pas le bout du graphique. Il doit être atteignable en une dizaine de bougies au plus : une option à durée fixe ne tient pas quarante bougies, et viser le bas du cadre produit une expiration inutilisable. Si le seul niveau franc est très loin, prends le premier palier intermédiaire — un ancien creux, un bord de consolidation — même s'il est modeste.
 — retracement_prix : le niveau OPPOSÉ le plus proche que le prix pourrait aller toucher AVANT de partir dans le sens attendu. Sur une vente, c'est la résistance juste au-dessus du prix actuel ; sur un achat, le support juste en dessous. C'est le repli qu'il faut pouvoir encaisser sans que l'option expire au mauvais moment. Prends un niveau réel — un sommet, un creux, un bord de range déjà touché — pas une marge arbitraire. Si aucun niveau opposé n'est visible entre le prix et le bord du graphique, mets null.
 — amplitude_bougie : de combien le prix avance EN MOYENNE par bougie dans le sens du mouvement, sur les dix dernières bougies. Autrement dit la taille moyenne d'un corps, pas la mèche. C'est cette mesure qui donne la vitesse.
 — minutes_par_bougie : la durée d'une bougie en minutes, d'après l'unité de temps affichée. M1 = 1, M5 = 5, M15 = 15, M30 = 30, H1 = 60, H4 = 240, journalier = 1440.
@@ -103,6 +103,16 @@ Remplis quand même binaire_duree avec ton estimation, choisie dans la liste sé
 
 — unité de temps H4, journalière, hebdomadaire ou mensuelle → binaire_duree = null et les quatre mesures à null, SANS EXCEPTION. À cette échelle le mouvement se joue sur des jours : aucune durée de la liste n'a de sens. Explique-le dans binaire_pourquoi.
 — Si le verdict est "attendre", tout à null — on ne choisit pas une durée pour un trade qu'on ne prend pas.
+
+LES NIVEAUX D'ACTION — « si le prix touche X, alors… »
+C'est le plan le plus sûr que tu puisses donner, et souvent le seul honnête : au lieu d'entrer maintenant au milieu du mouvement, l'élève attend que le prix atteigne un endroit où quelque chose s'est déjà produit, et il sait d'avance quoi faire quand il y arrive.
+Donne 2 ou 3 niveaux dans "niveaux_action", classés du plus proche du prix actuel au plus lointain. Chacun décrit une situation d'attente, pas une entrée immédiate.
+Deux déclencheurs possibles, et un seul par niveau :
+— "rejet" : le prix vient toucher le niveau et le refuse. On prend alors le sens OPPOSÉ à l'approche. Toucher une résistance et être rejeté se joue à la vente ; toucher un support et rebondir se joue à l'achat. C'est le cas le plus fréquent.
+— "cassure" : le prix CLÔTURE au-delà du niveau. On prend alors le sens DE la cassure. Attention : une mèche qui dépasse n'est pas une cassure, c'est un rejet — tu l'as appris au Niveau 3. Précise-le dans "pourquoi" quand le niveau est susceptible d'être percé par une mèche.
+Pour chaque niveau : son prix, son nom court ("Résistance du sommet", "Support testé 3 fois"), le sens à prendre, l'objectif que le prix viserait si le scénario se réalise, une raison en une phrase, et ce qui annulerait le scénario.
+Ne propose que des niveaux RÉELS, où le prix a déjà réagi de façon visible sur l'image. Deux niveaux justifiés valent mieux que trois dont un inventé. Si tu n'en vois qu'un, n'en donne qu'un ; si tu n'en vois aucun, renvoie une liste vide.
+Le sens d'un niveau d'action peut contredire ton verdict général : c'est normal et c'est même le but. Le verdict dit ce que raconte le graphique maintenant ; les niveaux disent quoi faire selon où le prix ira.
 
 SI LE PRIX PART CONTRE L'ÉLÈVE
 Donne aussi invalidation_prix, le prix exact qui tue la thèse. Avec retracement_prix, le programme en déduit une seconde entrée : un ordre limite posé au niveau opposé, qui n'a de sens que TANT QUE la thèse tient. Sell limit au-dessus sur une vente, buy limit en dessous sur un achat — entrer à un meilleur prix sur la même lecture, pas rattraper une perte en misant plus gros.
@@ -238,6 +248,38 @@ const SCHEMA = {
       maxLength: 170,
       description:
         "UNE ligne pour le forex/actions/crypto au comptant : où placer le stop et le premier objectif. null si le verdict est 'attendre'.",
+    },
+    niveaux_action: {
+      type: "array",
+      minItems: 0,
+      maxItems: 3,
+      description:
+        "Les plans d'attente : « si le prix touche X, alors BUY/SELL ». Classés du plus proche du prix actuel au plus lointain. Liste vide si aucun niveau réel n'est identifiable.",
+      items: {
+        type: "object",
+        properties: {
+          prix: { type: "number", description: "Le prix du niveau." },
+          nom: { type: "string", maxLength: 34, description: "Nom court du niveau." },
+          declencheur: {
+            type: "string",
+            enum: ["rejet", "cassure"],
+            description: "rejet = le prix touche et refuse ; cassure = le prix clôture au-delà.",
+          },
+          sens: {
+            type: "string",
+            enum: ["achat", "vente"],
+            description: "Le sens à prendre quand le déclencheur se produit.",
+          },
+          objectif: {
+            type: ["number", "null"],
+            description: "Le prix visé si le scénario se réalise. Sert à calculer l'expiration.",
+          },
+          pourquoi: { type: "string", maxLength: 140, description: "UNE phrase." },
+          invalide_si: { type: "string", maxLength: 120, description: "Ce qui annule ce scénario." },
+        },
+        required: ["prix", "nom", "declencheur", "sens", "objectif", "pourquoi", "invalide_si"],
+        additionalProperties: false,
+      },
     },
     echelle: {
       type: ["object", "null"],
@@ -533,9 +575,10 @@ function calculerRepli(
 
 /** Nombre de bougies → durée sélectionnable, ou null si ça sort de la liste. */
 function dureeDeBougies(bougies: number, minutesParBougie: number): Duree | null {
-  // Plafonné à 30 bougies : au-delà, la lecture qui justifie l'entrée a toutes
-  // les chances d'être périmée avant l'échéance.
-  const n = Math.min(30, Math.max(1, Math.ceil(bougies)));
+  // Plafonné à 20 bougies : au-delà, la lecture qui justifie l'entrée a toutes
+  // les chances d'être périmée avant l'échéance — et une option à durée fixe
+  // qui court sur quarante bougies n'est plus le trade qu'on avait analysé.
+  const n = Math.min(20, Math.max(1, Math.ceil(bougies)));
   const secondes = DUREES.find((d) => d >= n * minutesParBougie * 60);
   return secondes ? { temps: enHorloge(secondes), secondes, bougies: n } : null;
 }
@@ -651,6 +694,110 @@ function calculerBinaire(a: Record<string, unknown>): Binaire {
 
   // Ni calcul ni estimation : le bouton et le repli restent utiles, la durée non.
   return { ...vide, bouton, repli };
+}
+
+/** Un plan d'attente : « si le prix touche X, alors BUY/SELL ». */
+interface NiveauAction {
+  prix: number;
+  nom: string;
+  declencheur: "rejet" | "cassure";
+  sens: "achat" | "vente";
+  bouton: "BUY" | "SELL";
+  objectif: number | null;
+  pourquoi: string;
+  invalide_si: string;
+  /** Écart au prix actuel, en pourcentage — sert à savoir lequel se jouera en premier. */
+  distance_pourcent: number | null;
+  /** Expiration calculée depuis CE niveau, pas depuis le prix actuel. */
+  temps: string | null;
+  bougies: number | null;
+}
+
+/**
+ * Les niveaux d'action, complétés par le calcul.
+ *
+ * Le modèle donne le niveau, le sens et l'objectif ; l'expiration se calcule
+ * comme ailleurs — la distance qui sépare le niveau de son objectif, divisée
+ * par la vitesse du marché. Le point important : elle part DU NIVEAU, pas du
+ * prix actuel. Un ordre déclenché à 1.0865 ne met pas le même temps à atteindre
+ * sa cible qu'une entrée prise ici et maintenant.
+ */
+function niveauxAction(
+  v: unknown,
+  actuel: number | null,
+  amplitude: number | null,
+  parBougie: number | null,
+): NiveauAction[] {
+  if (!Array.isArray(v)) return [];
+
+  return v
+    .filter(
+      (n): n is Record<string, unknown> =>
+        !!n &&
+        typeof n === "object" &&
+        typeof (n as Record<string, unknown>).prix === "number" &&
+        ((n as Record<string, unknown>).sens === "achat" ||
+          (n as Record<string, unknown>).sens === "vente"),
+    )
+    .map((n) => {
+      const prix = n.prix as number;
+      const objectif = typeof n.objectif === "number" && isFinite(n.objectif) ? n.objectif : null;
+
+      let temps: string | null = null;
+      let bougies: number | null = null;
+      if (objectif !== null && amplitude && amplitude > 0 && parBougie && parBougie <= 60) {
+        const d = dureeDeBougies(Math.abs(objectif - prix) / amplitude, parBougie);
+        if (d) {
+          temps = d.temps;
+          bougies = d.bougies;
+        }
+      }
+
+      return {
+        prix,
+        nom: String(n.nom ?? "Niveau").slice(0, 40),
+        declencheur: (n.declencheur === "cassure" ? "cassure" : "rejet") as "rejet" | "cassure",
+        sens: n.sens as "achat" | "vente",
+        bouton: (n.sens === "achat" ? "BUY" : "SELL") as "BUY" | "SELL",
+        objectif,
+        pourquoi: String(n.pourquoi ?? "").slice(0, 200),
+        invalide_si: String(n.invalide_si ?? "").slice(0, 160),
+        distance_pourcent:
+          actuel !== null && actuel !== 0
+            ? Math.round((Math.abs(prix - actuel) / Math.abs(actuel)) * 10000) / 100
+            : null,
+        temps,
+        bougies,
+      };
+    })
+    .sort((a, b) => (a.distance_pourcent ?? 1e9) - (b.distance_pourcent ?? 1e9))
+    .slice(0, 3);
+}
+
+/**
+ * Les niveaux d'action deviennent des tracés.
+ *
+ * On ne demande pas au modèle de les dessiner en plus de les décrire : leur
+ * hauteur se déduit du prix via la calibration de l'axe, donc autant les poser
+ * nous-mêmes — c'est exact, et ça garantit qu'un niveau écrit est un niveau
+ * visible.
+ */
+function tracesDesNiveaux(niveaux: NiveauAction[], echelle: unknown): unknown[] {
+  return niveaux
+    .map((n) => {
+      const y = hauteurDuPrix(n.prix, echelle);
+      if (y === null) return null;
+      return {
+        type: "niveau",
+        role: n.sens === "achat" ? "haussier" : "baissier",
+        label: `${n.bouton} si ${n.declencheur === "rejet" ? "rejet" : "cassure"} ${n.prix}`.slice(0, 32),
+        x1: 0,
+        y1: y,
+        x2: 1,
+        y2: y,
+      };
+    })
+    .filter((t) => t !== null);
 }
 
 interface Tracee {
@@ -781,14 +928,31 @@ Rappel : court. Une phrase de résumé, trois ou quatre puces maximum.${insistan
         console.log("[debug] points brut =", JSON.stringify((bloc.input as Record<string, unknown>).points));
       }
       const brut = propre(bloc.input) as Record<string, unknown>;
+      const nombre = (v: unknown) => (typeof v === "number" && isFinite(v) ? v : null);
+      const niveaux = niveauxAction(
+        brut.niveaux_action,
+        nombre(brut.prix_actuel),
+        nombre(brut.amplitude_bougie),
+        nombre(brut.minutes_par_bougie),
+      );
+
+      // Les tracés du modèle d'abord, ceux des niveaux d'action ensuite : un
+      // graphique surchargé ne se lit plus, et les niveaux calculés sont les
+      // plus fiables des deux — ils passent par la calibration de l'axe.
+      const traces = [
+        ...sansContradiction(
+          annotationsValides(brut.annotations, brut.echelle),
+          brut.verdict,
+        ).slice(0, 4),
+        ...tracesDesNiveaux(niveaux, brut.echelle),
+      ];
+
       return {
         ...brut,
         binaire: calculerBinaire(brut),
+        niveaux_action: niveaux,
         points: enPuces(brut.points),
-        annotations: sansContradiction(
-          annotationsValides(brut.annotations, brut.echelle),
-          brut.verdict,
-        ),
+        annotations: traces,
       };
     };
 
