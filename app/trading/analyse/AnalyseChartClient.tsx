@@ -802,82 +802,137 @@ function Etiquette({
 // -------------------------------------------------------------- résultat ----
 
 function Resultat({ analyse: a, avis }: { analyse: Analyse; avis: Verdict | null }) {
-  const v = VERDICTS[a.verdict];
   const accord = avis !== null ? avis === a.verdict : null;
+
+  const b = a.binaire;
+  const bouton = b?.bouton ?? null;
+  const tonBouton = bouton === "BUY" ? "#26a69a" : bouton === "SELL" ? "#ef5350" : color.textMuted;
 
   return (
     <>
-      <div
-        style={{
-          background: v.fond,
-          border: `1px solid ${v.ton}`,
-          borderRadius: 14,
-          padding: "20px 22px",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
-          <span
-            style={{
-              padding: "9px 20px",
-              borderRadius: 10,
-              background: v.ton,
-              color: color.white,
-              fontWeight: 900,
-              fontSize: 19,
-              letterSpacing: 1,
-            }}
-          >
-            {v.label}
-          </span>
-          <div style={{ flex: 1, minWidth: 180 }}>
-            <div style={{ fontSize: 13, color: color.textMuted, fontWeight: 700 }}>
-              Confiance {a.confiance}%
-            </div>
+      {/* LA RÉPONSE, EN PREMIER.
+          Le sens et la durée sont ce que l'élève est venu chercher : ils passent
+          avant le raisonnement, pas après. Le fond sombre et les couleurs des
+          boutons reprennent celles de la plateforme, pour qu'il n'ait rien à
+          traduire entre cet écran et le sien. */}
+      <div style={{ background: gradient.navy, borderRadius: 14, padding: "20px 22px" }}>
+        <div style={{ display: "flex", alignItems: "stretch", gap: 12, flexWrap: "wrap" }}>
+          <div style={{ flex: "1 1 150px", display: "flex", flexDirection: "column" }}>
+            <div style={{ fontSize: 12.5, color: "#8fa6c4", marginBottom: 5 }}>Sens</div>
             <div
               style={{
-                height: 7,
-                borderRadius: 99,
-                background: "rgba(0,0,0,.09)",
-                marginTop: 6,
-                overflow: "hidden",
+                flex: 1,
+                background: tonBouton,
+                borderRadius: 9,
+                display: "grid",
+                placeItems: "center",
+                color: color.white,
+                fontSize: 22,
+                fontWeight: 900,
+                letterSpacing: 1.5,
+                minHeight: 62,
+                padding: "0 14px",
               }}
             >
+              {bouton === "BUY" ? "↗ BUY" : bouton === "SELL" ? "↘ SELL" : "ATTENDRE"}
+            </div>
+          </div>
+
+          {b?.temps && (
+            <div style={{ flex: "1 1 190px" }}>
+              <div style={{ fontSize: 12.5, color: "#8fa6c4", marginBottom: 5 }}>Time</div>
               <div
                 style={{
-                  width: `${Math.max(0, Math.min(100, a.confiance))}%`,
-                  height: "100%",
-                  background: v.ton,
+                  background: "#0b1526",
+                  border: "1px solid #24344f",
+                  borderRadius: 9,
+                  padding: "13px 16px",
+                  fontSize: 31,
+                  fontWeight: 800,
+                  color: color.white,
+                  fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+                  letterSpacing: 1,
+                  textAlign: "center",
+                  minHeight: 62,
+                  boxSizing: "border-box",
                 }}
-              />
+              >
+                {b.temps}
+              </div>
             </div>
+          )}
+        </div>
+
+        <div style={{ marginTop: 14 }}>
+          <div style={{ fontSize: 12.5, color: "#8fa6c4", fontWeight: 700 }}>
+            Confiance {a.confiance}%
+          </div>
+          <div
+            style={{
+              height: 7,
+              borderRadius: 99,
+              background: "rgba(255,255,255,.12)",
+              marginTop: 6,
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                width: `${Math.max(0, Math.min(100, a.confiance))}%`,
+                height: "100%",
+                background: tonBouton,
+              }}
+            />
           </div>
         </div>
 
-        <p style={{ fontSize: 16, lineHeight: 1.65, color: color.textBody, margin: "15px 0 0" }}>
+        <p style={{ fontSize: 15.5, lineHeight: 1.6, color: "#dbe7f7", margin: "14px 0 0" }}>
           {a.resume}
         </p>
 
-        {a.points.length > 0 && (
-          <ul style={{ margin: "12px 0 0", paddingLeft: 19 }}>
-            {a.points.map((p, i) => (
-              <li
-                key={i}
-                style={{ fontSize: 15, lineHeight: 1.6, color: color.textBody, marginBottom: 5 }}
-              >
-                {p}
-              </li>
-            ))}
-          </ul>
+        {/* D'où sort la durée : l'élève doit pouvoir refaire le calcul. */}
+        {b?.temps && b.source === "calcul" && b.bougies && b.minutes_par_bougie ? (
+          <p style={{ fontSize: 13, lineHeight: 1.55, color: "#8fa6c4", margin: "8px 0 0" }}>
+            {b.bougies} bougie{b.bougies > 1 ? "s" : ""} de {b.minutes_par_bougie} minute
+            {b.minutes_par_bougie > 1 ? "s" : ""} pour atteindre l&apos;objectif, arrondi à la
+            durée sélectionnable au-dessus. Chrono à lancer à la clôture de la bougie en cours.
+          </p>
+        ) : (
+          a.binaire_pourquoi && (
+            <p style={{ fontSize: 13, lineHeight: 1.55, color: "#8fa6c4", margin: "8px 0 0" }}>
+              {a.binaire_pourquoi}
+            </p>
+          )
         )}
 
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
-          <Puce texte={TENDANCES[a.tendance]} />
-          {a.instrument && <Puce texte={a.instrument} />}
-          {a.unite_temps && <Puce texte={a.unite_temps} />}
+          <PuceSombre texte={TENDANCES[a.tendance]} />
+          {a.instrument && <PuceSombre texte={a.instrument} />}
+          {a.unite_temps && <PuceSombre texte={a.unite_temps} />}
         </div>
       </div>
 
-      <Plan analyse={a} />
+      {/* Le raisonnement, ensuite : ce qui a été lu dans les bougies. */}
+      {a.points.length > 0 && (
+        <ul
+          style={{
+            margin: "12px 0 0",
+            padding: "14px 18px 14px 34px",
+            background: color.white,
+            border: `1px solid ${color.border}`,
+            borderRadius: 12,
+          }}
+        >
+          {a.points.map((p, i) => (
+            <li
+              key={i}
+              style={{ fontSize: 15, lineHeight: 1.6, color: color.textBody, marginBottom: 5 }}
+            >
+              {p}
+            </li>
+          ))}
+        </ul>
+      )}
 
       {/* Les deux lignes qui empêchent de prendre ça pour une certitude. */}
       <div style={{ display: "grid", gap: 8, marginTop: 10 }}>
@@ -906,145 +961,26 @@ function Resultat({ analyse: a, avis }: { analyse: Analyse; avis: Verdict | null
           </p>
         </div>
       )}
+
+      <AutresMarches analyse={a} />
     </>
   );
 }
 
 /**
- * Le plan, décliné par instrument.
+ * Les autres façons de jouer la même lecture.
  *
- * L'expiration binaire est mise en avant parce que c'est la question numéro un
- * de l'élève : sur Pocket Option, choisir 1 minute au lieu de 5 sur la même
- * lecture change complètement le résultat. On affiche donc la valeur exacte à
- * sélectionner — pas une fourchette qu'il faudrait encore interpréter.
- *
- * Et on ne promet rien : une durée cohérente avec la lecture n'est pas une
- * durée gagnante. Le mot « gain » n'apparaît nulle part ici, volontairement.
+ * Secondaire, donc en bas et en petit : l'élève travaille en options à durée
+ * fixe, le reste est là pour le jour où il passera sur un autre instrument.
  */
-function Plan({ analyse: a }: { analyse: Analyse }) {
-  const b = a.binaire;
-  const rien = !b?.temps && !b?.bouton && !a.option_classique && !a.comptant && !a.binaire_pourquoi;
-  if (rien) return null;
-
-  const boutonAchat = b?.bouton === "BUY";
-  const tonBouton = boutonAchat ? "#26a69a" : "#ef5350";
-
+function AutresMarches({ analyse: a }: { analyse: Analyse }) {
+  if (!a.option_classique && !a.comptant) return null;
   return (
-    <div style={{ marginTop: 12 }}>
-      <h2 style={{ fontSize: 17, color: color.textDark, margin: "0 0 9px", fontWeight: 800 }}>
-        Comment ça se joue
-      </h2>
-
-      {/* Le panneau de la plateforme, reproduit : le bouton à presser et la
-          valeur à saisir dans le champ Time. Rien à traduire, rien à convertir. */}
-      <div style={{ background: gradient.navy, borderRadius: 12, padding: "16px 19px" }}>
-        <div
-          style={{
-            fontSize: 12,
-            color: "#c8daf0",
-            fontWeight: 700,
-            textTransform: "uppercase",
-            letterSpacing: 0.5,
-          }}
-        >
-          Option binaire · Pocket Option
-        </div>
-
-        {b?.temps && b.bouton ? (
-          <>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "stretch",
-                gap: 12,
-                flexWrap: "wrap",
-                marginTop: 11,
-              }}
-            >
-              {/* Champ « Time » */}
-              <div style={{ flex: "1 1 190px" }}>
-                <div style={{ fontSize: 12.5, color: "#8fa6c4", marginBottom: 5 }}>Time</div>
-                <div
-                  style={{
-                    background: "#0b1526",
-                    border: `1px solid #24344f`,
-                    borderRadius: 9,
-                    padding: "12px 16px",
-                    fontSize: 30,
-                    fontWeight: 800,
-                    color: color.white,
-                    fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-                    letterSpacing: 1,
-                    textAlign: "center",
-                  }}
-                >
-                  {b.temps}
-                </div>
-              </div>
-
-              {/* Bouton à presser */}
-              <div style={{ flex: "1 1 150px", display: "flex", flexDirection: "column" }}>
-                <div style={{ fontSize: 12.5, color: "#8fa6c4", marginBottom: 5 }}>Sens</div>
-                <div
-                  style={{
-                    flex: 1,
-                    background: tonBouton,
-                    borderRadius: 9,
-                    display: "grid",
-                    placeItems: "center",
-                    color: color.white,
-                    fontSize: 21,
-                    fontWeight: 900,
-                    letterSpacing: 1.5,
-                    minHeight: 58,
-                  }}
-                >
-                  {boutonAchat ? "↗ BUY" : "↘ SELL"}
-                </div>
-              </div>
-            </div>
-
-            {/* D'où sort le chiffre : l'élève doit pouvoir le refaire. */}
-            <p style={{ fontSize: 13.5, lineHeight: 1.6, color: "#c8daf0", margin: "11px 0 0" }}>
-              {b.source === "calcul" && b.bougies && b.minutes_par_bougie ? (
-                <>
-                  Calculé&nbsp;: le prix doit parcourir sa distance à l&apos;objectif au rythme
-                  moyen des dernières bougies, soit environ <strong>{b.bougies} bougie
-                  {b.bougies > 1 ? "s" : ""}</strong> de {b.minutes_par_bougie} minute
-                  {b.minutes_par_bougie > 1 ? "s" : ""} — arrondi à la durée sélectionnable
-                  au-dessus.
-                </>
-              ) : (
-                <>Durée estimée à partir de l&apos;unité de temps affichée.</>
-              )}
-            </p>
-
-            {a.binaire_pourquoi && (
-              <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#dbe7f7", margin: "8px 0 0" }}>
-                {a.binaire_pourquoi}
-              </p>
-            )}
-
-            <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "#8fa6c4", margin: "10px 0 0" }}>
-              Cette durée est celle que le mouvement demande s&apos;il se produit. Ce n&apos;est
-              pas une expiration gagnante — ça n&apos;existe pas.
-            </p>
-          </>
-        ) : (
-          <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#dbe7f7", margin: "7px 0 0" }}>
-            {a.binaire_pourquoi || "Aucune durée proposée sur cette configuration."}
-          </p>
-        )}
-      </div>
-
-      {(a.option_classique || a.comptant) && (
-        <div style={{ display: "grid", gap: 8, marginTop: 8 }}>
-          {a.option_classique && (
-            <Ligne titre="Option sur action / indice" texte={a.option_classique} ton={color.info} />
-          )}
-          {a.comptant && <Ligne titre="Au comptant" texte={a.comptant} ton={color.cyan} />}
-        </div>
+    <div style={{ display: "grid", gap: 8, marginTop: 10 }}>
+      {a.option_classique && (
+        <Ligne titre="Option sur action / indice" texte={a.option_classique} ton={color.info} />
       )}
+      {a.comptant && <Ligne titre="Au comptant" texte={a.comptant} ton={color.cyan} />}
     </div>
   );
 }
@@ -1070,7 +1006,8 @@ function Ligne({ titre, texte, ton }: { titre: string; texte: string; ton: strin
   );
 }
 
-function Puce({ texte, fort }: { texte: string; fort?: boolean }) {
+/** Instrument, unité de temps, tendance — sur le panneau sombre. */
+function PuceSombre({ texte }: { texte: string }) {
   return (
     <span
       style={{
@@ -1078,9 +1015,9 @@ function Puce({ texte, fort }: { texte: string; fort?: boolean }) {
         fontWeight: 700,
         padding: "5px 11px",
         borderRadius: 99,
-        background: fort ? color.navy : "rgba(255,255,255,.7)",
-        border: `1px solid ${fort ? color.navy : color.border}`,
-        color: fort ? color.white : color.textMuted,
+        background: "rgba(255,255,255,.08)",
+        border: "1px solid rgba(255,255,255,.16)",
+        color: "#c8daf0",
       }}
     >
       {texte}
