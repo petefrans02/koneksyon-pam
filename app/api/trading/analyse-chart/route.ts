@@ -93,15 +93,20 @@ L'élève va saisir une durée dans un champ "Time" au format 00:03:00, puis pre
 Tu ne choisis PAS la durée toi-même : tu fournis quatre mesures, et le programme calcule.
 — prix_actuel : le prix de clôture de la dernière bougie, tout à droite. Lis-le sur l'axe.
 — objectif_prix : le prix que le mouvement doit atteindre pour que ta lecture se réalise — le prochain obstacle réel (sommet, creux, bord de range), pas un chiffre rond arbitraire.
+— retracement_prix : le niveau OPPOSÉ le plus proche que le prix pourrait aller toucher AVANT de partir dans le sens attendu. Sur une vente, c'est la résistance juste au-dessus du prix actuel ; sur un achat, le support juste en dessous. C'est le repli qu'il faut pouvoir encaisser sans que l'option expire au mauvais moment. Prends un niveau réel — un sommet, un creux, un bord de range déjà touché — pas une marge arbitraire. Si aucun niveau opposé n'est visible entre le prix et le bord du graphique, mets null.
 — amplitude_bougie : de combien le prix avance EN MOYENNE par bougie dans le sens du mouvement, sur les dix dernières bougies. Autrement dit la taille moyenne d'un corps, pas la mèche. C'est cette mesure qui donne la vitesse.
 — minutes_par_bougie : la durée d'une bougie en minutes, d'après l'unité de temps affichée. M1 = 1, M5 = 5, M15 = 15, M30 = 30, H1 = 60, H4 = 240, journalier = 1440.
-Le programme fera : bougies nécessaires = distance à parcourir ÷ amplitude par bougie, puis durée = bougies × minutes_par_bougie, arrondie à la valeur sélectionnable au-dessus.
+Le programme calculera DEUX durées : la directe (le prix part tout de suite : distance à l'objectif ÷ amplitude), et la couverte (le prix va d'abord toucher le niveau opposé, puis repart : distance jusqu'à ce niveau + distance de ce niveau à l'objectif, le tout ÷ amplitude). Les deux sont converties en minutes puis arrondies à la valeur sélectionnable au-dessus.
 Ces quatre nombres doivent être cohérents entre eux et avec l'échelle de prix que tu as lue. Si tu ne peux pas en mesurer un honnêtement, mets-le à null — le programme retombera alors sur ta durée estimée.
 
 Remplis quand même binaire_duree avec ton estimation, choisie dans la liste sélectionnable : 30 s · 1 min · 2 min · 3 min · 5 min · 10 min · 15 min · 30 min · 1 h · 2 h · 4 h. Elle sert de secours quand les mesures ne sont pas exploitables. Repère utile pour cette estimation : une expiration couvre en général 3 à 5 bougies de l'unité affichée.
 
 — unité de temps H4, journalière, hebdomadaire ou mensuelle → binaire_duree = null et les quatre mesures à null, SANS EXCEPTION. À cette échelle le mouvement se joue sur des jours : aucune durée de la liste n'a de sens. Explique-le dans binaire_pourquoi.
 — Si le verdict est "attendre", tout à null — on ne choisit pas une durée pour un trade qu'on ne prend pas.
+
+SI LE PRIX PART CONTRE L'ÉLÈVE
+Donne aussi invalidation_prix, le prix exact qui tue la thèse. Avec retracement_prix, le programme en déduit une seconde entrée : un ordre limite posé au niveau opposé, qui n'a de sens que TANT QUE la thèse tient. Sell limit au-dessus sur une vente, buy limit en dessous sur un achat — entrer à un meilleur prix sur la même lecture, pas rattraper une perte en misant plus gros.
+Ces deux prix doivent être cohérents : sur une vente, le niveau de repli est SOUS l'invalidation ; sur un achat, AU-DESSUS. Un ordre limite placé au-delà de l'invalidation reviendrait à reprendre position sur une thèse déjà morte.
 
 Dans binaire_pourquoi (UNE phrase) : dis ce que le prix doit parcourir — le niveau visé — et rappelle de lancer le chrono à la CLÔTURE de la bougie en cours, car entrer en plein milieu d'une bougie ampute l'expiration d'une fraction du temps prévu. N'annonce AUCUN nombre de bougies ni aucune durée dans cette phrase : c'est le programme qui les calcule et les affiche, et un chiffre écrit à la main finit toujours par contredire le chiffre calculé.
 Ne promets jamais que l'expiration sera gagnante. Elle est cohérente avec la lecture, ce qui n'est pas la même chose.
@@ -195,6 +200,16 @@ const SCHEMA = {
       type: ["number", "null"],
       description:
         "Prix que le mouvement doit atteindre pour que la lecture se réalise — le prochain obstacle réel. null si indéterminable.",
+    },
+    retracement_prix: {
+      type: ["number", "null"],
+      description:
+        "Le niveau OPPOSÉ le plus proche que le prix pourrait aller toucher avant de partir : résistance au-dessus sur une vente, support en dessous sur un achat. Sert à calculer une expiration qui encaisse ce repli, et à placer l'ordre limite de seconde entrée. null si aucun niveau opposé n'est visible.",
+    },
+    invalidation_prix: {
+      type: ["number", "null"],
+      description:
+        "Le prix exact qui invalide la lecture — celui cité dans le champ `invalidation`. Au-delà, la thèse est morte et on ne reprend pas position. null si non chiffrable.",
     },
     amplitude_bougie: {
       type: ["number", "null"],
@@ -450,14 +465,79 @@ function enSecondes(texte: unknown): number | null {
   return DUREES.includes(sec) ? sec : null;
 }
 
+interface Duree {
+  temps: string;
+  secondes: number;
+  bougies: number;
+  /** Le niveau que le prix irait toucher d'abord — seulement sur la durée couverte. */
+  niveau?: number | null;
+}
+
+/** La seconde entrée, si le prix part d'abord contre la lecture. */
+interface Repli {
+  type: "SELL LIMIT" | "BUY LIMIT";
+  prix: number;
+  /** Au-delà, la thèse est morte : on ne reprend pas position. */
+  abandon: number | null;
+}
+
 interface Binaire {
   bouton: "BUY" | "SELL" | null;
+  /** La durée recommandée : la couverte quand elle existe, la directe sinon. */
   temps: string | null;
   secondes: number | null;
   bougies: number | null;
   minutes_par_bougie: number | null;
   /** "calcul" quand la durée sort des mesures, "estimation" quand elle vient du modèle. */
   source: "calcul" | "estimation" | null;
+  direct: Duree | null;
+  couvert: Duree | null;
+  repli: Repli | null;
+}
+
+/**
+ * L'ordre limite de seconde entrée.
+ *
+ * L'idée n'est pas de « rattraper une perte » — aucune position ne rattrape la
+ * précédente, et augmenter la mise après un échec est le mécanisme qui vide le
+ * plus de comptes. C'est de reprendre la MÊME lecture à un MEILLEUR prix, si le
+ * marché offre le repli. D'où les deux conditions strictes ci-dessous : le
+ * niveau doit être du bon côté du prix, et en deçà de l'invalidation. Passé
+ * l'invalidation, la thèse n'existe plus et il n'y a rien à reprendre.
+ */
+function calculerRepli(
+  bouton: "BUY" | "SELL",
+  actuel: number | null,
+  retracement: number | null,
+  invalidation: number | null,
+): Repli | null {
+  if (actuel === null || retracement === null) return null;
+
+  const vente = bouton === "SELL";
+  const bonCote = vente ? retracement > actuel : retracement < actuel;
+  if (!bonCote) return null;
+
+  // Le repli doit rester en deçà de l'invalidation, sinon l'ordre se
+  // déclencherait sur une lecture déjà démentie.
+  if (invalidation !== null) {
+    const avantInvalidation = vente ? retracement < invalidation : retracement > invalidation;
+    if (!avantInvalidation) return null;
+  }
+
+  return {
+    type: vente ? "SELL LIMIT" : "BUY LIMIT",
+    prix: retracement,
+    abandon: invalidation,
+  };
+}
+
+/** Nombre de bougies → durée sélectionnable, ou null si ça sort de la liste. */
+function dureeDeBougies(bougies: number, minutesParBougie: number): Duree | null {
+  // Plafonné à 30 bougies : au-delà, la lecture qui justifie l'entrée a toutes
+  // les chances d'être périmée avant l'échéance.
+  const n = Math.min(30, Math.max(1, Math.ceil(bougies)));
+  const secondes = DUREES.find((d) => d >= n * minutesParBougie * 60);
+  return secondes ? { temps: enHorloge(secondes), secondes, bougies: n } : null;
 }
 
 /**
@@ -480,6 +560,9 @@ function calculerBinaire(a: Record<string, unknown>): Binaire {
     bougies: null,
     minutes_par_bougie: null,
     source: null,
+    direct: null,
+    couvert: null,
+    repli: null,
   };
 
   if (a.verdict !== "achat" && a.verdict !== "vente") return vide;
@@ -490,29 +573,61 @@ function calculerBinaire(a: Record<string, unknown>): Binaire {
 
   const actuel = nombre(a.prix_actuel);
   const objectif = nombre(a.objectif_prix);
+  const retracement = nombre(a.retracement_prix);
   const amplitude = nombre(a.amplitude_bougie);
   const parBougie = nombre(a.minutes_par_bougie);
+  const repli = calculerRepli(bouton, actuel, retracement, nombre(a.invalidation_prix));
 
   // Voie principale : le calcul, quand les quatre mesures tiennent debout.
   if (actuel !== null && objectif !== null && amplitude !== null && parBougie !== null) {
     const distance = Math.abs(objectif - actuel);
-    // Une amplitude nulle ou supérieure à la distance signale une mesure ratée,
-    // pas un marché immobile : on refuse le calcul plutôt que d'inventer.
+    // Une amplitude nulle ou une distance nulle signale une mesure ratée, pas
+    // un marché immobile : on refuse le calcul plutôt que d'inventer.
     const coherent = amplitude > 0 && distance > 0 && parBougie > 0 && parBougie <= 60;
     if (coherent) {
-      // Plafonné à 20 bougies : au-delà, la lecture qui justifie l'entrée a
-      // toutes les chances d'être périmée avant l'échéance.
-      const bougies = Math.min(20, Math.max(1, Math.ceil(distance / amplitude)));
-      const secondesBrutes = bougies * parBougie * 60;
-      const secondes = DUREES.find((d) => d >= secondesBrutes);
-      if (secondes) {
+      const direct = dureeDeBougies(distance / amplitude, parBougie);
+
+      /**
+       * La durée qui encaisse un repli.
+       *
+       * Le prix ne part pas toujours tout de suite : sur une vente il peut
+       * d'abord remonter tester la résistance juste au-dessus. Une option
+       * expirant pendant ce repli perd, alors que la lecture était juste — en
+       * binaire, seul compte de quel côté du prix d'entrée on se trouve à
+       * l'échéance. On additionne donc les deux trajets : monter jusqu'au
+       * niveau, puis redescendre jusqu'à l'objectif — qui est au-delà du prix
+       * d'entrée, donc largement du bon côté.
+       *
+       * Le niveau doit être du bon côté : une « résistance » située sous le
+       * prix sur une vente n'est pas un repli, c'est une mesure ratée.
+       */
+      let couvert: Duree | null = null;
+      if (retracement !== null) {
+        const bonCote = bouton === "SELL" ? retracement > actuel : retracement < actuel;
+        const trajet = Math.abs(retracement - actuel) + Math.abs(objectif - retracement);
+        // Un repli plus long que le mouvement lui-même ne se couvre pas : ce
+        // serait payer une expiration démesurée pour un signal qui, à ce
+        // compte-là, n'en est plus un.
+        if (bonCote && trajet > 0 && trajet < distance * 4) {
+          const d = dureeDeBougies(trajet / amplitude, parBougie);
+          if (d) couvert = { ...d, niveau: retracement };
+        }
+      }
+
+      // On recommande la couverte : elle vaut pour les deux scénarios, alors
+      // que la directe ne vaut que si le prix part immédiatement.
+      const retenue = couvert ?? direct;
+      if (retenue) {
         return {
           bouton,
-          temps: enHorloge(secondes),
-          secondes,
-          bougies,
+          temps: retenue.temps,
+          secondes: retenue.secondes,
+          bougies: retenue.bougies,
           minutes_par_bougie: parBougie,
           source: "calcul",
+          direct,
+          couvert,
+          repli,
         };
       }
     }
@@ -528,11 +643,14 @@ function calculerBinaire(a: Record<string, unknown>): Binaire {
       bougies: parBougie ? Math.round(secours / 60 / parBougie) : null,
       minutes_par_bougie: parBougie,
       source: "estimation",
+      direct: null,
+      couvert: null,
+      repli,
     };
   }
 
-  // Ni calcul ni estimation : le bouton reste utile, la durée non.
-  return { ...vide, bouton };
+  // Ni calcul ni estimation : le bouton et le repli restent utiles, la durée non.
+  return { ...vide, bouton, repli };
 }
 
 interface Tracee {
@@ -644,7 +762,7 @@ Procède dans cet ordre, c'est celui du programme :
 4. Identifie les figures de bougies qui comptent — celles situées sur un niveau, pas celles du milieu de nulle part.
 5. Mesure le momentum : les corps grandissent-ils ou rétrécissent-ils vers la droite du graphique ?
 6. Conclus par un sens, une confiance, une invalidation, une contre-objection.
-7. Remplis le plan pour les trois types d'instruments. Pour la binaire : relis l'unité de temps affichée, applique la correspondance, et donne UNE durée de la liste — c'est le chiffre que l'élève va cliquer.
+7. Remplis le plan pour les trois types d'instruments. Pour la binaire, fournis les cinq mesures — dont retracement_prix, le niveau opposé le plus proche que le prix pourrait aller tester avant de partir : c'est lui qui permet de calculer une expiration qui encaisse le repli au lieu d'expirer en plein dedans.
 8. Lis deux graduations de l'axe des prix et remplis "echelle". C'est ce qui permettra de placer les traits au bon endroit.
 9. Enfin, place les annotations : ce sont les mêmes éléments que ceux que tu viens d'écrire — ne trace rien que tu n'aies pas écrit, n'écris rien que tu ne traces pas. Pour chaque "niveau", donne son "prix". Si le verdict n'est pas "attendre", l'une des annotations est le niveau d'entrée (label « Entrée », prix = dernier prix) et une autre le niveau d'invalidation (rôle "invalidation").
 
