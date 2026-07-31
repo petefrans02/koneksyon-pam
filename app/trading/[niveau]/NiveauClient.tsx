@@ -308,13 +308,28 @@ export default function NiveauClient({ slug }: { slug: string }) {
                     disponible={nbQuestions > 0}
                   />
                   {niveau.slug === "bougies" && (
-                    <Action
-                      href="/trading/entrainement"
-                      titre="Entraînement sur graphiques"
-                      detail="« Que va faire le marché ensuite ? » — graphiques illimités, correction expliquée."
-                      ton={color.gold}
-                      disponible
-                    />
+                    <>
+                      <Action
+                        href="/trading/entrainement"
+                        titre="Entraînement sur graphiques"
+                        detail="« Que va faire le marché ensuite ? » — graphiques illimités, correction expliquée."
+                        ton={color.gold}
+                        disponible
+                      />
+                      {/* Le seul endroit de l'académie où l'élève apporte son
+                          propre marché. Ça ne valide aucune compétence — une
+                          maîtrise se démontre sur un exercice dont le système
+                          connaît la réponse — mais c'est le pont vers sa
+                          séance réelle. */}
+                      <Action
+                        href="/trading/analyse"
+                        titre="Analyser mon propre graphique"
+                        detail="Envoie une capture de ton graphique : structure, figures et momentum sont lus, puis le verdict tombe — achat, vente ou attendre, avec ce qui l'invaliderait."
+                        ton={color.cyan}
+                        disponible
+                        badge="Nouveau"
+                      />
+                    </>
                   )}
                   {niveau.slug === "momentum" && (
                     <Action
