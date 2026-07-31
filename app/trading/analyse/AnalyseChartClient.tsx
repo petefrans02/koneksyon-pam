@@ -33,6 +33,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { color, gradient } from "@/lib/design";
 import { minutesDeUnite } from "@/lib/trading/unites";
+import { ajouterTrade, saveJournal, useJournal } from "@/lib/trading/journal";
 
 // ------------------------------------------------------------------ types ---
 
@@ -1014,6 +1015,16 @@ function PanneauSynthese({ synthese: s, avis }: { synthese: Synthese; avis: Verd
         ))}
       </div>
 
+      {s.binaire && (
+        <NoterTrade
+          binaire={s.binaire}
+          instrument={s.instrument || null}
+          unite={s.entree?.unite_temps ?? null}
+          confiance={s.confiance}
+          alignement={s.alignement}
+        />
+      )}
+
       <BlocNiveaux niveaux={s.niveaux_action ?? []} />
 
       {s.binaire?.repli && <BlocRepli repli={s.binaire.repli} />}
@@ -1501,6 +1512,16 @@ function Resultat({ analyse: a, avis }: { analyse: Analyse; avis: Verdict | null
       )}
 
       {/* Les deux lignes qui empêchent de prendre ça pour une certitude. */}
+      {a.binaire && (
+        <NoterTrade
+          binaire={a.binaire}
+          instrument={a.instrument ?? null}
+          unite={a.unite_temps ?? null}
+          confiance={a.confiance}
+          alignement={null}
+        />
+      )}
+
       <BlocNiveaux niveaux={a.niveaux_action ?? []} />
 
       {a.binaire?.repli && <BlocRepli repli={a.binaire.repli} />}
@@ -1656,6 +1677,107 @@ function CalculDurees({ binaire: b }: { binaire: Binaire }) {
         </>
       )}
     </p>
+  );
+}
+
+/**
+ * « Noter ce trade ».
+ *
+ * Le seul moyen de savoir si tout ce qui précède sert à quelque chose. La
+ * durée, le sens, l'unité de temps et l'alignement sont déjà connus : l'élève
+ * n'a rien à ressaisir, il dira juste plus tard si c'est passé. Une friction de
+ * plus ici, et personne ne tient de relevé.
+ */
+function NoterTrade({
+  binaire,
+  instrument,
+  unite,
+  confiance,
+  alignement,
+}: {
+  binaire: Binaire;
+  instrument: string | null;
+  unite: string | null;
+  confiance: number;
+  alignement: Synthese["alignement"] | null;
+}) {
+  const journal = useJournal();
+  const [note, setNote] = useState(false);
+
+  if (!binaire.bouton || !binaire.temps) return null;
+
+  function enregistrer() {
+    if (!binaire.bouton) return;
+    saveJournal(
+      ajouterTrade(journal, {
+        instrument,
+        unite,
+        bouton: binaire.bouton,
+        secondes: binaire.secondes,
+        temps: binaire.temps,
+        confiance,
+        alignement,
+        scenario: binaire.couvert ? "couvert" : binaire.direct ? "direct" : null,
+        payout: journal.payoutDefaut,
+        mise: null,
+      }),
+    );
+    setNote(true);
+  }
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+        flexWrap: "wrap",
+        marginTop: 10,
+        background: color.white,
+        border: `1px solid ${color.border}`,
+        borderRadius: 11,
+        padding: "12px 16px",
+      }}
+    >
+      {note ? (
+        <>
+          <span style={{ fontSize: 14.5, color: color.success, fontWeight: 700 }}>
+            ✓ Noté dans ton relevé
+          </span>
+          <span style={{ fontSize: 13.5, color: color.textMuted }}>
+            Reviens dire si c&apos;est passé une fois l&apos;expiration écoulée.
+          </span>
+        </>
+      ) : (
+        <>
+          <button
+            onClick={enregistrer}
+            style={{
+              border: `1.5px solid ${color.navy}`,
+              background: color.white,
+              color: color.navy,
+              borderRadius: 9,
+              padding: "9px 17px",
+              fontSize: 14,
+              fontWeight: 800,
+              cursor: "pointer",
+            }}
+          >
+            Noter ce trade
+          </button>
+          <span style={{ fontSize: 13.5, lineHeight: 1.5, color: color.textMuted, flex: 1, minWidth: 180 }}>
+            Tu diras plus tard si c&apos;est passé. Au bout d&apos;une trentaine de trades, tu
+            sauras quelles durées marchent chez toi.
+          </span>
+        </>
+      )}
+      <Link
+        href="/trading/journal"
+        style={{ fontSize: 13.5, color: color.info, fontWeight: 700, textDecoration: "none" }}
+      >
+        Mon relevé →
+      </Link>
+    </div>
   );
 }
 

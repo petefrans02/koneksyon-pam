@@ -329,6 +329,16 @@ export default function NiveauClient({ slug }: { slug: string }) {
                         disponible
                         badge="Nouveau"
                       />
+                      {/* Le relevé ne valide rien non plus, mais c'est lui qui
+                          transforme une impression en fait. */}
+                      <Action
+                        href="/trading/journal"
+                        titre="Mon relevé"
+                        detail="Ton taux de réussite réel par durée d'expiration, comparé au seuil de rentabilité de ton payout. Aucune conclusion tant que l'échantillon est trop petit."
+                        ton={color.info}
+                        disponible
+                        badge="Nouveau"
+                      />
                     </>
                   )}
                   {niveau.slug === "momentum" && (
