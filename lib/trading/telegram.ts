@@ -176,6 +176,72 @@ export const A_PROPOS =
   "Académie Trading — KONEKSYON PAM.";
 
 /**
+ * Enregistre le webhook — côté serveur, et c'est tout l'intérêt.
+ *
+ * Faire lancer un `curl` avec le token ET le secret ouvre deux façons de se
+ * tromper, et la seconde est silencieuse : si le `secret_token` transmis à
+ * Telegram diffère d'un espace de celui enregistré ici, la route répond 401 à
+ * chaque message et le bot reste muet sans qu'aucune erreur ne soit visible.
+ *
+ * En le faisant ici, le serveur utilise **la même variable** des deux côtés.
+ * Le décalage devient impossible par construction.
+ */
+export async function enregistrerWebhook(
+  jeton: string,
+  url: string,
+  secret: string,
+): Promise<{ ok: boolean; description?: string }> {
+  try {
+    const res = await fetch(`${API}${jeton}/setWebhook`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        url,
+        secret_token: secret,
+        // Un ancien message en attente rejouerait une analyse périmée dès la
+        // reconnexion : on repart propre.
+        drop_pending_updates: true,
+        allowed_updates: ["message", "callback_query"],
+      }),
+    });
+    const data = (await res.json()) as { ok?: boolean; description?: string };
+    return { ok: data.ok === true, description: data.description };
+  } catch (e) {
+    return { ok: false, description: e instanceof Error ? e.message : "échec réseau" };
+  }
+}
+
+export interface InfoWebhook {
+  url?: string;
+  pending_update_count?: number;
+  last_error_date?: number;
+  last_error_message?: string;
+  max_connections?: number;
+}
+
+/** L'état vu par Telegram — la seule source qui dise pourquoi le bot se tait. */
+export async function infoWebhook(jeton: string): Promise<InfoWebhook | null> {
+  try {
+    const res = await fetch(`${API}${jeton}/getWebhookInfo`);
+    const data = (await res.json()) as { ok?: boolean; result?: InfoWebhook };
+    return data.ok ? (data.result ?? null) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Vérifie que le token est valide et renvoie l'identité du bot. */
+export async function identite(jeton: string): Promise<{ username?: string; id?: number } | null> {
+  try {
+    const res = await fetch(`${API}${jeton}/getMe`);
+    const data = (await res.json()) as { ok?: boolean; result?: { username?: string; id?: number } };
+    return data.ok ? (data.result ?? null) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Enregistre la vitrine du bot auprès de Telegram.
  *
  * Idempotent : on peut le rejouer autant de fois qu'on veut, ça écrase la
