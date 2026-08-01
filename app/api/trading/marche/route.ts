@@ -98,7 +98,18 @@ export async function GET(request: NextRequest) {
     const lectures = series.map((s) => lire(s.symbole, s.unite, s.candles));
     const synthese = synthetiser(lectures);
 
+    // Toutes les unités figées : le marché est fermé, pas l'outil en panne.
+    const figee = series.every((s) => s.figee);
+    const retard = Math.min(...series.map((s) => s.age));
+
     return Response.json({
+      marche: {
+        ouvert: !figee,
+        retard_minutes: retard,
+        message: figee
+          ? `Marché fermé ou données figées : la dernière bougie a ${retard >= 120 ? Math.round(retard / 60) + " heures" : retard + " minutes"}. Toute lecture porterait sur un marché à l'arrêt.`
+          : null,
+      },
       synthese: {
         symbole: synthese.symbole,
         sens: synthese.sens,

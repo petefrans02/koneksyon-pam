@@ -58,6 +58,16 @@ export interface Serie {
   candles: Candle[];
   /** Horodatage de la dernière bougie, tel que renvoyé par le fournisseur. */
   derniere: string | null;
+  /** Âge de la dernière bougie, en minutes. */
+  age: number;
+  /**
+   * Vrai quand les données sont figées — marché fermé, ou fournisseur en
+   * retard. Sans ce drapeau, un week-end produit une lecture parfaitement
+   * cohérente sur des bougies vieilles de deux jours : dojis partout, aucune
+   * direction, « attendre ». L'analyse est juste, mais elle ressemble à une
+   * panne, et l'élève cherche le bug là où il n'y en a pas.
+   */
+  figee: boolean;
 }
 
 export class ErreurMarche extends Error {
@@ -173,11 +183,19 @@ export async function bougies(
     throw new ErreurMarche("Pas assez de bougies pour une lecture sérieuse.");
   }
 
+  // Au-delà de trois bougies de retard, les données ne décrivent plus le
+  // marché en cours. Trois plutôt qu'une : le fournisseur publie avec un léger
+  // décalage, et la bougie en formation n'est pas encore close.
+  const derniereBougie = candles[candles.length - 1];
+  const age = Math.max(0, (Date.now() - derniereBougie.t) / 60000);
+
   return {
     symbole,
     unite,
     candles,
     derniere: data.values[0]?.datetime ?? null,
+    age: Math.round(age),
+    figee: age > MINUTES[unite] * 3,
   };
 }
 

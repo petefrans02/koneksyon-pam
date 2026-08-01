@@ -190,6 +190,19 @@ async function analyser(
       return;
     }
 
+    // Un marché fermé produit une lecture parfaitement cohérente sur des
+    // bougies vieilles de deux jours : dojis partout, aucune direction,
+    // « attendre ». L'analyse est juste, mais elle ressemble à une panne — et
+    // c'est exactement ce qui se passe le week-end sur le forex.
+    if (series.every((s) => s.figee)) {
+      const retard = Math.min(...series.map((s) => s.age));
+      const age = retard >= 120 ? `${Math.round(retard / 60)} heures` : `${retard} minutes`;
+      await remplacerOuEnvoyer(
+        `🕒 <b>${symbole} — marché fermé</b>\n\nLa dernière bougie a <b>${age}</b>. Le prix ne bouge plus : toute lecture porterait sur un marché à l'arrêt.\n\nLe forex ferme du vendredi soir au dimanche soir. C'est précisément pour ça que Pocket Option propose des actifs <b>OTC</b> le week-end — mais ceux-là, le broker est seul à les coter, et aucune donnée n'existe pour eux.\n\n<i>Ce week-end : passe par koneksyonpam.com/trading/analyse avec une capture d'écran. Lundi, je reprends la lecture en direct.</i>`,
+      );
+      return;
+    }
+
     const lectures: Lecture[] = series.map((s) => lire(s.symbole, s.unite, s.candles));
     const synthese = synthetiser(lectures);
 
