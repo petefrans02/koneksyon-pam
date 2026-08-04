@@ -47,8 +47,24 @@ export interface MomentumReading {
  */
 export const SEUIL_ACCELERE = 1.25;
 export const SEUIL_RALENTIT = 0.8;
-/** Variation minimale, en %, pour qu'une direction soit affirmée. */
-export const SEUIL_DIRECTION = 0.4;
+/**
+ * Déplacement net minimal pour affirmer une direction, exprimé en **amplitudes
+ * moyennes de bougie** — pas en pourcentage du prix.
+ *
+ * Le seuil était auparavant absolu : 0,4 % de variation. Calibré sur les
+ * bougies générées de l'académie, qui bougent beaucoup, il était inatteignable
+ * sur un vrai marché — 0,4 % sur huit bougies d'EUR/USD en M1, c'est 46 pips
+ * en huit minutes. La direction ressortait donc « plate » en permanence, le
+ * momentum ne marquait jamais de points, et toute lecture finissait en
+ * « attendre ». Sept symboles testés, sept fois le même verdict : c'est ce qui
+ * a mis la puce à l'oreille.
+ *
+ * Rapporter le déplacement à l'amplitude moyenne des bougies rend le seuil
+ * indépendant de l'instrument et de l'unité de temps : « le prix a-t-il
+ * parcouru au moins une bougie moyenne dans un sens ? » veut dire la même
+ * chose sur EUR/USD en M1 que sur le Bitcoin en H1.
+ */
+export const SEUIL_DIRECTION = 1.0;
 
 function moyenne(xs: number[]): number {
   if (!xs.length) return 0;
@@ -115,10 +131,19 @@ export function readMomentum(candles: Candle[], fenetre = 8): MomentumReading {
   // taille des bougies.
   const score = Math.pow(bodyRatio * rangeRatio * speedRatio * speedRatio, 1 / 4);
 
-  const variation =
-    ((recent[recent.length - 1].c - recent[0].o) / recent[0].o) * 100;
+  // Le déplacement net, comparé à ce que parcourt une bougie moyenne. Un
+  // marché qui a avancé de moins d'une bougie en huit bougies n'a pas de
+  // direction : il oscille.
+  const deplacement = recent[recent.length - 1].c - recent[0].o;
+  const seuil = ampRecent * SEUIL_DIRECTION;
   const direction =
-    variation > SEUIL_DIRECTION ? "hausse" : variation < -SEUIL_DIRECTION ? "baisse" : "plat";
+    seuil <= 0
+      ? "plat"
+      : deplacement > seuil
+        ? "hausse"
+        : deplacement < -seuil
+          ? "baisse"
+          : "plat";
 
   const state: MomentumState =
     score >= SEUIL_ACCELERE ? "acceleration" : score <= SEUIL_RALENTIT ? "ralentissement" : "stable";
