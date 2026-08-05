@@ -331,6 +331,17 @@ export default function NiveauClient({ slug }: { slug: string }) {
                       />
                       {/* Le relevé ne valide rien non plus, mais c'est lui qui
                           transforme une impression en fait. */}
+                      {/* Le livre déborde largement le Niveau 2, mais c'est là
+                          que l'élève apprend les bougies — autant le lui donner
+                          au moment où il en a besoin. */}
+                      <Action
+                        href="/trading/livre"
+                        titre="Le livre des bougies"
+                        detail="Neuf chapitres, de l'histoire de Sakata en 1750 jusqu'à la lecture avancée. 33 schémas, 40 exercices corrigés — et le chapitre qui explique pourquoi les figures échouent."
+                        ton={color.gold}
+                        disponible
+                        badge="Nouveau"
+                      />
                       <Action
                         href="/trading/journal"
                         titre="Mon relevé"
