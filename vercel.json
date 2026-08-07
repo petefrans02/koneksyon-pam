@@ -1,4 +1,13 @@
 {
+  "headers": [
+    {
+      "source": "/otc.ics",
+      "headers": [
+        { "key": "Content-Type", "value": "text/calendar; charset=utf-8" },
+        { "key": "Content-Disposition", "value": "inline; filename=\"trading-otc.ics\"" }
+      ]
+    }
+  ],
   "crons": [
     {
       "path": "/api/cron/contests",
