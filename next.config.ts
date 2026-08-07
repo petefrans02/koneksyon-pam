@@ -24,6 +24,36 @@ const CSP = [
   "worker-src 'self' blob:",
 ].join("; ");
 
+// ─── CSP du Trading Center ───────────────────────────────────────────────────
+// Le graphique TradingView est un script tiers + une iframe. La CSP globale
+// interdit les deux, et c'est très bien ainsi : la relâcher partout
+// exposerait les pages de don, d'authentification et d'administration pour le
+// confort d'une seule section.
+//
+// On la relâche donc SUR /trading-center UNIQUEMENT, et strictement de ce
+// qu'exige le widget :
+//   — script-src  : s3.tradingview.com (le chargeur du widget)
+//   — frame-src   : www.tradingview.com + s.tradingview.com (l'iframe du graphique)
+//   — connect-src : les flux de cotation du widget
+//
+// Deux en-têtes CSP sur une même réponse s'INTERSECTENT côté navigateur : le
+// plus strict gagne, et la relâche n'aurait aucun effet. La règle globale
+// exclut donc explicitement ce chemin (voir headers()), au lieu d'ajouter une
+// seconde règle qui aurait paru fonctionner sans rien changer.
+const CSP_TRADING = CSP
+  .replace(
+    "script-src 'self' 'unsafe-inline'",
+    "script-src 'self' 'unsafe-inline' https://s3.tradingview.com https://www.tradingview.com",
+  )
+  .replace(
+    "frame-src 'none'",
+    "frame-src https://www.tradingview.com https://s.tradingview.com",
+  )
+  .replace(
+    "connect-src 'self'",
+    "connect-src 'self' https://*.tradingview.com wss://*.tradingview.com",
+  );
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
@@ -50,11 +80,24 @@ const nextConfig: NextConfig = {
 
   async headers() {
     return [
+      // ── CSP : deux règles DISJOINTES ────────────────────────────────────
+      // Elles ne doivent jamais se recouvrir. Deux en-têtes CSP sur une même
+      // réponse s'intersectent (le plus strict gagne), si bien qu'un
+      // recouvrement rendrait le graphique TradingView invisible tout en
+      // donnant l'impression que la règle est en place.
+      {
+        source: "/trading-center/:path*",
+        headers: [{ key: "Content-Security-Policy", value: CSP_TRADING }],
+      },
+      {
+        source: "/((?!trading-center).*)",
+        headers: [{ key: "Content-Security-Policy", value: CSP }],
+      },
+
       {
         source: "/(.*)",
         headers: [
           // ── Core security ───────────────────────────────────────────────
-          { key: "Content-Security-Policy",      value: CSP },
           { key: "X-Frame-Options",              value: "DENY" },
           { key: "X-Content-Type-Options",       value: "nosniff" },
           { key: "Referrer-Policy",              value: "strict-origin-when-cross-origin" },

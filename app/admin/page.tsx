@@ -512,6 +512,19 @@ export default function AdminPage() {
               </div>
             </Link>
 
+            {/* Bannière Trading Center */}
+            <Link href="/admin/trading-center" className="block rounded-2xl p-6 mb-2 transition-transform hover:-translate-y-0.5"
+              style={{ background: "linear-gradient(135deg,#070e1c,#12203a)", border: "1px solid #38bdf855", boxShadow: "0 8px 30px rgba(56,189,248,0.13)" }}>
+              <div className="flex items-center gap-4">
+                <span style={{ fontSize: 38 }}>📈</span>
+                <div className="flex-1">
+                  <p style={{ color: "#67e8f9", fontWeight: 900, fontSize: 18 }}>Trading Center</p>
+                  <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 13 }}>Flux d&apos;alertes TradingView, seuil de confiance, filtre IA, signaux, abonnements Premium et santé du webhook.</p>
+                </div>
+                <span style={{ color: "#67e8f9", fontWeight: 900 }}>→</span>
+              </div>
+            </Link>
+
             <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-sm">
               <h2 className="font-bold text-stone-900 mb-4">Navigation rapide</h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

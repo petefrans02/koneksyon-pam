@@ -19,6 +19,10 @@
     {
       "path": "/api/cron/generate-discussions",
       "schedule": "0 */3 * * *"
+    },
+    {
+      "path": "/api/cron/trading-center",
+      "schedule": "0 */2 * * *"
     }
   ]
 }
