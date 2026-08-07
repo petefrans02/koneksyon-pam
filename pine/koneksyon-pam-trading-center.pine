@@ -1,0 +1,390 @@
+// @version=6
+// =============================================================================
+// KONEKSYON PAM TRADING CENTER — moteur d'analyse multi-échelles
+//
+// Ce script est le MOTEUR DE CALCUL du Trading Center. Il tourne sur les
+// serveurs de TradingView, lit sept échelles de temps du même actif, et
+// n'émet une alerte que lorsqu'une configuration complète se présente.
+//
+// Le site, lui, ne recalcule RIEN. Il reçoit cet instantané, le note, le
+// soumet à un filtre IA, et décide de publier ou non. Le partage des rôles
+// est net : TradingView voit le marché, KONEKSYON PAM décide.
+//
+// -----------------------------------------------------------------------------
+// INSTALLATION (10 minutes, une seule fois)
+// -----------------------------------------------------------------------------
+//  1. TradingView → graphique XAU/USD → unité de temps 15 minutes.
+//     ⚠️ L'unité du graphique EST l'unité d'entrée des signaux. 15 minutes est
+//        le bon compromis sur l'or : assez rapide pour un stop serré, assez
+//        lent pour ne pas courir après le bruit.
+//  2. Éditeur Pine → Ouvrir → Nouvel indicateur → colle tout ce fichier.
+//  3. « Enregistrer » puis « Ajouter au graphique ».
+//  4. Renseigne le SECRET dans les paramètres de l'indicateur (roue dentée).
+//     Il doit être IDENTIQUE à la variable TRADINGVIEW_WEBHOOK_SECRET du site.
+//  5. Alerte (⏰) → Condition : « KP Trading Center » → « Any alert() function call »
+//     → Onglet Notifications → coche « Webhook URL » :
+//          https://koneksyonpam.com/api/trading-center/webhook
+//     → Expiration : coche « Open-ended » (SANS date de fin).
+//        ⚠️ C'est le point le plus important de toute l'installation. Une
+//           alerte avec date d'expiration s'éteint toute seule en silence, et
+//           le site se tait sans que personne comprenne pourquoi.
+//  6. Créer.
+//
+// Les webhooks exigent un abonnement TradingView payant (Essential minimum).
+// -----------------------------------------------------------------------------
+
+indicator("KP Trading Center", overlay = true, max_labels_count = 100)
+
+// ═══════════════════════════════════════════════════════════ PARAMÈTRES ═════
+
+grpCon = "Connexion"
+secret = input.string("", "Secret du webhook", group = grpCon,
+     tooltip = "Doit être identique à TRADINGVIEW_WEBHOOK_SECRET côté site. Sans lui, toutes les alertes sont refusées.")
+marche = input.string("XAUUSD", "Code du marché", group = grpCon,
+     tooltip = "Doit correspondre à la colonne `code` de la table tc_marches.")
+
+grpStr = "Structure"
+pivotLen  = input.int(5, "Longueur des pivots", minval = 2, maxval = 20, group = grpStr,
+     tooltip = "Nombre de bougies de part et d'autre pour valider un sommet ou un creux. Plus grand = structure plus lente, moins de faux signaux.")
+zoneLook  = input.int(60, "Fenêtre des zones", minval = 20, maxval = 300, group = grpStr)
+
+grpRisk = "Risque"
+atrLen    = input.int(14, "Longueur ATR", minval = 5, group = grpRisk)
+stopATR   = input.float(1.5, "Stop en multiples d'ATR", minval = 0.5, maxval = 5, step = 0.1, group = grpRisk,
+     tooltip = "1,5 ATR est le réglage de référence : assez large pour encaisser le bruit, assez serré pour garder un bon risque/rendement.")
+tp1R      = input.float(1.0, "TP1 en R", minval = 0.5, step = 0.1, group = grpRisk)
+tp2R      = input.float(2.0, "TP2 en R", minval = 1.0, step = 0.1, group = grpRisk)
+tp3R      = input.float(3.0, "TP3 en R", minval = 1.5, step = 0.1, group = grpRisk)
+
+grpDiv = "Divers"
+poulsOn = input.bool(true, "Émettre un battement de cœur horaire", group = grpDiv,
+     tooltip = "Envoie un signe de vie au site toutes les heures. C'est ce qui permet de distinguer « le marché est calme » de « l'alerte est morte ».")
+dessiner = input.bool(true, "Dessiner sur le graphique", group = grpDiv)
+
+// ══════════════════════════════════════════════════════════ INDICATEURS ═════
+
+ema20  = ta.ema(close, 20)
+ema50  = ta.ema(close, 50)
+ema200 = ta.ema(close, 200)
+atr    = ta.atr(atrLen)
+rsi    = ta.rsi(close, 14)
+vwapV  = ta.vwap(hlc3)
+
+[macdL, macdS, macdH] = ta.macd(close, 12, 26, 9)
+[diPlus, diMinus, adx] = ta.dmi(14, 14)
+
+// Volume relatif : le volume de la bougie rapporté à sa moyenne sur 20.
+// Sur les actifs sans volume réel (certains flux forex), TradingView renvoie
+// 0 ; on neutralise alors le critère plutôt que de renvoyer une valeur
+// aberrante qui serait comptée comme « participation nulle » par le site.
+volMoy = ta.sma(volume, 20)
+rvol   = (volMoy > 0 and volume > 0) ? volume / volMoy : na
+
+// ════════════════════════════════════════════════════════════ STRUCTURE ═════
+//
+// La structure est lue sur les pivots : un sommet est un plus haut entouré de
+// `pivotLen` bougies plus basses de chaque côté. C'est la définition la plus
+// simple qui résiste au bruit, et elle est la même que celle enseignée dans
+// l'Académie Trading du site — les deux modules parlent donc le même langage.
+
+ph = ta.pivothigh(high, pivotLen, pivotLen)
+pl = ta.pivotlow(low, pivotLen, pivotLen)
+
+var float sommet1 = na   // dernier sommet confirmé
+var float sommet2 = na   // l'avant-dernier
+var float creux1  = na
+var float creux2  = na
+
+if not na(ph)
+    sommet2 := sommet1
+    sommet1 := ph
+if not na(pl)
+    creux2 := creux1
+    creux1 := pl
+
+sommetsHauts = not na(sommet1) and not na(sommet2) and sommet1 > sommet2
+sommetsBas   = not na(sommet1) and not na(sommet2) and sommet1 < sommet2
+creuxHauts   = not na(creux1)  and not na(creux2)  and creux1  > creux2
+creuxBas     = not na(creux1)  and not na(creux2)  and creux1  < creux2
+
+tendanceLocale = sommetsHauts and creuxHauts ? "haussiere" : sommetsBas and creuxBas ? "baissiere" : "range"
+
+// ── Cassure de structure (BOS) et changement de caractère (CHOCH) ────────────
+//
+// BOS   : le prix clôture au-delà du dernier sommet (ou creux) DANS le sens de
+//         la tendance en cours. C'est une continuation.
+// CHOCH : il clôture au-delà CONTRE la tendance en cours. C'est le premier
+//         signe d'un retournement, et c'est ce qui les distingue — la même
+//         cassure ne veut pas dire la même chose selon d'où l'on vient.
+
+cassureHaut = not na(sommet1) and close > sommet1 and close[1] <= sommet1
+cassureBas  = not na(creux1)  and close < creux1  and close[1] >= creux1
+
+bos   = cassureHaut and tendanceLocale == "haussiere" ? "haussier" : cassureBas and tendanceLocale == "baissiere" ? "baissier" : ""
+choch = cassureHaut and tendanceLocale == "baissiere" ? "haussier" : cassureBas and tendanceLocale == "haussiere" ? "baissier" : ""
+
+// ── Balayage de liquidité ───────────────────────────────────────────────────
+//
+// La mèche dépasse le niveau, le CORPS non : les stops posés au-delà ont été
+// ramassés, puis le prix est revenu. C'est le signe le plus fiable qu'une
+// zone a été « nettoyée » avant un vrai mouvement. Un dépassement en clôture
+// n'est PAS un balayage — c'est une cassure, et c'est l'inverse.
+
+sweepHaut = not na(sommet1) and high > sommet1 and close < sommet1
+sweepBas  = not na(creux1)  and low  < creux1  and close > creux1
+sweep     = sweepBas ? "bas" : sweepHaut ? "haut" : ""
+
+// ── Fair Value Gap ──────────────────────────────────────────────────────────
+//
+// Trois bougies dont la première et la troisième ne se touchent pas : il reste
+// un « trou » de prix que le marché revient combler la plupart du temps.
+
+fvgHaussier = low > high[2]
+fvgBaissier = high < low[2]
+fvgHaut = fvgHaussier ? low : fvgBaissier ? low[2] : na
+fvgBas  = fvgHaussier ? high[2] : fvgBaissier ? high : na
+
+// ── Order block ─────────────────────────────────────────────────────────────
+//
+// La dernière bougie de sens contraire avant le mouvement d'impulsion. On la
+// retient au moment de la cassure : c'est là qu'elle prend sa valeur.
+
+var float obHaut = na
+var float obBas  = na
+if cassureHaut
+    obHaut := math.max(high[1], high[2])
+    obBas  := math.min(low[1], low[2])
+if cassureBas
+    obHaut := math.max(high[1], high[2])
+    obBas  := math.min(low[1], low[2])
+
+// ── Figures de confirmation en bougie ───────────────────────────────────────
+
+corps  = math.abs(close - open)
+etendue = high - low
+mecheHaute = high - math.max(close, open)
+mecheBasse = math.min(close, open) - low
+
+englobHauss = close > open and close[1] < open[1] and close > open[1] and open < close[1]
+englobBaiss = close < open and close[1] > open[1] and close < open[1] and open > close[1]
+marteau     = etendue > 0 and mecheBasse > corps * 2 and mecheHaute < corps
+etoile      = etendue > 0 and mecheHaute > corps * 2 and mecheBasse < corps
+
+bougie = englobHauss ? "Englobante haussiere" : englobBaiss ? "Englobante baissiere" : marteau ? "Marteau" : etoile ? "Etoile du soir" : ""
+
+// ═════════════════════════════════════════════════ LES SEPT ÉCHELLES ════════
+//
+// `request.security` avec `lookahead_off` : sans ce réglage, le script lirait
+// la clôture d'une bougie supérieure AVANT qu'elle n'existe. En backtest le
+// résultat serait spectaculaire, en direct il serait faux. C'est l'erreur la
+// plus classique du Pine multi-échelles, et la plus coûteuse.
+
+lireTendance() =>
+    e20 = ta.ema(close, 20)
+    e50 = ta.ema(close, 50)
+    e200 = ta.ema(close, 200)
+    t = e20 > e50 and e50 > e200 and close > e50 ? "haussiere" : e20 < e50 and e50 < e200 and close < e50 ? "baissiere" : "range"
+    pos = close > e20 and close > e50 and close > e200 ? "au-dessus" : close < e20 and close < e50 and close < e200 ? "en-dessous" : "melange"
+    [t, ta.rsi(close, 14), array.get(ta.dmi(14, 14), 2), pos]
+
+f(tf) => request.security(syminfo.tickerid, tf, lireTendance(), lookahead = barmerge.lookahead_off)
+
+[tD, rD, aD, pD]     = f("D")
+[t4H, r4H, a4H, p4H] = f("240")
+[t1H, r1H, a1H, p1H] = f("60")
+[t30, r30, a30, p30] = f("30")
+[t15, r15, a15, p15] = f("15")
+[t5, r5, a5, p5]     = f("5")
+[t1, r1, a1, p1]     = f("1")
+
+// La tendance de FOND est celle des grandes échelles. On exige que le
+// quotidien et le 4H soient d'accord : c'est la seule façon d'éviter de
+// qualifier de « tendance » un simple mouvement intraday.
+tendanceFond = tD == t4H and tD != "range" ? tD : t4H == t1H and t4H != "range" ? t4H : "range"
+
+// ═════════════════════════════════════════════════════════════ SÉANCES ══════
+//
+// Horaires des places, en UTC. Le chevauchement Londres/New York est traité
+// à part : c'est le seul moment où les volumes des deux places s'additionnent,
+// et sur l'or c'est là que les mouvements aboutissent.
+
+hUTC = hour(time, "UTC")
+jUTC = dayofweek(time, "UTC")
+weekEnd = jUTC == dayofweek.saturday or jUTC == dayofweek.sunday
+
+session = weekEnd ? "hors-session" : hUTC >= 12 and hUTC < 16 ? "chevauchement" : hUTC >= 7 and hUTC < 16 ? "londres" : hUTC >= 16 and hUTC < 21 ? "new-york" : hUTC < 9 ? "asie" : "hors-session"
+
+sessionActive = session == "londres" or session == "new-york" or session == "chevauchement"
+
+// ═══════════════════════════════════════════════ LA CONDITION D'ENTRÉE ══════
+//
+// C'est ici que se joue la sélectivité du système. Le site refiltrera ensuite,
+// mais il ne peut pas rattraper une condition trop laxiste : il ne verra
+// jamais les alertes qu'on n'a pas émises, et il croulera sous celles qu'on
+// émet à tort.
+//
+// Cinq exigences CUMULATIVES, dans l'esprit du barème du site :
+//   1. La tendance de fond existe et n'est pas un range.
+//   2. L'échelle d'entrée va dans le même sens que le fond.
+//   3. Un événement de structure vient de se produire (BOS, CHOCH ou balayage).
+//   4. Les EMA de l'échelle d'entrée sont empilées dans le sens.
+//   5. La séance est active et l'ADX confirme une tendance réelle.
+
+fondHaussier = tendanceFond == "haussiere"
+fondBaissier = tendanceFond == "baissiere"
+
+emaEmpileHaut = ema20 > ema50 and ema50 > ema200
+emaEmpileBas  = ema20 < ema50 and ema50 < ema200
+
+evenementHaut = bos == "haussier" or choch == "haussier" or sweepBas or englobHauss or marteau
+evenementBas  = bos == "baissier" or choch == "baissier" or sweepHaut or englobBaiss or etoile
+
+conditionAchat = fondHaussier and tendanceLocale != "baissiere" and emaEmpileHaut and evenementHaut and sessionActive and adx >= 20 and close > vwapV
+conditionVente = fondBaissier and tendanceLocale != "haussiere" and emaEmpileBas  and evenementBas  and sessionActive and adx >= 20 and close < vwapV
+
+// Une seule alerte par configuration : sans ce verrou, la condition reste
+// vraie plusieurs bougies d'affilée et le script tire à chaque clôture. Le
+// site a bien un anti-doublon, mais laisser partir vingt alertes pour en
+// garder une gaspille le quota TradingView et brouille le journal.
+var int derniereAlerte = 0
+delaiEcoule = na(derniereAlerte) or derniereAlerte == 0 or (bar_index - derniereAlerte) > 12
+
+signalAchat = conditionAchat and delaiEcoule
+signalVente = conditionVente and delaiEcoule
+
+// ═════════════════════════════════════════════════════════════ LE PLAN ══════
+//
+// Le stop est posé à `stopATR` fois l'amplitude moyenne, SOUS le plus bas
+// récent à l'achat (au-dessus du plus haut à la vente). Le structurel et le
+// volatilité-dépendant sont combinés : un stop purement structurel peut être
+// absurdement loin après une longue bougie, un stop purement ATR peut tomber
+// au milieu d'une zone évidente.
+
+plusBas  = ta.lowest(low, 10)
+plusHaut = ta.highest(high, 10)
+
+entree = close
+stopAchat = math.min(plusBas, entree - atr * stopATR)
+stopVente = math.max(plusHaut, entree + atr * stopATR)
+
+stop   = signalAchat ? stopAchat : stopVente
+risque = math.abs(entree - stop)
+
+tp1 = signalAchat ? entree + risque * tp1R : entree - risque * tp1R
+tp2 = signalAchat ? entree + risque * tp2R : entree - risque * tp2R
+tp3 = signalAchat ? entree + risque * tp3R : entree - risque * tp3R
+
+// Zone d'entrée : un quart du risque de part et d'autre. Un prix unique est
+// intenable en pratique — le temps de passer l'ordre, le marché a bougé.
+zoneBas  = entree - risque * 0.25
+zoneHaut = entree + risque * 0.25
+
+// ═══════════════════════════════════════════════════════ LE MESSAGE JSON ════
+//
+// Construit à la main plutôt qu'avec un modèle d'alerte : les placeholders
+// `{{...}}` de TradingView ne savent pas produire un objet imbriqué, et le
+// site attend une structure à plusieurs niveaux.
+//
+// `str.tostring(x, "#.#####")` fixe le format : sans lui, Pine peut produire
+// une notation scientifique (« 2.04e+3 ») que le site refuserait comme un
+// nombre illisible — et le refus arriverait en production, un mardi matin.
+
+n(float v) => na(v) ? "null" : str.tostring(v, "#.#####")
+q(string s) => s == "" ? "null" : "\"" + s + "\""
+
+jsonUnite(string nom, string t, float r, float a, string p) =>
+    "\"" + nom + "\":{\"tendance\":\"" + t + "\",\"rsi\":" + n(r) + ",\"adx\":" + n(a) + ",\"ema_position\":\"" + p + "\"}"
+
+construireMessage(string sens) =>
+    unites = "{" +
+         jsonUnite("D", tD, rD, aD, pD) + "," +
+         jsonUnite("4H", t4H, r4H, a4H, p4H) + "," +
+         jsonUnite("1H", t1H, r1H, a1H, p1H) + "," +
+         jsonUnite("30M", t30, r30, a30, p30) + "," +
+         jsonUnite("15M", t15, r15, a15, p15) + "," +
+         jsonUnite("5M", t5, r5, a5, p5) + "," +
+         jsonUnite("1M", t1, r1, a1, p1) + "}"
+
+    indic = "{\"ema20\":" + n(ema20) + ",\"ema50\":" + n(ema50) + ",\"ema200\":" + n(ema200) +
+         ",\"vwap\":" + n(vwapV) + ",\"atr\":" + n(atr) + ",\"rsi\":" + n(rsi) +
+         ",\"macd\":" + n(macdL) + ",\"macd_signal\":" + n(macdS) + ",\"macd_hist\":" + n(macdH) +
+         ",\"adx\":" + n(adx) + ",\"rvol\":" + n(rvol) + "}"
+
+    smc = "{\"bos\":" + q(bos) + ",\"choch\":" + q(choch) + ",\"sweep\":" + q(sweep) +
+         ",\"order_block_haut\":" + n(obHaut) + ",\"order_block_bas\":" + n(obBas) +
+         ",\"fvg_haut\":" + n(fvgHaut) + ",\"fvg_bas\":" + n(fvgBas) + "}"
+
+    niveaux = "{\"support\":" + n(creux1) + ",\"resistance\":" + n(sommet1) + "}"
+
+    plan = "{\"entree\":" + n(entree) + ",\"zone_bas\":" + n(zoneBas) + ",\"zone_haut\":" + n(zoneHaut) +
+         ",\"stop\":" + n(stop) + ",\"tp1\":" + n(tp1) + ",\"tp2\":" + n(tp2) + ",\"tp3\":" + n(tp3) + "}"
+
+    "{\"secret\":\"" + secret + "\"" +
+         ",\"marche\":\"" + marche + "\"" +
+         ",\"sens\":\"" + sens + "\"" +
+         ",\"prix\":" + n(close) +
+         ",\"unite\":\"15M\"" +
+         ",\"session\":\"" + session + "\"" +
+         ",\"tendance\":\"" + tendanceFond + "\"" +
+         ",\"bougie\":" + q(bougie) +
+         ",\"heure\":\"" + str.format_time(time_close, "yyyy-MM-dd'T'HH:mm:ss'Z'", "UTC") + "\"" +
+         ",\"unites\":" + unites +
+         ",\"indicateurs\":" + indic +
+         ",\"smc\":" + smc +
+         ",\"niveaux\":" + niveaux +
+         ",\"plan\":" + plan +
+         ",\"note\":\"Structure locale " + tendanceLocale + ", fond " + tendanceFond + "\"}"
+
+// ═════════════════════════════════════════════════════════ LES ALERTES ══════
+
+if barstate.isconfirmed and (signalAchat or signalVente)
+    derniereAlerte := bar_index
+    alert(construireMessage(signalAchat ? "BUY" : "SELL"), alert.freq_once_per_bar_close)
+
+// ── Le battement de cœur ────────────────────────────────────────────────────
+//
+// Un signe de vie horaire, envoyé même quand il n'y a rien à signaler. Sans
+// lui, une alerte TradingView expirée produit exactement le même silence
+// qu'un marché calme, et le site n'a aucun moyen de faire la différence.
+// Le site répond à ce message sans rien publier ni compter comme un rejet.
+
+nouvelleHeure = ta.change(hour(time, "UTC")) != 0
+
+if poulsOn and barstate.isconfirmed and nouvelleHeure
+    alert("{\"secret\":\"" + secret + "\",\"type\":\"pouls\",\"marche\":\"" + marche +
+         "\",\"prix\":" + n(close) + ",\"session\":\"" + session +
+         "\",\"tendance\":\"" + tendanceFond + "\"}", alert.freq_once_per_bar_close)
+
+// ══════════════════════════════════════════════════════════ AFFICHAGE ═══════
+
+plot(dessiner ? ema20 : na, "EMA 20", color = color.new(#38bdf8, 0), linewidth = 1)
+plot(dessiner ? ema50 : na, "EMA 50", color = color.new(#f0c840, 0), linewidth = 1)
+plot(dessiner ? ema200 : na, "EMA 200", color = color.new(#9db4d4, 30), linewidth = 2)
+plot(dessiner ? vwapV : na, "VWAP", color = color.new(#67e8f9, 40), linewidth = 1, style = plot.style_circles)
+
+plotshape(dessiner and signalAchat, "Achat", shape.labelup, location.belowbar,
+     color = color.new(#22c55e, 0), text = "ACHAT", textcolor = color.white, size = size.small)
+plotshape(dessiner and signalVente, "Vente", shape.labeldown, location.abovebar,
+     color = color.new(#f43f5e, 0), text = "VENTE", textcolor = color.white, size = size.small)
+
+// Le tableau de contrôle : il permet de vérifier d'un coup d'œil ce que le
+// script voit, sans attendre qu'une alerte parte. Indispensable pendant le
+// réglage — sans lui, on règle à l'aveugle.
+if dessiner and barstate.islast
+    var table tb = table.new(position.top_right, 2, 9, bgcolor = color.new(#050a14, 12), border_width = 1, border_color = color.new(#78aaeb, 82))
+    ligne(int i, string k, string v, color c) =>
+        table.cell(tb, 0, i, k, text_color = color.new(#9db4d4, 0), text_size = size.tiny, text_halign = text.align_left)
+        table.cell(tb, 1, i, v, text_color = c, text_size = size.tiny, text_halign = text.align_right)
+
+    couleurT(string t) => t == "haussiere" ? #22c55e : t == "baissiere" ? #f43f5e : #9db4d4
+
+    table.cell(tb, 0, 0, "KP TRADING CENTER", text_color = #f0c840, text_size = size.small)
+    table.cell(tb, 1, 0, marche, text_color = #f2f6fc, text_size = size.small, text_halign = text.align_right)
+    ligne(1, "Fond (D+4H)", tendanceFond, couleurT(tendanceFond))
+    ligne(2, "Structure 15M", tendanceLocale, couleurT(tendanceLocale))
+    ligne(3, "Séance", session, sessionActive ? #22c55e : #9db4d4)
+    ligne(4, "ADX", str.tostring(adx, "#.#"), adx >= 25 ? #22c55e : adx >= 20 ? #f0c840 : #f43f5e)
+    ligne(5, "RSI", str.tostring(rsi, "#.#"), #f2f6fc)
+    ligne(6, "Vol. relatif", na(rvol) ? "n/d" : str.tostring(rvol, "#.##") + "x", na(rvol) ? #9db4d4 : rvol >= 1.2 ? #22c55e : #f43f5e)
+    ligne(7, "EMA empilées", emaEmpileHaut ? "haussier" : emaEmpileBas ? "baissier" : "non", emaEmpileHaut or emaEmpileBas ? #22c55e : #9db4d4)
+    ligne(8, "Secret", secret == "" ? "MANQUANT" : "configuré", secret == "" ? #f43f5e : #22c55e)

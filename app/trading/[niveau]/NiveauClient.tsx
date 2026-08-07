@@ -308,13 +308,49 @@ export default function NiveauClient({ slug }: { slug: string }) {
                     disponible={nbQuestions > 0}
                   />
                   {niveau.slug === "bougies" && (
-                    <Action
-                      href="/trading/entrainement"
-                      titre="Entraînement sur graphiques"
-                      detail="« Que va faire le marché ensuite ? » — graphiques illimités, correction expliquée."
-                      ton={color.gold}
-                      disponible
-                    />
+                    <>
+                      <Action
+                        href="/trading/entrainement"
+                        titre="Entraînement sur graphiques"
+                        detail="« Que va faire le marché ensuite ? » — graphiques illimités, correction expliquée."
+                        ton={color.gold}
+                        disponible
+                      />
+                      {/* Le seul endroit de l'académie où l'élève apporte son
+                          propre marché. Ça ne valide aucune compétence — une
+                          maîtrise se démontre sur un exercice dont le système
+                          connaît la réponse — mais c'est le pont vers sa
+                          séance réelle. */}
+                      <Action
+                        href="/trading/analyse"
+                        titre="Analyser mon propre graphique"
+                        detail="Envoie une capture de ton graphique : structure, figures et momentum sont lus, puis le verdict tombe — achat, vente ou attendre, avec ce qui l'invaliderait."
+                        ton={color.cyan}
+                        disponible
+                        badge="Nouveau"
+                      />
+                      {/* Le relevé ne valide rien non plus, mais c'est lui qui
+                          transforme une impression en fait. */}
+                      {/* Le livre déborde largement le Niveau 2, mais c'est là
+                          que l'élève apprend les bougies — autant le lui donner
+                          au moment où il en a besoin. */}
+                      <Action
+                        href="/trading/livre"
+                        titre="Le livre des bougies"
+                        detail="Neuf chapitres, de l'histoire de Sakata en 1750 jusqu'à la lecture avancée. 33 schémas, 40 exercices corrigés — et le chapitre qui explique pourquoi les figures échouent."
+                        ton={color.gold}
+                        disponible
+                        badge="Nouveau"
+                      />
+                      <Action
+                        href="/trading/journal"
+                        titre="Mon relevé"
+                        detail="Ton taux de réussite réel par durée d'expiration, comparé au seuil de rentabilité de ton payout. Aucune conclusion tant que l'échantillon est trop petit."
+                        ton={color.info}
+                        disponible
+                        badge="Nouveau"
+                      />
+                    </>
                   )}
                   {niveau.slug === "momentum" && (
                     <Action
