@@ -185,7 +185,11 @@ lireTendance() =>
     e200 = ta.ema(close, 200)
     t = e20 > e50 and e50 > e200 and close > e50 ? "haussiere" : e20 < e50 and e50 < e200 and close < e50 ? "baissiere" : "range"
     pos = close > e20 and close > e50 and close > e200 ? "au-dessus" : close < e20 and close < e50 and close < e200 ? "en-dessous" : "melange"
-    [t, ta.rsi(close, 14), array.get(ta.dmi(14, 14), 2), pos]
+    // `ta.dmi` rend un TUPLE, pas un tableau : il se déstructure, il ne se lit
+    // pas avec `array.get`. Les deux premières valeurs (DI+ et DI−) ne servent
+    // pas ici, mais Pine exige qu'on les nomme pour atteindre la troisième.
+    [dip, dim, adxLocal] = ta.dmi(14, 14)
+    [t, ta.rsi(close, 14), adxLocal, pos]
 
 f(tf) => request.security(syminfo.tickerid, tf, lireTendance(), lookahead = barmerge.lookahead_off)
 
@@ -370,21 +374,27 @@ plotshape(dessiner and signalVente, "Vente", shape.labeldown, location.abovebar,
 // Le tableau de contrôle : il permet de vérifier d'un coup d'œil ce que le
 // script voit, sans attendre qu'une alerte parte. Indispensable pendant le
 // réglage — sans lui, on règle à l'aveugle.
+//
+// Les deux fonctions sont déclarées AU PREMIER NIVEAU, pas dans le `if` : Pine
+// interdit de définir une fonction à l'intérieur d'un bloc conditionnel. La
+// table, elle, est créée en `var` au premier niveau puis remplie dans le `if`.
+
+couleurT(string t) => t == "haussiere" ? #22c55e : t == "baissiere" ? #f43f5e : #9db4d4
+
+var table tb = table.new(position.top_right, 2, 9, bgcolor = color.new(#050a14, 12), border_width = 1, border_color = color.new(#78aaeb, 82))
+
+ligne(int i, string k, string v, color c) =>
+    table.cell(tb, 0, i, k, text_color = color.new(#9db4d4, 0), text_size = size.tiny, text_halign = text.align_left)
+    table.cell(tb, 1, i, v, text_color = c, text_size = size.tiny, text_halign = text.align_right)
+
 if dessiner and barstate.islast
-    var table tb = table.new(position.top_right, 2, 9, bgcolor = color.new(#050a14, 12), border_width = 1, border_color = color.new(#78aaeb, 82))
-    ligne(int i, string k, string v, color c) =>
-        table.cell(tb, 0, i, k, text_color = color.new(#9db4d4, 0), text_size = size.tiny, text_halign = text.align_left)
-        table.cell(tb, 1, i, v, text_color = c, text_size = size.tiny, text_halign = text.align_right)
-
-    couleurT(string t) => t == "haussiere" ? #22c55e : t == "baissiere" ? #f43f5e : #9db4d4
-
     table.cell(tb, 0, 0, "KP TRADING CENTER", text_color = #f0c840, text_size = size.small)
     table.cell(tb, 1, 0, marche, text_color = #f2f6fc, text_size = size.small, text_halign = text.align_right)
     ligne(1, "Fond (D+4H)", tendanceFond, couleurT(tendanceFond))
     ligne(2, "Structure 15M", tendanceLocale, couleurT(tendanceLocale))
-    ligne(3, "Séance", session, sessionActive ? #22c55e : #9db4d4)
+    ligne(3, "Seance", session, sessionActive ? #22c55e : #9db4d4)
     ligne(4, "ADX", str.tostring(adx, "#.#"), adx >= 25 ? #22c55e : adx >= 20 ? #f0c840 : #f43f5e)
     ligne(5, "RSI", str.tostring(rsi, "#.#"), #f2f6fc)
     ligne(6, "Vol. relatif", na(rvol) ? "n/d" : str.tostring(rvol, "#.##") + "x", na(rvol) ? #9db4d4 : rvol >= 1.2 ? #22c55e : #f43f5e)
-    ligne(7, "EMA empilées", emaEmpileHaut ? "haussier" : emaEmpileBas ? "baissier" : "non", emaEmpileHaut or emaEmpileBas ? #22c55e : #9db4d4)
-    ligne(8, "Secret", secret == "" ? "MANQUANT" : "configuré", secret == "" ? #f43f5e : #22c55e)
+    ligne(7, "EMA empilees", emaEmpileHaut ? "haussier" : emaEmpileBas ? "baissier" : "non", emaEmpileHaut or emaEmpileBas ? #22c55e : #9db4d4)
+    ligne(8, "Secret", secret == "" ? "MANQUANT" : "configure", secret == "" ? #f43f5e : #22c55e)
